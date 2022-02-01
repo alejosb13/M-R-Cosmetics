@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pd-free-angularcli": {
+    "mr-cosmetics": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -24,9 +24,10 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/bootstrap/scss/bootstrap.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/assets/scss/paper-dashboard.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "src/assets/css/floating-labels.css"
             ],
             "scripts": []
           },
@@ -53,18 +54,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pd-free-angularcli:build"
+            "browserTarget": "mr-cosmetics:build",
+            "port": 80 
           },
           "configurations": {
             "production": {
-              "browserTarget": "pd-free-angularcli:build:production"
+              "browserTarget": "mr-cosmetics:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pd-free-angularcli:build"
+            "browserTarget": "mr-cosmetics:build"
           }
         },
         "test": {
@@ -104,7 +106,7 @@
         }
       }
     },
-    "pd-free-angularcli-e2e": {
+    "mr-cosmetics-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -113,7 +115,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "pd-free-angularcli:serve"
+            "devServerTarget": "mr-cosmetics:serve"
           }
         },
         "lint": {
@@ -128,7 +130,7 @@
       }
     }
   },
-  "defaultProject": "pd-free-angularcli",
+  "defaultProject": "mr-cosmetics",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

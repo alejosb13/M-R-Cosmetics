@@ -1,0 +1,11 @@
+.login-center{    
+    height: 100vh;
+    max-width: 100%;
+
+}
+
+.card-body {
+    /* padding:20px; */
+    min-height:auto;
+    
+}
