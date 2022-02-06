@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { Cliente } from '../models/Cliente.model';
@@ -11,6 +11,11 @@ const ClienteURL = `${environment.urlAPI}cliente`
   providedIn: 'root'
 })
 export class ClientesService {
+  
+  total:number = 0
+  busqueda:string = ""
+  datosTablaStorage:Cliente[] = []
+
 
   constructor(
     private http: HttpClient
@@ -27,11 +32,6 @@ export class ClientesService {
     
     return new HttpHeaders(config);
   }
-  
-  
-  total:number = 0
-  busqueda:string = ""
-  datosTablaStorage:Cliente[] = []
   
   buscar(datosTabla:any[]){
     let busqueda = this.busqueda

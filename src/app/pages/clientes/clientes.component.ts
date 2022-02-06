@@ -1,4 +1,5 @@
 import { Component, OnInit, PipeTransform } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Cliente } from './models/Cliente.model';
 import { ClientesService } from './servicios/clientes.service';
 
@@ -11,26 +12,34 @@ import { ClientesService } from './servicios/clientes.service';
 export class ClientesComponent implements OnInit {
 
   page = 1;
-  pageSize = 3;
+  pageSize = 9;
   collectionSize = 0;
   Clientes: Cliente[];
+  isLoad:boolean
   
   constructor(
     private _ClientesService:ClientesService
-  ) {
+  ) {}
+  
+  ngOnInit(): void {
     this.asignarValores()
   }
-  
-  ngOnInit(): void {}
 
 
   asignarValores(){
+    this.isLoad = true
+    
     this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> {
+      console.log(clientes);
+          
       this.Clientes = [...clientes]
       this._ClientesService.datosTablaStorage = [...clientes]
       this._ClientesService.total = clientes.length
       
       this.refreshCountries() 
+      this.isLoad =false
+    },(error)=>{
+      this.isLoad =false
     }) 
   }
   

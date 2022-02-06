@@ -12,7 +12,7 @@ import { ClientesComponent } from 'app/pages/clientes/clientes.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'inicio',         component: DashboardComponent },
-    { path: 'clientes',         component: ClientesComponent },
+    { path: 'clientes',       component: ClientesComponent },
     { path: 'user',           component: UserComponent },
     { path: 'table',          component: TableComponent },
     { path: 'typography',     component: TypographyComponent },
