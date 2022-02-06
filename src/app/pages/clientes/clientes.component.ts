@@ -1,7 +1,8 @@
 import { Component, OnInit, PipeTransform } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { TablasService } from 'app/shared/services/tablas.service';
 import { Cliente } from './models/Cliente.model';
 import { ClientesService } from './servicios/clientes.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -12,13 +13,14 @@ import { ClientesService } from './servicios/clientes.service';
 export class ClientesComponent implements OnInit {
 
   page = 1;
-  pageSize = 9;
+  pageSize = 3;
   collectionSize = 0;
   Clientes: Cliente[];
   isLoad:boolean
   
   constructor(
-    private _ClientesService:ClientesService
+    private _ClientesService:ClientesService,
+    private _TablasService:TablasService,
   ) {}
   
   ngOnInit(): void {
@@ -33,8 +35,8 @@ export class ClientesComponent implements OnInit {
       console.log(clientes);
           
       this.Clientes = [...clientes]
-      this._ClientesService.datosTablaStorage = [...clientes]
-      this._ClientesService.total = clientes.length
+      this._TablasService.datosTablaStorage = [...clientes]
+      this._TablasService.total = clientes.length
       
       this.refreshCountries() 
       this.isLoad =false
@@ -44,14 +46,33 @@ export class ClientesComponent implements OnInit {
   }
   
   refreshCountries() {
-    this._ClientesService.datosTablaStorage = [...this.Clientes]
+    this._TablasService.datosTablaStorage = [...this.Clientes]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
   
   BuscarValor(){
-    this._ClientesService.buscar(this.Clientes)
+    this._TablasService.buscar(this.Clientes)
     
-    if(this._ClientesService.busqueda ==""){this.refreshCountries()}
+    if(this._TablasService.busqueda ==""){this.refreshCountries()}
     
+  }
+  
+  eliminar(id:number){
+    console.log(id);
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Este registro cliente se eliminará y no podrás recuperarlo.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#51cbce',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+         console.log("eliminar");
+         
+      }
+    })
   }
 }

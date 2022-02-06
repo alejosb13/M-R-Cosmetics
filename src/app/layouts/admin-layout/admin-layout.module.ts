@@ -15,6 +15,7 @@ import { NotificationsComponent }   from '../../pages/notifications/notification
 import { ClientesComponent } from '../../pages/clientes/clientes.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    ClientesComponent
+    ClientesComponent,
+    ClienteEditarComponent
   ]
 })
 

@@ -14,12 +14,12 @@
     <div class=" card-header border-0 pt-5 d-flex flex-row justify-content-between bg-white">
       <div class="card-title align-items-start flex-column">
         <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Clientes</span>
-        <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _ClientesService.total }}</span>
+        <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
       </div>
 
       <form class="d-flex align-items-center col-4 buscador">
           <div class="form-label-group w-100">
-              <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_ClientesService.busqueda" name="buscar">
+              <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
               <label for="inputEmail">Buscar</label>
           </div>
       </form>
@@ -40,7 +40,7 @@
           </tr>
         </thead>
         <tbody >
-          <tr *ngFor="let cliente of _ClientesService.datosTablaStorage">
+          <tr *ngFor="let cliente of _TablasService.datosTablaStorage">
             <th scope="row">{{ cliente.id }}</th>
             <td>
               {{ cliente.nombre }}
@@ -83,7 +83,7 @@
                   <a href="#"><i class="fas fa-pencil-alt"></i></a>
                 </div>
                 <div class="mr-3" ngbTooltip="Eliminar">
-                  <a href="#"><i class="fas fa-trash-alt"></i></a>
+                  <span class="text-primary pointer" role="button" (click)="eliminar(cliente.id)"><i class="fas fa-trash-alt"></i></span>
                 </div>
               </div>
             </td>
@@ -92,8 +92,7 @@
       </table>
         
       <div class="d-flex justify-content-between p-2">
-          <ngb-pagination [collectionSize]="_ClientesService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()">
-          </ngb-pagination>
+        <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
       </div>
     </div>
   </ng-container>

@@ -67,4 +67,22 @@ export class ClientesService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+  
+  insertCliente(id:number,data:any): Observable<any> { 
+
+    return this.http.post(
+      ClienteURL, 
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+  
+  UpdateCliente(id:number,data:any): Observable<any> { 
+
+    return this.http.put(
+      ClienteURL, 
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }
