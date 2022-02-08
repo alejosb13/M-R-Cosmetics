@@ -80,10 +80,10 @@
             <td>
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="Editar">
-                  <a href="#"><i class="fas fa-pencil-alt"></i></a>
+                  <a [routerLink]="[ '/cliente','editar',cliente.id]" ><i class="fas fa-pencil-alt"></i></a>
                 </div>
                 <div class="mr-3" ngbTooltip="Eliminar">
-                  <span class="text-primary pointer" role="button" (click)="eliminar(cliente.id)"><i class="fas fa-trash-alt"></i></span>
+                  <span class="text-primary pointer" role="button" (click)="eliminar(cliente)"><i class="fas fa-trash-alt"></i></span>
                 </div>
               </div>
             </td>

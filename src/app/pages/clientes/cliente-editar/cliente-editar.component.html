@@ -1,94 +1,231 @@
 <div class="row">
     <div class="col-md-12">
-      <div class="card card-user">
-        <div class="card-header">
-          <h5 class="card-title">Editar Cliente</h5>
-        </div>
-        <div class="card-body px-4">
-          <form>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Categoria</label>
-                  <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Frecuencia</label>
-                  <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-              </div>
-              <hr class="hr w-100">
+        <div class="card card-user">
+            <div class="card-header">
+                <h5 class="card-title">Editar Cliente</h5>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="" >
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Apellido</label>
-                        <input type="text" class="form-control" placeholder="">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Cedula</label>
-                        <input type="number" class="form-control" placeholder="">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Telefono celular</label>
-                        <input type="number" class="form-control" placeholder="">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Telefono alternativo</label>
-                        <input type="number" class="form-control" placeholder="">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Dias de cobro</label>
-                        <input type="text" class="form-control" placeholder="">
-                    </div>
-                </div>            
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Estado</label>
-                        <select class="form-control" id="exampleFormControlSelect1">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
-                      </div>
-                </div>
-            </div>
+            <div class="card-body px-4">
+                <form [formGroup]="editarClienteForm">
+                  <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Categoria <span class="text-danger">(*)</span></label>
+                                <select
+                                  class="form-control"
+                                  id="exampleFormControlSelect1"
+                                  name="categoria_id"
+                                  formControlName="categoria_id"
+                                  autocomplete="off"
+                                >
+                                  <option selected value="" hidden>Seleccione una tipo de categoria</option>
+                                  <option *ngFor="let categoria of Categorias" value="{{ categoria.id}}">{{ categoria.tipo }}</option>
 
-            <div class="row">
-              <div class="update ml-auto mr-auto">
-                <button type="submit" class="btn btn-primary btn-round">Actualizar</button>
-              </div>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Frecuencia <span class="text-danger">(*)</span></label>
+                                <select
+                                  class="form-control"
+                                  id="exampleFormControlSelect1"
+                                  name="frecuencia_id"
+                                  formControlName="frecuencia_id"
+                                  autocomplete="off"
+                                >
+                                  <option selected value="" hidden>Seleccione una frecuencia</option>
+                                  <option *ngFor="let frecuencia of Frecuencias" value="{{ frecuencia.id}}">{{ frecuencia.descripcion }} -> {{ frecuencia.dias }} dias</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr class="hr w-100">
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Nombre</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="nombre"
+                            formControlName="nombre"
+                            autocomplete="off"
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Apellido <span class="text-danger">(*)</span></label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="apellido"
+                              formControlName="apellido"
+                              autocomplete="off"
+                            >
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Cedula <span class="text-danger">(*)</span></label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              name="cedula"
+                              formControlName="cedula"
+                              autocomplete="off"
+                            >
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-group">
+                              <label>Telefono celular <span class="text-danger">(*)</span></label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                name="celular"
+                                formControlName="celular"
+                                autocomplete="off"
+                              >
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Telefono alternativo</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              name="telefono"
+                              formControlName="telefono"
+                              autocomplete="off"
+                            >
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Direccion <span class="text-danger">(*)</span></label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="direccion_casa"
+                              formControlName="direccion_casa"
+                              autocomplete="off"
+                            >
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Direccion negocio</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="estado"
+                              formControlName="estado"
+                              autocomplete="off"
+                            >
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="d-block">Días de cobro <span class="text-danger">(*)</span></label>
+                          
+                          <!-- <select 
+                            class="form-control" 
+                            name="dias_cobro"
+                            formControlName="dias_cobro"
+                          >
+                            <option>Lunes</option>
+                            <option>Martes</option>
+                            <option>Miercoles</option>
+                            <option>Jueves</option>
+                            <option>Viernes</option>
+                            <option>Sabado</option>
+                            <option>Domingo</option>
+                          </select> -->
+                          <div
+                            ngbDropdown
+                            class="d-inline-block"
+                            placement="top"
+                          >
+                            <button
+                              class="btn btn-outline-primary position-relative btn-desplegable mt-0"
+                              id="dropdownForm1"
+                              ngbDropdownToggle
+                            >
+                              Días de cobro
+                            </button>
+                            <div
+                              ngbDropdownMenu
+                              aria-labelledby="dropdownForm1"
+                              class="desplegable"
+                            >
+                              <div class="parent-check">
+                                <div class="form-check">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="dias_cobro"
+                                    formArrayName="dias_cobro" 
+                                  >
+                                  <label
+                                      class="form-check-label"
+                                      for="defaultCheck1"
+                                  >
+                                      Lunes
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="dias_cobro"
+                                    formArrayName="dias_cobro" 
+                                  >
+                                  <label
+                                    class="form-check-label"
+                                    for="defaultCheck1"
+                                  >
+                                    Martes
+                                  </label>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-group">
+                              <label>Estado</label>
+                              <select
+                                class="form-control"
+                                id="exampleFormControlSelect1"
+                                name="estado"
+                                formControlName="estado"
+                              >
+                                  <option value="1">Activo</option>
+                                  <option value="0">Inactivo</option>
+                              </select>
+                          </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="update ml-auto mr-auto">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-round"
+                            >
+                                Actualizar
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
-  
+</div>

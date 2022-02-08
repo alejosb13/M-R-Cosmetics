@@ -57,11 +57,11 @@ export class ClientesComponent implements OnInit {
     
   }
   
-  eliminar(id:number){
-    console.log(id);
+  eliminar({id}:Cliente){
+    // console.log(id);
     Swal.fire({
       title: '¿Estas seguro?',
-      text: "Este registro cliente se eliminará y no podrás recuperarlo.",
+      text: "Este cliente se eliminará y no podrás recuperarlo.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#51cbce',
@@ -70,8 +70,16 @@ export class ClientesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-         console.log("eliminar");
-         
+
+        this._ClientesService.deleteCliente(id).subscribe((data)=>{
+          this.Clientes = this.Clientes.filter(cliente => cliente.id != id)
+          this.refreshCountries()
+
+          Swal.fire({
+            text: data[0],
+            icon: 'success',
+          })
+        })
       }
     })
   }

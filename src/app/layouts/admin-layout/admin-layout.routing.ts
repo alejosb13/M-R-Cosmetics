@@ -13,10 +13,10 @@ import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/client
 // import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 
 export const AdminLayoutRoutes: Routes = [
-    { path: 'inicio',         component: DashboardComponent },
+    { path: 'inicio',               component: DashboardComponent },
     
-    { path: 'cliente',       component: ClientesComponent },
-    { path: 'cliente/guardar/:id',   component: ClienteEditarComponent },
+    { path: 'cliente',              component: ClientesComponent },
+    { path: 'cliente/guardar/:id',  component: ClienteEditarComponent },
     { path: 'cliente/editar/:id',   component: ClienteEditarComponent },
 
     

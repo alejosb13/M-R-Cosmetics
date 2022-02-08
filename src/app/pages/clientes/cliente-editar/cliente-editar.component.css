@@ -1,0 +1,42 @@
+.parent-check{
+    width: 100%;
+    max-width: 100px;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    margin: 0 auto;
+}
+
+.form-check {
+    padding: 5px 0px 5px;
+    display: flex;
+    /* justify-content: center; */
+    align-items:center;    
+}
+
+.form-check input[type=checkbox], .form-check-radio input[type=radio]{
+    opacity: 1;
+    position: static;
+    visibility: visible;
+    margin: 5px 7px 5px 0px;
+    cursor: pointer;
+}
+
+.form-check label{
+    padding: 0px;
+}
+
+.btn-desplegable{
+    z-index: 2;
+}
+
+.desplegable {
+    margin-bottom: 53px !important;
+    margin-left: 25px !important;
+    z-index: 1;
+}
+
+.card label{
+    font-weight:600;
+}

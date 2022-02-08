@@ -77,12 +77,19 @@ export class ClientesService {
     );
   }
   
-  UpdateCliente(id:number,data:any): Observable<any> { 
+  updateCliente(id:number,data:any): Observable<any> { 
 
     return this.http.put(
       ClienteURL, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  deleteCliente(id:number): Observable<any> { 
+    const URL = `${ClienteURL}/${id}`
+    return this.http.delete(
+      URL, {headers: this.headerJson_Token()}
     );
   }
 }
