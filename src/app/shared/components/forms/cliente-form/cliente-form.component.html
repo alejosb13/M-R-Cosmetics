@@ -1,342 +1,354 @@
-<form [formGroup]="editarClienteForm" >
-    <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
-      <br>
-      <br>
-      <br>
-      <div class="row">
-          <div class="col-md-6">
-              <div class="form-group">
-                  <label>Categoria <span class="text-danger">(*)</span></label>
-                  <select
-                    class="form-control"
-                    id="exampleFormControlSelect1"
-                    name="categoria_id"
-                    formControlName="categoria_id"
-                    autocomplete="off"
-                  >
-                    <option selected value="" hidden>Seleccione una tipo de categoria</option>
-                    <option *ngFor="let categoria of Categorias" value="{{ categoria.id}}">{{ categoria.tipo }}</option>
+<form [formGroup]="editarClienteForm" [hidden]="loadInfo">
+  <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+      <div class="col-md-6">
+          <div class="form-group">
+              <label>Categoria <span class="text-danger">(*)</span></label>
+              <select
+                class="form-control"
+                id="exampleFormControlSelect1"
+                name="categoria_id"
+                formControlName="categoria_id"
+                autocomplete="off"
+              >
+                <option selected value="" hidden>Seleccione una tipo de categoria</option>
+                <option *ngFor="let categoria of Categorias" value="{{ categoria.id}}">{{ categoria.tipo }}</option>
 
-                  </select>
-              </div>
+              </select>
           </div>
-          <div class="col-md-6">
-              <div class="form-group">
-                  <label>Frecuencia <span class="text-danger">(*)</span></label>
-                  <select
-                    class="form-control"
-                    id="exampleFormControlSelect1"
-                    name="frecuencia_id"
-                    formControlName="frecuencia_id"
-                    autocomplete="off"
-                  >
-                    <option selected value="" hidden>Seleccione una frecuencia</option>
-                    <option *ngFor="let frecuencia of Frecuencias" value="{{ frecuencia.id}}">{{ frecuencia.descripcion }} -> {{ frecuencia.dias }} dias</option>
-                  </select>
-              </div>
-          </div>
-          <hr class="hr w-100">
       </div>
-      <div class="row">
-        <div class="col-md-6">
+      <div class="col-md-6">
           <div class="form-group">
-            <label>Nombre</label>
-            <input
-              type="text"
-              class="form-control"
-              name="nombre"
-              formControlName="nombre"
-              autocomplete="off"
-              [ngClass]="{
-                'is-invalid': editarClienteForm.controls['nombre'].invalid && editarClienteForm.controls['nombre'].touched,
-                'is-valid': editarClienteForm.controls['nombre'].valid
-              }"
-            >
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'required',
-              message: 'El nombre es requerido',
-              control: editarClienteForm.controls['nombre']
-            }"></ng-container>
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'minlength',
-              message: 'El nombre debe poseer al menos 3 letras',
-              control: editarClienteForm.controls['nombre']
-            }"></ng-container>
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'maxlength',
-              message: 'El nombre debe tener como máximo 80 letras',
-              control: editarClienteForm.controls['nombre']
-            }"></ng-container>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-              <label>Apellido <span class="text-danger">(*)</span></label>
-              <input
-                type="text"
+              <label>Frecuencia <span class="text-danger">(*)</span></label>
+              <select
                 class="form-control"
-                name="apellido"
-                formControlName="apellido"
+                id="exampleFormControlSelect1"
+                name="frecuencia_id"
+                formControlName="frecuencia_id"
                 autocomplete="off"
-                [ngClass]="{
-                  'is-invalid': editarClienteForm.controls['apellido'].invalid && editarClienteForm.controls['apellido'].touched,
-                  'is-valid': editarClienteForm.controls['apellido'].valid
-                }"
               >
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'required',
-                message: 'El apellido es requerido',
-                control: editarClienteForm.controls['apellido']
-              }"></ng-container>
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'minlength',
-                message: 'El apellido debe poseer al menos 3 letras',
-                control: editarClienteForm.controls['apellido']
-              }"></ng-container>
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'maxlength',
-                message: 'El apellido debe tener como máximo 80 letras',
-                control: editarClienteForm.controls['apellido']
-              }"></ng-container>
+                <option selected value="" hidden>Seleccione una frecuencia</option>
+                <option *ngFor="let frecuencia of Frecuencias" value="{{ frecuencia.id}}">{{ frecuencia.descripcion }} -> {{ frecuencia.dias }} dias</option>
+              </select>
           </div>
+      </div>
+      <hr class="hr w-100">
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          name="nombre"
+          formControlName="nombre"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid': editarClienteForm.controls['nombre'].invalid && editarClienteForm.controls['nombre'].touched,
+            'is-valid': editarClienteForm.controls['nombre'].valid
+          }"
+        >
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'El nombre es requerido',
+          control: editarClienteForm.controls['nombre']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'minlength',
+          message: 'El nombre debe poseer al menos 3 letras',
+          control: editarClienteForm.controls['nombre']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'El nombre debe tener como máximo 80 letras',
+          control: editarClienteForm.controls['nombre']
+        }"></ng-container>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+          <label>Apellido <span class="text-danger">(*)</span></label>
+          <input
+            type="text"
+            class="form-control"
+            name="apellido"
+            formControlName="apellido"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid': editarClienteForm.controls['apellido'].invalid && editarClienteForm.controls['apellido'].touched,
+              'is-valid': editarClienteForm.controls['apellido'].valid
+            }"
+          >
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El apellido es requerido',
+            control: editarClienteForm.controls['apellido']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'minlength',
+            message: 'El apellido debe poseer al menos 3 letras',
+            control: editarClienteForm.controls['apellido']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El apellido debe tener como máximo 80 letras',
+            control: editarClienteForm.controls['apellido']
+          }"></ng-container>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Cedula <span class="text-danger">(*)</span></label>
+        <input
+          type="text"
+          class="form-control"
+          name="cedula"
+          formControlName="cedula"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid': editarClienteForm.controls['cedula'].invalid && editarClienteForm.controls['cedula'].touched,
+            'is-valid': editarClienteForm.controls['cedula'].valid
+          }"
+        >
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'La cedula es requerida',
+          control: editarClienteForm.controls['cedula']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'La cedula debe poseer letras ni espacios',
+          control: editarClienteForm.controls['cedula']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'La cedula debe tener como máximo 12 numeros',
+          control: editarClienteForm.controls['cedula']
+        }"></ng-container>
+      </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+          <label>Telefono celular <span class="text-danger">(*)</span></label>
+          <input
+            type="text"
+            class="form-control"
+            name="celular"
+            formControlName="celular"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid': editarClienteForm.controls['celular'].invalid && editarClienteForm.controls['celular'].touched,
+              'is-valid': editarClienteForm.controls['celular'].valid
+            }"
+          >
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El celular es requerido',
+            control: editarClienteForm.controls['celular']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'pattern',
+            message: 'El celular debe poseer letras ni espacios',
+            control: editarClienteForm.controls['celular']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El celular debe tener como máximo 11 numeros',
+            control: editarClienteForm.controls['celular']
+          }"></ng-container>
         </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Cedula <span class="text-danger">(*)</span></label>
-            <input
-              type="text"
-              class="form-control"
-              name="cedula"
-              formControlName="cedula"
-              autocomplete="off"
-              [ngClass]="{
-                'is-invalid': editarClienteForm.controls['cedula'].invalid && editarClienteForm.controls['cedula'].touched,
-                'is-valid': editarClienteForm.controls['cedula'].valid
-              }"
-            >
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'required',
-              message: 'La cedula es requerida',
-              control: editarClienteForm.controls['cedula']
-            }"></ng-container>
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'pattern',
-              message: 'La cedula debe poseer letras ni espacios',
-              control: editarClienteForm.controls['cedula']
-            }"></ng-container>
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'maxlength',
-              message: 'La cedula debe tener como máximo 12 numeros',
-              control: editarClienteForm.controls['cedula']
-            }"></ng-container>
-          </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-              <label>Telefono celular <span class="text-danger">(*)</span></label>
-              <input
-                type="text"
-                class="form-control"
-                name="celular"
-                formControlName="celular"
-                autocomplete="off"
-                [ngClass]="{
-                  'is-invalid': editarClienteForm.controls['celular'].invalid && editarClienteForm.controls['celular'].touched,
-                  'is-valid': editarClienteForm.controls['celular'].valid
-                }"
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Telefono alternativo</label>
+        <input
+          type="text"
+          class="form-control"
+          name="telefono"
+          formControlName="telefono"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid': editarClienteForm.controls['telefono'].invalid && editarClienteForm.controls['telefono'].touched,
+            'is-valid': editarClienteForm.controls['telefono'].valid
+          }"
+        >
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'El telefono es requerido',
+          control: editarClienteForm.controls['telefono']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'El telefono debe poseer letras ni espacios',
+          control: editarClienteForm.controls['telefono']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'El telefono debe tener como máximo 11 numeros',
+          control: editarClienteForm.controls['telefono']
+        }"></ng-container>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+          <label>Direccion <span class="text-danger">(*)</span></label>
+          <input
+            type="text"
+            class="form-control"
+            name="direccion_casa"
+            formControlName="direccion_casa"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid': editarClienteForm.controls['direccion_casa'].invalid && editarClienteForm.controls['direccion_casa'].touched,
+              'is-valid': editarClienteForm.controls['direccion_casa'].valid
+            }"
+          >
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'La dirección es requerido',
+            control: editarClienteForm.controls['direccion_casa']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La dirección debe tener como máximo 11 numeros',
+            control: editarClienteForm.controls['telefono']
+          }"></ng-container>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+          <label>Direccion negocio</label>
+          <input
+            type="text"
+            class="form-control"
+            name="direccion_negocio"
+            formControlName="direccion_negocio"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid': editarClienteForm.controls['direccion_negocio'].invalid && editarClienteForm.controls['direccion_negocio'].touched,
+              'is-valid': editarClienteForm.controls['direccion_negocio'].valid
+            }"
+          >
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'La dirección es requerido',
+            control: editarClienteForm.controls['direccion_negocio']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La dirección debe tener como máximo 11 numeros',
+            control: editarClienteForm.controls['direccion_negocio']
+          }"></ng-container>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="d-block">Días de cobro <span class="text-danger">(*)</span></label>
+        
+        <!-- <select 
+          class="form-control" 
+          name="dias_cobro"
+          formControlName="dias_cobro"
+        >
+          <option>Lunes</option>
+          <option>Martes</option>
+          <option>Miercoles</option>
+          <option>Jueves</option>
+          <option>Viernes</option>
+          <option>Sabado</option>
+          <option>Domingo</option>
+        </select> -->
+        <div
+          ngbDropdown
+          class="d-inline-block"
+          placement="top"
+        >
+          <button
+            class="btn btn-outline-primary position-relative btn-desplegable mt-0"
+            id="dropdownForm1"
+            ngbDropdownToggle
+          >
+            Días de cobro
+          </button>
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownForm1"
+            class="desplegable"
+          >
+            <div class="parent-check" #diasCobro>
+              <div 
+                *ngFor="let day of daysOfWeek; let i = index"  
+                class="form-check"
               >
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'required',
-                message: 'El celular es requerido',
-                control: editarClienteForm.controls['celular']
-              }"></ng-container>
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'pattern',
-                message: 'El celular debe poseer letras ni espacios',
-                control: editarClienteForm.controls['celular']
-              }"></ng-container>
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'maxlength',
-                message: 'El celular debe tener como máximo 11 numeros',
-                control: editarClienteForm.controls['celular']
-              }"></ng-container>
-            </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Telefono alternativo</label>
-            <input
-              type="text"
-              class="form-control"
-              name="telefono"
-              formControlName="telefono"
-              autocomplete="off"
-              [ngClass]="{
-                'is-invalid': editarClienteForm.controls['telefono'].invalid && editarClienteForm.controls['telefono'].touched,
-                'is-valid': editarClienteForm.controls['telefono'].valid
-              }"
-            >
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'required',
-              message: 'El telefono es requerido',
-              control: editarClienteForm.controls['telefono']
-            }"></ng-container>
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'pattern',
-              message: 'El telefono debe poseer letras ni espacios',
-              control: editarClienteForm.controls['telefono']
-            }"></ng-container>
-            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'maxlength',
-              message: 'El telefono debe tener como máximo 11 numeros',
-              control: editarClienteForm.controls['telefono']
-            }"></ng-container>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-              <label>Direccion <span class="text-danger">(*)</span></label>
-              <input
-                type="text"
-                class="form-control"
-                name="direccion_casa"
-                formControlName="direccion_casa"
-                autocomplete="off"
-                [ngClass]="{
-                  'is-invalid': editarClienteForm.controls['direccion_casa'].invalid && editarClienteForm.controls['direccion_casa'].touched,
-                  'is-valid': editarClienteForm.controls['direccion_casa'].valid
-                }"
-              >
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'required',
-                message: 'La dirección es requerido',
-                control: editarClienteForm.controls['direccion_casa']
-              }"></ng-container>
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'maxlength',
-                message: 'La dirección debe tener como máximo 11 numeros',
-                control: editarClienteForm.controls['telefono']
-              }"></ng-container>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-              <label>Direccion negocio</label>
-              <input
-                type="text"
-                class="form-control"
-                name="direccion_negocio"
-                formControlName="direccion_negocio"
-                autocomplete="off"
-                [ngClass]="{
-                  'is-invalid': editarClienteForm.controls['direccion_negocio'].invalid && editarClienteForm.controls['direccion_negocio'].touched,
-                  'is-valid': editarClienteForm.controls['direccion_negocio'].valid
-                }"
-              >
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'required',
-                message: 'La dirección es requerido',
-                control: editarClienteForm.controls['direccion_negocio']
-              }"></ng-container>
-              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'maxlength',
-                message: 'La dirección debe tener como máximo 11 numeros',
-                control: editarClienteForm.controls['direccion_negocio']
-              }"></ng-container>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label class="d-block">Días de cobro <span class="text-danger">(*)</span></label>
-            
-            <!-- <select 
-              class="form-control" 
-              name="dias_cobro"
-              formControlName="dias_cobro"
-            >
-              <option>Lunes</option>
-              <option>Martes</option>
-              <option>Miercoles</option>
-              <option>Jueves</option>
-              <option>Viernes</option>
-              <option>Sabado</option>
-              <option>Domingo</option>
-            </select> -->
-            <div
-              ngbDropdown
-              class="d-inline-block"
-              placement="top"
-            >
-              <button
-                class="btn btn-outline-primary position-relative btn-desplegable mt-0"
-                id="dropdownForm1"
-                ngbDropdownToggle
-              >
-                Días de cobro
-              </button>
-              <div
-                ngbDropdownMenu
-                aria-labelledby="dropdownForm1"
-                class="desplegable"
-              >
-                <div class="parent-check" #diasCobro>
-                  <div 
-                    *ngFor="let day of daysOfWeek; let i = index"  
-                    class="form-check"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      name="dias_cobro"
-                      formArrayName="dias_cobro" 
-                      (change) = "changeValueFormArray($event.target)"
-                      [value]="i"
-                    >
-                    <label
-                      class="form-check-label"
-                    >
-                      {{ day }}
-                    </label>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label>Estado</label>
-                <select
-                  class="form-control"
-                  id="exampleFormControlSelect1"
-                  name="estado"
-                  formControlName="estado"
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="dias_cobro"
+                  formArrayName="dias_cobro" 
+                  (change) = "changeValueFormArray($event.target)"
+                  [value]="i"
                 >
-                    <option value="1">Activo</option>
-                    <option value="0">Inactivo</option>
-                </select>
-            </div>
-        </div>
+                <label
+                  class="form-check-label"
+                >
+                  {{ day }}
+                </label>
+              </div>
 
-      </div>
-      <div class="row">
-          <div class="update ml-auto mr-auto">
-              <button
-                
-                type="submit"
-                class="btn btn-primary btn-round"
-                (click)="EnviarFormulario()"
-              >
-                  Actualizar
-              </button>
+            </div>
           </div>
+        </div>
       </div>
-      <ng-template #formError let-control="control" let-message="message" let-validation="validation">
-        <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
-          <div class="invalid-feedback">
-            {{ message }}
-          </div>
-        </ng-container>
-      </ng-template>
-  </form>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Estado</label>
+            <select
+              class="form-control"
+              id="exampleFormControlSelect1"
+              name="estado"
+              formControlName="estado"
+            >
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+            </select>
+        </div>
+    </div>
+
+  </div>
+  <div class="row">
+      <div class="update ml-auto mr-auto">
+          <button  
+            type="submit"
+            class="btn btn-primary btn-round"
+            (click)="EnviarFormulario()"
+          >
+            <div *ngIf="clienteId">Actualizar</div>
+            <div *ngIf="!clienteId">Agregar</div>
+          </button>
+      </div>
+  </div>
+  <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>
+
+
+ 
+<div  [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando cliente
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+    
+  </div>
+</div>

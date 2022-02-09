@@ -31,7 +31,7 @@ export class TablasService {
     
     // debugger
     valores.map((valorFilaDatatableObject:any)=>{
-      if(valorFilaDatatableObject.toString().toLowerCase().includes(busquedaMinuscula)) tieneCoincidencia = true
+      if(String(valorFilaDatatableObject).toLowerCase().includes(busquedaMinuscula)) tieneCoincidencia = true
     })
     
     return tieneCoincidencia

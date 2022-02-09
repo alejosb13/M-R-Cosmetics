@@ -15,19 +15,20 @@
 -- Volcando datos para la tabla api_maquillaje.categorias: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
 INSERT INTO `categorias` (`id`, `tipo`, `descripcion`, `estado`, `created_at`, `updated_at`) VALUES
-	(1, 'B', 'esta es descripcion', 0, NULL, '2022-01-27 01:01:26'),
+	(1, 'B', 'esta es descripcion', 1, NULL, '2022-01-27 01:01:26'),
 	(7, 'A', 'esta es descripcion', 1, '2022-01-27 00:38:41', '2022-01-27 00:38:41');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 
 -- Volcando datos para la tabla api_maquillaje.clientes: ~6 rows (aproximadamente)
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` (`id`, `categoria_id`, `frecuencia_id`, `nombre`, `celular`, `apellido`, `telefono`, `direccion_casa`, `direccion_negocio`, `cedula`, `dias_cobro`, `estado`, `created_at`, `updated_at`) VALUES
-	(2, 1, 1, 'yuleina22', 123456789, '', 123456789, 'Beiro', 'villa crespo', '123456', 'lunes', 0, '2022-01-25 01:30:28', '2022-01-26 00:49:39'),
-	(3, 1, 1, 'yuleina22', 123456789, '', 123456789, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:32:25', '2022-01-26 00:36:30'),
-	(4, 1, 1, 'yuleina', 12345678, '', 12345678, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:32:30', '2022-01-25 01:32:30'),
-	(5, 1, 1, 'yuleina', 12345678, '', 12345678, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:32:54', '2022-01-25 01:32:54'),
-	(6, 1, 1, 'yuleina', 12345678, '', 12345678, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:37:58', '2022-01-25 01:37:58'),
-	(7, 1, 1, 'alejandro', 123456789, '', 123456789, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 23:29:59', '2022-01-25 23:29:59');
+INSERT INTO `clientes` (`id`, `categoria_id`, `frecuencia_id`, `nombre`, `apellido`, `celular`, `telefono`, `direccion_casa`, `direccion_negocio`, `cedula`, `dias_cobro`, `estado`, `created_at`, `updated_at`) VALUES
+	(2, 1, 1, 'yuleina22', '', 123456789, 123456789, 'Beiro', 'villa crespo', '123456', 'lunes', 0, '2022-01-25 01:30:28', '2022-01-26 00:49:39'),
+	(3, 1, 1, 'yuleina22', '', 123456789, 123456789, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:32:25', '2022-01-26 00:36:30'),
+	(4, 7, 2, 'Alejandro', 'asfasf', 1131905210, 12345678, 'Av.francisco beiro 3360', 'Av.francisco beiro 3360', '220179363', 'lunes,sábado', 1, '2022-01-25 01:32:30', '2022-02-09 01:41:21'),
+	(5, 1, 1, 'yuleina', '', 12345678, 12345678, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:32:54', '2022-01-25 01:32:54'),
+	(6, 1, 1, 'yuleina', '', 12345678, 12345678, 'Beiro', 'villa crespo', '123456', 'lunes', 1, '2022-01-25 01:37:58', '2022-01-25 01:37:58'),
+	(7, 1, 1, 'alejandro', '', 123456789, 123456789, 'Beiro', 'villa crespo', '123456', 'Lunes,Sábado', 1, '2022-01-25 23:29:59', '2022-01-25 23:29:59'),
+	(8, 7, 1, 'Pepe', 'sarando', 1131905432, 0, 'Av.Barrio Bolivar', 'Av.Barrio Bolivar', '22345675', 'viernes,jueves', 1, '2022-02-09 01:55:29', '2022-02-09 01:55:29');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 
 -- Volcando datos para la tabla api_maquillaje.facturas: ~2 rows (aproximadamente)
@@ -51,11 +52,11 @@ INSERT INTO `factura_detalles` (`id`, `producto_id`, `factura_id`, `cantidad`, `
 -- Volcando datos para la tabla api_maquillaje.frecuencias: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `frecuencias` DISABLE KEYS */;
 INSERT INTO `frecuencias` (`id`, `descripcion`, `dias`, `estado`, `created_at`, `updated_at`) VALUES
-	(1, 'esta es descripcion 2222', 0, 15, '2022-01-24 21:38:13', '2022-01-27 01:36:20'),
-	(2, 'esta es descripcion', 1, 30, '2022-01-27 01:28:49', '2022-01-27 01:28:49');
+	(1, 'quincenal', 15, 1, '2022-01-24 21:38:13', '2022-01-27 01:36:20'),
+	(2, 'mensual', 30, 1, '2022-01-27 01:28:49', '2022-02-08 18:35:49');
 /*!40000 ALTER TABLE `frecuencias` ENABLE KEYS */;
 
--- Volcando datos para la tabla api_maquillaje.migrations: ~22 rows (aproximadamente)
+-- Volcando datos para la tabla api_maquillaje.migrations: ~33 rows (aproximadamente)
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(21, '2014_10_12_000000_create_users_table', 1),
@@ -79,7 +80,18 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(72, '2022_01_21_141652_create_clientes_table', 1),
 	(73, '2022_01_21_145924_create_facturas_table', 1),
 	(74, '2022_01_21_153506_create_productos_table', 1),
-	(75, '2022_01_21_161644_create_factura_detalles_table', 1);
+	(75, '2022_01_21_161644_create_factura_detalles_table', 1),
+	(76, '2014_10_12_000000_create_users_table', 1),
+	(77, '2014_10_12_100000_create_password_resets_table', 1),
+	(78, '2019_08_19_000000_create_failed_jobs_table', 1),
+	(79, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+	(80, '2022_01_20_233955_create_permission_tables', 1),
+	(81, '2022_01_21_011111_create_categorias_table', 1),
+	(82, '2022_01_21_011120_create_frecuencias_table', 1),
+	(83, '2022_01_21_141652_create_clientes_table', 1),
+	(84, '2022_01_21_145924_create_facturas_table', 1),
+	(85, '2022_01_21_153506_create_productos_table', 1),
+	(86, '2022_01_21_161644_create_factura_detalles_table', 1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- Volcando datos para la tabla api_maquillaje.model_has_permissions: ~0 rows (aproximadamente)

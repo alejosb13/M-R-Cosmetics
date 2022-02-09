@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientesService } from 'app/shared/services/clientes.service';
+import { HelpersService } from 'app/shared/services/helpers.service';
 import Swal from 'sweetalert2';
 import { Cliente } from '../../../shared/models/Cliente.model';
 
@@ -18,7 +20,7 @@ export class ClienteEditarComponent implements OnInit {
     private _ClientesService: ClientesService,
     // private fb: FormBuilder,
     // private _FrecuenciaService: FrecuenciaService,
-    // private _HelpersService: HelpersService,
+    private _HelpersService: HelpersService,
     
   ) { 
     this.clienteId = Number(route.snapshot.params.id);
@@ -34,14 +36,15 @@ export class ClienteEditarComponent implements OnInit {
         text: "Cliente modificado con exito",
         icon: 'success',
       }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload()
-        }
+        if (result.isConfirmed) window.location.reload()
       })
-    },(error)=>{
-      // console.log(error);
+    },(HttpErrorResponse :HttpErrorResponse)=>{
+      // console.log(HttpErrorResponse );
+      let error:string =  this._HelpersService.errorResponse(HttpErrorResponse )
+
       Swal.fire({
-        text: "Error",
+        title: "Error",
+        html: error,
         icon: 'error',
       })
     })

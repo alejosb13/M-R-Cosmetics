@@ -22,6 +22,7 @@ export class ClienteFormComponent implements OnInit {
   Categorias:Categoria[]
   Frecuencias:Frecuencia[]
   daysOfWeek:string[]
+  loadInfo:boolean = false;
   
   @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() clienteId?:number
@@ -150,11 +151,8 @@ export class ClienteFormComponent implements OnInit {
   }
   
   setFormValues(){
-    
+    this.loadInfo = true
     this._ClientesService.getClienteById(this.clienteId).subscribe((cliente:Cliente)=>{
-      // console.log(cliente);
-      // console.log(cliente.dias_cobro.split(","));
-      
       this.editarClienteForm.patchValue({
         "categoria_id" : cliente.categoria_id,
         "frecuencia_id" : cliente.frecuencia_id,
@@ -181,8 +179,8 @@ export class ClienteFormComponent implements OnInit {
           input.setAttribute('checked', true)
         }
       })
-
       
+      this.loadInfo = false
     })
             
 

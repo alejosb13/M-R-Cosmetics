@@ -187,3 +187,7 @@
   outline: none;
   display: none;
 }
+ul.error-list li {
+  font-size: 15px;
+  text-align: left;
+}
