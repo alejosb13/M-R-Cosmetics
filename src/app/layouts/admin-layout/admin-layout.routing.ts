@@ -10,13 +10,14 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 
 import { ClientesComponent } from 'app/pages/clientes/clientes.component';
 import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
+import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cliente-insertar.component';
 // import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'inicio',               component: DashboardComponent },
     
     { path: 'cliente',              component: ClientesComponent },
-    { path: 'cliente/guardar/:id',  component: ClienteEditarComponent },
+    { path: 'cliente/agregar',      component: ClienteInsertarComponent},
     { path: 'cliente/editar/:id',   component: ClienteEditarComponent },
 
     

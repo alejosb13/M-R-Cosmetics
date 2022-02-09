@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Categoria } from 'app/shared/models/Categoria.models';
-import { Frecuencia } from 'app/shared/models/Frecuencia.models';
-import { CategoriaService } from 'app/shared/services/categoria.service';
-import { FrecuenciaService } from 'app/shared/services/frecuencia.service';
+import { ActivatedRoute } from '@angular/router';
+import { ClientesService } from 'app/shared/services/clientes.service';
+import Swal from 'sweetalert2';
+import { Cliente } from '../../../shared/models/Cliente.model';
 
 @Component({
   selector: 'app-cliente-editar',
@@ -12,115 +11,40 @@ import { FrecuenciaService } from 'app/shared/services/frecuencia.service';
 })
 export class ClienteEditarComponent implements OnInit {
   
-  editarClienteForm: FormGroup;
-  Categorias:Categoria[]
-  Frecuencias:Frecuencia[]
-  
+ 
+  clienteId:number
   constructor(
-    private fb: FormBuilder,
-    private _CategoriaService: CategoriaService,
-    private _FrecuenciaService: FrecuenciaService,
+    route: ActivatedRoute,
+    private _ClientesService: ClientesService,
+    // private fb: FormBuilder,
+    // private _FrecuenciaService: FrecuenciaService,
+    // private _HelpersService: HelpersService,
     
   ) { 
-    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
-    this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
-  }
-
-  ngOnInit(): void {
+    this.clienteId = Number(route.snapshot.params.id);
     
-    this.definirValidaciones()
   }
+
+  ngOnInit(): void {}
   
-  definirValidaciones(){
-    this.editarClienteForm = this.fb.group(
-      {
-        categoria_id: [
-          '',
-          Validators.compose([
-            Validators.required,        
-            // Validators.maxLength(100),
-          ]),
-        ],
-        frecuencia_id: [
-          '',
-          Validators.compose([
-            Validators.required,
-            // Validators.min(2000),
-            // Validators.max(this.anioActual),
-
-          ]),
-        ],
-        nombre: [
-          '',
-          Validators.compose([
-            Validators.required,
-            
-          ]),
-        ],
-        apellido: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        celular: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        telefono: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        direccion_casa: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        direccion_negocio: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        cedula: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        dias_cobro: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-        // fecha_vencimiento: [
-        //   '',
-        //   Validators.compose([
-        //     // Validators.required,
-
-        //   ]),
-        // ],
-        estado: [
-          '',
-          Validators.compose([
-            // Validators.required,
-
-          ]),
-        ],
-      }
-    ); 
+  ClientValuesForm(cliente:Cliente){
+    this._ClientesService.updateCliente(this.clienteId,cliente).subscribe(data =>{
+      // console.log(data);
+      Swal.fire({
+        text: "Cliente modificado con exito",
+        icon: 'success',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload()
+        }
+      })
+    },(error)=>{
+      // console.log(error);
+      Swal.fire({
+        text: "Error",
+        icon: 'error',
+      })
+    })
   }
+
 }

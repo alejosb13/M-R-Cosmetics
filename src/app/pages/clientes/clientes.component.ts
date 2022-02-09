@@ -1,7 +1,7 @@
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { TablasService } from 'app/shared/services/tablas.service';
-import { Cliente } from './models/Cliente.model';
-import { ClientesService } from './servicios/clientes.service';
+import { Cliente } from '../../shared/models/Cliente.model';
+import { ClientesService } from '../../shared/services/clientes.service';
 import Swal from 'sweetalert2';
 
 

@@ -33,31 +33,31 @@ export class ClientesService {
     return new HttpHeaders(config);
   }
   
-  buscar(datosTabla:any[]){
-    let busqueda = this.busqueda
+  // buscar(datosTabla:any[]){
+  //   let busqueda = this.busqueda
         
-    // filter
-    let result = datosTabla.filter(valoresFila => this.filtrarBusqueda(valoresFila, busqueda));
+  //   // filter
+  //   let result = datosTabla.filter(valoresFila => this.filtrarBusqueda(valoresFila, busqueda));
     
-    this.datosTablaStorage = result
-    this.total = result.length;
-  }
+  //   this.datosTablaStorage = result
+  //   this.total = result.length;
+  // }
   
-  filtrarBusqueda(valoresFila:any,busqueda:string):boolean {
-    let busquedaMinuscula = busqueda.toLowerCase()
-    let tieneCoincidencia = false
+  // filtrarBusqueda(valoresFila:any,busqueda:string):boolean {
+  //   let busquedaMinuscula = busqueda.toLowerCase()
+  //   let tieneCoincidencia = false
     
-    // console.log(valoresFila);
-    let valores = Object.values(valoresFila)
-    // let valores = valoresFila
+  //   // console.log(valoresFila);
+  //   let valores = Object.values(valoresFila)
+  //   // let valores = valoresFila
     
-    // debugger
-    valores.map((valorFilaDatatableObject:any)=>{
-      if(valorFilaDatatableObject.toString().toLowerCase().includes(busquedaMinuscula)) tieneCoincidencia = true
-    })
+  //   // debugger
+  //   valores.map((valorFilaDatatableObject:any)=>{
+  //     if(valorFilaDatatableObject.toString().toLowerCase().includes(busquedaMinuscula)) tieneCoincidencia = true
+  //   })
     
-    return tieneCoincidencia
-  }
+  //   return tieneCoincidencia
+  // }
   
   // public methods
   getCliente(): Observable<any> { 
@@ -67,20 +67,30 @@ export class ClientesService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
-  
-  insertCliente(id:number,data:any): Observable<any> { 
 
-    return this.http.post(
+  getClienteById(Id:number): Observable<any> { 
+    const URL = `${ClienteURL}/${Id}`
+    
+    return this.http.get(
+      URL,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+  
+  insertCliente(data:Cliente): Observable<any> { 
+
+    return this.http.post<Cliente>(
       ClienteURL, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
   
-  updateCliente(id:number,data:any): Observable<any> { 
-
-    return this.http.put(
-      ClienteURL, 
+  updateCliente(Id:number,data:Cliente): Observable<any> { 
+    const URL = `${ClienteURL}/${Id}`
+    
+    return this.http.put<Cliente>(
+      URL, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );

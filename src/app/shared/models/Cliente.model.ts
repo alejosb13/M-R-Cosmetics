@@ -7,6 +7,7 @@ export interface Cliente {
     categoria_id: number;
     frecuencia_id: number;
     nombre: string;
+    apellido: string;
     celular: number;
     telefono: number;
     direccion_casa: string;
@@ -14,9 +15,9 @@ export interface Cliente {
     cedula: string;
     dias_cobro: string;
     fecha_vencimiento: string;
-    frecuencia: Frecuencia;
-    categoria: Categoria;
-    facturas: Factura[];
+    frecuencia?: Frecuencia;
+    categoria?: Categoria;
+    facturas?: Factura[];
     estado: number;
     created_at?: Date;
     updated_at?: Date;

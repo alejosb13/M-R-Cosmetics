@@ -16,6 +16,8 @@ import { ClientesComponent } from '../../pages/clientes/clientes.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
+import { ClienteFormComponent } from 'app/shared/components/forms/cliente-form/cliente-form.component';
+import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cliente-insertar.component';
 
 @NgModule({
   imports: [
@@ -34,8 +36,11 @@ import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/client
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
+    
     ClientesComponent,
-    ClienteEditarComponent
+    ClienteEditarComponent,
+    ClienteInsertarComponent,
+    ClienteFormComponent
 
   ]
 })
