@@ -12,12 +12,19 @@ import { TypographyComponent }      from '../../pages/typography/typography.comp
 import { IconsComponent }           from '../../pages/icons/icons.component';
 import { MapsComponent }            from '../../pages/maps/maps.component';
 import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
-import { ClientesComponent } from '../../pages/clientes/clientes.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { ClientesComponent } from '../../pages/clientes/clientes.component';
 import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
 import { ClienteFormComponent } from 'app/shared/components/forms/cliente-form/cliente-form.component';
 import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cliente-insertar.component';
+
+import { ProductosComponent } from 'app/pages/productos/productos.component';
+import { ProductoEditarComponent } from 'app/pages/productos/producto-editar/producto-editar.component';
+import { ProductoFormComponent } from 'app/shared/components/forms/producto-form/producto-form.component';
+import { ProductoInsertarComponent } from 'app/pages/productos/producto-insertar/producto-insertar.component';
+
 
 @NgModule({
   imports: [
@@ -40,8 +47,12 @@ import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cl
     ClientesComponent,
     ClienteEditarComponent,
     ClienteInsertarComponent,
-    ClienteFormComponent
-
+    ClienteFormComponent,
+    
+    ProductosComponent,
+    ProductoEditarComponent,
+    ProductoInsertarComponent,
+    ProductoFormComponent,
   ]
 })
 

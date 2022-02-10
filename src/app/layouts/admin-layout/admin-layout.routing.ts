@@ -11,16 +11,32 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 import { ClientesComponent } from 'app/pages/clientes/clientes.component';
 import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
 import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cliente-insertar.component';
-// import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
+import { ProductosComponent } from 'app/pages/productos/productos.component';
+import { ProductoEditarComponent } from 'app/pages/productos/producto-editar/producto-editar.component';
+import { ProductoInsertarComponent } from 'app/pages/productos/producto-insertar/producto-insertar.component';
+
+
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'inicio',               component: DashboardComponent },
     
-    { path: 'cliente',              component: ClientesComponent },
-    { path: 'cliente/agregar',      component: ClienteInsertarComponent},
-    { path: 'cliente/editar/:id',   component: ClienteEditarComponent },
+    { 
+        path: 'cliente', 
+        children:[
+            { path: '',             component: ClientesComponent},
+            { path: 'agregar',      component: ClienteInsertarComponent},
+            { path: 'editar/:id',   component: ClienteEditarComponent },
+        ]
+    },
+    { 
+        path: 'producto', 
+        children:[
+            { path: '',             component: ProductosComponent},
+            { path: 'agregar',      component: ProductoInsertarComponent},
+            { path: 'editar/:id',   component: ProductoEditarComponent },
+        ]
+    },
 
-    
     { path: 'user',           component: UserComponent },
     { path: 'table',          component: TableComponent },
     { path: 'typography',     component: TypographyComponent },

@@ -2,25 +2,20 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { Cliente } from '../models/Cliente.model';
+import { Producto } from '../models/Producto.models';
 
-
-const ClienteURL = `${environment.urlAPI}cliente`
+const ProductoURL = `${environment.urlAPI}productos`
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientesService {
-  
-  total:number = 0
-  busqueda:string = ""
-  datosTablaStorage:Cliente[] = []
-
+export class ProductosService {
 
   constructor(
     private http: HttpClient
-  ) {}
-
+  ) { }
+  
+  
   
   headerJson_Token():HttpHeaders{
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage() 
@@ -34,16 +29,16 @@ export class ClientesService {
   }
   
   // public methods
-  getCliente(): Observable<any> { 
+  getProducto(): Observable<any> { 
 
     return this.http.get(
-      ClienteURL, 
+      ProductoURL, 
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  getClienteById(Id:number): Observable<any> { 
-    const URL = `${ClienteURL}/${Id}`
+  getProductoById(Id:number): Observable<any> { 
+    const URL = `${ProductoURL}/${Id}`
     
     return this.http.get(
       URL,
@@ -51,27 +46,27 @@ export class ClientesService {
     );
   }
   
-  insertCliente(data:Cliente): Observable<any> { 
+  insertProducto(data:Producto): Observable<any> { 
 
-    return this.http.post<Cliente>(
-      ClienteURL, 
+    return this.http.post<Producto>(
+      ProductoURL, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
   
-  updateCliente(Id:number,data:Cliente): Observable<any> { 
-    const URL = `${ClienteURL}/${Id}`
+  updateProducto(Id:number,data:Producto): Observable<any> { 
+    const URL = `${ProductoURL}/${Id}`
     
-    return this.http.put<Cliente>(
+    return this.http.put<Producto>(
       URL, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  deleteCliente(id:number): Observable<any> { 
-    const URL = `${ClienteURL}/${id}`
+  deleteProducto(id:number): Observable<any> { 
+    const URL = `${ProductoURL}/${id}`
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}
     );
