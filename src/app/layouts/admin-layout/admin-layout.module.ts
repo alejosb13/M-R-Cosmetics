@@ -25,6 +25,11 @@ import { ProductoEditarComponent } from 'app/pages/productos/producto-editar/pro
 import { ProductoFormComponent } from 'app/shared/components/forms/producto-form/producto-form.component';
 import { ProductoInsertarComponent } from 'app/pages/productos/producto-insertar/producto-insertar.component';
 
+import { UsuariosComponent } from 'app/pages/usuarios/usuarios.component';
+import { UsuariosEditarComponent } from 'app/pages/usuarios/usuarios-editar/usuarios-editar.component';
+import { UsuarioInsertarComponent } from 'app/pages/usuarios/usuario-insertar/usuario-insertar.component';
+import { UsuarioFormComponent } from 'app/shared/components/forms/usuario-form/usuario-form.component';
+
 
 @NgModule({
   imports: [
@@ -53,6 +58,11 @@ import { ProductoInsertarComponent } from 'app/pages/productos/producto-insertar
     ProductoEditarComponent,
     ProductoInsertarComponent,
     ProductoFormComponent,
+    
+    UsuariosComponent,
+    UsuariosEditarComponent,
+    UsuarioInsertarComponent,
+    UsuarioFormComponent
   ]
 })
 
