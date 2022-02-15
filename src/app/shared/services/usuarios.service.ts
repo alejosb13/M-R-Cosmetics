@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/Usuario.model';
+import { Usuario, UsuarioServ } from '../models/Usuario.model';
 
 const UsuarioURL = `${environment.urlAPI}usuarios`
 
@@ -43,7 +43,7 @@ export class UsuariosService {
     );
   }
   
-  insertUsuario(data:Usuario): Observable<any> { 
+  insertUsuario(data:UsuarioServ): Observable<any> { 
 
     return this.http.post<Usuario>(
       UsuarioURL, 
@@ -52,7 +52,7 @@ export class UsuariosService {
     );
   }
   
-  updateUsuario(Id:number,data:Usuario): Observable<any> { 
+  updateUsuario(Id:number,data:UsuarioServ): Observable<any> { 
     const URL = `${UsuarioURL}/${Id}`
     
     return this.http.put<Usuario>(

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Usuario } from 'app/shared/models/Usuario.model';
+import { Usuario, UsuarioServ } from 'app/shared/models/Usuario.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import Swal from 'sweetalert2';
@@ -27,7 +27,7 @@ export class UsuariosEditarComponent implements OnInit {
 
   ngOnInit(): void {}
   
-  ValuesForm(usuario:Usuario){
+  ValuesForm(usuario:UsuarioServ){
     this._UsuariosService.updateUsuario(this.UsuarioId,usuario).subscribe(data =>{
       // console.log(data);
       Swal.fire({

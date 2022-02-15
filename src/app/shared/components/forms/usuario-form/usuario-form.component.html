@@ -9,7 +9,6 @@
                 <label>Role <span class="text-danger">(*)</span></label>
                 <select
                   class="form-control"
-                  id="exampleFormControlSelect1"
                   name="role"
                   formControlName="role"
                   autocomplete="off"
@@ -129,7 +128,7 @@
         <div class="form-group">
             <label>Contraseña <span class="text-danger">(*)</span></label>
             <input
-              type="text"
+              type="password"
               class="form-control"
               name="password"
               formControlName="password"
@@ -160,7 +159,7 @@
         <div class="form-group">
             <label>Confirmar contraseña <span class="text-danger">(*)</span></label>
             <input
-              type="text"
+              type="password"
               class="form-control"
               name="password_confirmation"
               formControlName="password_confirmation"
@@ -228,7 +227,6 @@
               <label>Estado</label>
               <select
                 class="form-control"
-                id="exampleFormControlSelect1"
                 name="estado"
                 formControlName="estado"
               >
@@ -265,7 +263,7 @@
   <div  [hidden]="!loadInfo" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
-        Cargando cliente
+        Cargando Usuario
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
       
