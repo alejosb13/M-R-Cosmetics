@@ -15,9 +15,13 @@ import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cl
 import { ProductosComponent } from 'app/pages/productos/productos.component';
 import { ProductoEditarComponent } from 'app/pages/productos/producto-editar/producto-editar.component';
 import { ProductoInsertarComponent } from 'app/pages/productos/producto-insertar/producto-insertar.component';
+
 import { UsuariosComponent } from 'app/pages/usuarios/usuarios.component';
 import { UsuariosEditarComponent } from 'app/pages/usuarios/usuarios-editar/usuarios-editar.component';
 import { UsuarioInsertarComponent } from 'app/pages/usuarios/usuario-insertar/usuario-insertar.component';
+import { FacturasComponent } from 'app/pages/facturas/facturas.component';
+import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
+import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
 
 
 
@@ -47,6 +51,14 @@ export const AdminLayoutRoutes: Routes = [
             { path: '',             component: ProductosComponent},
             { path: 'agregar',      component: ProductoInsertarComponent},
             { path: 'editar/:id',   component: ProductoEditarComponent },
+        ]
+    },
+    { 
+        path: 'factura', 
+        children:[
+            { path: '',             component: FacturasComponent},
+            { path: 'agregar',      component: FacturaInsertarComponent},
+            { path: 'editar/:id',   component: FacturaEditarComponent },
         ]
     },
 
