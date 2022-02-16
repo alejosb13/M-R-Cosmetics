@@ -26,11 +26,13 @@ export class FacturaInsertarComponent implements OnInit {
   Producto:Producto
   Clientes:Cliente[]
   Usuarios:Usuario[]
+  ClienteId:number=0
+  UsuarioId:number=0
   
   constructor(
     private modalService: NgbModal,
     private _ProductosService: ProductosService,
-    private _FacturasService: FacturasService,
+    public _FacturasService: FacturasService,
     private _ClientesService: ClientesService,
     private _UsuariosService: UsuariosService,
     
@@ -66,6 +68,28 @@ export class FacturaInsertarComponent implements OnInit {
       );
     
   }
+  
+  CambiarSelect(select:HTMLSelectElement){
+    let value = select.value
+    let name = select.name
+    let optionsToArray:[] = Array.from(select.options) as []
+    let optionSeleccionado:HTMLOptionElement = optionsToArray[select.selectedIndex]
+    
+    let FacturaCheckout: FacturaCheckout = {...this._FacturasService.FacturaCheckout}
+
+    if(name == "usuario" ) {
+      FacturaCheckout.user_id =  Number(value)
+      FacturaCheckout.userFullName = optionSeleccionado.text
+    }
+    
+    if(name == "cliente" ){
+      FacturaCheckout.cliente_id =  Number(value)
+      FacturaCheckout.clienteFullName =  optionSeleccionado.text
+    }
+    
+    this._FacturasService.FacturaCheckout = {...FacturaCheckout}
+  }
+  
   
   FormsValues(producto:Producto){
     console.log("esteee");

@@ -11,10 +11,11 @@
                                 <label>Cliente <span class="text-danger">(*)</span></label>
                                 <select
                                   class="form-control"
-                                  name="categoria_id"
+                                  name="cliente"
                                   autocomplete="off"
+                                  (change)="CambiarSelect($event.target)"
                                 >
-                                  <option selected value="" hidden>Seleccione un cliente</option>
+                                  <option selected value="0" hidden>Seleccione un cliente</option>
                                   <option *ngFor="let cliente of Clientes" value="{{ cliente.id}}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
                   
                                 </select>
@@ -25,10 +26,11 @@
                                 <label>Usuario <span class="text-danger">(*)</span></label>
                                 <select
                                   class="form-control"
-                                  name="categoria_id"
+                                  name="usuario"
                                   autocomplete="off"
+                                  (change)="CambiarSelect($event.target)"
                                 >
-                                  <option selected value="" hidden>Seleccione un usuario</option>
+                                  <option selected value="0" hidden>Seleccione un usuario</option>
                                   <option *ngFor="let usuario of Usuarios" value="{{ usuario.id}}">{{ usuario.name }} {{ usuario.apellido }}</option>
                   
                                 </select>
@@ -104,15 +106,20 @@
                         <div class="header-group">
                             <div class="cliente">
                                 <span class="mr-1">Cliente:</span>
-                                <span>Alejandro Sanchez</span>
+                                <span *ngIf="!_FacturasService.FacturaCheckout.clienteFullName" >--</span>
+                                <span *ngIf="_FacturasService.FacturaCheckout.clienteFullName" >{{_FacturasService.FacturaCheckout.clienteFullName}}</span>
                             </div>
                             <div class="Vendedor">
                                 <span class="mr-1">Vendedor:</span>
-                                <span>Pepe Mora</span>
+                                <span *ngIf="!_FacturasService.FacturaCheckout.userFullName">--</span>
+                                <span *ngIf="_FacturasService.FacturaCheckout.userFullName">{{_FacturasService.FacturaCheckout.userFullName}}</span>
                             </div>
                         </div>
                         <ul class="list-group mb-3">
-                          <li *ngFor="let producto of _FacturasService.FacturaCheckout.factura_detalle" class="list-group-item d-flex justify-content-between lh-sm">
+                          <li 
+                            *ngFor="let producto of _FacturasService.FacturaCheckout.factura_detalle" 
+                            class="list-group-item d-flex justify-content-between lh-sm animate__animated animate__jello"
+                          >
                             <div>
                               <h6 class="my-0">{{producto.nombre}}</h6>
                               <small class="text-muted">{{producto.descripcion}}</small>
@@ -125,11 +132,11 @@
                               <h6 class="my-0">Sub-total</h6>
                               <small>Brief description</small>
                             </div>
-                            <span class="text-success">−$5</span>
+                            <span class="text-success">$0</span>
                           </li>
                           <li class="list-group-item d-flex justify-content-between">
                             <span>Total (USD)</span>
-                            <strong>$20</strong>
+                            <strong>$0</strong>
                           </li>
                         </ul>
                     </div>
