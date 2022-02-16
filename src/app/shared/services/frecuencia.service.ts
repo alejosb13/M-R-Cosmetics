@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { Frecuencia } from '../models/Frecuencia.models';
+import { Frecuencia } from '../models/Frecuencia.model';
 
 const FrecuenciaURL = `${environment.urlAPI}frecuencias`
 @Injectable({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Producto } from 'app/shared/models/Producto.models';
+import { Producto } from 'app/shared/models/Producto.model';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import Swal from 'sweetalert2';
@@ -31,7 +31,7 @@ export class ProductosComponent implements OnInit {
     this.isLoad = true
     
     this._ProductosService.getProducto().subscribe((producto:Producto[])=> {
-      console.log(producto);
+      // console.log(producto);
           
       this.Productos = [...producto]
       this._TablasService.datosTablaStorage = [...producto]

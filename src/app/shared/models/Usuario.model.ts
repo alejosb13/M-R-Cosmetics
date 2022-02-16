@@ -1,4 +1,4 @@
-import { Factura } from "./Factura.models";
+import { Factura } from "./Factura.model";
 
 export interface Usuario {
     id?: number;

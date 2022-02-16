@@ -1,6 +1,6 @@
-import { Categoria } from "app/shared/models/Categoria.models";
-import { Factura } from "app/shared/models/Factura.models";
-import { Frecuencia } from "app/shared/models/Frecuencia.models";
+import { Categoria } from "app/shared/models/Categoria.model";
+import { Factura } from "app/shared/models/Factura.model";
+import { Frecuencia } from "app/shared/models/Frecuencia.model";
 
 export interface Cliente {
     id?: number;

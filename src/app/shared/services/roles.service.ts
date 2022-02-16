@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { Role } from '../models/Role.models';
+import { Role } from '../models/Role.model';
 
 const RolesURL = `${environment.urlAPI}roles`
 

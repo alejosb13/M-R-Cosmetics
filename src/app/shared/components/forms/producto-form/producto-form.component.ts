@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Producto } from 'app/shared/models/Producto.models';
+import { Producto } from 'app/shared/models/Producto.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';

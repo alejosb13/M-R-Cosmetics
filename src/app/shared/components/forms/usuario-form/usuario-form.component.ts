@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Role } from 'app/shared/models/Role.models';
+import { Role } from 'app/shared/models/Role.model';
 import { Usuario, UsuarioServ } from 'app/shared/models/Usuario.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { RolesService } from 'app/shared/services/roles.service';

@@ -32,6 +32,7 @@ import { UsuarioFormComponent } from 'app/shared/components/forms/usuario-form/u
 import { FacturasComponent } from 'app/pages/facturas/facturas.component';
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
 import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
+import { FacturarProductoComponent } from 'app/shared/components/forms/facturar-producto/facturar-producto.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/fa
     FacturasComponent,
     FacturaEditarComponent,
     FacturaInsertarComponent,
+    FacturarProductoComponent
   ]
 })
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { Producto } from '../models/Producto.models';
+import { Producto } from '../models/Producto.model';
 
 const ProductoURL = `${environment.urlAPI}productos`
 
@@ -10,11 +10,21 @@ const ProductoURL = `${environment.urlAPI}productos`
   providedIn: 'root'
 })
 export class ProductosService {
-
+  
+  // private productoStorage:Producto
+  
   constructor(
     private http: HttpClient
   ) { }
-    
+  
+  // get producto():Producto{
+  //   return this.productoStorage
+  // }
+  
+  // set producto(value:Producto){
+  //   this.productoStorage = value
+  // }
+  
   headerJson_Token():HttpHeaders{
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage() 
     

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
-import { Factura } from '../models/Factura.models';
+import { Factura } from '../models/Factura.model';
+import { FacturaCheckout } from '../models/FacturaCheckout.model';
 
 const FacturaURL = `${environment.urlAPI}facturas`
 
@@ -14,6 +15,8 @@ export class FacturasService {
     private http: HttpClient
   ) { }
     
+  FacturaCheckout:FacturaCheckout = {} as FacturaCheckout;
+  
   headerJson_Token():HttpHeaders{
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage() 
     

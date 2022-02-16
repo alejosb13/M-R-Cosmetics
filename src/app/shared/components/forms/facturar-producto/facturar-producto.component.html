@@ -1,0 +1,242 @@
+<form [formGroup]="ProductForm" [hidden]="loadInfo">
+    <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="mr-1"><b>Marca: </b></label>
+                <span>{{producto.marca}}</span>
+                <!-- <input
+                    type="text"
+                    class="form-control"
+                    name="marca"
+                    formControlName="marca"
+                    autocomplete="off"
+                    [ngClass]="{
+                    'is-invalid': ProductForm.controls['marca'].invalid && ProductForm.controls['marca'].touched,
+                    'is-valid': ProductForm.controls['marca'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'La marca es requerida',
+                    control: ProductForm.controls['marca']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'La marca debe tener como máximo 30 letras',
+                    control: ProductForm.controls['marca']
+                }"></ng-container> -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="mr-1"><b>Modelo: </b></label>
+                <span>{{producto.modelo}}</span>
+                <!-- <input
+                    type="text"
+                    class="form-control"
+                    name="modelo"
+                    formControlName="modelo"
+                    autocomplete="off"
+                    [ngClass]="{
+                    'is-invalid': ProductForm.controls['modelo'].invalid && ProductForm.controls['modelo'].touched,
+                    'is-valid': ProductForm.controls['modelo'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'El modelo es requerido',
+                    control: ProductForm.controls['modelo']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'El modelo debe tener como máximo 43 letras',
+                    control: ProductForm.controls['modelo']
+                }"></ng-container> -->
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="mr-1"><b>Linea: </b></label>
+                <span>{{producto.linea}}</span>
+                <!-- <input
+                    type="text"
+                    class="form-control"
+                    name="linea"
+                    formControlName="linea"
+                    autocomplete="off"
+                    [ngClass]="{
+                        'is-invalid': ProductForm.controls['linea'].invalid && ProductForm.controls['linea'].touched,
+                        'is-valid': ProductForm.controls['linea'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'La linea es requerido',
+                    control: ProductForm.controls['linea']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'La linea debe tener como máximo 50 numeros',
+                    control: ProductForm.controls['linea']
+                }"></ng-container> -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="mr-1"><b>Descripción: </b></label>
+                <span>{{producto.descripcion}}</span>
+
+                <!-- <input
+                    type="text"
+                    class="form-control"
+                    name="descripcion"
+                    formControlName="descripcion"
+                    autocomplete="off"
+                    [ngClass]="{
+                        'is-invalid': ProductForm.controls['descripcion'].invalid && ProductForm.controls['descripcion'].touched,
+                        'is-valid': ProductForm.controls['descripcion'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'La descripción es requerida',
+                    control: ProductForm.controls['descripcion']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'La descripción debe tener como máximo 200 numeros',
+                    control: ProductForm.controls['descripcion']
+                }"></ng-container> -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Stock <span class="text-danger">(*)</span></label>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="stock"
+                    formControlName="stock"
+                    autocomplete="off"
+                    [ngClass]="{
+                    'is-invalid': ProductForm.controls['stock'].invalid && ProductForm.controls['stock'].touched,
+                    'is-valid': ProductForm.controls['stock'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'pattern',
+                    message: 'El stock debe ser numerico',
+                    control: ProductForm.controls['stock']
+                    }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'El stock es requerido',
+                    control: ProductForm.controls['stock']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'El stock debe tener como máximo 11 letras',
+                    control: ProductForm.controls['stock']
+                }"></ng-container>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Precio <span class="text-danger">(*)</span></label>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="precio"
+                    formControlName="precio"
+                    autocomplete="off"
+                    [ngClass]="{
+                        'is-invalid': ProductForm.controls['precio'].invalid && ProductForm.controls['precio'].touched,
+                        'is-valid': ProductForm.controls['precio'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'El precio es requerido',
+                control: ProductForm.controls['precio']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'pattern',
+                message: 'El valor debe ser decimal',
+                control: ProductForm.controls['precio']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'maxlength',
+                message: 'El precio debe tener como máximo 80 letras',
+                control: ProductForm.controls['precio']
+                }"></ng-container>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Comision <span class="text-danger">(*)</span></label>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="comision"
+                    formControlName="comision"
+                    autocomplete="off"
+                    [ngClass]="{
+                    'is-invalid': ProductForm.controls['comision'].invalid && ProductForm.controls['comision'].touched,
+                    'is-valid': ProductForm.controls['comision'].valid
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'La comision es requerida',
+                    control: ProductForm.controls['comision']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'pattern',
+                    message: 'La comision debe ser numerica',
+                    control: ProductForm.controls['comision']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'La comision debe tener como máximo 11 numeros',
+                    control: ProductForm.controls['comision']
+                }"></ng-container>
+            </div>
+        </div>
+  
+    </div>
+    <div class="row">
+        <div class="update ml-auto mr-auto">
+            <button  
+              type="submit"
+              class="btn btn-primary btn-round"
+              (click)="EnviarFormulario()"
+            >
+              <div>Agregar</div>
+            </button>
+        </div>
+    </div>
+    <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+      <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+        <div class="invalid-feedback">
+          {{ message }}
+        </div>
+      </ng-container>
+    </ng-template>
+  </form>
+  
+  
+   
+  <div  [hidden]="!loadInfo" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando producto
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+      
+    </div>
+  </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Factura } from 'app/shared/models/Factura.models';
+import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';

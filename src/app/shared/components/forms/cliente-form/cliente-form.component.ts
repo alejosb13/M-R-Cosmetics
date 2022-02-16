@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from 'app/shared/models/Cliente.model';
-import { Categoria } from 'app/shared/models/Categoria.models';
-import { Frecuencia } from 'app/shared/models/Frecuencia.models';
+import { Categoria } from 'app/shared/models/Categoria.model';
+import { Frecuencia } from 'app/shared/models/Frecuencia.model';
 import { CategoriaService } from 'app/shared/services/categoria.service';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { FrecuenciaService } from 'app/shared/services/frecuencia.service';

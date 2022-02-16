@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { Categoria } from '../models/Categoria.models';
+import { Categoria } from '../models/Categoria.model';
 
 const CategoriaURL = `${environment.urlAPI}categorias`
 

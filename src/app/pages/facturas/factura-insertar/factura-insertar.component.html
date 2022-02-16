@@ -1,1 +1,166 @@
-<p>factura-insertar works!</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="container-fluid bg-white">
+            <div class="row">
+                <div class="col-md-8 pt-4">
+                    <h5 class="card-title">Generar factura</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cliente <span class="text-danger">(*)</span></label>
+                                <select
+                                  class="form-control"
+                                  name="categoria_id"
+                                  autocomplete="off"
+                                >
+                                  <option selected value="" hidden>Seleccione un cliente</option>
+                                  <option *ngFor="let cliente of Clientes" value="{{ cliente.id}}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                  
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Usuario <span class="text-danger">(*)</span></label>
+                                <select
+                                  class="form-control"
+                                  name="categoria_id"
+                                  autocomplete="off"
+                                >
+                                  <option selected value="" hidden>Seleccione un usuario</option>
+                                  <option *ngFor="let usuario of Usuarios" value="{{ usuario.id}}">{{ usuario.name }} {{ usuario.apellido }}</option>
+                  
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-plain">
+                                <div class="header">
+                                    <h6 class="title">Productos</h6>
+                                </div>
+                                <div *ngIf="isLoad" class="container-fluid p-5">
+                                    <div class="d-flex justify-content-center align-content-center">
+                                        <span>
+                                            Cargando productos
+                                            <i class="fas fa-circle-notch fa-spin"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                              <div class="table-responsive table-full-width" *ngIf="!isLoad" >
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Marca</th>
+                                            <th scope="col">Modelo</th>
+                                            <th scope="col">Linea</th>
+                                            <th scope="col">Stock</th>
+                                            <th scope="col">Precio</th>
+                                            <th scope="col">Descripcion</th>
+                                            <th scope="col">Comision</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let producto of Productos">
+                                            <th scope="row">{{ producto.id }}</th>
+                                            <td>
+                                              {{ producto.marca }}
+                                            </td>
+                                            <td>{{ producto.modelo }}</td>
+                                            <td>{{ producto.linea }}</td>
+                                            <td>{{ producto.stock }}</td>
+                                            <td>{{ producto.precio }}</td>
+                                            <td>{{ producto.descripcion }}</td>
+                                            <td>{{ producto.comision }}</td>
+                                            <td>
+                                                <button class="btn btn-success" (click)="openFormProduct(producto)">
+                                                    <i class="fas fa-cart-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+ 
+                                    </tbody>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="w-100 order-md-last">
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                          <span class="text-primary">Vista Previa</span>
+                          <div class="text">
+                            <span class="title-productos mr-2">Productos</span>
+                            <span class="badge bg-primary rounded-pill">3</span>
+                          </div>
+                        </h4>
+                        
+                        <div class="header-group">
+                            <div class="cliente">
+                                <span class="mr-1">Cliente:</span>
+                                <span>Alejandro Sanchez</span>
+                            </div>
+                            <div class="Vendedor">
+                                <span class="mr-1">Vendedor:</span>
+                                <span>Pepe Mora</span>
+                            </div>
+                        </div>
+                        <ul class="list-group mb-3">
+                          <li *ngFor="let producto of _FacturasService.FacturaCheckout.factura_detalle" class="list-group-item d-flex justify-content-between lh-sm">
+                            <div>
+                              <h6 class="my-0">{{producto.nombre}}</h6>
+                              <small class="text-muted">{{producto.descripcion}}</small>
+                            </div>
+                            <span class="text-muted">{{producto.precio}}</span>
+                          </li>
+                         
+                          <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                              <h6 class="my-0">Sub-total</h6>
+                              <small>Brief description</small>
+                            </div>
+                            <span class="text-success">−$5</span>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (USD)</span>
+                            <strong>$20</strong>
+                          </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template
+    #modalProducto
+    let-modal
+>
+    <div class="modal-header">
+        <button
+            type="button"
+            class="close btn btn-icon btn-sm btn-primary"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+        >
+            <!-- <span aria-hidden="true">&times;</span> -->
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+      <div class="container cortar-preview">
+        <app-facturar-producto (FormsValues)="FormsValues($event)" [producto]="Producto"></app-facturar-producto>
+      </div>
+    </div>
+    <!-- <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Guardar</button>
+    </div> -->
+
+</ng-template>

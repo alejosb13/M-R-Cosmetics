@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Producto } from 'app/shared/models/Producto.models';
+import { Producto } from 'app/shared/models/Producto.model';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { ProductosService } from 'app/shared/services/productos.service';
