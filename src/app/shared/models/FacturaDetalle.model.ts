@@ -7,6 +7,7 @@ export interface FacturaDetalle {
     porcentaje: number;
     nombre?: string;
     descripcion?: string;
+    // comision?: number;
     created_at?: Date;
     updated_at?: Date;
 }

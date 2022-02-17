@@ -157,7 +157,12 @@
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'El celular debe tener como máximo 11 numeros',
+            message: 'El celular debe tener como máximo 12 numeros',
+            control: editarClienteForm.controls['celular']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'minlength',
+            message: 'El celular debe tener como minimo 10 numeros',
             control: editarClienteForm.controls['celular']
           }"></ng-container>
         </div>
@@ -188,7 +193,12 @@
         }"></ng-container>
         <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
           validation: 'maxlength',
-          message: 'El telefono debe tener como máximo 11 numeros',
+          message: 'El telefono debe tener como máximo 12 numeros',
+          control: editarClienteForm.controls['telefono']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'minlength',
+          message: 'El telefono debe tener como minimo 10 numeros',
           control: editarClienteForm.controls['telefono']
         }"></ng-container>
       </div>

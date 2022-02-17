@@ -98,7 +98,8 @@ export class ClienteFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(11),
+            Validators.maxLength(12),
+            Validators.minLength(10),
             
             // Validators.maxLength(12),
           ]),
@@ -107,7 +108,8 @@ export class ClienteFormComponent implements OnInit {
           '',
           Validators.compose([
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(11),
+            Validators.maxLength(12),
+            Validators.minLength(10),
           ]),
         ],
         direccion_casa: [

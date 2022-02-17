@@ -18,6 +18,7 @@ export class FacturarProductoComponent implements OnInit {
   // Frecuencias:Frecuencia[]
   daysOfWeek:string[]
   loadInfo:boolean = false;
+  precio:number
   
   @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() producto:Producto
@@ -25,13 +26,16 @@ export class FacturarProductoComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-  ) {}
+  ) {
+
+  }
 
   ngOnInit(): void {
-    
+    this.precio = this.producto.precio
     this.definirValidaciones()
     console.log(this.producto);
     this.setFormValues()
+    this.changeValues()
   }
   
   definirValidaciones(){
@@ -56,11 +60,12 @@ export class FacturarProductoComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx), 
-            Validators.maxLength(11),
+            Validators.max(this.producto.stock),
+            Validators.min(1),
           ]),
         ],
         precio: [
-          '',
+          {value:"", disabled:true},
           Validators.compose([
             Validators.required,
             // Validators.maxLength(80),
@@ -111,7 +116,7 @@ export class FacturarProductoComponent implements OnInit {
       this.ProductForm.setValue({
         // "marca" : producto.marca,
         // "modelo" : producto.modelo,
-        "stock" : this.producto.stock,
+        "stock" :  (this.producto.stock > 0)? 1 : 0,
         "precio" : this.producto.precio,
         "comision" : this.producto.comision,
         // "linea" : producto.linea,
@@ -121,9 +126,16 @@ export class FacturarProductoComponent implements OnInit {
       
     //   this.loadInfo = false
     // })
-            
-
-    
+  }
+  
+  changeValues(){
+    this.ProductForm.get("stock").valueChanges.subscribe(valueStock=>{
+      this.ProductForm.get("precio").setValue(this.precio * valueStock)
+      
+      // if()
+      // let precio = this.ProductForm.get("precio")?.value
+      // this.ProductForm.get("precio").setValue(precio * valueStock)
+    })
 
   }
   

@@ -121,22 +121,22 @@
                             class="list-group-item d-flex justify-content-between lh-sm animate__animated animate__jello"
                           >
                             <div>
-                              <h6 class="my-0">{{producto.nombre}}</h6>
+                              <h6 class="my-0">{{producto.nombre}} <span class="text-lowercase">x ({{producto.cantidad}})</span></h6>
                               <small class="text-muted">{{producto.descripcion}}</small>
                             </div>
-                            <span class="text-muted">{{producto.precio}}</span>
+                            <span class="text-muted">{{producto.precio | currency: 'USD' }}</span>
                           </li>
                          
                           <li class="list-group-item d-flex justify-content-between bg-light">
                             <div class="text-success">
-                              <h6 class="my-0">Sub-total</h6>
-                              <small>Brief description</small>
+                              <h6 class="my-0">IVA</h6>
+                              <small>15%</small>
                             </div>
-                            <span class="text-success">$0</span>
+                            <span class="text-success">{{_FacturasService.FacturaCheckout.iva |currency: 'USD' }}</span>
                           </li>
                           <li class="list-group-item d-flex justify-content-between">
                             <span>Total (USD)</span>
-                            <strong>$0</strong>
+                            <strong>{{_FacturasService.FacturaCheckout.monto |currency: 'USD' }}</strong>
                           </li>
                         </ul>
                     </div>

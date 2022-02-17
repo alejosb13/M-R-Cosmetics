@@ -90,11 +90,21 @@ export class FacturaInsertarComponent implements OnInit {
     this._FacturasService.FacturaCheckout = {...FacturaCheckout}
   }
   
+  actualizarProducto(product:Producto){
+    this.Productos = this.Productos.map(producto => {
+      if(producto.id == product.id){
+        producto.stock = producto.stock - product.stock
+      }
+      
+      return producto
+    })
+  }
+  
   
   FormsValues(producto:Producto){
     console.log("esteee");
     console.log(producto);
-    
+
     let factura_detalle:FacturaDetalle ={
       producto_id: producto.id,
       cantidad: producto.stock,
@@ -102,20 +112,29 @@ export class FacturaInsertarComponent implements OnInit {
       nombre: `${producto.modelo} - ${producto.marca}`,
       descripcion: producto.descripcion,
       porcentaje: producto.comision,
+      // comision: producto.comision,
     }
     
     let FacturaCheckout: FacturaCheckout = {...this._FacturasService.FacturaCheckout}
-    console.log(FacturaCheckout.factura_detalle);
-    
-    FacturaCheckout.user_id = 1
-    FacturaCheckout.cliente_id = 1
     FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle ]
-
-    console.log(FacturaCheckout);
+    
+    let precios = FacturaCheckout.factura_detalle.map((producto => producto.precio))
+    let comisiones = FacturaCheckout.factura_detalle.map((producto => producto.porcentaje))
+    
+    let total = precios.reduce((valorAnterior, valor) => valorAnterior + valor)
+    let totalIva = total *0.15
+    let totalFinal = total + totalIva
+    
+    FacturaCheckout.iva = totalIva
+    FacturaCheckout.monto = totalFinal
+    
+    console.log(FacturaCheckout.factura_detalle);
+    console.log(totalIva);
+    console.log(total);
+    console.log(totalFinal);
     
     this._FacturasService.FacturaCheckout = FacturaCheckout
-    // this._FacturasService.FacturaCheckout = producto
-    
+    this.actualizarProducto(producto)
     this.modalService.dismissAll()
   }
 

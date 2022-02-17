@@ -118,7 +118,7 @@
             <div class="form-group">
                 <label>Stock <span class="text-danger">(*)</span></label>
                 <input
-                    type="text"
+                    type="number"
                     class="form-control"
                     name="stock"
                     formControlName="stock"
@@ -139,15 +139,15 @@
                     control: ProductForm.controls['stock']
                 }"></ng-container>
                 <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'maxlength',
-                    message: 'El stock debe tener como máximo 11 letras',
+                    validation: 'max',
+                    message: 'Supera el maximo en stock',
                     control: ProductForm.controls['stock']
                 }"></ng-container>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label>Precio <span class="text-danger">(*)</span></label>
+                <label>Precio </label>
                 <input
                     type="text"
                     class="form-control"
