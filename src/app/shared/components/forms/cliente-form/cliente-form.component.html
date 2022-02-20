@@ -35,74 +35,89 @@
               </select>
           </div>
       </div>
+      <div class="col-md-6">
+          <div class="form-group">
+              <label>Usuario<span class="text-danger"></span></label>
+              <select
+                class="form-control"
+                id="exampleFormControlSelect1"
+                name="user_id"
+                formControlName="user_id"
+                autocomplete="off"
+              >
+                <option selected value="" hidden>Seleccione un usuario</option>
+                <option *ngFor="let usuario of Usuarios" value="{{ usuario.id}}">{{ usuario.name }} {{ usuario.apelido }}</option>
+              </select>
+          </div>
+      </div>
       <hr class="hr w-100">
   </div>
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <label>Nombre</label>
+        <label>Nombre Completo</label>
         <input
           type="text"
           class="form-control"
-          name="nombre"
-          formControlName="nombre"
+          name="nombreCompleto"
+          formControlName="nombreCompleto"
           autocomplete="off"
           [ngClass]="{
-            'is-invalid': editarClienteForm.controls['nombre'].invalid && editarClienteForm.controls['nombre'].touched,
-            'is-valid': editarClienteForm.controls['nombre'].valid
+            'is-invalid': editarClienteForm.controls['nombreCompleto'].invalid && editarClienteForm.controls['nombreCompleto'].touched,
+            'is-valid': editarClienteForm.controls['nombreCompleto'].valid
           }"
         >
         <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
           validation: 'required',
           message: 'El nombre es requerido',
-          control: editarClienteForm.controls['nombre']
+          control: editarClienteForm.controls['nombreCompleto']
         }"></ng-container>
         <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
           validation: 'minlength',
           message: 'El nombre debe poseer al menos 3 letras',
-          control: editarClienteForm.controls['nombre']
+          control: editarClienteForm.controls['nombreCompleto']
         }"></ng-container>
         <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
           validation: 'maxlength',
           message: 'El nombre debe tener como máximo 80 letras',
-          control: editarClienteForm.controls['nombre']
+          control: editarClienteForm.controls['nombreCompleto']
         }"></ng-container>
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
-          <label>Apellido <span class="text-danger">(*)</span></label>
+          <label>Empresa <span class="text-danger">(*)</span></label>
           <input
             type="text"
             class="form-control"
-            name="apellido"
-            formControlName="apellido"
+            name="nombreEmpresa"
+            formControlName="nombreEmpresa"
             autocomplete="off"
             [ngClass]="{
-              'is-invalid': editarClienteForm.controls['apellido'].invalid && editarClienteForm.controls['apellido'].touched,
-              'is-valid': editarClienteForm.controls['apellido'].valid
+              'is-invalid': editarClienteForm.controls['nombreEmpresa'].invalid && editarClienteForm.controls['nombreEmpresa'].touched,
+              'is-valid': editarClienteForm.controls['nombreEmpresa'].valid
             }"
           >
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'required',
-            message: 'El apellido es requerido',
-            control: editarClienteForm.controls['apellido']
+            message: 'El nombre de la empresa es requerido',
+            control: editarClienteForm.controls['nombreEmpresa']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'minlength',
-            message: 'El apellido debe poseer al menos 3 letras',
-            control: editarClienteForm.controls['apellido']
+            message: 'El  nombre de la empresa debe poseer al menos 3 letras',
+            control: editarClienteForm.controls['nombreEmpresa']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'El apellido debe tener como máximo 80 letras',
-            control: editarClienteForm.controls['apellido']
+            message: 'El  nombre de la empresa debe tener como máximo 80 letras',
+            control: editarClienteForm.controls['nombreEmpresa']
           }"></ng-container>
       </div>
     </div>
     <div class="col-md-4">
       <div class="form-group">
-        <label>Cedula <span class="text-danger">(*)</span></label>
+        <label>Cedula <span class="text-danger">(*) (No debe de poseer guiiones)</span></label>
         <input
           type="text"
           class="form-control"
@@ -126,7 +141,12 @@
         }"></ng-container>
         <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
           validation: 'maxlength',
-          message: 'La cedula debe tener como máximo 12 numeros',
+          message: 'La cedula debe tener como máximo 14 numeros',
+          control: editarClienteForm.controls['cedula']
+        }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'minlength',
+          message: 'La cedula debe tener como minimo 14 numeros',
           control: editarClienteForm.controls['cedula']
         }"></ng-container>
       </div>
@@ -169,7 +189,7 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
-        <label>Telefono alternativo</label>
+        <label>Telefono Empresa</label>
         <input
           type="text"
           class="form-control"

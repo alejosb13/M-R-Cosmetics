@@ -9,6 +9,8 @@ import { FrecuenciaService } from 'app/shared/services/frecuencia.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
 import Swal from 'sweetalert2';
+import { Usuario } from 'app/shared/models/Usuario.model';
+import { UsuariosService } from 'app/shared/services/usuarios.service';
 
 
 @Component({
@@ -21,6 +23,7 @@ export class ClienteFormComponent implements OnInit {
   editarClienteForm: FormGroup;
   Categorias:Categoria[]
   Frecuencias:Frecuencia[]
+  Usuarios:Usuario[]
   daysOfWeek:string[]
   loadInfo:boolean = false;
   
@@ -33,11 +36,13 @@ export class ClienteFormComponent implements OnInit {
     private _CategoriaService: CategoriaService,
     private _ClientesService: ClientesService,
     private _FrecuenciaService: FrecuenciaService,
+    private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,
     
   ) { 
     this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
     this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
+    this._UsuariosService.getUsuario().subscribe((usaurios:Usuario[]) => this.Usuarios = [...usaurios]);
     
     this.daysOfWeek = this._HelpersService.DaysOfTheWeek
     
@@ -69,7 +74,15 @@ export class ClienteFormComponent implements OnInit {
 
           ]),
         ],
-        nombre: [
+        user_id: [
+          '',
+          Validators.compose([
+            // Validators.min(2000),
+            // Validators.max(this.anioActual),
+
+          ]),
+        ],
+        nombreCompleto: [
           '',
           Validators.compose([
             Validators.required,
@@ -77,7 +90,7 @@ export class ClienteFormComponent implements OnInit {
             Validators.minLength(3),
           ]),
         ],
-        apellido: [
+        nombreEmpresa: [
           '',
           Validators.compose([
             Validators.required,
@@ -90,7 +103,8 @@ export class ClienteFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(12),
+            Validators.maxLength(14),
+            Validators.minLength(14),
           ]),
         ],
         celular: [
@@ -158,8 +172,9 @@ export class ClienteFormComponent implements OnInit {
       this.editarClienteForm.patchValue({
         "categoria_id" : cliente.categoria_id,
         "frecuencia_id" : cliente.frecuencia_id,
-        "nombre" : cliente.nombre,
-        "apellido" : cliente.apellido,
+        "user_id" : cliente.user_id,
+        "nombreCompleto" : cliente.nombreCompleto,
+        "nombreEmpresa" : cliente.nombreEmpresa,
         "cedula" : cliente.cedula,
         "celular" : cliente.celular,
         "telefono" : cliente.telefono,
@@ -209,12 +224,13 @@ export class ClienteFormComponent implements OnInit {
   EnviarFormulario(){
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
-    // console.log(this.editarClienteForm.getRawValue());
+    console.log(this.editarClienteForm.getRawValue());
     
     if(this.editarClienteForm.valid){
       let cliente = {} as Cliente
-      cliente.nombre            = this.formularioControls.nombre.value
-      cliente.apellido          = this.formularioControls.apellido.value
+      cliente.nombreCompleto    = this.formularioControls.nombreCompleto.value
+      cliente.nombreEmpresa     = this.formularioControls.nombreEmpresa.value
+      cliente.user_id           = Number(this.formularioControls.user_id.value)
       cliente.categoria_id      = Number(this.formularioControls.categoria_id.value)
       cliente.cedula            = this.formularioControls.cedula.value
       cliente.celular           = Number(this.formularioControls.celular.value)
@@ -224,7 +240,7 @@ export class ClienteFormComponent implements OnInit {
       cliente.estado            = Number(this.formularioControls.estado.value)
       cliente.frecuencia_id     = Number(this.formularioControls.frecuencia_id.value)
       cliente.telefono          = Number(this.formularioControls.telefono.value)
-    
+
       this.FormsValues.emit(cliente)
     }else{
       Swal.fire({

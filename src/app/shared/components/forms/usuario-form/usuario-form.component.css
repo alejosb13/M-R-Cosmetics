@@ -1,0 +1,7 @@
+select{
+    text-transform: capitalize;
+}
+
+option{
+    text-transform: capitalize;
+}

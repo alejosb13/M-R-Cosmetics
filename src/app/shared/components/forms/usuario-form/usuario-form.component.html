@@ -124,7 +124,7 @@
           }"></ng-container>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" *ngIf="!Id" [formGroup]="PasswordGroup">
         <div class="form-group">
             <label>Contraseña <span class="text-danger">(*)</span></label>
             <input
@@ -134,28 +134,28 @@
               formControlName="password"
               autocomplete="off"
               [ngClass]="{
-                'is-invalid': editarUsuarioForm.controls['password'].invalid && editarUsuarioForm.controls['password'].touched,
-                'is-valid': editarUsuarioForm.controls['password'].valid
+                'is-invalid': PasswordGroup.controls['password'].invalid && PasswordGroup.controls['password'].touched,
+                'is-valid': PasswordGroup.controls['password'].valid
               }"
             >
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                 validation: 'minlength',
                 message: 'La contraseña debe poseer al menos 8 letras',
-                control: editarUsuarioForm.controls['password']
+                control: PasswordGroup.controls['password']
               }"></ng-container>
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
               validation: 'required',
               message: 'La contraseña es requerida',
-              control: editarUsuarioForm.controls['password']
+              control: PasswordGroup.controls['password']
             }"></ng-container>
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
               validation: 'maxlength',
               message: 'La contraseña debe tener como máximo 12 caracteres',
-              control: editarUsuarioForm.controls['password']
+              control: PasswordGroup.controls['password']
             }"></ng-container>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" *ngIf="!Id"  [formGroup]="PasswordGroup">
         <div class="form-group">
             <label>Confirmar contraseña <span class="text-danger">(*)</span></label>
             <input
@@ -165,29 +165,29 @@
               formControlName="password_confirmation"
               autocomplete="off"
               [ngClass]="{
-                'is-invalid': editarUsuarioForm.controls['password_confirmation'].invalid && editarUsuarioForm.controls['password_confirmation'].touched,
-                'is-valid': editarUsuarioForm.controls['password_confirmation'].valid
+                'is-invalid': PasswordGroup.controls['password_confirmation'].invalid && PasswordGroup.controls['password_confirmation'].touched,
+                'is-valid': PasswordGroup.controls['password_confirmation'].valid
               }"
             >
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                 validation: 'required',
                 message: 'La contraseña es requerida',
-                control: editarUsuarioForm.controls['password_confirmation']
+                control: PasswordGroup.controls['password_confirmation']
               }"></ng-container>
               <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                 validation: 'minlength',
                 message: 'El contraseña debe poseer al menos 8 letras',
-                control: editarUsuarioForm.controls['password_confirmation']
+                control: PasswordGroup.controls['password_confirmation']
               }"></ng-container>
               <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                 validation: 'maxlength',
                 message: 'La contraseña debe tener como máximo 12 caracteres',
-                control: editarUsuarioForm.controls['password_confirmation']
+                control: PasswordGroup.controls['password_confirmation']
               }"></ng-container>
               <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                 validation: 'ConfirmPassword',
                 message: 'Las contraaseñas no coinciden',
-                control: editarUsuarioForm.controls['password_confirmation']
+                control: PasswordGroup.controls['password_confirmation']
               }"></ng-container>
         </div>
       </div>

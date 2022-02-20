@@ -33,7 +33,7 @@
         
       </div>
   
-      <div class="card-body py-3 px-6 bg-white">  
+      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">  
         <table class="table table-striped" >
           <thead>
             <tr>
@@ -44,7 +44,7 @@
               <th scope="col">Stock</th>
               <th scope="col">Precio</th>
               <th scope="col">Descripcion</th>
-              <th scope="col">Comision</th>
+              <!-- <th scope="col">Comision</th> -->
               <th scope="col">Estado</th>
               <th scope="col">Opciones</th>
             </tr>
@@ -61,7 +61,7 @@
                 <td>{{ producto.stock }}</td>
                 <td>{{ producto.precio }}</td>
                 <td>{{ producto.descripcion }}</td>
-                <td>{{ producto.comision }}</td>
+                <!-- <td>{{ producto.comision }}</td> -->
                 <td>
                     <span *ngIf="producto.estado">Activo</span>
                     <span *ngIf="!producto.estado">Inactivo</span>

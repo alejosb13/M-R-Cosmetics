@@ -29,10 +29,13 @@ import { UsuariosComponent } from 'app/pages/usuarios/usuarios.component';
 import { UsuariosEditarComponent } from 'app/pages/usuarios/usuarios-editar/usuarios-editar.component';
 import { UsuarioInsertarComponent } from 'app/pages/usuarios/usuario-insertar/usuario-insertar.component';
 import { UsuarioFormComponent } from 'app/shared/components/forms/usuario-form/usuario-form.component';
+
 import { FacturasComponent } from 'app/pages/facturas/facturas.component';
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
 import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
 import { FacturarProductoComponent } from 'app/shared/components/forms/facturar-producto/facturar-producto.component';
+
+import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-password/cambiar-password.component';
 
 
 @NgModule({
@@ -71,7 +74,9 @@ import { FacturarProductoComponent } from 'app/shared/components/forms/facturar-
     FacturasComponent,
     FacturaEditarComponent,
     FacturaInsertarComponent,
-    FacturarProductoComponent
+    FacturarProductoComponent,
+    
+    CambiarPasswordComponent,
   ]
 })
 

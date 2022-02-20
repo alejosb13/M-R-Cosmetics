@@ -33,12 +33,15 @@ export class ClientesComponent implements OnInit {
     
     this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> {
       console.log(clientes);
-          
+      clientes.map(cliente=>{ 
+        const regex = /,/g;
+        cliente.dias_cobro = cliente.dias_cobro.replace(regex," - ")
+        return cliente
+      })
       this.Clientes = [...clientes]
       this._TablasService.datosTablaStorage = [...clientes]
       this._TablasService.total = clientes.length
       this._TablasService.busqueda = "" 
-      
       
       this.refreshCountries() 
       this.isLoad =false

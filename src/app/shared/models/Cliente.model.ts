@@ -6,8 +6,9 @@ export interface Cliente {
     id?: number;
     categoria_id: number;
     frecuencia_id: number;
-    nombre: string;
-    apellido: string;
+    user_id: number;
+    nombreCompleto: string;
+    nombreEmpresa: string;
     celular: number;
     telefono: number;
     direccion_casa: string;

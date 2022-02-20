@@ -1,8 +1,9 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card card-user">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between">
                 <h5 class="card-title">Editar Usuario</h5>
+                <button class="btn btn-primary" (click)="open(content)">Cambiar contraseña</button>
             </div>
             <div class="card-body px-4">
                 <app-usuario-form (FormsValues)="ValuesForm($event)" [Id]="UsuarioId"></app-usuario-form>
@@ -11,3 +12,16 @@
         </div>
     </div>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Cambiar contraseña</h4>
+      <button type="button" class="btn-close btn-primary" aria-label="Close" (click)="modal.dismiss('Cross click')">X</button>
+    </div>
+    <div class="modal-body">
+        <app-cambiar-password [Id]="UsuarioId" (FormsValues)="FormPassword($event)"></app-cambiar-password>
+    </div>
+    <!-- <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div> -->
+  </ng-template>

@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 export class UsuarioFormComponent implements OnInit {
 
   editarUsuarioForm: FormGroup;
+  PasswordGroup:FormGroup;
   Roles:Role[]
   loadInfo:boolean = false;
   
@@ -72,24 +73,24 @@ export class UsuarioFormComponent implements OnInit {
             Validators.maxLength(150),
           ]),
         ],
-        password: [
-          '',
-          Validators.compose([
-            Validators.required,    
-            Validators.maxLength(12),
-            Validators.minLength(8),  
-            // Validators.maxLength(12),
-          ]),
-        ],
-        password_confirmation: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.maxLength(12),
-            Validators.minLength(8),  
-            // Validators.maxLength(12),
-          ]),
-        ],
+        // password: [
+        //   '',
+        //   Validators.compose([
+        //     Validators.required,    
+        //     Validators.maxLength(12),
+        //     Validators.minLength(8),  
+        //     // Validators.maxLength(12),
+        //   ]),
+        // ],
+        // password_confirmation: [
+        //   '',
+        //   Validators.compose([
+        //     Validators.required,
+        //     Validators.maxLength(12),
+        //     Validators.minLength(8),  
+        //     // Validators.maxLength(12),
+        //   ]),
+        // ],
         cargo: [
           '',
           Validators.compose([
@@ -109,6 +110,30 @@ export class UsuarioFormComponent implements OnInit {
         validator: ValidFunctionsValidator.MatchPassword,
       }
     ); 
+    
+    if(!this.Id){
+      this.PasswordGroup = this.fb.group({
+          password: [
+            '',
+            Validators.compose([
+              Validators.required,    
+              Validators.maxLength(12),
+              Validators.minLength(8),  
+              // Validators.maxLength(12),
+            ]),
+          ],
+          password_confirmation: [
+            '',
+            Validators.compose([
+              Validators.required,
+              Validators.maxLength(12),
+              Validators.minLength(8),  
+              // Validators.maxLength(12),
+            ]),
+          ],
+      })
+      
+    }
     
   }
   
@@ -135,8 +160,12 @@ export class UsuarioFormComponent implements OnInit {
     return this.editarUsuarioForm.controls
   }
   
+  get formularioPassword(){
+    return this.PasswordGroup.controls
+  }
+  
   EnviarFormulario(){
-    console.log(this.editarUsuarioForm);
+    console.log(this.PasswordGroup.getRawValue());
     
     if(this.editarUsuarioForm.valid){
       let usuarioService = {} as UsuarioServ
@@ -144,8 +173,12 @@ export class UsuarioFormComponent implements OnInit {
       usuarioService.apellido              = this.formularioControls.apellido.value
       usuarioService.email                 = this.formularioControls.email.value
       usuarioService.cargo                 = this.formularioControls.cargo.value
-      usuarioService.password              = this.formularioControls.password.value
-      usuarioService.password_confirmation = this.formularioControls.password_confirmation.value
+      
+      if(!this.Id){
+        usuarioService.password              = this.formularioPassword.password.value
+        usuarioService.password_confirmation = this.formularioPassword.password_confirmation.value
+      }
+      
       usuarioService.role                  = Number(this.formularioControls.role.value)
       usuarioService.estado                = this.formularioControls.estado.value
       

@@ -4,7 +4,7 @@ export interface Producto {
     modelo: string;
     stock: number;
     precio: number;
-    comision: number;
+    // comision: number;
     linea: string;
     descripcion: string;
     estado: number;

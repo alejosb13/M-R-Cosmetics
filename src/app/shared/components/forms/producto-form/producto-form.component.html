@@ -85,6 +85,11 @@
                     message: 'El stock debe tener como máximo 11 letras',
                     control: ProductForm.controls['stock']
                 }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'min',
+                    message: 'El stock debe ser mayor o igual a 1',
+                    control: ProductForm.controls['stock']
+                }"></ng-container>
             </div>
         </div>
         <div class="col-md-4">
@@ -118,7 +123,7 @@
                 }"></ng-container>
             </div>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="form-group">
                 <label>Comision <span class="text-danger">(*)</span></label>
                 <input
@@ -148,7 +153,7 @@
                     control: ProductForm.controls['comision']
                 }"></ng-container>
             </div>
-        </div>
+        </div> -->
         <div class="col-md-4">
             <div class="form-group">
                 <label>Linea <span class="text-danger">(*)</span></label>

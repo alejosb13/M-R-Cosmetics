@@ -33,12 +33,13 @@
       
     </div>
 
-    <div class="card-body py-3 px-6 bg-white">  
-      <table class="table table-striped" >
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">  
+      <table class="table table-striped " >
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
+            <th scope="col">Empresa</th>
             <th scope="col">Dias de cobro</th>
             <th scope="col">Direccion de casa</th>
             <th scope="col">Categoria</th>
@@ -51,13 +52,20 @@
           <tr *ngFor="let cliente of _TablasService.datosTablaStorage">
             <th scope="row">{{ cliente.id }}</th>
             <td>
-              {{ cliente.nombre }}
+              {{ cliente.nombreCompleto }}
             </td>
-            <td>{{ cliente.dias_cobro }}</td>
+            <td>
+              {{ cliente.nombreEmpresa }}
+            </td>
+            <td>
+              <div class="text-center text-primary"  ngbTooltip="{{ cliente.dias_cobro | uppercase }}">
+                <i class="fas fa-info-circle"></i>
+              </div>
+            </td>
             <td>{{ cliente.direccion_casa }}</td>
             <td >              
               <div class="d-flex flex-direction">
-                <div class="mr-3" ngbTooltip="{{ cliente.categoria. descripcion }}">
+                <div class="mr-3" ngbTooltip="{{ cliente.categoria.descripcion }}">
                   <span>({{ cliente.categoria.tipo }}) </span>
                   <a href="#">
                     <i class="fas fa-chart-line "></i>

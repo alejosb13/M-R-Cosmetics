@@ -111,7 +111,7 @@ export class FacturaInsertarComponent implements OnInit {
       precio: producto.precio,
       nombre: `${producto.modelo} - ${producto.marca}`,
       descripcion: producto.descripcion,
-      porcentaje: producto.comision,
+      porcentaje: 0,
       // comision: producto.comision,
     }
     

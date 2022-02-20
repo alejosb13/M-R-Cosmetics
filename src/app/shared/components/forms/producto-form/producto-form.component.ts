@@ -25,12 +25,7 @@ export class ProductoFormComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    // private _CategoriaService: CategoriaService,
-    // private _ClientesService: ClientesService,
-    // private _FrecuenciaService: FrecuenciaService,
-        private _ProductosService: ProductosService,
-    private _HelpersService: HelpersService,
-    
+    private _ProductosService: ProductosService,
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +58,7 @@ export class ProductoFormComponent implements OnInit {
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx), 
             Validators.maxLength(11),
+            Validators.min(1),
           ]),
         ],
         precio: [
@@ -74,14 +70,14 @@ export class ProductoFormComponent implements OnInit {
             // Validators.minLength(3),
           ]),
         ],
-        comision: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(11),
-          ]),
-        ],
+        // comision: [
+        //   '',
+        //   Validators.compose([
+        //     Validators.required,
+        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
+        //     Validators.maxLength(11),
+        //   ]),
+        // ],
         linea: [
           '',
           Validators.compose([
@@ -119,7 +115,7 @@ export class ProductoFormComponent implements OnInit {
         "modelo" : producto.modelo,
         "stock" : producto.stock,
         "precio" : producto.precio,
-        "comision" : producto.comision,
+        // "comision" : producto.comision,
         "linea" : producto.linea,
         "descripcion" : producto.descripcion,
         "estado" : producto.estado,
@@ -170,16 +166,16 @@ export class ProductoFormComponent implements OnInit {
     if(this.ProductForm.valid){
       let producto = {} as Producto
       
-      producto.comision =  Number(this.formularioControls.comision.value)
-      producto.estado = Number(this.formularioControls.estado.value)
-      producto.linea =  this.formularioControls.linea.value
-      producto.marca =  this.formularioControls.marca.value
-      producto.modelo = this.formularioControls.modelo.value
-      producto.precio = Number(this.formularioControls.precio.value)
-      producto.stock = Number(this.formularioControls.stock.value)
-      producto.descripcion = String(this.formularioControls.stock.value)
+      // producto.comision =  Number(this.formularioControls.comision.value)
+      producto.linea        =  this.formularioControls.linea.value
+      producto.marca        =  this.formularioControls.marca.value
+      producto.modelo       = this.formularioControls.modelo.value
+      producto.precio       = Number(this.formularioControls.precio.value)
+      producto.stock        = Number(this.formularioControls.stock.value)
+      producto.descripcion  = String(this.formularioControls.descripcion.value)
+      producto.estado       = Number(this.formularioControls.estado.value)
  
-      console.log(producto);
+      // console.log(producto);
       
       this.FormsValues.emit(producto)
     }else{

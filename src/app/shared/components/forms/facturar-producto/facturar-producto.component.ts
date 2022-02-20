@@ -118,7 +118,7 @@ export class FacturarProductoComponent implements OnInit {
         // "modelo" : producto.modelo,
         "stock" :  (this.producto.stock > 0)? 1 : 0,
         "precio" : this.producto.precio,
-        "comision" : this.producto.comision,
+        // "comision" : this.producto.comision,
         // "linea" : producto.linea,
         // "descripcion" : producto.descripcion,
         // "estado" : producto.estado,
@@ -154,7 +154,7 @@ export class FacturarProductoComponent implements OnInit {
       let producto = {...this.producto}
       producto.precio   = Number(this.formularioControls.precio.value)
       producto.stock    = Number(this.formularioControls.stock.value)
-      producto.comision =  Number(this.formularioControls.comision.value)
+      // producto.comision =  Number(this.formularioControls.comision.value)
       // producto.comision =  Number(this.formularioControls.comision.value)
       // producto.estado = Number(this.formularioControls.estado.value)
       // producto.linea =  this.formularioControls.linea.value

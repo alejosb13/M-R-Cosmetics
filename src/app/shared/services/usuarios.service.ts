@@ -62,6 +62,16 @@ export class UsuariosService {
     );
   }
 
+  updatePassword(Id:number,data:any): Observable<any> { 
+    const URL = `${environment.urlAPI}update-password/${Id}`
+    
+    return this.http.put<any>(
+      URL, 
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   deleteUsuario(id:number): Observable<any> { 
     const URL = `${UsuarioURL}/${id}`
     return this.http.delete(
