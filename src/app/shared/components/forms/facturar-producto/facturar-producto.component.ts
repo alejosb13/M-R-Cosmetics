@@ -73,14 +73,14 @@ export class FacturarProductoComponent implements OnInit {
             // Validators.minLength(3),
           ]),
         ],
-        comision: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(11),
-          ]),
-        ],
+        // comision: [
+        //   '',
+        //   Validators.compose([
+        //     Validators.required,
+        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
+        //     Validators.maxLength(11),
+        //   ]),
+        // ],
         // linea: [
         //   '',
         //   Validators.compose([

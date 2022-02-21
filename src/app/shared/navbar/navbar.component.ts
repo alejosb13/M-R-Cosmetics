@@ -2,11 +2,15 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/co
 import { ROUTES } from '../../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { Location} from '@angular/common';
+import { CheckoutService } from '../services/checkout.service';
+import { FacturaDetalle } from '../models/FacturaDetalle.model';
 
 @Component({
     moduleId: module.id,
     selector: 'navbar-cmp',
-    templateUrl: 'navbar.component.html'
+    templateUrl: 'navbar.component.html',
+    styleUrls:  ['./navbar.component.css'],
+
 })
 
 export class NavbarComponent implements OnInit{
@@ -16,13 +20,28 @@ export class NavbarComponent implements OnInit{
     private toggleButton;
     private sidebarVisible: boolean;
 
+
     public isCollapsed = true;
     @ViewChild("navbar-cmp", {static: false}) button;
 
-    constructor(location:Location, private renderer : Renderer2, private element : ElementRef, private router: Router) {
-        this.location = location;
-        this.nativeElement = element.nativeElement;
-        this.sidebarVisible = false;
+    constructor(
+      location:Location, 
+      private renderer : Renderer2, 
+      private element : ElementRef, 
+      private router: Router,
+      public _CheckoutService: CheckoutService
+    ) {
+      this.location = location;
+      
+      let productosCheckout:FacturaDetalle[] = this._CheckoutService.getProductCheckout()
+      if(productosCheckout.length > 0){
+        // console.log("cantidad");
+        // console.log(productosCheckout.length);
+        this._CheckoutService.numeroProductos.next(productosCheckout.length)
+      }
+      
+      this.nativeElement = element.nativeElement;
+      this.sidebarVisible = false;
     }
 
     ngOnInit(){

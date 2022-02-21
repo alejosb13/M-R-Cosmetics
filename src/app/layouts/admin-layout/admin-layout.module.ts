@@ -45,7 +45,6 @@ import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-pa
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
-    FormsModule,
   ],
   declarations: [
     DashboardComponent,

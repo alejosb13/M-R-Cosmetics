@@ -165,7 +165,7 @@ export class UsuarioFormComponent implements OnInit {
   }
   
   EnviarFormulario(){
-    console.log(this.PasswordGroup.getRawValue());
+    // console.log(this.PasswordGroup.getRawValue());
     
     if(this.editarUsuarioForm.valid){
       let usuarioService = {} as UsuarioServ

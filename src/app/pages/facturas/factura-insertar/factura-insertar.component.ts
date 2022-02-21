@@ -5,9 +5,11 @@ import { FacturaCheckout } from 'app/shared/models/FacturaCheckout.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { Producto } from 'app/shared/models/Producto.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
+import { CheckoutService } from 'app/shared/services/checkout.service';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { ProductosService } from 'app/shared/services/productos.service';
+import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 
 @Component({
@@ -19,6 +21,10 @@ export class FacturaInsertarComponent implements OnInit {
   
   @ViewChild('modalProducto') modalP: ElementRef<any>;
   modalOptions:NgbModalOptions;
+  
+  page = 1;
+  pageSize = 3;
+  collectionSize = 0;
   
   isLoad:boolean
   Productos:Producto[]
@@ -35,6 +41,8 @@ export class FacturaInsertarComponent implements OnInit {
     public _FacturasService: FacturasService,
     private _ClientesService: ClientesService,
     private _UsuariosService: UsuariosService,
+    public _TablasService:TablasService,
+    public _CheckoutService:CheckoutService
     
   ) { }
 
@@ -49,10 +57,21 @@ export class FacturaInsertarComponent implements OnInit {
     this.isLoad = true
     this._ProductosService.getProducto().subscribe((producto:Producto[])=> {
       this.Productos= [...producto]
+      this._TablasService.datosTablaStorage = [...producto]
+      this._TablasService.total = producto.length
+      this._TablasService.busqueda = "" 
+      this.refreshCountries() 
+      
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
     }) 
+  }
+  
+  agregarProducto(event:any,producto:Producto){
+    console.log(event);
+    console.log(producto);
+    
   }
   
   openFormProduct(producto:Producto){
@@ -75,7 +94,7 @@ export class FacturaInsertarComponent implements OnInit {
     let optionsToArray:[] = Array.from(select.options) as []
     let optionSeleccionado:HTMLOptionElement = optionsToArray[select.selectedIndex]
     
-    let FacturaCheckout: FacturaCheckout = {...this._FacturasService.FacturaCheckout}
+    let FacturaCheckout: FacturaCheckout = {...this._CheckoutService.dataStorage}
 
     if(name == "usuario" ) {
       FacturaCheckout.user_id =  Number(value)
@@ -87,7 +106,7 @@ export class FacturaInsertarComponent implements OnInit {
       FacturaCheckout.clienteFullName =  optionSeleccionado.text
     }
     
-    this._FacturasService.FacturaCheckout = {...FacturaCheckout}
+    this._CheckoutService.dataStorage = {...FacturaCheckout}
   }
   
   actualizarProducto(product:Producto){
@@ -100,6 +119,17 @@ export class FacturaInsertarComponent implements OnInit {
     })
   }
   
+  refreshCountries() {
+    this._TablasService.datosTablaStorage = [...this.Productos]
+    .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }
+  
+  BuscarValor(){
+    this._TablasService.buscar(this.Productos)
+    
+    if(this._TablasService.busqueda ==""){this.refreshCountries()}
+    
+  }
   
   FormsValues(producto:Producto){
     console.log("esteee");
@@ -115,26 +145,30 @@ export class FacturaInsertarComponent implements OnInit {
       // comision: producto.comision,
     }
     
-    let FacturaCheckout: FacturaCheckout = {...this._FacturasService.FacturaCheckout}
+    let FacturaCheckout: FacturaCheckout = {...this._CheckoutService.dataStorage}
     FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle ]
     
     let precios = FacturaCheckout.factura_detalle.map((producto => producto.precio))
     let comisiones = FacturaCheckout.factura_detalle.map((producto => producto.porcentaje))
     
     let total = precios.reduce((valorAnterior, valor) => valorAnterior + valor)
-    let totalIva = total *0.15
-    let totalFinal = total + totalIva
+    // let totalIva = total *0.15
+    // let totalFinal = total + totalIva
     
-    FacturaCheckout.iva = totalIva
-    FacturaCheckout.monto = totalFinal
+    // FacturaCheckout.iva = totalIva
+    FacturaCheckout.monto = total
     
-    console.log(FacturaCheckout.factura_detalle);
-    console.log(totalIva);
+    console.log(FacturaCheckout);
+    // console.log(totalIva);
     console.log(total);
-    console.log(totalFinal);
+    // console.log(totalFinal);
     
-    this._FacturasService.FacturaCheckout = FacturaCheckout
+    this._CheckoutService.dataStorage = FacturaCheckout
     this.actualizarProducto(producto)
+    
+    let numeroProductos:FacturaDetalle[] = this._CheckoutService.getProductCheckout()
+    this._CheckoutService.numeroProductos.next(numeroProductos.length)
+    
     this.modalService.dismissAll()
   }
 

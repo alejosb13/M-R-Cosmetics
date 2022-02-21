@@ -1,0 +1,11 @@
+.carrito-nav { position: relative; }
+.carrito-nav > span { position: absolute; }
+
+
+@media (max-width: 991px) {
+    .carrito-nav { position: relative; }
+    .carrito-nav > span {
+        top: 0px;
+        left: 20px;
+    }
+}

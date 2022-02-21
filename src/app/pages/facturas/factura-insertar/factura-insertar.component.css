@@ -25,3 +25,13 @@ button.btn.btn-success {
     font-size: 17px;
     padding: 6px 14px;
 }
+
+.carga-producto {
+    min-width: 112px;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+.carga-producto input{
+    width: 100%;
+    max-width: 90px;
+}

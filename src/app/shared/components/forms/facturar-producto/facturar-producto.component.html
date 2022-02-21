@@ -116,7 +116,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label>Stock <span class="text-danger">(*)</span></label>
+                <label>Cantidad <span class="text-danger">(*)</span></label>
                 <input
                     type="number"
                     class="form-control"
@@ -141,6 +141,11 @@
                 <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                     validation: 'max',
                     message: 'Supera el maximo en stock',
+                    control: ProductForm.controls['stock']
+                }"></ng-container>
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                    validation: 'min',
+                    message: 'Ingrese una cantidad valida',
                     control: ProductForm.controls['stock']
                 }"></ng-container>
             </div>
@@ -216,7 +221,7 @@
               class="btn btn-primary btn-round"
               (click)="EnviarFormulario()"
             >
-              <div>Agregar</div>
+              <div>Agregar al carrito</div>
             </button>
         </div>
     </div>
