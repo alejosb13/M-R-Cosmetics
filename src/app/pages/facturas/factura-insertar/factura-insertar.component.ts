@@ -94,7 +94,7 @@ export class FacturaInsertarComponent implements OnInit {
     let optionsToArray:[] = Array.from(select.options) as []
     let optionSeleccionado:HTMLOptionElement = optionsToArray[select.selectedIndex]
     
-    let FacturaCheckout: FacturaCheckout = {...this._CheckoutService.dataStorage}
+    let FacturaCheckout: FacturaCheckout = this._CheckoutService.getCheckout()
 
     if(name == "usuario" ) {
       FacturaCheckout.user_id =  Number(value)
@@ -106,7 +106,7 @@ export class FacturaInsertarComponent implements OnInit {
       FacturaCheckout.clienteFullName =  optionSeleccionado.text
     }
     
-    this._CheckoutService.dataStorage = {...FacturaCheckout}
+    this._CheckoutService.CheckoutToStorage(FacturaCheckout)
   }
   
   actualizarProducto(product:Producto){
@@ -132,38 +132,40 @@ export class FacturaInsertarComponent implements OnInit {
   }
   
   FormsValues(producto:Producto){
-    console.log("esteee");
+    // console.log("esteee");
     console.log(producto);
+    
+    this._CheckoutService.addProductCheckout(producto)
 
-    let factura_detalle:FacturaDetalle ={
-      producto_id: producto.id,
-      cantidad: producto.stock,
-      precio: producto.precio,
-      nombre: `${producto.modelo} - ${producto.marca}`,
-      descripcion: producto.descripcion,
-      porcentaje: 0,
-      // comision: producto.comision,
-    }
+    // let factura_detalle:FacturaDetalle ={
+    //   producto_id: producto.id,
+    //   cantidad: producto.stock,
+    //   precio: producto.precio,
+    //   nombre: `${producto.modelo} - ${producto.marca}`,
+    //   descripcion: producto.descripcion,
+    //   porcentaje: 0,
+    //   // comision: producto.comision,
+    // }
     
-    let FacturaCheckout: FacturaCheckout = {...this._CheckoutService.dataStorage}
-    FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle ]
+    // let FacturaCheckout: FacturaCheckout = {...this._CheckoutService.dataStorage}
+    // FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle ]
     
-    let precios = FacturaCheckout.factura_detalle.map((producto => producto.precio))
-    let comisiones = FacturaCheckout.factura_detalle.map((producto => producto.porcentaje))
+    // let precios = FacturaCheckout.factura_detalle.map((producto => producto.precio))
+    // let comisiones = FacturaCheckout.factura_detalle.map((producto => producto.porcentaje))
     
-    let total = precios.reduce((valorAnterior, valor) => valorAnterior + valor)
+    // let total = precios.reduce((valorAnterior, valor) => valorAnterior + valor)
     // let totalIva = total *0.15
     // let totalFinal = total + totalIva
     
     // FacturaCheckout.iva = totalIva
-    FacturaCheckout.monto = total
+    // FacturaCheckout.monto = total
     
-    console.log(FacturaCheckout);
+    // console.log(FacturaCheckout);
     // console.log(totalIva);
-    console.log(total);
+    // console.log(total);
     // console.log(totalFinal);
     
-    this._CheckoutService.dataStorage = FacturaCheckout
+    // this._CheckoutService.dataStorage = FacturaCheckout
     this.actualizarProducto(producto)
     
     let numeroProductos:FacturaDetalle[] = this._CheckoutService.getProductCheckout()

@@ -5,6 +5,7 @@ import { environment } from 'environments/environment';
 import { Factura } from '../models/Factura.model';
 import { FacturaCheckout } from '../models/FacturaCheckout.model';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
+import { Producto } from '../models/Producto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,37 +33,32 @@ export class CheckoutService {
   }
   
   
-  set dataStorage(value:FacturaCheckout ){
+  private calcularMontoTotal(Factura:FacturaCheckout):number{
+    let monto:number = 0
+    if(Factura.factura_detalle.length >0){
+      let precios = Factura.factura_detalle.map((producto => producto.precio))
+      
+      monto = precios.reduce((valorAnterior, valor) => valorAnterior + valor)
+    }
+    
+    return monto
+  }
+  
+  private set dataStorage(value:FacturaCheckout ){
     localStorage.setItem(this.authLocalStorageToken, JSON.stringify(value));
   }
   
-  get dataStorage():FacturaCheckout{
+  private get dataStorage():FacturaCheckout{
     let  FacturaCheckout:FacturaCheckout = {} as FacturaCheckout;
     if(localStorage.getItem(this.authLocalStorageToken)){
       FacturaCheckout = JSON.parse(localStorage.getItem(this.authLocalStorageToken))
     }
     return FacturaCheckout
-    // return localStorage.removeItem(this.authLocalStorageToken);
-        
   }
   
-  // public methods
-  getCheckout(): any { 
-
-    // return this.http.get(
-    //   FacturaURL, 
-    //   {headers: this.headerJson_Token(), responseType: "json" }
-    // );
-  }
-
-  getProductCheckoutById(Id:number): any { 
-    // const URL = `${FacturaURL}/${Id}`
-    
-    // return this.http.get(
-    //   URL,
-    //   {headers: this.headerJson_Token(), responseType: "json" }
-    // );
-  }
+ 
+  
+  getProductCheckoutById(Id:number): any { }
   
   getProductCheckout():FacturaDetalle[] { 
     const FacturaCheckout:FacturaCheckout = this.dataStorage
@@ -74,29 +70,43 @@ export class CheckoutService {
     return detalleProductos
   }
   
-  insertCheckout(data:Factura){ 
+  getCheckout():FacturaCheckout{
+    return this.dataStorage
+  }
+   
+  insertCheckout(data:Factura){ }
+  
+  updateCheckout(Id:number,data:Factura) { }
 
-    // return this.http.post<Factura>(
-    //   FacturaURL, 
-    //   data,
-    //   {headers: this.headerJson_Token(), responseType: "json" }
-    // );
+  addProductCheckout(producto:Producto) { 
+    let factura_detalle:FacturaDetalle ={
+      producto_id: producto.id,
+      cantidad: producto.stock,
+      precio: producto.precio,
+      nombre: `${producto.modelo} - ${producto.marca}`,
+      descripcion: producto.descripcion,
+      porcentaje: 0,
+      // comision: producto.comision,
+    }
+    
+    let FacturaCheckout: FacturaCheckout = {...this.dataStorage}
+    FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle]
+    FacturaCheckout.monto = this.calcularMontoTotal(FacturaCheckout)
+    
+    this.CheckoutToStorage(FacturaCheckout)
   }
   
-  updateCheckout(Id:number,data:Factura) { 
-    // const URL = `${FacturaURL}/${Id}`
+  deleteProductCheckout(item:FacturaDetalle) { 
     
-    // return this.http.put<Factura>(
-    //   URL, 
-    //   data,
-    //   {headers: this.headerJson_Token(), responseType: "json" }
-    // );
+    let Factura:FacturaCheckout = {...this.dataStorage}
+    Factura.factura_detalle = Factura.factura_detalle.filter((producto:FacturaDetalle)=> producto.producto_id == item.id && producto.cantidad == item.cantidad)
+    Factura.monto = this.calcularMontoTotal(Factura)
+    
+    this.CheckoutToStorage(Factura)
   }
-
-  deleteProductCheckout(id:number) { 
-    // const URL = `${FacturaURL}/${id}`
-    // return this.http.delete(
-    //   URL, {headers: this.headerJson_Token()}
-    // );
+  
+  CheckoutToStorage(Factura:FacturaCheckout){
+    this.dataStorage = Factura
   }
+  
 }

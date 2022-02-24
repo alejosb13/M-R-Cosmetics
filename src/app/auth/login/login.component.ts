@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
   }
   
   
-  EnviarFormulario(event){
+  EnviarFormulario(){
     // console.log(event);
     
     if(this.editarUsuarioForm.valid){

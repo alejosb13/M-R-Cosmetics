@@ -164,7 +164,7 @@ export class FacturarProductoComponent implements OnInit {
       // producto.stock = Number(this.formularioControls.stock.value)
       // producto.descripcion = String(this.formularioControls.stock.value)
  
-      console.log(producto);
+      // console.log(producto);
       
       this.FormsValues.emit(producto)
     }else{

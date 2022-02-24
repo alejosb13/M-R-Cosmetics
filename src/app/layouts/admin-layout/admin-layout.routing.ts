@@ -22,6 +22,7 @@ import { UsuarioInsertarComponent } from 'app/pages/usuarios/usuario-insertar/us
 import { FacturasComponent } from 'app/pages/facturas/facturas.component';
 import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
+import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 
 
 
@@ -57,8 +58,22 @@ export const AdminLayoutRoutes: Routes = [
         path: 'factura', 
         children:[
             { path: '',             component: FacturasComponent},
-            { path: 'agregar',      component: FacturaInsertarComponent},
+            // { path: 'agregar',      component: FacturaInsertarComponent},
             { path: 'editar/:id',   component: FacturaEditarComponent },
+        ]
+    },
+    { 
+        path: 'checkout', 
+        children:[
+            { path: '',             component:     CheckoutComponent},
+
+        ]
+    },
+    { 
+        path: 'pedido', 
+        children:[
+            { path: '',             component:     FacturaInsertarComponent},
+
         ]
     },
 
