@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -44,4 +45,31 @@ export class HelpersService {
     }
     return ListErrorStr
   }
+  
+  addDaytoDate(days:number,format:string):string{
+    let currentDay = moment(moment().format('MM/DD/YYYY'),'MM/DD/YYYY'),
+        countDays = 0;
+    
+    while (countDays < days) {
+      // Si no es sabado ni domingo
+      if (currentDay.isoWeekday() !== 6 && currentDay.isoWeekday() !== 7) {
+        countDays++
+        // console.log(countDays,currentDay.format('MM/DD/YYYY'));
+      } 
+      currentDay.add(1, 'days');   
+    }
+    
+    return currentDay.format(format)
+  }
+
+  changeformatDate(date:string,formatIn:string,formatOut:string){
+    let currentDay = moment(date,formatIn)
+    
+    return currentDay.format(formatOut)
+  }
+
+  currentDay():string{
+    return moment().format('MM/DD/YYYY')
+  }
+  
 }

@@ -53,32 +53,99 @@
             <!-- <div class="row">
                 <div class="col" style="padding-left:0;">ITEMS 3</div>
             </div> -->
-            <form>
-                <div class="form-group">
-                    <p class="font-weight-bold">Cliente <span class="text-danger">(*)</span></p>
-                    <select
-                      class="form-control"
-                      name="cliente"
-                      autocomplete="off"
+            <div class="form-group" >
+                <p class="font-weight-bold">Cliente <span class="text-danger">(*)</span></p>
+                <select
+                    class="form-control"
+                    name="cliente"
+                    autocomplete="off"
+                    (change)="cambiarValores($event.target)"
+                    
+                >
+                    <option selected value="0" hidden>Seleccione un cliente</option>
+                    <option 
+                        class="text-muted" 
+                        *ngFor="let cliente of clientes"
+                        [value]="cliente?.id"
+                        [selected]="clienteData?.id == cliente.id"
                     >
-                      <option selected value="0" hidden>Seleccione un cliente</option>
-                      <option class="text-muted">Rigo Gallo</option>
-                      <option class="text-muted">Rigo Gallo</option>
-                      <option class="text-muted">Rigo Gallo</option>
-                      <!-- <option *ngFor="let cliente of Clientes" value="{{ cliente.id}}">{{ cliente.nombreCompleto }} - {{ cliente.nombreEmpresa }}</option> -->
-      
-                    </select>
-                </div>
-                <p class=" font-weight-bold">Vendedor</p> 
-                <span class="d-block mb-4">Alejandro Sanchez (colocar user)</span>
+                        {{ cliente.nombreCompleto }} - {{ cliente.nombreEmpresa }}
+                    </option>
+                </select>
+                
+            </div>
+            <div class="form-group" *ngIf="clienteSelected">
+                <p class=" font-weight-bold">Categoria: {{ clienteData.categoria.tipo }} </p> 
+                <p class=" font-weight-bold">Fecha Vencimiento</p> 
+                <input type="date"  class="form-control" [(ngModel)]="date" >
+            </div>
+            <p class=" font-weight-bold">Vendedor</p> 
+            <span class="d-block mb-4">Alejandro Sanchez (colocar user)</span>
                 <!-- <p class="font-weight-bold">GIVE CODE</p> 
                 <input id="code" placeholder="Enter your code"> -->
-            </form>
-            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                <div class="col font-weight-bold">TOTAL PRICE</div>
-                <div class="col text-right font-weight-bold"> {{factura.monto | currency: 'USD'}}</div>
-            </div> 
-            <button class="btn btn-primary">Generar Factura</button>
+                
+            <div 
+                class="form-group" 
+                style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;"
+                *ngIf="factura.monto "
+            >
+                <!-- <div class="col-md-12"> -->
+                    <p class="d-block font-weight-bold">Tipo de Venta</p>
+                    <select
+                        class="form-control"
+                        name="tipo_venta"
+                        autocomplete="off"
+                        (change)="cambiarValores($event.target)"
+                        
+                    >
+                        <option selected value="0" hidden>Seleccione la moneda</option>
+                        <option 
+                            class="text-muted" 
+                            value="1"
+                            selected=""
+                        >
+                            Credito
+                        </option>
+                        <option 
+                            class="text-muted" 
+                            value="2"
+                            selected=""
+                        >
+                            Contado
+                        </option>
+                    </select> 
+                <!-- </div> -->
+                <br>
+                <!-- <p class="d-block font-weight-bold">Tipo de Venta</p>
+                <select
+                    class="form-control"
+                    name="tcambio"
+                    autocomplete="off"
+                    (change)="cambiarValores($event.target)"
+                    
+                >
+                    <option selected value="0" hidden>Seleccione la moneda</option>
+                    <option 
+                        class="text-muted" 
+                        value="1"
+                        selected=""
+                    >
+                        USD
+                    </option>
+                    <option 
+                        class="text-muted" 
+                        value="2"
+                        selected=""
+                    >
+                        Contado
+                    </option>
+                </select>  -->
+                <!-- <br> -->
+                <div class="d-flex justify-content-between">
+                    <div class="font-weight-bold">Precio total </div>
+                    <div class="text-right font-weight-bold"> {{factura.monto | currency: 'USD'}}</div>
+                </div>
+            <button class="btn btn-primary" (click)="generarfactura()">Generar Factura</button>
         </div>
     </div>
 </div>

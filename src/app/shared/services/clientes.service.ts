@@ -34,9 +34,9 @@ export class ClientesService {
   }
   
   // public methods
-  getCliente(): Observable<any> { 
+  getCliente(): Observable<Cliente[]> { 
 
-    return this.http.get(
+    return this.http.get<Cliente[]>(
       ClienteURL, 
       {headers: this.headerJson_Token(), responseType: "json" }
     );

@@ -7,6 +7,7 @@ import { FacturaCheckout } from '../models/FacturaCheckout.model';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { Producto } from '../models/Producto.model';
 
+const FacturaURL = `${environment.urlAPI}facturas`
 @Injectable({
   providedIn: 'root'
 })
@@ -74,9 +75,11 @@ export class CheckoutService {
     return this.dataStorage
   }
    
-  insertCheckout(data:Factura){ }
+  // insertCheckout(data:Factura){ 
+    
+  // }
   
-  updateCheckout(Id:number,data:Factura) { }
+  // updateCheckout(Id:number,data:Factura) { }
 
   addProductCheckout(producto:Producto) { 
     let factura_detalle:FacturaDetalle ={
@@ -107,6 +110,14 @@ export class CheckoutService {
   
   CheckoutToStorage(Factura:FacturaCheckout){
     this.dataStorage = Factura
+  }
+
+  insertFactura(data:FacturaCheckout): Observable<any>{
+    return this.http.post<Factura>(
+      FacturaURL, 
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
   }
   
 }

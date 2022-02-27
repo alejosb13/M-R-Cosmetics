@@ -10,7 +10,9 @@ export interface FacturaCheckout {
     nruc?: string;
     fecha_vencimiento: string;
     iva: number;
-    tcambio: number;
+    tipo_venta:number
+    // tcambio: number;
+    status_pagado:boolean;
     estado: number;
     factura_detalle?: FacturaDetalle[];
 }
