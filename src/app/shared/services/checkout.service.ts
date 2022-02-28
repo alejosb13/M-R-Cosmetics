@@ -75,12 +75,6 @@ export class CheckoutService {
     return this.dataStorage
   }
    
-  // insertCheckout(data:Factura){ 
-    
-  // }
-  
-  // updateCheckout(Id:number,data:Factura) { }
-
   addProductCheckout(producto:Producto) { 
     let factura_detalle:FacturaDetalle ={
       producto_id: producto.id,
@@ -118,6 +112,10 @@ export class CheckoutService {
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
+  }
+
+  vaciarCheckout(){
+    localStorage.removeItem(this.authLocalStorageToken);
   }
   
 }

@@ -84,26 +84,21 @@ export class CheckoutComponent implements OnInit {
   cambiarValores(element:any) {
     let FacturaCheckout:FacturaCheckout = {...this.factura}
     
-    //campos defaul
-    FacturaCheckout.status_pagado = false
-    FacturaCheckout.iva = 0
-    FacturaCheckout.estado = 1
-    
     if(element.name == "cliente"){  
       FacturaCheckout.cliente_id = Number(element.value)
       this._CheckoutService.CheckoutToStorage(FacturaCheckout)
       
       this.getcheckout()
       this.ValidClienteSelected()
-      
-      FacturaCheckout.fecha_vencimiento = this._HelpersService.changeformatDate(this.date,'YYYY-MM-DD','YYYY-MM-DD HH:MM:S') 
     }
 
     if(element.name == "tipo_venta"){
       FacturaCheckout.tipo_venta = Number(element.value)
       this._CheckoutService.CheckoutToStorage(FacturaCheckout)
+      
       this.getcheckout()
     }
+    
   }
   
   deleteProduct(productoCheckout:FacturaDetalle) {
@@ -126,9 +121,62 @@ export class CheckoutComponent implements OnInit {
   
   
   generarfactura(){
-    let factura = this._CheckoutService.getCheckout()
-    this._CheckoutService.insertFactura(factura).subscribe( data=>{
-      console.log(data);
-    })
+    
+    if(!this.hasErrorValidation()){
+      let FacturaCheckout:FacturaCheckout = {...this.factura}
+    
+      FacturaCheckout.fecha_vencimiento = this._HelpersService.changeformatDate(this.date,'YYYY-MM-DD','YYYY-MM-DDThh:mm:ss') 
+      FacturaCheckout.user_id = 18 
+      FacturaCheckout.status_pagado = true
+      FacturaCheckout.iva = 0
+      FacturaCheckout.estado = 1
+      
+      this._CheckoutService.CheckoutToStorage(FacturaCheckout)
+      this.getcheckout()
+      console.log(this.factura);
+      
+      this._CheckoutService.insertFactura(this.factura).subscribe( data=>{
+        this._CheckoutService.vaciarCheckout()
+        
+        Swal.fire({
+          title: '¡Pedido Generado!',
+          text: "Su pedido fue generado con exito",
+          icon: 'success',
+          confirmButtonColor: '#34b5b8',
+          confirmButtonText: 'Ok'
+        })
+        
+      })
+    }
+
+  }
+  
+  private hasErrorValidation():boolean{
+    let error:boolean = false;
+    let mensaje:string = "";
+    let FacturaCheckout:FacturaCheckout = {...this.factura}
+    
+    if(!FacturaCheckout.tipo_venta){
+      mensaje = "Seleccione la operacion de pago."
+      error = true
+    }
+
+    if(!FacturaCheckout.cliente_id){
+      mensaje = "Seleccione un cliente."
+      error = true
+    }
+    
+    if(error){
+      Swal.fire({
+        title: '¡Error!',
+        text: mensaje,
+        icon: 'warning',
+        confirmButtonColor: '#34b5b8',
+        confirmButtonText: 'Volver'
+      })
+    }
+    
+    return error;
+    
   }
 }

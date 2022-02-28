@@ -90,7 +90,7 @@
                 *ngIf="factura.monto "
             >
                 <!-- <div class="col-md-12"> -->
-                    <p class="d-block font-weight-bold">Tipo de Venta</p>
+                    <p class="d-block font-weight-bold">Operación de pago <span class="text-danger">(*)</span></p>
                     <select
                         class="form-control"
                         name="tipo_venta"
@@ -98,18 +98,18 @@
                         (change)="cambiarValores($event.target)"
                         
                     >
-                        <option selected value="0" hidden>Seleccione la moneda</option>
+                        <option selected value="0" hidden>Seleccione la operación de pago</option>
                         <option 
                             class="text-muted" 
                             value="1"
-                            selected=""
+                            [selected]="factura.tipo_venta == 1"
                         >
                             Credito
                         </option>
                         <option 
                             class="text-muted" 
                             value="2"
-                            selected=""
+                            [selected]="factura.tipo_venta == 2"
                         >
                             Contado
                         </option>
