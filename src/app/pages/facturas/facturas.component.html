@@ -39,10 +39,12 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Nombre Cliente</th>
-              <th scope="col">Nombre Usuario</th>
+              <th scope="col">Nombre Empresa</th>
               <th scope="col">Monto</th>
-              <th scope="col">Tipo de Cambio</th>
-              <th scope="col">IVA</th>
+              <!-- <th scope="col">Tipo de Cambio</th> -->
+              <!-- <th scope="col">IVA</th> -->
+              <th scope="col">Operación</th>
+              <th scope="col">Estado</th>
               <th scope="col">Ver</th>
               <th scope="col">Fecha de Vencimiento</th>
             </tr>
@@ -52,14 +54,22 @@
             <tr *ngFor="let factura of _TablasService.datosTablaStorage">
                 <th scope="row">{{ factura.id }}</th>
                 <td>
-                  {{ factura.cliente.nombre }} {{ factura.cliente.apellido }}
+                  {{ factura.cliente.nombreCompleto }}
                 </td>
                 <td>
-                    {{ factura.user.name }} {{ factura.user.apellido }}
+                  {{ factura.cliente.nombreEmpresa }}
                 </td>
                 <td>{{ factura.monto  | currency: 'USD' }}</td>
-                <td>{{ factura.tcambio }}</td>
-                <td>{{ factura.iva }}%</td>
+                <!-- <td>{{ factura.tcambio }}</td> -->
+                <!-- <td>{{ factura.iva }}%</td> -->
+                <td>
+                  <span *ngIf="factura.tipo_venta == 2">Contado</span>
+                  <span *ngIf="factura.tipo_venta == 1">Credito</span>
+                </td>
+                <td>
+                  <span *ngIf="factura.status_pagado == 2">En proceso</span>
+                  <span *ngIf="factura.status_pagado == 1">Finalizado</span>
+                </td>
                 <td>Detalle</td>
                 <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
             </tr>

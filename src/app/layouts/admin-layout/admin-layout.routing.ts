@@ -23,6 +23,7 @@ import { FacturasComponent } from 'app/pages/facturas/facturas.component';
 import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
 import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
+import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/factura-detalle.component';
 
 
 
@@ -59,6 +60,7 @@ export const AdminLayoutRoutes: Routes = [
         children:[
             { path: '',             component: FacturasComponent},
             // { path: 'agregar',      component: FacturaInsertarComponent},
+            { path: 'detalle/:id',   component: FacturaDetalleComponent },
             { path: 'editar/:id',   component: FacturaEditarComponent },
         ]
     },

@@ -1,0 +1,31 @@
+.detalle-section{
+    padding: 0.85rem 1.25rem;
+}
+.detalle-container {
+    padding: 0px 1.25rem;
+}
+
+.detalle-container .detalle {
+    display: flex;
+    position: relative;
+    padding: 0.25rem 0px;
+    margin-bottom: -1px;
+
+}
+
+.detalle-container .detalle .description {
+    font-weight: 700;
+    color:#000;
+    /* flex: 0; */
+    width: 145px;
+    /* flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 145px; */
+}
+.detalle-container .detalle .value {
+    color:#000;
+    flex: 1;
+    /* flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 50%; */
+}

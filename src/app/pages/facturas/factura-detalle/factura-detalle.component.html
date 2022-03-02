@@ -1,0 +1,125 @@
+<div class="bg-white">
+  
+    <div *ngIf="isLoad" class="container-fluid p-5">
+      <div class="d-flex justify-content-center align-content-center">
+        <span>
+          Cargando Detalle de factura
+          <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="container-fluid" *ngIf="!isLoad">
+        <div class="row mb-5">
+            <div class="col-md-6 detalle-section">
+                <div class="detalle-container">
+                    <h4>Detalles de cliente</h4>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Nombre completo</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.nombreCompleto }}</span>
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Nombre salon</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.nombreEmpresa }}</span>
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Cedula</span>
+                            
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.cedula }}</span>
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Dirección</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.direccion_casa }}</span>
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Dirección salon</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.direccion_negocio }}</span>
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Teléfono</span>
+                          
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.celular }}</span>
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Teléfono salon</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.cliente.telefono }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 detalle-section">
+                <div class="detalle-container">
+                    <h4>Detalle factura</h4>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Numero de factura</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.id }}</span>    
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Fecha</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.created_at | date:"dd-MM-yyyy" }}</span>    
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Fecha vencimiento</span>
+                        </div>
+                        <div class="value">
+                            <span>{{ Factura.fecha_vencimiento | date:"dd-MM-yyyy" }}</span>    
+                        </div>
+                    </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Estado</span>
+                            
+                        </div>
+                        <div class="value">
+                            <span *ngIf="Factura.status_pagado == 2">En proceso</span>
+                            <span *ngIf="Factura.status_pagado == 1">Finalizado</span> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                AGREGAR LISTADO DE PRODUCTOS
+            </div>
+        </div>
+    </div>
+
+</div>

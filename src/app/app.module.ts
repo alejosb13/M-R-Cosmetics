@@ -15,7 +15,7 @@ import { AppRoutes } from './app.routing';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule } from "@angular/common/http";
-
+import { FacturaDetalleComponent } from './pages/facturas/factura-detalle/factura-detalle.component';
 @NgModule({
   declarations: [
     AppComponent,

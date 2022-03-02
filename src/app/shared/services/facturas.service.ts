@@ -29,18 +29,18 @@ export class FacturasService {
   }
   
   // public methods
-  getFacturas(): Observable<any> { 
+  getFacturas(): Observable<Factura[]> { 
 
-    return this.http.get(
+    return this.http.get<Factura[]>(
       FacturaURL, 
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  getFacturaById(Id:number): Observable<any> { 
+  getFacturaById(Id:number): Observable<Factura> { 
     const URL = `${FacturaURL}/${Id}`
     
-    return this.http.get(
+    return this.http.get<Factura>(
       URL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );

@@ -37,6 +37,7 @@ import { FacturarProductoComponent } from 'app/shared/components/forms/facturar-
 
 import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-password/cambiar-password.component';
 import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
+import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/factura-detalle.component';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
     FacturaEditarComponent,
     FacturaInsertarComponent,
     FacturarProductoComponent,
+    FacturaDetalleComponent,
     
     CambiarPasswordComponent,
     

@@ -86,7 +86,7 @@
     </div>
     <div class="col-md-6">
       <div class="form-group">
-          <label>Empresa <span class="text-danger">(*)</span></label>
+          <label>Nombre del salon <span class="text-danger">(*)</span></label>
           <input
             type="text"
             class="form-control"
@@ -100,24 +100,24 @@
           >
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'required',
-            message: 'El nombre de la empresa es requerido',
+            message: 'El nombre del salon es requerido',
             control: editarClienteForm.controls['nombreEmpresa']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'minlength',
-            message: 'El  nombre de la empresa debe poseer al menos 3 letras',
+            message: 'El  nombre del salon debe poseer al menos 3 letras',
             control: editarClienteForm.controls['nombreEmpresa']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'El  nombre de la empresa debe tener como máximo 80 letras',
+            message: 'El  nombre del salon debe tener como máximo 80 letras',
             control: editarClienteForm.controls['nombreEmpresa']
           }"></ng-container>
       </div>
     </div>
     <div class="col-md-4">
       <div class="form-group">
-        <label>Cedula <span class="text-danger">(*) (No debe de poseer guiiones)</span></label>
+        <label>Cedula <span class="text-danger">(*) (No debe de poseer guiones)</span></label>
         <input
           type="text"
           class="form-control"
@@ -189,7 +189,7 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
-        <label>Telefono Empresa</label>
+        <label>Telefono del salon</label>
         <input
           type="text"
           class="form-control"
@@ -225,7 +225,7 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
-          <label>Direccion <span class="text-danger">(*)</span></label>
+          <label>Dirección <span class="text-danger">(*)</span></label>
           <input
             type="text"
             class="form-control"
@@ -251,7 +251,7 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
-          <label>Direccion negocio</label>
+          <label>Direccion del salon</label>
           <input
             type="text"
             class="form-control"
@@ -265,12 +265,12 @@
           >
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'required',
-            message: 'La dirección es requerido',
+            message: 'La dirección del salon es requerida',
             control: editarClienteForm.controls['direccion_negocio']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'La dirección debe tener como máximo 11 numeros',
+            message: 'La dirección del salon debe tener como máximo 180 letras',
             control: editarClienteForm.controls['direccion_negocio']
           }"></ng-container>
       </div>
