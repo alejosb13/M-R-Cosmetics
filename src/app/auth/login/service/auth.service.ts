@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Categoria } from 'app/shared/models/Categoria.model';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
+import { Auth } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,15 @@ export class AuthService {
     };
     
     return new HttpHeaders(config);
+  }
+  
+  isLogin(): boolean{
+    if(!this.dataStorage) return false
+    if(!this.dataStorage.token ){
+      return false
+    }
+    
+    return this.dataStorage.token != ""? true : false;
   }
 
   login(email:string,password:string): Observable<any> {
@@ -47,13 +57,33 @@ export class AuthService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }  
+  deleteSession(){
+    localStorage.removeItem(this.authLocalStorageToken)
+  }
+  
+  validarRol(roleName:string):boolean{
+    if(roleName.includes(",")){
+      let arrayRole:string[] = roleName.split(',')
+      if(this.dataStorage) return arrayRole.includes(this.dataStorage.user.roleName)
+      
+    }else{
+      return this.dataStorage.user.roleName.includes(roleName)
+    }
+    
+    return false
+  }
 
-  set dataStorage(value:any ){
+  set dataStorage(value:Auth ){
     localStorage.setItem(this.authLocalStorageToken, JSON.stringify(value));
   }
   
-  get dataStorage(){
-    return localStorage.get(this.authLocalStorageToken);
+  get dataStorage():Auth{
+    let auth:Auth = JSON.parse(localStorage.getItem(this.authLocalStorageToken));
+    
+    if(auth){
+      return auth;
+    }
+    // return localStorage.getItem(this.authLocalStorageToken);
     // return localStorage.removeItem(this.authLocalStorageToken);
         
   }

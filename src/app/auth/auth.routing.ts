@@ -11,7 +11,7 @@ import { LoginComponent } from './login/login.component';
 // import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 
 export const AuthRoutes: Routes = [
-    { path: 'login',         component: LoginComponent },
+    { path: 'login',         component: LoginComponent},
     
     // { path: 'user',           component: UserComponent },
     // { path: 'table',          component: TableComponent },

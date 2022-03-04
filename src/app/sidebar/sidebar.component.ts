@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'app/auth/login/service/auth.service';
 
 
 export interface RouteInfo {
@@ -6,15 +7,16 @@ export interface RouteInfo {
     title: string;
     icon: string;
     class: string;
+    access: string;
 }
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/inicio',        title: 'Inicio',            icon:'nc-icon nc-shop',       class: '' },
-    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',  class: '' },
-    { path: '/producto',      title: 'Producto',          icon:'fas fa-truck-loading',  class: '' },
-    { path: '/usuario',       title: 'Usuario',           icon:'fas fa-user-tie',       class: '' },
-    { path: '/factura',       title: 'Facturas',          icon:'fas fa-receipt',        class: '' },
-    { path: '/pedido',        title: 'Pedido',            icon:'fas fa-receipt',        class: '' },
+    { path: '/inicio',        title: 'Inicio',            icon:'nc-icon nc-shop',       class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',  class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/producto',      title: 'Producto',          icon:'fas fa-truck-loading',  class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/usuario',       title: 'Usuario',           icon:'fas fa-user-tie',       class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/factura',       title: 'Facturas',          icon:'fas fa-receipt',        class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/pedido',        title: 'Pedido',            icon:'fas fa-receipt',        class: '' , access: 'administrador,vendedor,supervisor'},
     // { path: '/icons',         title: 'Icons',             icon:'nc-diamond',    class: '' },
     // { path: '/maps',          title: 'Maps',              icon:'nc-pin-3',      class: '' },
     // { path: '/notifications', title: 'Notifications',     icon:'nc-bell-55',    class: '' },
@@ -32,9 +34,13 @@ export const ROUTES: RouteInfo[] = [
 
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
+    
+    constructor(
+        private _AuthService:AuthService
+    ){}
+    
     ngOnInit() {
-        
-        this.menuItems = ROUTES.filter(menuItem => menuItem);
+        this.menuItems = ROUTES.filter(menuItem => this._AuthService.validarRol(menuItem.access));
         // console.log(this.menuItems);
     }
 }

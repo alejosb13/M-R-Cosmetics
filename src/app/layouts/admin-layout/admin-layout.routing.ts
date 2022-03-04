@@ -24,14 +24,19 @@ import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/fa
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
 import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/factura-detalle.component';
+import { AuthGuard } from 'app/auth/login/auth.guard';
+
+const ADMINISTRADOR = "administrador"
+const VENDEDOR      = "vendedor"
+const SUPERVISOR    = "supervisor"
 
 
 
 export const AdminLayoutRoutes: Routes = [
-    { path: 'inicio',               component: DashboardComponent },
-    
+    { path: 'inicio', component: DashboardComponent, canActivate: [AuthGuard], data: {role: [SUPERVISOR,VENDEDOR,ADMINISTRADOR]}}, 
     { 
         path: 'cliente', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR]},
         children:[
             { path: '',             component: ClientesComponent},
             { path: 'agregar',      component: ClienteInsertarComponent},
@@ -41,6 +46,7 @@ export const AdminLayoutRoutes: Routes = [
     
     { 
         path: 'usuario', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
         children:[
             { path: '',             component: UsuariosComponent},
             { path: 'agregar',      component: UsuarioInsertarComponent},
@@ -49,6 +55,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'producto', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
         children:[
             { path: '',             component: ProductosComponent},
             { path: 'agregar',      component: ProductoInsertarComponent},
@@ -57,6 +64,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'factura', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
         children:[
             { path: '',             component: FacturasComponent},
             // { path: 'agregar',      component: FacturaInsertarComponent},
@@ -66,6 +74,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'checkout', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
         children:[
             { path: '',             component:     CheckoutComponent},
 
@@ -73,6 +82,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'pedido', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
         children:[
             { path: '',             component:     FacturaInsertarComponent},
 
@@ -86,4 +96,13 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },
     // { path: 'upgrade',        component: UpgradeComponent }
+    // {
+    //     path: '',
+    //     redirectTo: '/',
+    //     pathMatch: 'full',
+    // },
+    //   {
+    //     path: '**',
+    //     redirectTo: 'error/404',
+    //   },
 ];

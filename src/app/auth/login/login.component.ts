@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
 import Swal from 'sweetalert2';
+import { Auth } from './models/auth.model';
 import { AuthService } from './service/auth.service';
 
 @Component({
@@ -63,11 +64,13 @@ export class LoginComponent implements OnInit {
     if(this.editarUsuarioForm.valid){
 
       let email              = String(this.formularioControls.email.value)
-      let password              = String(this.formularioControls.password.value)
+      let password           = String(this.formularioControls.password.value)
 
       this._AuthService.login(email,password).subscribe(data => {
         console.log(data);
-        this._AuthService.dataStorage= {token:data.token}
+        
+        let Auth:Auth = {...data}  
+        this._AuthService.dataStorage = {...Auth}
         this.router.navigateByUrl("/inicio");
       },error=> {
         Swal.fire({

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Location} from '@angular/common';
 import { CheckoutService } from '../services/checkout.service';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
+import { AuthService } from 'app/auth/login/service/auth.service';
 
 @Component({
     moduleId: module.id,
@@ -29,7 +30,8 @@ export class NavbarComponent implements OnInit{
       private renderer : Renderer2, 
       private element : ElementRef, 
       private router: Router,
-      public _CheckoutService: CheckoutService
+      public _CheckoutService: CheckoutService,
+      private _AuthService:AuthService,
     ) {
       this.location = location;
       
@@ -63,6 +65,17 @@ export class NavbarComponent implements OnInit{
       }
       
       return 'Dashboard';
+    }
+    
+    logout(){
+      this._AuthService.logout().subscribe((data) => {
+        this._AuthService.deleteSession()
+        this.router.navigateByUrl("/login");
+      },(error)=>{
+        this._AuthService.deleteSession()
+        this.router.navigateByUrl("/login");
+        
+      })
     }
     
     sidebarToggle() {
