@@ -40,7 +40,10 @@ export class ClienteFormComponent implements OnInit {
     private _HelpersService: HelpersService,
     
   ) { 
-    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
+    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => {
+      console.log(this.Categorias);
+      
+      this.Categorias = [...data]});
     this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
     this._UsuariosService.getUsuario().subscribe((usaurios:Usuario[]) => this.Usuarios = [...usaurios]);
     
@@ -49,6 +52,7 @@ export class ClienteFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.Categorias);
     
     this.definirValidaciones()
     

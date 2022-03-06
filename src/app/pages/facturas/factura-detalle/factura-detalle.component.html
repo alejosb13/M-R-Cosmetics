@@ -11,7 +11,7 @@
     </div>
     
     <div class="container-fluid" *ngIf="!isLoad">
-        <div class="row mb-5">
+        <div class="row mb-2">
             <div class="col-md-6 detalle-section">
                 <div class="detalle-container">
                     <h4>Detalles de cliente</h4>
@@ -80,10 +80,10 @@
                     <h4>Detalle factura</h4>
                     <div class="detalle">
                         <div class="description">
-                            <span>Numero de factura</span>
+                            <span>factura</span>
                         </div>
                         <div class="value">
-                            <span>{{ Factura.id }}</span>    
+                            <span>#{{ Factura.id }}</span>    
                         </div>
                     </div>
                     <div class="detalle">
@@ -108,18 +108,105 @@
                             
                         </div>
                         <div class="value">
-                            <span *ngIf="Factura.status_pagado == 2">En proceso</span>
+                            <span *ngIf="Factura.status_pagado == 0">En proceso</span>
                             <span *ngIf="Factura.status_pagado == 1">Finalizado</span> 
+                        </div>
+                    </div>
+                    <div class="detalle" *ngIf="Factura.tipo_venta == 1">
+                        <div class="description">
+                            <span>Historial de pago</span>
+                        </div>
+                        <div class="value">
+                            <a class="mostrar_modal" role="button" (click)="open(content)" >Mostrar</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                AGREGAR LISTADO DE PRODUCTOS
+        <div class="row  detalle-section">
+            <div class="col-md-12  detalle-section">
+                <ul class="list-group list">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span><b>Descripcion</b></span>
+                      <span class=""><b>Cantidad</b></span>
+                      <span class=""><b>Precio</b></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let producto of Factura.factura_detalle">
+                      <span class="texto-descripcion">{{ producto.descripcion }}</span>
+                      <span class="texto-cantidad" *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
+                      <span class="texto-cantidad" *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
+                      <span class="texto-precio">{{ producto.precio | currency: 'USD' }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><b>Pagado</b></span>
+
+                        <span class=""><b>{{ Pagado | currency: 'USD'}}</b></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><b>Diferencia</b></span>
+
+                        <span class=""><b>{{ Diferencia | currency: 'USD'}}</b></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><b>Total</b></span>
+
+                        <span class=""><b>{{ Factura.monto | currency: 'USD' }}</b></span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-
 </div>
+
+<!-- Modal -->
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <div>
+            <h4 class="modal-title" id="modal-basic-title">Historial de pago</h4>
+            <h5><small>Factura #{{ FacturaId }} </small></h5>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+        <div class="list-group">
+            <div 
+                class="list-group-item list-group-item-action flex-column align-items-star position-relative" 
+                role="button"  
+                *ngFor="let itemHistorial of Factura.factura_historial; let i=index;"
+                (click)="Collaps(i)"
+            >
+                <div class="d-flex w-100 justify-content-between align-items-center" type="button" >
+                    <div>
+                        <small>Fecha: {{ itemHistorial.updated_at | date:"dd-MM-yyyy" }}</small>
+                        <p class="mb-1"><b>Pagó</b></p>
+                    </div>
+                    <div>
+                        <span><b>{{ itemHistorial.precio | currency: 'USD' }}</b></span>
+                    </div>
+                </div>
+                <div *ngIf="i === expandedIndex" class="animate__animated animate__pulse ">
+                    <div class="card">
+                      <div class="card-body">
+                        Usuario: {{ itemHistorial.name }} {{ itemHistorial.apellido }}
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-group-item list-group-item-action flex-column align-items-star position-relative">
+                <div class="d-flex w-100 justify-content-between align-items-center" >
+                    <div>
+                        <p class="mb-1"><b>Total pagado</b></p>
+                    </div>
+                    <div>
+                        <span><b>{{ Pagado | currency: 'USD' }}</b></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
+    </div>
+</ng-template>

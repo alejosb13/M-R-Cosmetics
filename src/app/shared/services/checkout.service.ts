@@ -83,6 +83,7 @@ export class CheckoutService {
       nombre: `${producto.modelo} - ${producto.marca}`,
       descripcion: producto.descripcion,
       porcentaje: 0,
+      estado: producto.estado,
       // comision: producto.comision,
     }
     

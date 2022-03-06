@@ -1,5 +1,10 @@
 import { Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthModule } from 'app/auth/auth.module';
+import { Auth, UserAuth } from 'app/auth/login/models/auth.model';
+import { AuthService } from 'app/auth/login/service/auth.service';
 import { Cliente } from 'app/shared/models/Cliente.model';
 import { FacturaCheckout } from 'app/shared/models/FacturaCheckout.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
@@ -22,21 +27,25 @@ export class CheckoutComponent implements OnInit {
   clienteData:Cliente 
   date:string  
   
+  userData:UserAuth
   
   constructor(
     private _location: Location,
     public _CheckoutService:CheckoutService,
-    public _ClientesService:ClientesService,
-    public _HelpersService:HelpersService,
-  ) {
+    private _ClientesService:ClientesService,
+    private _HelpersService:HelpersService,
+    private _AuthService:AuthService,
+    private router:Router,
+  ) {}
+  
+  ngOnInit(): void {
+    
     this.getProducts()
     this.getcheckout()
     this.getClientes()
-    // this.date = this._HelpersService.currentDay()
-  }
-
-  ngOnInit(): void {
-
+    this.getDataUser()
+    
+    
   }
   
   getClientes(){
@@ -44,6 +53,10 @@ export class CheckoutComponent implements OnInit {
       this.clientes = [...clientes]
       this.ValidClienteSelected()
     })
+  }
+  
+  getDataUser(){
+    this.userData = this._AuthService.dataStorage.user 
   }
   
   ValidClienteSelected(){
@@ -126,8 +139,8 @@ export class CheckoutComponent implements OnInit {
       let FacturaCheckout:FacturaCheckout = {...this.factura}
     
       FacturaCheckout.fecha_vencimiento = this._HelpersService.changeformatDate(this.date,'YYYY-MM-DD','YYYY-MM-DDThh:mm:ss') 
-      FacturaCheckout.user_id = 18 
-      FacturaCheckout.status_pagado = true
+      FacturaCheckout.user_id = this.userData.userId
+      FacturaCheckout.status_pagado = FacturaCheckout.tipo_venta == 1? false : true
       FacturaCheckout.iva = 0
       FacturaCheckout.estado = 1
       
@@ -138,14 +151,36 @@ export class CheckoutComponent implements OnInit {
       this._CheckoutService.insertFactura(this.factura).subscribe( data=>{
         this._CheckoutService.vaciarCheckout()
         
-        Swal.fire({
-          title: '¡Pedido Generado!',
-          text: "Su pedido fue generado con exito",
-          icon: 'success',
-          confirmButtonColor: '#34b5b8',
-          confirmButtonText: 'Ok'
-        })
+        if(data.status){
+          Swal.fire({
+            title: '¡Pedido Generado!',
+            text: "Su pedido fue generado con exito",
+            icon: 'success',
+            confirmButtonColor: '#34b5b8',
+            confirmButtonText: 'Ok',
+            
+          }).then((result) => {
+            return this.router.navigateByUrl(`/factura/detalle/${data.factura_id}`);
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            text: "Error generando la factura",
+            icon: 'error',
+            
+          })
+        }
+      },
+      
+      (errorResponse:HttpErrorResponse)=>{
+        console.log(errorResponse);
         
+        Swal.fire({
+          title: 'Error',
+          text: errorResponse.error.mensaje,
+          icon: 'error',
+          
+        })
       })
     }
 

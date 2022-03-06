@@ -3,167 +3,63 @@
         <div class="container-fluid bg-white">
             <div class="row">
                 <div class="col-md-12 pt-4 px-4">
-                    <h5 class="card-title">Generar Pedido</h5>
-                    
-                    <!-- <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Cliente <span class="text-danger">(*)</span></label>
-                                <select
-                                  class="form-control"
-                                  name="cliente"
-                                  autocomplete="off"
-                                  (change)="CambiarSelect($event.target)"
-                                >
-                                  <option selected value="0" hidden>Seleccione un cliente</option>
-                                  <option *ngFor="let cliente of Clientes" value="{{ cliente.id}}">{{ cliente.nombreCompleto }} - {{ cliente.nombreEmpresa }}</option>
-                  
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Usuario <span class="text-danger">(*)</span></label>
-                                <select
-                                  class="form-control"
-                                  name="usuario"
-                                  autocomplete="off"
-                                  (change)="CambiarSelect($event.target)"
-                                >
-                                  <option selected value="0" hidden>Seleccione un usuario</option>
-                                  <option *ngFor="let usuario of Usuarios" value="{{ usuario.id}}">{{ usuario.name }} {{ usuario.apellido }}</option>
-                  
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class=""> -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-plain">
-                                <div class="header d-flex justify-content-between align-items-baseline">
-                                    <h6 class="title">Productos</h6>
-                                    <form class="d-flex align-items-center col-4 buscador">
-                                      <div class="form-label-group w-100 m-0">
-                                          <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
-                                          <label for="inputEmail">Buscar</label>
-                                      </div>
-                                  </form>
-                                </div>
-
-                                <div *ngIf="isLoad" class="container-fluid p-5">
-                                    <div class="d-flex justify-content-center align-content-center">
-                                        <span>
-                                            Cargando productos
-                                            <i class="fas fa-circle-notch fa-spin"></i>
-                                        </span>
+                  <h5 class="card-title">Generar Pedido</h5>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="card card-plain">
+                              <div class="header d-flex justify-content-between align-items-baseline">
+                                  <h6 class="title">Productos</h6>
+                                  <form class="d-flex align-items-center col-4 buscador">
+                                    <div class="form-label-group w-100 m-0">
+                                        <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
+                                        <label for="inputEmail">Buscar</label>
                                     </div>
-                                </div>
-                              <div class="table-responsive table-full-width" *ngIf="!isLoad" >
-                                <table class="table table-hover">
-                                    <!-- <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Marca</th>
-                                            <th scope="col">Modelo</th>
-                                            <th scope="col">Linea</th>
-                                            <th scope="col">Stock</th>
-                                            <th scope="col">Precio</th>
-                                            <th scope="col">Descripcion</th>
-                                            <th scope="col"></th>
-                                            <th scope="col">Comision</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead> -->
-                                    <tbody>
-                                        <tr *ngFor="let producto of _TablasService.datosTablaStorage">
-                                            <!-- <th scope="row">{{ producto.id }}</th> -->
-                                            <td>
-                                              <!-- {{ producto.marca }} -->
-                                            </td>
-                                            <!-- <td>{{ producto.modelo }}</td> -->
-                                            <!-- <td>{{ producto.linea }}</td> -->
-                                            <td>{{ producto.descripcion }}</td>
-                                            <td>{{ producto.stock }} Uds</td>
-                                            <td>{{ producto.precio | currency: 'USD' }}</td>
+                                </form>
+                              </div>
 
-                                            <!-- <td>{{ producto.comision }}</td> -->
-                                            <td>
-                                              <form role="form" (submit)="agregarProducto($event, producto)">
-                                                <div class="form-inline carga-producto">
-                                                    <!-- <input type="number" name="producto" value="0" min="1" max="{{ producto.stock }}" class="form-control form-control-sm mr-2" > -->
-                                                    <!-- <button type="button" class="btn btn-success btn-sm" type="submit"> -->
-                                                    <button type="button" class="btn btn-success btn-sm" (click)="openFormProduct(producto)">
-                                                      <i class="fas fa-cart-plus"></i>
-                                                    </button>
-                                                </div>
-                                              </form>
-                                            </td>
-                                            <!-- <td>
-                                                <button class="btn btn-success" (click)="openFormProduct(producto)">
+                              <div *ngIf="isLoad" class="container-fluid p-5">
+                                  <div class="d-flex justify-content-center align-content-center">
+                                      <span>
+                                          Cargando productos
+                                          <i class="fas fa-circle-notch fa-spin"></i>
+                                      </span>
+                                  </div>
+                              </div>
+                            <div class="table-responsive table-full-width" *ngIf="!isLoad" >
+                              <table class="table table-hover">
+                                  <tbody>
+                                      <tr *ngFor="let producto of _TablasService.datosTablaStorage">
+                                          <!-- <th scope="row">{{ producto.id }}</th> -->
+                                          <td>
+                                            <!-- {{ producto.marca }} -->
+                                          </td>
+                                          <!-- <td>{{ producto.modelo }}</td> -->
+                                          <!-- <td>{{ producto.linea }}</td> -->
+                                          <td>{{ producto.descripcion }}</td>
+                                          <td>{{ producto.stock }} Uds</td>
+                                          <td>{{ producto.precio | currency: 'USD' }}</td>
+
+                                          <!-- <td>{{ producto.comision }}</td> -->
+                                          <td>
+                                            <form role="form" (submit)="agregarProducto($event, producto)">
+                                              <div class="form-inline carga-producto">
+                                                  <button type="button" class="btn btn-success btn-sm" (click)="openFormProduct(producto)">
                                                     <i class="fas fa-cart-plus"></i>
-                                                </button>
-                                            </td> -->
-                                        </tr>
- 
-                                    </tbody>
-                                </table>
-                              </div>
-                              <div class="d-flex justify-content-between p-2">
-                                <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
-                              </div>
+                                                  </button>
+                                              </div>
+                                            </form>
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="col-md-4">
-                    <div class="w-100 order-md-last">
-                        <h4 class="d-flex justify-content-between align-items-center mb-3">
-                          <span class="text-primary">Vista Previa</span>
-                          <div class="text">
-                            <span class="title-productos mr-2">Productos</span>
-                            <span class="badge bg-primary rounded-pill">3</span>
+                            <div class="d-flex justify-content-between p-2">
+                              <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
+                            </div>
                           </div>
-                        </h4>
-                        
-                        <div class="header-group">
-                            <div class="cliente">
-                                <span class="mr-1">Cliente:</span>
-                                <span *ngIf="!_FacturasService.FacturaCheckout.clienteFullName" >--</span>
-                                <span *ngIf="_FacturasService.FacturaCheckout.clienteFullName" >{{_FacturasService.FacturaCheckout.clienteFullName}}</span>
-                            </div>
-                            <div class="Vendedor">
-                                <span class="mr-1">Vendedor:</span>
-                                <span *ngIf="!_FacturasService.FacturaCheckout.userFullName">--</span>
-                                <span *ngIf="_FacturasService.FacturaCheckout.userFullName">{{_FacturasService.FacturaCheckout.userFullName}}</span>
-                            </div>
-                        </div>
-                        <ul class="list-group mb-3">
-                          <li 
-                            *ngFor="let producto of _FacturasService.FacturaCheckout.factura_detalle" 
-                            class="list-group-item d-flex justify-content-between lh-sm animate__animated animate__jello"
-                          >
-                            <div>
-                              <h6 class="my-0">{{producto.nombre}} <span class="text-lowercase">x ({{producto.cantidad}})</span></h6>
-                              <small class="text-muted">{{producto.descripcion}}</small>
-                            </div>
-                            <span class="text-muted">{{producto.precio | currency: 'USD' }}</span>
-                          </li>
-                         
-                          <li class="list-group-item d-flex justify-content-between bg-light">
-                            <div class="text-success">
-                              <h6 class="my-0">IVA</h6>
-                              <small>15%</small>
-                            </div>
-                            <span class="text-success">{{_FacturasService.FacturaCheckout.iva |currency: 'USD' }}</span>
-                          </li>
-                          <li class="list-group-item d-flex justify-content-between">
-                            <span>Total (USD)</span>
-                            <strong>{{_FacturasService.FacturaCheckout.monto |currency: 'USD' }}</strong>
-                          </li>
-                        </ul>
-                    </div>
-                </div> -->
+                      </div>
+                  </div>
+                </div>
             </div>
         </div>
     </div>
@@ -173,24 +69,20 @@
     #modalProducto
     let-modal
 >
-    <div class="modal-header">
-        <button
-            type="button"
-            class="close btn btn-icon btn-sm btn-primary"
-            aria-label="Close"
-            (click)="modal.dismiss('Cross click')"
-        >
-            <!-- <span aria-hidden="true">&times;</span> -->
-            <i class="fas fa-times"></i>
-        </button>
+  <div class="modal-header">
+      <button
+          type="button"
+          class="close btn btn-icon btn-sm btn-primary"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+      >
+          <!-- <span aria-hidden="true">&times;</span> -->
+          <i class="fas fa-times"></i>
+      </button>
+  </div>
+  <div class="modal-body">
+    <div class="container cortar-preview">
+      <app-facturar-producto (FormsValues)="FormsValues($event)" [producto]="Producto"></app-facturar-producto>
     </div>
-    <div class="modal-body">
-      <div class="container cortar-preview">
-        <app-facturar-producto (FormsValues)="FormsValues($event)" [producto]="Producto"></app-facturar-producto>
-      </div>
-    </div>
-    <!-- <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Guardar</button>
-    </div> -->
-
+  </div>
 </ng-template>

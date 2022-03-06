@@ -154,6 +154,7 @@ export class FacturarProductoComponent implements OnInit {
       let producto = {...this.producto}
       producto.precio   = Number(this.formularioControls.precio.value)
       producto.stock    = Number(this.formularioControls.stock.value)
+      producto.estado   = 1
       // producto.comision =  Number(this.formularioControls.comision.value)
       // producto.comision =  Number(this.formularioControls.comision.value)
       // producto.estado = Number(this.formularioControls.estado.value)

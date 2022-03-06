@@ -17,7 +17,7 @@
     font-weight: 700;
     color:#000;
     /* flex: 0; */
-    width: 145px;
+    min-width: 149px;
     /* flex-grow: 0;
     flex-shrink: 1;
     flex-basis: 145px; */
@@ -28,4 +28,40 @@
     /* flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 50%; */
+}
+
+.table th, 
+.table td
+{
+    border-top: none;
+}
+
+.list .list-group-item:first-child{
+    border: none !important; 
+}
+
+.list .list-group-item:nth-child(2){
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.list .texto-descripcion {
+    width: 230px;
+}
+
+.list .texto-cantidad {
+    width: 169px;
+}
+
+.list .texto-precio {
+    width: 78px;
+    text-align: right;
+}
+
+
+@media (max-width: 767.98px) {
+    .detalle-container .detalle .description {
+        text-align: left;
+    }
+    .detalle-container .detalle .value {
+        text-align: right;
+    }
 }

@@ -22,4 +22,4 @@ export enum Role {
     Vendedor      = 3,
     Supervisor    = 4,
 
-  };
+};

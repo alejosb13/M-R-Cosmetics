@@ -67,10 +67,10 @@
                   <span *ngIf="factura.tipo_venta == 1">Credito</span>
                 </td>
                 <td>
-                  <span *ngIf="factura.status_pagado == 2">En proceso</span>
+                  <span *ngIf="factura.status_pagado == 0">En proceso</span>
                   <span *ngIf="factura.status_pagado == 1">Finalizado</span>
                 </td>
-                <td>Detalle</td>
+                <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
                 <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
             </tr>
           </tbody>

@@ -34,11 +34,13 @@ import { FacturasComponent } from 'app/pages/facturas/facturas.component';
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
 import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
 import { FacturarProductoComponent } from 'app/shared/components/forms/facturar-producto/facturar-producto.component';
-
-import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-password/cambiar-password.component';
-import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/factura-detalle.component';
 
+import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-password/cambiar-password.component';
+
+import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
+import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-insertar.component';
+import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar.component';
 
 @NgModule({
   imports: [
@@ -77,10 +79,13 @@ import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/fact
     FacturaInsertarComponent,
     FacturarProductoComponent,
     FacturaDetalleComponent,
-    
+
     CambiarPasswordComponent,
     
     CheckoutComponent,
+    
+    AbonoInsertarComponent,
+    AbonoEditarComponent,
   ]
 })
 

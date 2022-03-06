@@ -25,6 +25,7 @@ import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factur
 import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/factura-detalle.component';
 import { AuthGuard } from 'app/auth/login/auth.guard';
+import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-insertar.component';
 
 const ADMINISTRADOR = "administrador"
 const VENDEDOR      = "vendedor"
@@ -85,6 +86,14 @@ export const AdminLayoutRoutes: Routes = [
         canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
         children:[
             { path: '',             component:     FacturaInsertarComponent},
+
+        ]
+    },
+    { 
+        path: 'abono', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        children:[
+            { path: 'agregar',   component: AbonoInsertarComponent },
 
         ]
     },
