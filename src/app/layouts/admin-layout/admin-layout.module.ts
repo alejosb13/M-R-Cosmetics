@@ -41,6 +41,8 @@ import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-pa
 import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-insertar.component';
 import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar.component';
+import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono-form.component';
+
 
 @NgModule({
   imports: [
@@ -86,6 +88,7 @@ import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar
     
     AbonoInsertarComponent,
     AbonoEditarComponent,
+    AbonoFormComponent,
   ]
 })
 

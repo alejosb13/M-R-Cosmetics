@@ -1,1 +1,13 @@
-<p>abono-editar works!</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-user">
+            <div class="card-header">
+                <h5 class="card-title">Agregar Abono</h5>
+            </div>
+            <div class="card-body px-4">
+              <!-- <app-producto-form (FormsValues)="ProductValuesForm($event)" ></app-producto-form> -->
+              <app-abono-form [Id]="AbonoId" (FormsValues)="FormValuesForm($event)" ></app-abono-form>
+            </div>
+        </div>
+    </div>
+</div>

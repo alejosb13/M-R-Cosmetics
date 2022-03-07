@@ -1,0 +1,104 @@
+<form [formGroup]="AbonoForm" [hidden]="loadInfo">
+    <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+          <div class="form-group">
+              <label>Factura <span class="text-danger">(*)</span></label>
+              <select
+                  class="form-control"
+                  id="exampleFormControlSelect1"
+                  name="factura_id"
+                  formControlName="factura_id"
+              >
+                  <option selected value="" hidden>Seleccione la factura a abonar</option>
+                  <option *ngFor="let factura of facturas" value="{{ factura.id }}">#{{ factura.id}} - {{ factura.cliente.nombreCompleto}}</option>
+              </select>
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Precio <span class="text-danger">(*)</span></label>
+          <input
+              type="text"
+              class="form-control"
+              name="precio"
+              formControlName="precio"
+              autocomplete="off"
+              [ngClass]="{
+              'is-invalid': AbonoForm.controls['precio'].invalid && AbonoForm.controls['precio'].touched,
+              'is-valid': AbonoForm.controls['precio'].valid
+              }"
+          >
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'El precio es requerida',
+              control: AbonoForm.controls['precio']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message: 'El precio debe tener como máximo 30 letras',
+              control: AbonoForm.controls['precio']
+          }"></ng-container>
+        </div>
+      </div>
+      <div class="col-md-6" [hidden]="!Id">
+        <div class="form-group">
+          <label>Estado</label>
+          <select
+            class="form-control"
+            name="estado"
+            formControlName="estado"
+            autocomplete="off"
+            [ngClass]="{
+            'is-invalid': AbonoForm.controls['estado'].invalid && AbonoForm.controls['estado'].touched,
+            'is-valid': AbonoForm.controls['estado'].valid
+            }"
+          >
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="facturaId != 0">
+      <div class="col-md-12">
+        <p>Abonado: <b>{{ abonado | currency: 'USD' }}</b> </p>
+        <p>Diferencia: <b>{{ restante | currency: 'USD' }}</b> </p>
+        <p>Total Factura: <b>{{ montoTotal | currency: 'USD' }}</b> </p>
+      </div>
+    </div>
+    <div class="row">
+        <div class="update ml-auto mr-auto">
+            <button  
+              type="submit"
+              class="btn btn-primary btn-round"
+              (click)="EnviarFormulario()"
+            >
+              <div *ngIf="Id">Actualizar</div>
+              <div *ngIf="!Id">Agregar</div>
+            </button>
+        </div>
+    </div>
+    <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+      <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+        <div class="invalid-feedback">
+          {{ message }}
+        </div>
+      </ng-container>
+    </ng-template>
+  </form>
+  
+  
+   
+  <div  [hidden]="!loadInfo" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando Abono
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+      
+    </div>
+  </div>

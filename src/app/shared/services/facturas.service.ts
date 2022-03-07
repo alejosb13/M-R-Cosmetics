@@ -29,10 +29,21 @@ export class FacturasService {
   }
   
   // public methods
-  getFacturas(): Observable<Factura[]> { 
-
+  getFacturas(options:any = {}): Observable<Factura[]> { 
+    let URL = FacturaURL
+    
+    if(Object.keys(options).length > 0){
+      let URLOptions = `${FacturaURL}?`
+      
+      for (const key in options) {
+        URLOptions += `${key}=${options[key]}&`
+      }
+      
+      URL = URLOptions
+    }
+    
     return this.http.get<Factura[]>(
-      FacturaURL, 
+      URL, 
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
