@@ -19,6 +19,7 @@ import { ClientesComponent } from '../../pages/clientes/clientes.component';
 import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
 import { ClienteFormComponent } from 'app/shared/components/forms/cliente-form/cliente-form.component';
 import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cliente-insertar.component';
+import { ClientesFacturasComponent } from 'app/pages/clientes/clientes-facturas/clientes-facturas.component';
 
 import { ProductosComponent } from 'app/pages/productos/productos.component';
 import { ProductoEditarComponent } from 'app/pages/productos/producto-editar/producto-editar.component';
@@ -39,6 +40,7 @@ import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/fact
 import { CambiarPasswordComponent } from 'app/shared/components/forms/cambiar-password/cambiar-password.component';
 
 import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
+
 import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-insertar.component';
 import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar.component';
 import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono-form.component';
@@ -65,6 +67,7 @@ import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono
     ClienteEditarComponent,
     ClienteInsertarComponent,
     ClienteFormComponent,
+    ClientesFacturasComponent,
     
     ProductosComponent,
     ProductoEditarComponent,

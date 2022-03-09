@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'app/shared/models/Usuario.model';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
 export class UsuariosComponent implements OnInit {
 
   page = 1;
-  pageSize = 3;
+  pageSize = environment.PageSize;
   collectionSize = 0;
   Usuarios: Usuario[];
   isLoad:boolean

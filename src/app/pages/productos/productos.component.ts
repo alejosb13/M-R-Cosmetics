@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Producto } from 'app/shared/models/Producto.model';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
 export class ProductosComponent implements OnInit {
 
   page = 1;
-  pageSize = 3;
+  pageSize = environment.PageSize;
   collectionSize = 0;
   Productos: Producto[];
   isLoad:boolean

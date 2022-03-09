@@ -37,9 +37,9 @@ export class ProductosService {
   }
   
   // public methods
-  getProducto(): Observable<any> { 
+  getProducto(): Observable<Producto[]> { 
 
-    return this.http.get(
+    return this.http.get<Producto[]>(
       ProductoURL, 
       {headers: this.headerJson_Token(), responseType: "json" }
     );

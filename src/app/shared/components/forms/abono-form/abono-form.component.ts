@@ -91,7 +91,7 @@ export class AbonoFormComponent implements OnInit {
   
   changeValues() {
     this.AbonoForm.valueChanges.subscribe((values)=>{
-      // console.log(values);
+      console.log(values);
       if(values.factura_id > 0){
         this.generarCalculo(values.factura_id)
       }
@@ -100,13 +100,23 @@ export class AbonoFormComponent implements OnInit {
   
   generarCalculo(facturaId:number){
     let factura:Factura = this.facturas.find(factura => factura.id == facturaId)
-    let abonos:number[] =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
-    let abonosActive = abonos.filter((abono) => abono != undefined );
+    
+    if(factura.factura_historial.length > 0){
+      let abonos:number[] =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
+      let abonosActive = abonos.filter((abono) => abono != undefined );
+      
+      this.abonado    =  abonosActive.reduce((acum, precio) => acum + precio)
+      this.restante   =  this.montoTotal - this.abonado
+      
+      console.log(factura,abonos,abonosActive);
+    }else{
+      this.abonado    = 0
+      this.restante   = 0
+    }
     
     this.facturaId  = factura.id
     this.montoTotal = factura.monto
-    this.abonado    =  abonosActive.reduce((acum, precio) => acum + precio)
-    this.restante   =  this.montoTotal - this.abonado
+    
   }
   
   get formularioControls(){

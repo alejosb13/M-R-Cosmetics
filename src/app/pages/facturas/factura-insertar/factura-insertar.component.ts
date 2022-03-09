@@ -1,16 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { Cliente } from 'app/shared/models/Cliente.model';
 import { FacturaCheckout } from 'app/shared/models/FacturaCheckout.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { Producto } from 'app/shared/models/Producto.model';
-import { Usuario } from 'app/shared/models/Usuario.model';
 import { CheckoutService } from 'app/shared/services/checkout.service';
-import { ClientesService } from 'app/shared/services/clientes.service';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
-import { UsuariosService } from 'app/shared/services/usuarios.service';
+import { environment } from 'environments/environment';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-factura-insertar',
@@ -23,15 +21,15 @@ export class FacturaInsertarComponent implements OnInit {
   modalOptions:NgbModalOptions;
   
   page = 1;
-  pageSize = 3;
+  pageSize = environment.PageSize;
   collectionSize = 0;
   
   isLoad:boolean
   Productos:Producto[]
   
   Producto:Producto
-  Clientes:Cliente[]
-  Usuarios:Usuario[]
+  // Clientes:Cliente[]
+  // Usuarios:Usuario[]
   ClienteId:number=0
   UsuarioId:number=0
   
@@ -39,23 +37,34 @@ export class FacturaInsertarComponent implements OnInit {
     private modalService: NgbModal,
     private _ProductosService: ProductosService,
     public _FacturasService: FacturasService,
-    private _ClientesService: ClientesService,
-    private _UsuariosService: UsuariosService,
+    // private _ClientesService: ClientesService,
+    // private _UsuariosService: UsuariosService,
     public _TablasService:TablasService,
     public _CheckoutService:CheckoutService
     
   ) { }
 
   ngOnInit(): void {
-    this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> this.Clientes = [...clientes])
-    this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> this.Usuarios = [...usuarios])
+    // this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> this.Clientes = [...clientes])
+    // this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> this.Usuarios = [...usuarios])
     
     this.loadProduct()
   }
   
   loadProduct(): void {
     this.isLoad = true
-    this._ProductosService.getProducto().subscribe((producto:Producto[])=> {
+    let productosStorage: FacturaDetalle[] = this._CheckoutService.getProductCheckout()
+    
+    this._ProductosService.getProducto()
+    .pipe(
+      map((productos : Producto[]) => productos.map(producto =>{
+        let productoS:FacturaDetalle = productosStorage.find(productoStorage => productoStorage.producto_id === producto.id )        
+        if(productoS) producto.stock = producto.stock - productoS.cantidad  
+        return producto
+      }))
+    )
+
+    .subscribe((producto:Producto[])=> {
       this.Productos= [...producto]
       this._TablasService.datosTablaStorage = [...producto]
       this._TablasService.total = producto.length
@@ -68,11 +77,11 @@ export class FacturaInsertarComponent implements OnInit {
     }) 
   }
   
-  agregarProducto(event:any,producto:Producto){
-    console.log(event);
-    console.log(producto);
+  // agregarProducto(event:any,producto:Producto){
+  //   console.log(event);
+  //   console.log(producto);
     
-  }
+  // }
   
   openFormProduct(producto:Producto){
     // this._ProductosService.producto = producto 
@@ -132,40 +141,9 @@ export class FacturaInsertarComponent implements OnInit {
   }
   
   FormsValues(producto:Producto){
-    // console.log("esteee");
-    console.log(producto);
+    // console.log(producto);
     
     this._CheckoutService.addProductCheckout(producto)
-
-    // let factura_detalle:FacturaDetalle ={
-    //   producto_id: producto.id,
-    //   cantidad: producto.stock,
-    //   precio: producto.precio,
-    //   nombre: `${producto.modelo} - ${producto.marca}`,
-    //   descripcion: producto.descripcion,
-    //   porcentaje: 0,
-    //   // comision: producto.comision,
-    // }
-    
-    // let FacturaCheckout: FacturaCheckout = {...this._CheckoutService.dataStorage}
-    // FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle ]
-    
-    // let precios = FacturaCheckout.factura_detalle.map((producto => producto.precio))
-    // let comisiones = FacturaCheckout.factura_detalle.map((producto => producto.porcentaje))
-    
-    // let total = precios.reduce((valorAnterior, valor) => valorAnterior + valor)
-    // let totalIva = total *0.15
-    // let totalFinal = total + totalIva
-    
-    // FacturaCheckout.iva = totalIva
-    // FacturaCheckout.monto = total
-    
-    // console.log(FacturaCheckout);
-    // console.log(totalIva);
-    // console.log(total);
-    // console.log(totalFinal);
-    
-    // this._CheckoutService.dataStorage = FacturaCheckout
     this.actualizarProducto(producto)
     
     let numeroProductos:FacturaDetalle[] = this._CheckoutService.getProductCheckout()

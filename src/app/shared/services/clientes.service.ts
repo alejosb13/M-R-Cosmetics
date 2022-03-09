@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { Cliente } from '../models/Cliente.model';
+import { Factura } from '../models/Factura.model';
 
 
 const ClienteURL = `${environment.urlAPI}cliente`
@@ -76,4 +77,13 @@ export class ClientesService {
       URL, {headers: this.headerJson_Token()}
     );
   }
+  
+  getClientexFactura(id:number): Observable<Factura[]> { 
+    const URL = `${ClienteURL}/factura/${id}`
+    return this.http.get<Factura[]>(
+      URL, {headers: this.headerJson_Token()}
+    );
+  }
+  
+  
 }

@@ -3,6 +3,7 @@ import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
+import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,7 +14,7 @@ import Swal from 'sweetalert2';
 export class FacturasComponent implements OnInit {
 
   page = 1;
-  pageSize = 3;
+  pageSize = environment.PageSize;
   collectionSize = 0;
   Facturas: Factura[];
   isLoad:boolean

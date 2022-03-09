@@ -88,7 +88,19 @@ export class CheckoutService {
     }
     
     let FacturaCheckout: FacturaCheckout = {...this.dataStorage}
-    FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle]
+    let ProductoExistente = FacturaCheckout.factura_detalle.find(FacturaDetalleStorage => FacturaDetalleStorage.producto_id == factura_detalle.producto_id)
+    
+    if(ProductoExistente){
+      ProductoExistente.cantidad = ProductoExistente.cantidad + factura_detalle.cantidad
+      ProductoExistente.precio = ProductoExistente.precio + factura_detalle.precio
+      
+      FacturaCheckout.factura_detalle = FacturaCheckout.factura_detalle.filter((producto:FacturaDetalle)=> producto.producto_id != ProductoExistente.producto_id )
+      FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, ProductoExistente ]: [ProductoExistente]
+    }else{
+      
+      FacturaCheckout.factura_detalle = (FacturaCheckout.factura_detalle)? [...FacturaCheckout.factura_detalle, factura_detalle ]: [factura_detalle]
+    }
+    
     FacturaCheckout.monto = this.calcularMontoTotal(FacturaCheckout)
     
     this.CheckoutToStorage(FacturaCheckout)
@@ -97,7 +109,12 @@ export class CheckoutService {
   deleteProductCheckout(item:FacturaDetalle) { 
     
     let Factura:FacturaCheckout = {...this.dataStorage}
-    Factura.factura_detalle = Factura.factura_detalle.filter((producto:FacturaDetalle)=> producto.producto_id == item.id && producto.cantidad == item.cantidad)
+    console.log(item);
+    
+    console.log("[factura Antes]" ,Factura.factura_detalle);
+    Factura.factura_detalle = Factura.factura_detalle.filter((producto:FacturaDetalle)=> producto.producto_id != item.producto_id )
+    console.log("[factura Despues]" ,Factura.factura_detalle);
+    
     Factura.monto = this.calcularMontoTotal(Factura)
     
     this.CheckoutToStorage(Factura)

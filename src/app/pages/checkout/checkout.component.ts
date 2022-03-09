@@ -115,6 +115,8 @@ export class CheckoutComponent implements OnInit {
   }
   
   deleteProduct(productoCheckout:FacturaDetalle) {
+    console.log(productoCheckout);
+    
     Swal.fire({
       title: '¿Estas seguro?',
       text: "Este producto se eliminará",
@@ -127,6 +129,7 @@ export class CheckoutComponent implements OnInit {
       if (result.isConfirmed) {
         this._CheckoutService.deleteProductCheckout(productoCheckout);
         this.getProducts()
+        this.getcheckout()
       }
     })
 

@@ -86,7 +86,7 @@
             <td >              
               <div class="d-flex flex-direction">
                 <div *ngIf="cliente.facturas.length > 0" class="mr-3" ngbTooltip="Facturas">
-                  <a href="#"><i class="fas fa-receipt"></i></a>
+                  <a [routerLink]="[ '/cliente','factura',cliente.id]"><i class="fas fa-receipt"></i></a>
                 </div>
                 <div *ngIf="cliente.facturas.length == 0" class="mr-3" ngbTooltip="No posee facturas">
                     -
