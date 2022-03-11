@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 export class ProductoFormComponent implements OnInit {
 
   ProductForm: FormGroup;
+  EstadoForm: FormGroup;
   // Categorias:Categoria[]
   // Frecuencias:Frecuencia[]
   daysOfWeek:string[]
@@ -31,6 +32,7 @@ export class ProductoFormComponent implements OnInit {
   ngOnInit(): void {
     
     this.definirValidaciones()
+    this.definirValidacionesEstado()
     
     if(this.Id) this.setFormValues()
   }
@@ -96,16 +98,41 @@ export class ProductoFormComponent implements OnInit {
             // Validators.maxLength(12),
           ]),
         ],
-        estado: [
-          1,
-          Validators.compose([
-            Validators.required,
-          ]),
-        ],
+        // estado: [
+        //   1,
+        //   Validators.compose([
+        //     Validators.required,
+        //   ]),
+        // ],
         
       }
     ); 
   }
+  
+  get formularioStadoControls(){
+    return this.EstadoForm.controls
+  }
+
+  definirValidacionesEstado(){
+    this.EstadoForm = this.fb.group(
+      {
+        estado: [
+          1,
+          Validators.compose([
+            Validators.required,
+
+          ]),
+        ],
+      }
+    ); 
+  }
+  
+  setEstadoValues(estado:number){
+    this.EstadoForm.patchValue({
+      "estado" : estado,
+    });
+  }
+  
   
   setFormValues(){
     this.loadInfo = true
@@ -118,9 +145,10 @@ export class ProductoFormComponent implements OnInit {
         // "comision" : producto.comision,
         "linea" : producto.linea,
         "descripcion" : producto.descripcion,
-        "estado" : producto.estado,
+        // "estado" : producto.estado,
       });
       
+      this.setEstadoValues(producto.estado)
       // let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
       // console.log(dias_cobro);
       
@@ -161,7 +189,7 @@ export class ProductoFormComponent implements OnInit {
   EnviarFormulario(){
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
-    console.log(this.ProductForm.getRawValue());
+    // console.log(this.ProductForm.getRawValue());
     
     if(this.ProductForm.valid){
       let producto = {} as Producto
@@ -173,7 +201,8 @@ export class ProductoFormComponent implements OnInit {
       producto.precio       = Number(this.formularioControls.precio.value)
       producto.stock        = Number(this.formularioControls.stock.value)
       producto.descripcion  = String(this.formularioControls.descripcion.value)
-      producto.estado       = Number(this.formularioControls.estado.value)
+      // producto.estado       = Number(this.formularioControls.estado.value)
+      producto.estado       = Number(this.formularioStadoControls.estado.value)
  
       // console.log(producto);
       

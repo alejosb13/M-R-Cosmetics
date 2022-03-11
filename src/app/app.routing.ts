@@ -29,6 +29,6 @@ export const AppRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: 'inicio'
   }
 ]

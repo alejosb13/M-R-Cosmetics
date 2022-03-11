@@ -41,8 +41,6 @@
               <th scope="col">Nombre Cliente</th>
               <th scope="col">Nombre Empresa</th>
               <th scope="col">Monto</th>
-              <!-- <th scope="col">Tipo de Cambio</th> -->
-              <!-- <th scope="col">IVA</th> -->
               <th scope="col">Operación</th>
               <th scope="col">Estado</th>
               <th scope="col">Ver</th>
@@ -60,8 +58,6 @@
                   {{ factura.cliente.nombreEmpresa }}
                 </td>
                 <td>{{ factura.monto  | currency: 'USD' }}</td>
-                <!-- <td>{{ factura.tcambio }}</td> -->
-                <!-- <td>{{ factura.iva }}%</td> -->
                 <td>
                   <span *ngIf="factura.tipo_venta == 2">Contado</span>
                   <span *ngIf="factura.tipo_venta == 1">Credito</span>

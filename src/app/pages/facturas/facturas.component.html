@@ -50,7 +50,7 @@
             </tr>
 
           </thead>
-          <tbody >
+          <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
             <tr *ngFor="let factura of _TablasService.datosTablaStorage">
                 <th scope="row">{{ factura.id }}</th>
                 <td>
@@ -72,6 +72,17 @@
                 </td>
                 <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
                 <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
+            <tr >
+              <td colspan="8">
+                <div class="container d-flex align-items-center justify-content-center">
+                  <!-- <div class="alert alert-info w-100 text-center" > -->
+                    <h5>No existen Facturas</h5>
+                  <!-- </div> -->
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>

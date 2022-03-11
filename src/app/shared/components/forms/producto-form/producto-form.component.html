@@ -206,14 +206,13 @@
                 }"></ng-container>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" [formGroup]="EstadoForm" *ngIf="Id" >
             <div class="form-group">
                 <label>Estado</label>
                 <select
-                    class="form-control"
-                    id="exampleFormControlSelect1"
-                    name="estado"
-                    formControlName="estado"
+                  class="form-control"
+                  name="estado"
+                  formControlName="estado"
                 >
                     <option value="1">Activo</option>
                     <option value="0">Inactivo</option>

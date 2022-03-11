@@ -64,7 +64,7 @@ export class NavbarComponent implements OnInit{
         if( titlee.includes(this.listTitles[item].path)) return this.listTitles[item].title;
       }
       
-      return 'Dashboard';
+      return '';
     }
     
     logout(){

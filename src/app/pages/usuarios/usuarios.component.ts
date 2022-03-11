@@ -32,7 +32,7 @@ export class UsuariosComponent implements OnInit {
     this.isLoad = true
     
     this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> {
-      console.log(usuarios);
+      // console.log(usuarios);
           
       this.Usuarios = [...usuarios]
       this._TablasService.datosTablaStorage = [...usuarios]

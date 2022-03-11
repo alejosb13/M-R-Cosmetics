@@ -21,6 +21,7 @@ import { UsuariosService } from 'app/shared/services/usuarios.service';
 export class ClienteFormComponent implements OnInit {
 
   editarClienteForm: FormGroup;
+  ClienteEstadoForm: FormGroup;
   Categorias:Categoria[]
   Frecuencias:Frecuencia[]
   Usuarios:Usuario[]
@@ -40,10 +41,7 @@ export class ClienteFormComponent implements OnInit {
     private _HelpersService: HelpersService,
     
   ) { 
-    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => {
-      console.log(this.Categorias);
-      
-      this.Categorias = [...data]});
+    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
     this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
     this._UsuariosService.getUsuario().subscribe((usaurios:Usuario[]) => this.Usuarios = [...usaurios]);
     
@@ -52,9 +50,10 @@ export class ClienteFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.Categorias);
+    // console.log(this.Categorias);
     
     this.definirValidaciones()
+    this.definirValidacionesEstado()
     
     if(this.clienteId) this.setFormValues()
   }
@@ -159,6 +158,21 @@ export class ClienteFormComponent implements OnInit {
 
         //   ]),
         // ],
+        // estado: [
+        //   1,
+        //   Validators.compose([
+        //     Validators.required,
+
+        //   ]),
+        // ],
+      }
+    ); 
+  }
+  
+  definirValidacionesEstado(){
+    this.ClienteEstadoForm = this.fb.group(
+      {
+
         estado: [
           1,
           Validators.compose([
@@ -168,6 +182,12 @@ export class ClienteFormComponent implements OnInit {
         ],
       }
     ); 
+  }
+  
+  setEstadoValues(estado:number){
+    this.ClienteEstadoForm.patchValue({
+      "estado" : estado,
+    });
   }
   
   setFormValues(){
@@ -185,8 +205,10 @@ export class ClienteFormComponent implements OnInit {
         "direccion_casa" : cliente.direccion_casa,
         "direccion_negocio" : cliente.direccion_negocio,
         // "dias_cobro" : [],
-        "estado" : cliente.estado,
+        // "estado" : cliente.estado,
       });
+      
+      this.setEstadoValues(cliente.estado)
       
       let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
       // console.log(dias_cobro);
@@ -203,10 +225,6 @@ export class ClienteFormComponent implements OnInit {
       
       this.loadInfo = false
     })
-            
-
-    
-
   }
   
   changeValueFormArray({ name, value, checked }) {
@@ -224,11 +242,15 @@ export class ClienteFormComponent implements OnInit {
     return this.editarClienteForm.controls
   }
 
+  get formularioStadoControls(){
+    return this.ClienteEstadoForm.controls
+  }
+
 
   EnviarFormulario(){
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
-    console.log(this.editarClienteForm.getRawValue());
+    // console.log(this.editarClienteForm.getRawValue());
     
     if(this.editarClienteForm.valid){
       let cliente = {} as Cliente
@@ -241,10 +263,11 @@ export class ClienteFormComponent implements OnInit {
       cliente.dias_cobro        = this._HelpersService.daysOfTheWeekToString(this.formularioControls.dias_cobro.value)
       cliente.direccion_casa    = this.formularioControls.direccion_casa.value
       cliente.direccion_negocio = this.formularioControls.direccion_negocio.value
-      cliente.estado            = Number(this.formularioControls.estado.value)
+      cliente.estado            = Number(this.formularioStadoControls.estado.value)
       cliente.frecuencia_id     = Number(this.formularioControls.frecuencia_id.value)
       cliente.telefono          = Number(this.formularioControls.telefono.value)
-
+      // console.log("[Cliente]",cliente);
+      
       this.FormsValues.emit(cliente)
     }else{
       Swal.fire({

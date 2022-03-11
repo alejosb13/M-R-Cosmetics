@@ -17,6 +17,8 @@ export class UsuarioFormComponent implements OnInit {
 
   editarUsuarioForm: FormGroup;
   PasswordGroup:FormGroup;
+  EstadoForm: FormGroup;
+  
   Roles:Role[]
   loadInfo:boolean = false;
   
@@ -34,6 +36,7 @@ export class UsuarioFormComponent implements OnInit {
   ngOnInit(): void {
     
     this.definirValidaciones()
+    this.definirValidacionesEstado()
     
     if(this.Id) this.setFormValues()
   }
@@ -99,12 +102,12 @@ export class UsuarioFormComponent implements OnInit {
             Validators.minLength(3),  
           ]),
         ],
-        estado: [
-          1,
-          Validators.compose([
-            Validators.required,
-          ]),
-        ],
+        // estado: [
+        //   1,
+        //   Validators.compose([
+        //     Validators.required,
+        //   ]),
+        // ],
       },
       {
         validator: ValidFunctionsValidator.MatchPassword,
@@ -149,11 +152,38 @@ export class UsuarioFormComponent implements OnInit {
         "email" : usuario.email,
         "cargo" : usuario.cargo,
         "role":   String( role.id),
-        "estado" : usuario.estado,
+        // "estado" : usuario.estado,
       });
     
+      this.setEstadoValues(usuario.estado)
+      
       this.loadInfo = false
     })
+    
+  }
+
+  definirValidacionesEstado(){
+    this.EstadoForm = this.fb.group(
+      {
+        estado: [
+          1,
+          Validators.compose([
+            Validators.required,
+
+          ]),
+        ],
+      }
+    ); 
+  }
+  
+  setEstadoValues(estado:number){
+    this.EstadoForm.patchValue({
+      "estado" : estado,
+    });
+  }
+  
+  get formularioStadoControls(){
+    return this.EstadoForm.controls
   }
 
   get formularioControls(){
@@ -180,7 +210,7 @@ export class UsuarioFormComponent implements OnInit {
       }
       
       usuarioService.role                  = Number(this.formularioControls.role.value)
-      usuarioService.estado                = this.formularioControls.estado.value
+      usuarioService.estado                = Number(this.formularioStadoControls.estado.value)
       
     
       this.FormsValues.emit(usuarioService)
