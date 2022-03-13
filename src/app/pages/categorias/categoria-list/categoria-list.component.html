@@ -3,7 +3,7 @@
     <div *ngIf="isLoad" class="container-fluid p-5">
       <div class="d-flex justify-content-center align-content-center">
         <span>
-          Cargando abonos
+          Cargando categorias
           <i class="fas fa-circle-notch fa-spin"></i>
         </span>
         
@@ -13,13 +13,13 @@
     <ng-container  *ngIf="!isLoad ">
   
       <div class=" card-header border-0 pt-4  bg-white">
-        <a class="btn btn-primary" routerLink="/abono/agregar">
-            <i class="fas fa-plus"></i>
-            Agregar
+        <a class="btn btn-primary" routerLink="/categoria/agregar">
+          <i class="fas fa-plus"></i>
+          Agregar
         </a>
         <div class="d-flex flex-row justify-content-between mt-3">
           <div class="card-title align-items-start flex-column">
-            <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Abonos</span>
+            <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Categorias</span>
             <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
           </div>
     
@@ -38,45 +38,45 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Monto</th>
-              <th scope="col">Factura</th>
-              <th scope="col">Usuario</th>
-              <th scope="col">Cliente</th>
-              <th scope="col">Opciones</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Numero de días</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Opercaciones</th>
             </tr>
 
           </thead>
           <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
-            <tr *ngFor="let abono of _TablasService.datosTablaStorage">
-                <th scope="row">{{ abono.id }}</th>
+            <tr *ngFor="let categoria of _TablasService.datosTablaStorage">
+                <th scope="row">{{ categoria.id }}</th>
                 <td>
-                  {{ abono.precio}}
+                  {{ categoria.tipo }}
                 </td>
+                <td>{{ categoria.descripcion }}</td>
+                <td>{{ categoria.valor_dias }}</td>
                 <td>
-                    <div class="mr-3" ngbTooltip="Factura">
-                        <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a>
-                    </div>
+                    <span *ngIf="categoria.estado == 0">Inactiva</span>
+                    <span *ngIf="categoria.estado == 1">Activa</span>
                 </td>
-                <td ><a [routerLink]="[ '/usuario','editar',abono.user_id]" ngbTooltip="{{ abono.usuario.name | uppercase }} {{ abono.usuario.apellido | uppercase }}"><i class="fa-user-tie fas"></i> #{{abono.user_id}}</a></td>
-                <td ><a [routerLink]="[ '/cliente','editar',abono.cliente.id]" ngbTooltip="{{ abono.cliente.nombreCompleto | uppercase }}"><i class="nc-icon nc-single-02"></i> #{{abono.cliente.id}}</a></td>
-                <td>
-                    <div class="d-flex flex-direction">
-                      <!-- <div class="mr-3" ngbTooltip="Editar">
-                        <a [routerLink]="[ '/abono','editar',abono.id]" ><i class="fas fa-pencil-alt"></i></a>
-                      </div> -->
-                      <div class="mr-3" ngbTooltip="Eliminar">
-                        <span class="text-primary pointer" role="button" (click)="eliminar(abono)"><i class="fas fa-trash-alt"></i></span>
-                      </div>
-                    </div>
-                  </td>
+              <td>
+                <div class="d-flex flex-direction">
+                  <div class="mr-3" ngbTooltip="Editar">
+                    <a [routerLink]="[ '/categoria','editar',categoria.id]" ><i class="fas fa-pencil-alt"></i></a>
+                  </div>
+                  <div class="mr-3" ngbTooltip="Eliminar">
+                    <span class="text-primary pointer" role="button" (click)="eliminar(categoria)"><i class="fas fa-trash-alt"></i></span>
+                  </div>
+                </div>
+              </td>
             </tr>
           </tbody>
+          
           <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
             <tr >
-              <td colspan="8">
+              <td colspan="9">
                 <div class="container d-flex align-items-center justify-content-center">
                   <!-- <div class="alert alert-info w-100 text-center" > -->
-                    <h5>No existen Abonos</h5>
+                    <h5>No existen categorias</h5>
                   <!-- </div> -->
                 </div>
               </td>

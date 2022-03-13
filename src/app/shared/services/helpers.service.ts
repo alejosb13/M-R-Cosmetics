@@ -72,4 +72,15 @@ export class HelpersService {
     return moment().format('MM/DD/YYYY')
   }
   
+  downloadFile(data: any,nameFile:string) {
+    let dataType = data.type;
+    let binaryData = [];
+    binaryData.push(data);
+    let downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+    downloadLink.setAttribute('download', nameFile);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+  }
+  
 }

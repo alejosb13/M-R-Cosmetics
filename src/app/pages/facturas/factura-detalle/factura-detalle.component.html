@@ -11,6 +11,13 @@
     </div>
     
     <div class="container-fluid" *ngIf="!isLoad">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary" (click)="descargarPDF()">
+                    <i class="fas fa-file-download fa-lg"></i> Descargar
+                </button>
+            </div>
+        </div>
         <div class="row mb-2">
             <div class="col-md-6 detalle-section">
                 <div class="detalle-container">
@@ -137,12 +144,12 @@
                       <span class="texto-cantidad" *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
                       <span class="texto-precio">{{ producto.precio | currency: 'USD' }}</span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="Factura.tipo_venta == 1">
                         <span><b>Pagado</b></span>
 
                         <span class=""><b>{{ Pagado | currency: 'USD'}}</b></span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="Factura.tipo_venta == 1">
                         <span><b>Diferencia</b></span>
 
                         <span class=""><b>{{ Diferencia | currency: 'USD'}}</b></span>

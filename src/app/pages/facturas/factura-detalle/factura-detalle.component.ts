@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Abono } from 'app/shared/models/Abono.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
+import { HelpersService } from 'app/shared/services/helpers.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -25,6 +25,8 @@ export class FacturaDetalleComponent implements OnInit {
   constructor(
     private _FacturasService:FacturasService,
     private _ActivatedRoute: ActivatedRoute,
+    private _HelpersService: HelpersService,
+    
     private NgbModal: NgbModal,
   ) {
   }
@@ -48,7 +50,7 @@ export class FacturaDetalleComponent implements OnInit {
       
       this.Factura = factura
       
-      if(factura.factura_historial.length > 0 && factura.tipo_venta){
+      if(factura.factura_historial.length > 0 && factura.tipo_venta == 1){
         let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
         let abonosStatusActive = abonos.filter((abono:any) => abono != undefined );
         
@@ -58,6 +60,19 @@ export class FacturaDetalleComponent implements OnInit {
       
       this.isLoad =false
     },()=> this.isLoad = false)
+  }
+  
+  descargarPDF(){
+    let data = {
+      factura: this.Factura,
+      abonado:this.Pagado,
+      diferencia:this.Diferencia
+    }
+    this._FacturasService.FacturaPDF(data).subscribe((data)=>{
+      console.log(data);
+      this._HelpersService.downloadFile(data,`Detalle_Factura_${this.FacturaId}`)
+      
+    })
   }
   
   

@@ -20,8 +20,8 @@ export class AbonoFormComponent implements OnInit {
   
   loadInfo:boolean = false;
   AbonoForm:FormGroup
-  facturasSelect:Factura[]
   facturas:Factura[]
+  facturasCredito:Factura[]
   factura:Factura
   Abono:FacturaHistorial
   
@@ -48,8 +48,8 @@ export class AbonoFormComponent implements OnInit {
   }
   
   getFacturasTipoCredito(){
-    this._FacturasService.getFacturas({tipo_venta:1}).subscribe((facturas:Factura[]) => this.facturas = facturas )
-    this._FacturasService.getFacturas({tipo_venta:1,status_pagado:0}).subscribe((facturas:Factura[]) => this.facturasSelect = facturas )
+    this._FacturasService.getFacturas({tipo_venta:1,status_pagado:0}).subscribe((facturas:Factura[]) => this.facturas = facturas )
+    this._FacturasService.getFacturas({tipo_venta:1}).subscribe((facturas:Factura[]) => this.facturasCredito = facturas )
   }
   
   definirValidaciones(){
@@ -131,7 +131,7 @@ export class AbonoFormComponent implements OnInit {
     let total:number         = 0
     let bloqueoAbono:boolean = false
     // let factura:Factura      = this.facturas.find(factura => factura.id == facturaId)
-    this.factura      = this.facturas.find(factura => factura.id == facturaId)
+    this.factura      = this.facturasCredito.find(factura => factura.id == facturaId)
     total = this.factura.monto
     
     if(this.factura.factura_historial.length > 0){

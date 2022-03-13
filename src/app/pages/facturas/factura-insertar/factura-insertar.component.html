@@ -25,21 +25,31 @@
                                       </span>
                                   </div>
                               </div>
-                            <div class="table-responsive table-full-width" *ngIf="!isLoad" >
-                              <table class="table table-hover">
+                            <!-- <div class="table-responsive table-full-width" *ngIf="!isLoad" > -->
+                            <div class="container-fluid" *ngIf="!isLoad" >
+                              <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let producto of _TablasService.datosTablaStorage">
+                                  {{ producto.descripcion }} -
+                                  {{ producto.stock }} Uds - 
+                                  {{ producto.precio | currency: 'USD' }} 
+                                  <span class="badge  badge-pill">
+                                    <form role="form" (submit)="agregarProducto($event, producto)">
+                                      <div class="form-inline carga-producto">
+                                          <button type="button" class="btn btn-success btn-sm" (click)="openFormProduct(producto)">
+                                            <i class="fas fa-cart-plus"></i>
+                                          </button>
+                                      </div>
+                                    </form>
+                                  </span>
+                                </li>
+
+                              </ul>
+                              <!-- <table class="table table-hover">
                                   <tbody>
                                       <tr *ngFor="let producto of _TablasService.datosTablaStorage">
-                                          <!-- <th scope="row">{{ producto.id }}</th> -->
-                                          <td>
-                                            <!-- {{ producto.marca }} -->
-                                          </td>
-                                          <!-- <td>{{ producto.modelo }}</td> -->
-                                          <!-- <td>{{ producto.linea }}</td> -->
                                           <td>{{ producto.descripcion }}</td>
                                           <td>{{ producto.stock }} Uds</td>
                                           <td>{{ producto.precio | currency: 'USD' }}</td>
-
-                                          <!-- <td>{{ producto.comision }}</td> -->
                                           <td>
                                             <form role="form" (submit)="agregarProducto($event, producto)">
                                               <div class="form-inline carga-producto">
@@ -51,7 +61,7 @@
                                           </td>
                                       </tr>
                                   </tbody>
-                              </table>
+                              </table> -->
                             </div>
                             <div class="d-flex justify-content-between p-2">
                               <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>

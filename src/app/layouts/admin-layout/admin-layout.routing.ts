@@ -33,6 +33,9 @@ import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-in
 import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar.component';
 import { AbonoFacturaComponent } from 'app/pages/abonos/abono-factura/abono-factura.component';
 import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.component';
+import { CategoriaListComponent } from 'app/pages/categorias/categoria-list/categoria-list.component';
+import { CategoriaInsertarComponent } from 'app/pages/categorias/categoria-insertar/categoria-insertar.component';
+import { CategoriaEditarComponent } from 'app/pages/categorias/categoria-editar/categoria-editar.component';
 
 
 const ADMINISTRADOR = "administrador"
@@ -107,6 +110,15 @@ export const AdminLayoutRoutes: Routes = [
             { path: 'editar/:id',   component: AbonoEditarComponent },
             { path: 'list/:facturaId',   component: AbonoListComponent },
 
+        ]
+    },
+    { 
+        path: 'categoria', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        children:[
+            { path: '',   component: CategoriaListComponent },
+            { path: 'agregar',   component: CategoriaInsertarComponent },
+            { path: 'editar/:id',   component: CategoriaEditarComponent },
         ]
     },
 

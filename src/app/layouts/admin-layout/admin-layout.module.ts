@@ -46,6 +46,10 @@ import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar
 import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono-form.component';
 import { AbonoFacturaComponent } from 'app/pages/abonos/abono-factura/abono-factura.component';
 import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.component';
+import { CategoriaListComponent } from 'app/pages/categorias/categoria-list/categoria-list.component';
+import { CategoriaInsertarComponent } from 'app/pages/categorias/categoria-insertar/categoria-insertar.component';
+import { CategoriaEditarComponent } from 'app/pages/categorias/categoria-editar/categoria-editar.component';
+import { CategoriaFormComponent } from 'app/shared/components/forms/categoria-form/categoria-form.component';
 
 
 @NgModule({
@@ -95,7 +99,13 @@ import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.compo
     AbonoEditarComponent,
     AbonoFormComponent,
     AbonoListComponent,
-    AbonoFacturaComponent
+    AbonoFacturaComponent,
+    
+    CategoriaListComponent,
+    CategoriaInsertarComponent,
+    CategoriaEditarComponent,
+    CategoriaFormComponent,
+    
   ]
 })
 

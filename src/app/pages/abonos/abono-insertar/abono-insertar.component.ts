@@ -31,7 +31,8 @@ export class AbonoInsertarComponent implements OnInit {
         icon: 'success',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.router.navigate([`abono/editar/${data.id}`]);
+          // this.router.navigate([`abono/editar/${data.id}`]);
+          this.router.navigate([`abono`]);
         }
       })
     },(HttpErrorResponse:HttpErrorResponse)=>{

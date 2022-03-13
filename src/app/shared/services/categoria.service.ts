@@ -36,8 +36,16 @@ export class CategoriaService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getCategoriaById(id:number): Observable<Categoria> { 
+
+    return this.http.get<Categoria>(
+      `${CategoriaURL}/${id}`, 
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
   
-  insertCliente(id:number,data:any): Observable<any> { 
+  insertCategoria(data:any): Observable<any> { 
 
     return this.http.post(
       CategoriaURL, 
@@ -46,16 +54,16 @@ export class CategoriaService {
     );
   }
   
-  updateCliente(id:number,data:any): Observable<any> { 
+  updateCategoria(id:number,data:any): Observable<any> { 
 
     return this.http.put(
-      CategoriaURL, 
+      `${CategoriaURL}/${id}`, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  deleteCliente(id:number): Observable<any> { 
+  deleteCategoria(id:number): Observable<any> { 
     const URL = `${CategoriaURL}/${id}`
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}
