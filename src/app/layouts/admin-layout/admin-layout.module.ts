@@ -44,6 +44,8 @@ import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-insertar.component';
 import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar.component';
 import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono-form.component';
+import { AbonoFacturaComponent } from 'app/pages/abonos/abono-factura/abono-factura.component';
+import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.component';
 
 
 @NgModule({
@@ -92,6 +94,8 @@ import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono
     AbonoInsertarComponent,
     AbonoEditarComponent,
     AbonoFormComponent,
+    AbonoListComponent,
+    AbonoFacturaComponent
   ]
 })
 

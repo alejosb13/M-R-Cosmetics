@@ -20,7 +20,7 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label>Precio <span class="text-danger">(*)</span></label>
+          <label>Monto <span class="text-danger">(*)</span></label>
           <input
               type="text"
               class="form-control"
@@ -34,12 +34,17 @@
           >
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
               validation: 'required',
-              message: 'El precio es requerida',
+              message: 'El monto es requerido',
               control: AbonoForm.controls['precio']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
               validation: 'maxlength',
-              message: 'El precio debe tener como máximo 30 letras',
+              message: 'El monto debe tener como máximo 30 letras',
+              control: AbonoForm.controls['precio']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'max',
+              message: 'El monto no debe ser mayor a la diferencia',
               control: AbonoForm.controls['precio']
           }"></ng-container>
         </div>
@@ -76,6 +81,7 @@
               type="submit"
               class="btn btn-primary btn-round"
               (click)="EnviarFormulario()"
+              [disabled]="bloqueo"
             >
               <div *ngIf="Id">Actualizar</div>
               <div *ngIf="!Id">Agregar</div>

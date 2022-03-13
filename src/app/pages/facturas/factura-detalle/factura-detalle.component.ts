@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Abono } from 'app/shared/models/Abono.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-factura-detalle',
@@ -34,16 +36,23 @@ export class FacturaDetalleComponent implements OnInit {
   
   facturaById(FacturaId:number){
     this.isLoad = true
-    this._FacturasService.getFacturaById(FacturaId).subscribe((factura:Factura)=>{
-      console.log(factura);
+    this._FacturasService.getFacturaById(FacturaId)
+    .pipe(
+      map((factura : Factura) => {
+        factura.factura_historial = factura.factura_historial.filter( abono => abono.estado == 1)
+        return factura
+      })
+    )
+    .subscribe((factura:Factura)=>{
+      // console.log(factura);
       
       this.Factura = factura
       
       if(factura.factura_historial.length > 0 && factura.tipo_venta){
-        let pagos:number[] =[]
+        let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
+        let abonosStatusActive = abonos.filter((abono:any) => abono != undefined );
         
-        pagos = factura.factura_historial.map(item => item.precio)
-        this.Pagado = pagos.reduce((valorAnterior, valor) => valorAnterior + valor)
+        this.Pagado = abonosStatusActive.reduce((valorAnterior:number, valor:number) => valorAnterior + valor)
         this.Diferencia =  factura.monto - this.Pagado 
       }
       

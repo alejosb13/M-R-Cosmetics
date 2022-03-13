@@ -12,12 +12,12 @@ export interface RouteInfo {
 
 export const ROUTES: RouteInfo[] = [
     { path: '/inicio',        title: 'Inicio',            icon:'nc-icon nc-shop',               class: '' , access: 'administrador,vendedor,supervisor'},
-    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,supervisor'},
     { path: '/producto',      title: 'Producto',          icon:'fas fa-truck-loading',          class: '' , access: 'administrador,supervisor'},
     { path: '/usuario',       title: 'Usuario',           icon:'fas fa-user-tie',               class: '' , access: 'administrador,supervisor'},
     { path: '/factura',       title: 'Facturas',          icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
     { path: '/pedido',        title: 'Pedido',            icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
-    { path: '/abono/agregar', title: 'Abono',             icon:'fas fa-money-check-alt',        class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/abono', title: 'Abono',             icon:'fas fa-money-check-alt',        class: '' , access: 'administrador,vendedor,supervisor'},
     // { path: '/icons',         title: 'Icons',             icon:'nc-diamond',    class: '' },
     // { path: '/maps',          title: 'Maps',              icon:'nc-pin-3',      class: '' },
     // { path: '/notifications', title: 'Notifications',     icon:'nc-bell-55',    class: '' },

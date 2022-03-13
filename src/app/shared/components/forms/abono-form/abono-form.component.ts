@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Abono } from 'app/shared/models/Abono.model';
 import { Factura } from 'app/shared/models/Factura.model';
+import { FacturaHistorial } from 'app/shared/models/FacturaHistorial.model';
 import { AbonoService } from 'app/shared/services/abono.service';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
@@ -19,12 +20,16 @@ export class AbonoFormComponent implements OnInit {
   
   loadInfo:boolean = false;
   AbonoForm:FormGroup
+  facturasSelect:Factura[]
   facturas:Factura[]
+  factura:Factura
+  Abono:FacturaHistorial
   
-  montoTotal:number=0
-  restante:number=0
-  abonado:number=0
-  facturaId:number=0
+  montoTotal:number = 0
+  restante:number   = 0
+  abonado:number    = 0
+  facturaId:number  = 0
+  bloqueo:boolean   = false
   // estado:number=1
   
   constructor(
@@ -44,6 +49,7 @@ export class AbonoFormComponent implements OnInit {
   
   getFacturasTipoCredito(){
     this._FacturasService.getFacturas({tipo_venta:1}).subscribe((facturas:Factura[]) => this.facturas = facturas )
+    this._FacturasService.getFacturas({tipo_venta:1,status_pagado:0}).subscribe((facturas:Factura[]) => this.facturasSelect = facturas )
   }
   
   definirValidaciones(){
@@ -61,6 +67,7 @@ export class AbonoFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.maxLength(43),
+            Validators.min(1),
             Validators.pattern(ValidFunctionsValidator.NumberRegEx), 
           ]),
         ],
@@ -78,6 +85,7 @@ export class AbonoFormComponent implements OnInit {
   setFormValues(){
     this.loadInfo = true
     this._AbonoService.getAbonoById(this.Id).subscribe((abono:Abono)=>{
+      this.Abono = abono
       this.AbonoForm.setValue({
         "factura_id" : abono.factura_id,
         "precio" : abono.precio,
@@ -85,37 +93,69 @@ export class AbonoFormComponent implements OnInit {
       });
       
       this.generarCalculo(abono.factura_id)
+      
       this.loadInfo = false            
     });
   }
   
   changeValues() {
     this.AbonoForm.valueChanges.subscribe((values)=>{
-      console.log(values);
+      // console.log(values);
       if(values.factura_id > 0){
         this.generarCalculo(values.factura_id)
+        let maximo:number = this.restante
+        // console.log(maximo);
+        
+        if(this.Id) maximo += this.Abono.precio
+        // console.log(maximo);
+        
+        this.AbonoForm.get("precio").setValidators([
+          Validators.required,
+          Validators.maxLength(43),
+          Validators.max(maximo),
+          Validators.min(1),
+          Validators.pattern(ValidFunctionsValidator.NumberRegEx), 
+        ])
+        
+        // console.log(this.AbonoForm.get("precio"));
+        // if(values.precio = this.restante){
+          
+        // }
       }
     })
   }
   
   generarCalculo(facturaId:number){
-    let factura:Factura = this.facturas.find(factura => factura.id == facturaId)
+    let abonado:number       = 0
+    let diferencia:number    = 0
+    let total:number         = 0
+    let bloqueoAbono:boolean = false
+    // let factura:Factura      = this.facturas.find(factura => factura.id == facturaId)
+    this.factura      = this.facturas.find(factura => factura.id == facturaId)
+    total = this.factura.monto
     
-    if(factura.factura_historial.length > 0){
-      let abonos:number[] =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
+    if(this.factura.factura_historial.length > 0){
+      let abonos:number[] =  this.factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
       let abonosActive = abonos.filter((abono) => abono != undefined );
       
-      this.abonado    =  abonosActive.reduce((acum, precio) => acum + precio)
-      this.restante   =  this.montoTotal - this.abonado
+      abonado    =  abonosActive.reduce((acum, precio) => acum + precio)
+      console.log(abonado);
       
-      console.log(factura,abonos,abonosActive);
-    }else{
-      this.abonado    = 0
-      this.restante   = 0
+      if(abonado >= total){
+        bloqueoAbono = true 
+      }
+      
+      diferencia =  this.factura.monto - abonado
+      
+      // console.log(factura,abonos,abonosActive);
     }
     
-    this.facturaId  = factura.id
-    this.montoTotal = factura.monto
+    this.facturaId  = this.factura.id
+    
+    this.bloqueo    = bloqueoAbono
+    this.abonado    = abonado
+    this.restante   = diferencia
+    this.montoTotal = total
     
   }
   
@@ -129,21 +169,30 @@ export class AbonoFormComponent implements OnInit {
     // console.log(this.formularioControls);
     // console.log(this.AbonoForm.getRawValue());
     
-    if(this.AbonoForm.valid){
-      let abono:Abono  = {} as Abono 
-      abono.precio     = Number(this.formularioControls.precio.value)
-      abono.factura_id = Number(this.formularioControls.factura_id.value)
-      abono.user_id    = Number(this._AuthService.dataStorage.user.userId)
-      abono.estado     = Number(this.formularioControls.estado.value)
-      
-
-      this.FormsValues.emit(abono)
-    }else{
+    if(this.bloqueo && !this.Id){
       Swal.fire({
-        text: "Complete todos los campos obligatorios",
+        text: "No puede agregar abonos en una factura que ya esta pagada",
         icon: 'warning',
       })
+    }else{
+      if(this.AbonoForm.valid){
+        let abono:Abono  = {} as Abono 
+        abono.precio     = Number(this.formularioControls.precio.value)
+        abono.factura_id = Number(this.formularioControls.factura_id.value)
+        abono.user_id    = Number(this._AuthService.dataStorage.user.userId)
+        abono.estado     = Number(this.formularioControls.estado.value)
+        
+  
+        this.FormsValues.emit(abono)
+      }else{
+        Swal.fire({
+          text: "Complete todos los campos obligatorios",
+          icon: 'warning',
+        })
+      }
     }
+    
+
     
   }
   

@@ -7,10 +7,12 @@ import { TypographyComponent } from '../../pages/typography/typography.component
 import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/maps/maps.component';
 import { NotificationsComponent } from '../../pages/notifications/notifications.component';
+import { AuthGuard } from 'app/auth/login/auth.guard';
 
 import { ClientesComponent } from 'app/pages/clientes/clientes.component';
 import { ClienteEditarComponent } from 'app/pages/clientes/cliente-editar/cliente-editar.component';
 import { ClienteInsertarComponent } from 'app/pages/clientes/cliente-insertar/cliente-insertar.component';
+import { ClientesFacturasComponent } from 'app/pages/clientes/clientes-facturas/clientes-facturas.component';
 
 import { ProductosComponent } from 'app/pages/productos/productos.component';
 import { ProductoEditarComponent } from 'app/pages/productos/producto-editar/producto-editar.component';
@@ -19,15 +21,19 @@ import { ProductoInsertarComponent } from 'app/pages/productos/producto-insertar
 import { UsuariosComponent } from 'app/pages/usuarios/usuarios.component';
 import { UsuariosEditarComponent } from 'app/pages/usuarios/usuarios-editar/usuarios-editar.component';
 import { UsuarioInsertarComponent } from 'app/pages/usuarios/usuario-insertar/usuario-insertar.component';
+
 import { FacturasComponent } from 'app/pages/facturas/facturas.component';
 import { FacturaInsertarComponent } from 'app/pages/facturas/factura-insertar/factura-insertar.component';
 import { FacturaEditarComponent } from 'app/pages/facturas/factura-editar/factura-editar.component';
-import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
 import { FacturaDetalleComponent } from 'app/pages/facturas/factura-detalle/factura-detalle.component';
-import { AuthGuard } from 'app/auth/login/auth.guard';
+
+import { CheckoutComponent } from 'app/pages/checkout/checkout.component';
+
 import { AbonoInsertarComponent } from 'app/pages/abonos/abono-insertar/abono-insertar.component';
 import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar.component';
-import { ClientesFacturasComponent } from 'app/pages/clientes/clientes-facturas/clientes-facturas.component';
+import { AbonoFacturaComponent } from 'app/pages/abonos/abono-factura/abono-factura.component';
+import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.component';
+
 
 const ADMINISTRADOR = "administrador"
 const VENDEDOR      = "vendedor"
@@ -68,7 +74,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'factura', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
         children:[
             { path: '',             component: FacturasComponent},
             // { path: 'agregar',      component: FacturaInsertarComponent},
@@ -78,7 +84,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'checkout', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
         children:[
             { path: '',             component:     CheckoutComponent},
 
@@ -86,7 +92,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'pedido', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
         children:[
             { path: '',             component:     FacturaInsertarComponent},
 
@@ -94,10 +100,12 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'abono', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
         children:[
+            { path: '',   component: AbonoListComponent },
             { path: 'agregar',   component: AbonoInsertarComponent },
             { path: 'editar/:id',   component: AbonoEditarComponent },
+            { path: 'list/:facturaId',   component: AbonoListComponent },
 
         ]
     },
