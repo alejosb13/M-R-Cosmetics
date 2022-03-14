@@ -67,7 +67,7 @@
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="{{ cliente.categoria.descripcion }}">
                   <span>({{ cliente.categoria.tipo }}) </span>
-                  <a href="#">
+                  <a [routerLink]="[ '/categoria','editar',cliente.categoria_id]" >
                     <i class="fas fa-chart-line "></i>
                   </a>
                 </div>
@@ -76,7 +76,7 @@
             <td >              
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="{{ cliente.frecuencia.descripcion }}">
-                  <a href="#"><i class="fas fa-stopwatch"></i></a>
+                  <a [routerLink]="[ '/frecuencia','editar', cliente.frecuencia_id ]"><i class="fas fa-stopwatch"></i></a>
                     &nbsp;
                   <span>({{ cliente.frecuencia.dias }} dias) </span>
                 </div>

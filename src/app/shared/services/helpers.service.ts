@@ -52,11 +52,11 @@ export class HelpersService {
     
     while (countDays < days) {
       // Si no es sabado ni domingo
+      currentDay.add(1, 'days');   
       if (currentDay.isoWeekday() !== 6 && currentDay.isoWeekday() !== 7) {
         countDays++
-        // console.log(countDays,currentDay.format('MM/DD/YYYY'));
+        console.log(countDays,currentDay.format('MM/DD/YYYY'));
       } 
-      currentDay.add(1, 'days');   
     }
     
     return currentDay.format(format)

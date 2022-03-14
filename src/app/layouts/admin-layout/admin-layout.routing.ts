@@ -36,6 +36,9 @@ import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.compo
 import { CategoriaListComponent } from 'app/pages/categorias/categoria-list/categoria-list.component';
 import { CategoriaInsertarComponent } from 'app/pages/categorias/categoria-insertar/categoria-insertar.component';
 import { CategoriaEditarComponent } from 'app/pages/categorias/categoria-editar/categoria-editar.component';
+import { FrecuenciaListadoComponent } from 'app/pages/frecuencias/frecuencia-listado/frecuencia-listado.component';
+import { FrecuenciaEditarComponent } from 'app/pages/frecuencias/frecuencia-editar/frecuencia-editar.component';
+import { FrecuenciaInsertarComponent } from 'app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component';
 
 
 const ADMINISTRADOR = "administrador"
@@ -120,6 +123,15 @@ export const AdminLayoutRoutes: Routes = [
             { path: 'agregar',   component: CategoriaInsertarComponent },
             { path: 'editar/:id',   component: CategoriaEditarComponent },
         ]
+    },
+    { 
+        path: 'frecuencia', 
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        children:[
+            { path: '',   component: FrecuenciaListadoComponent },
+            { path: 'agregar',   component: FrecuenciaInsertarComponent },
+            { path: 'editar/:id',   component: FrecuenciaEditarComponent },
+        ]    
     },
 
     { path: 'user',           component: UserComponent },

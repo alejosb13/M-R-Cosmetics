@@ -34,8 +34,16 @@ export class FrecuenciaService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getFrecuenciaById(id:number): Observable<Frecuencia> { 
+
+    return this.http.get<Frecuencia>(
+      `${FrecuenciaURL}/${id}`, 
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
   
-  insertCliente(id:number,data:any): Observable<any> { 
+  insertFrecuencia(data:any): Observable<any> { 
 
     return this.http.post(
       FrecuenciaURL, 
@@ -44,16 +52,16 @@ export class FrecuenciaService {
     );
   }
   
-  updateCliente(id:number,data:any): Observable<any> { 
+  updateFrecuencia(id:number,data:any): Observable<any> { 
 
     return this.http.put(
-      FrecuenciaURL, 
+      `${FrecuenciaURL}/${id}`, 
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  deleteCliente(id:number): Observable<any> { 
+  deleteFrecuencia(id:number): Observable<any> { 
     const URL = `${FrecuenciaURL}/${id}`
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}

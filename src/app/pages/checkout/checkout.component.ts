@@ -65,20 +65,22 @@ export class CheckoutComponent implements OnInit {
       // console.log(this.factura);
       // console.log(this.clientes);
       this.clienteData = this.clientes.find(cliente => cliente.id == this.factura.cliente_id)
-      // console.log(this.clienteData);
+      console.log(this.clienteData);
       
-      if(this.clienteData.categoria.tipo == "A"){
-        this.date = this._HelpersService.addDaytoDate(60,'YYYY-MM-DD') 
-        // console.log(this._HelpersService.addDaytoDate(15,'YYYY-MM-DD'));
-      }
-      if(this.clienteData.categoria.tipo == "B"){
-        this.date = this._HelpersService.addDaytoDate(45,'YYYY-MM-DD') 
-        // console.log(this._HelpersService.addDaytoDate(30,'YYYY-MM-DD'));
-      }
-      if(this.clienteData.categoria.tipo == "C"){
-        this.date = this._HelpersService.addDaytoDate(30,'YYYY-MM-DD') 
-        // console.log(this._HelpersService.addDaytoDate(60,'YYYY-MM-DD'));
-      }
+      this.date = this._HelpersService.addDaytoDate(Number(this.clienteData.frecuencia.dias),'YYYY-MM-DD') 
+        
+      // if(this.clienteData.categoria.tipo == "A"){
+      //   this.date = this._HelpersService.addDaytoDate(60,'YYYY-MM-DD') 
+      //   // console.log(this._HelpersService.addDaytoDate(15,'YYYY-MM-DD'));
+      // }
+      // if(this.clienteData.categoria.tipo == "B"){
+      //   this.date = this._HelpersService.addDaytoDate(45,'YYYY-MM-DD') 
+      //   // console.log(this._HelpersService.addDaytoDate(30,'YYYY-MM-DD'));
+      // }
+      // if(this.clienteData.categoria.tipo == "C"){
+      //   this.date = this._HelpersService.addDaytoDate(30,'YYYY-MM-DD') 
+      //   // console.log(this._HelpersService.addDaytoDate(60,'YYYY-MM-DD'));
+      // }
     }
   }
   

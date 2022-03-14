@@ -50,6 +50,10 @@ import { CategoriaListComponent } from 'app/pages/categorias/categoria-list/cate
 import { CategoriaInsertarComponent } from 'app/pages/categorias/categoria-insertar/categoria-insertar.component';
 import { CategoriaEditarComponent } from 'app/pages/categorias/categoria-editar/categoria-editar.component';
 import { CategoriaFormComponent } from 'app/shared/components/forms/categoria-form/categoria-form.component';
+import { FrecuenciaListadoComponent } from 'app/pages/frecuencias/frecuencia-listado/frecuencia-listado.component';
+import { FrecuenciaEditarComponent } from 'app/pages/frecuencias/frecuencia-editar/frecuencia-editar.component';
+import { FrecuenciaInsertarComponent } from 'app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component';
+import { FrecuenciaFormComponent } from 'app/shared/components/forms/frecuencia-form/frecuencia-form.component';
 
 
 @NgModule({
@@ -106,6 +110,10 @@ import { CategoriaFormComponent } from 'app/shared/components/forms/categoria-fo
     CategoriaEditarComponent,
     CategoriaFormComponent,
     
+    FrecuenciaListadoComponent,
+    FrecuenciaEditarComponent,
+    FrecuenciaInsertarComponent,
+    FrecuenciaFormComponent,
   ]
 })
 
