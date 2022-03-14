@@ -56,6 +56,8 @@ export class FacturaDetalleComponent implements OnInit {
         
         this.Pagado = abonosStatusActive.reduce((valorAnterior:number, valor:number) => valorAnterior + valor)
         this.Diferencia =  factura.monto - this.Pagado 
+      }else{
+        this.Diferencia =  factura.monto
       }
       
       this.isLoad =false
@@ -63,12 +65,12 @@ export class FacturaDetalleComponent implements OnInit {
   }
   
   descargarPDF(){
-    let data = {
-      factura: this.Factura,
-      abonado:this.Pagado,
-      diferencia:this.Diferencia
-    }
-    this._FacturasService.FacturaPDF(data).subscribe((data)=>{
+    // let data = {
+    //   factura: this.Factura,
+    //   abonado:this.Pagado,
+    //   diferencia:this.Diferencia
+    // }
+    this._FacturasService.FacturaPDF(this.FacturaId).subscribe((data)=>{
       console.log(data);
       this._HelpersService.downloadFile(data,`Detalle_Factura_${this.FacturaId}`)
       
