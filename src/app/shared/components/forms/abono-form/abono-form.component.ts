@@ -148,6 +148,8 @@ export class AbonoFormComponent implements OnInit {
       diferencia =  this.factura.monto - abonado
       
       // console.log(factura,abonos,abonosActive);
+    }else{
+      diferencia = this.factura.monto
     }
     
     this.facturaId  = this.factura.id
