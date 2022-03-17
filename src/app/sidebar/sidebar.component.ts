@@ -12,7 +12,7 @@ export interface RouteInfo {
 
 export const ROUTES: RouteInfo[] = [
     { path: '/inicio',        title: 'Inicio',            icon:'nc-icon nc-shop',               class: '' , access: 'administrador,vendedor,supervisor'},
-    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,supervisor'},
+    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,vendedor,supervisor'},
     { path: '/producto',      title: 'Producto',          icon:'fas fa-truck-loading',          class: '' , access: 'administrador,supervisor'},
     { path: '/usuario',       title: 'Usuario',           icon:'fas fa-user-tie',               class: '' , access: 'administrador,supervisor'},
     { path: '/factura',       title: 'Facturas',          icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},

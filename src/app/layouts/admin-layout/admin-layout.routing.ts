@@ -51,7 +51,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'inicio', component: DashboardComponent, canActivate: [AuthGuard], data: {role: [SUPERVISOR,VENDEDOR,ADMINISTRADOR]}}, 
     { 
         path: 'cliente', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR,VENDEDOR]},
         children:[
             { path: '',             component: ClientesComponent},
             { path: 'agregar',      component: ClienteInsertarComponent},
@@ -62,7 +62,7 @@ export const AdminLayoutRoutes: Routes = [
     
     { 
         path: 'usuario', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR]},
         children:[
             { path: '',             component: UsuariosComponent},
             { path: 'agregar',      component: UsuarioInsertarComponent},
@@ -71,7 +71,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'producto', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR]},
         children:[
             { path: '',             component: ProductosComponent},
             { path: 'agregar',      component: ProductoInsertarComponent},
@@ -80,7 +80,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'factura', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR,VENDEDOR]},
         children:[
             { path: '',             component: FacturasComponent},
             // { path: 'agregar',      component: FacturaInsertarComponent},
@@ -98,7 +98,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'pedido', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR,VENDEDOR]},
         children:[
             { path: '',             component:     FacturaInsertarComponent},
 
@@ -106,7 +106,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'abono', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR,VENDEDOR]},
         children:[
             { path: '',   component: AbonoListComponent },
             { path: 'agregar',   component: AbonoInsertarComponent },
@@ -117,7 +117,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'categoria', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR]},
         children:[
             { path: '',   component: CategoriaListComponent },
             { path: 'agregar',   component: CategoriaInsertarComponent },
@@ -126,7 +126,7 @@ export const AdminLayoutRoutes: Routes = [
     },
     { 
         path: 'frecuencia', 
-        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,VENDEDOR]},
+        canActivate: [AuthGuard], data: {role: [ADMINISTRADOR,SUPERVISOR]},
         children:[
             { path: '',   component: FrecuenciaListadoComponent },
             { path: 'agregar',   component: FrecuenciaInsertarComponent },

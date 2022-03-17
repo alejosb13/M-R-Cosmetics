@@ -106,8 +106,8 @@ export class ClienteFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(14),
-            Validators.minLength(14),
+            // Validators.maxLength(14),
+            // Validators.minLength(14),
           ]),
         ],
         celular: [
@@ -115,8 +115,8 @@ export class ClienteFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(12),
-            Validators.minLength(10),
+            // Validators.maxLength(12),
+            // Validators.minLength(10),
             
             // Validators.maxLength(12),
           ]),
@@ -125,8 +125,8 @@ export class ClienteFormComponent implements OnInit {
           '',
           Validators.compose([
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            Validators.maxLength(12),
-            Validators.minLength(10),
+            // Validators.maxLength(12),
+            // Validators.minLength(10),
           ]),
         ],
         direccion_casa: [
