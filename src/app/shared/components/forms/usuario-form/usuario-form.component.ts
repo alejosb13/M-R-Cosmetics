@@ -144,7 +144,7 @@ export class UsuarioFormComponent implements OnInit {
     this.loadInfo = true
     this._UsuariosService.getUsuarioById(this.Id).subscribe((usuario:Usuario)=>{
       let role = this.Roles.find((role)=> role.id == usuario.role_id )
-      console.log(role);
+      // console.log(role);
       
       this.editarUsuarioForm.patchValue({
         "nombre" : usuario.name,
