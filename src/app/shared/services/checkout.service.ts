@@ -115,11 +115,11 @@ export class CheckoutService {
   deleteProductCheckout(item:FacturaDetalle) { 
     
     let Factura:FacturaCheckout = {...this.dataStorage}
-    console.log(item);
+    // console.log(item);
     
-    console.log("[factura Antes]" ,Factura.factura_detalle);
+    // console.log("[factura Antes]" ,Factura.factura_detalle);
     Factura.factura_detalle = Factura.factura_detalle.filter((producto:FacturaDetalle)=> producto.producto_id != item.producto_id )
-    console.log("[factura Despues]" ,Factura.factura_detalle);
+    // console.log("[factura Despues]" ,Factura.factura_detalle);
     
     Factura.monto = this.calcularMontoTotal(Factura)
     
