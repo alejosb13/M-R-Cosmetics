@@ -151,7 +151,7 @@ export class CheckoutComponent implements OnInit {
       
       this._CheckoutService.CheckoutToStorage(FacturaCheckout)
       this.getcheckout()
-      console.log(this.factura);
+      // console.log(this.factura);
       
       this._CheckoutService.insertFactura(this.factura).subscribe( data=>{
         this._CheckoutService.vaciarCheckout()
