@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'app/auth/login/service/auth.service';
 import { Producto } from 'app/shared/models/Producto.model';
-import { HelpersService } from 'app/shared/services/helpers.service';
-import { ProductosService } from 'app/shared/services/productos.service';
+// import { HelpersService } from 'app/shared/services/helpers.service';
+// import { ProductosService } from 'app/shared/services/productos.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
 import Swal from 'sweetalert2';
 
@@ -19,32 +20,40 @@ export class FacturarProductoComponent implements OnInit {
   daysOfWeek:string[]
   loadInfo:boolean = false;
   precio:number
-  
+
+  isAdmin:boolean
+
   @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() producto:Producto
   @Output() FormsValues = new EventEmitter<Producto>();
-  
+
   constructor(
     private fb: FormBuilder,
+    private _AuthService: AuthService,
   ) {
 
   }
 
   ngOnInit(): void {
+
     this.precio = this.producto.precio
+    this.isAdmin = this._AuthService.isAdmin()
+
+
     this.definirValidaciones()
-    console.log(this.producto);
+    // console.log(this.producto);
     this.setFormValues()
     this.changeValues()
   }
-  
+
+
   definirValidaciones(){
     this.ProductForm = this.fb.group(
       {
         // marca: [
         //   '',
         //   Validators.compose([
-        //     Validators.required,        
+        //     Validators.required,
         //     Validators.maxLength(30),
         //   ]),
         // ],
@@ -59,13 +68,13 @@ export class FacturarProductoComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx), 
+            Validators.pattern(ValidFunctionsValidator.NumberRegEx),
             Validators.max(this.producto.stock),
             Validators.min(1),
           ]),
         ],
         precio: [
-          {value:"", disabled:true},
+          {value:"", disabled: !this.isAdmin},
           Validators.compose([
             Validators.required,
             // Validators.maxLength(80),
@@ -77,7 +86,7 @@ export class FacturarProductoComponent implements OnInit {
         //   '',
         //   Validators.compose([
         //     Validators.required,
-        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
+        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),
         //     Validators.maxLength(11),
         //   ]),
         // ],
@@ -86,7 +95,7 @@ export class FacturarProductoComponent implements OnInit {
         //   Validators.compose([
         //     Validators.required,
         //     Validators.maxLength(50),
-            
+
         //     // Validators.maxLength(12),
         //   ]),
         // ],
@@ -95,7 +104,7 @@ export class FacturarProductoComponent implements OnInit {
         //   Validators.compose([
         //     Validators.required,
         //     Validators.maxLength(200),
-            
+
         //     // Validators.maxLength(12),
         //   ]),
         // ],
@@ -105,11 +114,11 @@ export class FacturarProductoComponent implements OnInit {
         //     Validators.required,
         //   ]),
         // ],
-        
+
       }
-    ); 
+    );
   }
-  
+
   setFormValues(){
     // this.loadInfo = true
     // this._ProductosService.getProductoById(this.Id).subscribe((producto:Producto)=>{
@@ -123,23 +132,23 @@ export class FacturarProductoComponent implements OnInit {
         // "descripcion" : producto.descripcion,
         // "estado" : producto.estado,
       });
-      
+
     //   this.loadInfo = false
     // })
   }
-  
+
   changeValues(){
     this.ProductForm.get("stock").valueChanges.subscribe(valueStock=>{
       this.ProductForm.get("precio").setValue(this.precio * valueStock)
-      
+
       // if()
       // let precio = this.ProductForm.get("precio")?.value
       // this.ProductForm.get("precio").setValue(precio * valueStock)
     })
 
   }
-  
-  
+
+
   get formularioControls(){
     return this.ProductForm.controls
   }
@@ -149,7 +158,7 @@ export class FacturarProductoComponent implements OnInit {
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
     // console.log(this.ProductForm.getRawValue());
-    
+
     if(this.ProductForm.valid){
       let producto = {...this.producto}
       producto.precio   = Number(this.formularioControls.precio.value)
@@ -164,9 +173,9 @@ export class FacturarProductoComponent implements OnInit {
       // producto.precio = Number(this.formularioControls.precio.value)
       // producto.stock = Number(this.formularioControls.stock.value)
       // producto.descripcion = String(this.formularioControls.stock.value)
- 
+
       // console.log(producto);
-      
+
       this.FormsValues.emit(producto)
     }else{
       Swal.fire({
@@ -174,6 +183,6 @@ export class FacturarProductoComponent implements OnInit {
         icon: 'warning',
       })
     }
-    
+
   }
 }
