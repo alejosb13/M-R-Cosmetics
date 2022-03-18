@@ -27,11 +27,11 @@ export class ClienteFormComponent implements OnInit {
   Usuarios:Usuario[]
   daysOfWeek:string[]
   loadInfo:boolean = false;
-  
+
   @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() clienteId?:number
   @Output() FormsValues = new EventEmitter<Cliente>();
-  
+
   constructor(
     private fb: FormBuilder,
     private _CategoriaService: CategoriaService,
@@ -39,32 +39,32 @@ export class ClienteFormComponent implements OnInit {
     private _FrecuenciaService: FrecuenciaService,
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,
-    
-  ) { 
+
+  ) {
     this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
     this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
     this._UsuariosService.getUsuario().subscribe((usaurios:Usuario[]) => this.Usuarios = [...usaurios]);
-    
+
     this.daysOfWeek = this._HelpersService.DaysOfTheWeek
-    
+
   }
 
   ngOnInit(): void {
     // console.log(this.Categorias);
-    
+
     this.definirValidaciones()
     this.definirValidacionesEstado()
-    
+
     if(this.clienteId) this.setFormValues()
   }
-  
+
   definirValidaciones(){
     this.editarClienteForm = this.fb.group(
       {
         categoria_id: [
           '',
           Validators.compose([
-            Validators.required,        
+            Validators.required,
 
           ]),
         ],
@@ -105,8 +105,8 @@ export class ClienteFormComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            // Validators.maxLength(14),
+            // Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+            Validators.maxLength(22),
             // Validators.minLength(14),
           ]),
         ],
@@ -114,18 +114,18 @@ export class ClienteFormComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            // Validators.maxLength(12),
+            Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+            Validators.maxLength(20),
             // Validators.minLength(10),
-            
+
             // Validators.maxLength(12),
           ]),
         ],
         telefono: [
           '',
           Validators.compose([
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
-            // Validators.maxLength(12),
+            Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+            Validators.maxLength(20),
             // Validators.minLength(10),
           ]),
         ],
@@ -166,9 +166,9 @@ export class ClienteFormComponent implements OnInit {
         //   ]),
         // ],
       }
-    ); 
+    );
   }
-  
+
   definirValidacionesEstado(){
     this.ClienteEstadoForm = this.fb.group(
       {
@@ -181,15 +181,15 @@ export class ClienteFormComponent implements OnInit {
           ]),
         ],
       }
-    ); 
+    );
   }
-  
+
   setEstadoValues(estado:number){
     this.ClienteEstadoForm.patchValue({
       "estado" : estado,
     });
   }
-  
+
   setFormValues(){
     this.loadInfo = true
     this._ClientesService.getClienteById(this.clienteId).subscribe((cliente:Cliente)=>{
@@ -207,26 +207,26 @@ export class ClienteFormComponent implements OnInit {
         // "dias_cobro" : [],
         // "estado" : cliente.estado,
       });
-      
+
       this.setEstadoValues(cliente.estado)
-      
+
       let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
       // console.log(dias_cobro);
-      
+
       const formArray: FormArray = this.editarClienteForm.get("dias_cobro") as FormArray; // obtengo el campo del formulario angular
       dias_cobro.map((numberDay:number) => formArray.push(new FormControl(numberDay)) )// ingreso el valor de los dias en el formulario angular
-      
+
       let arrayInput = Array.from(this.diasCobroInput.nativeElement.querySelectorAll('input[type="checkbox"]'))
       arrayInput.map((input: any, i: number) => {
         if (dias_cobro.some((numberDay) => numberDay == input.value)) {
           input.setAttribute('checked', true)
         }
       })
-      
+
       this.loadInfo = false
     })
   }
-  
+
   changeValueFormArray({ name, value, checked }) {
     const formArray: FormArray = this.editarClienteForm.get(name) as FormArray;
 
@@ -237,7 +237,7 @@ export class ClienteFormComponent implements OnInit {
       formArray.removeAt(index);
     }
   }
-  
+
   get formularioControls(){
     return this.editarClienteForm.controls
   }
@@ -251,7 +251,7 @@ export class ClienteFormComponent implements OnInit {
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
     // console.log(this.editarClienteForm.getRawValue());
-    
+
     if(this.editarClienteForm.valid){
       let cliente = {} as Cliente
       cliente.nombreCompleto    = this.formularioControls.nombreCompleto.value
@@ -267,7 +267,7 @@ export class ClienteFormComponent implements OnInit {
       cliente.frecuencia_id     = Number(this.formularioControls.frecuencia_id.value)
       cliente.telefono          = Number(this.formularioControls.telefono.value)
       // console.log("[Cliente]",cliente);
-      
+
       this.FormsValues.emit(cliente)
     }else{
       Swal.fire({
@@ -275,6 +275,6 @@ export class ClienteFormComponent implements OnInit {
         icon: 'warning',
       })
     }
-    
+
   }
 }
