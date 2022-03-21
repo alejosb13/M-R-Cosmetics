@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'app/auth/login/service/auth.service';
+// import { AuthService } from 'app/auth/login/service/auth.service';
 import Swal from 'sweetalert2';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { Producto } from '../models/Producto.model';
@@ -21,7 +21,7 @@ export class FacturaEditarFormComponent implements OnInit {
   loadInfo:boolean = false;
   precio:number
 
-  isAdmin:boolean
+  // isAdmin:boolean
 
   // @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() producto:ProductoDetalle
@@ -29,15 +29,15 @@ export class FacturaEditarFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _AuthService: AuthService,
+    // private _AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    console.log(this.producto);
+    // console.log(this.producto);
 
 
     // this.precio = this.producto.precio
-    this.isAdmin = this._AuthService.isAdmin()
+    // this.isAdmin = this._AuthService.isAdmin()
 
 
     this.definirValidaciones()
@@ -61,7 +61,7 @@ export class FacturaEditarFormComponent implements OnInit {
           ]),
         ],
         precio: [
-          {value:"", disabled: !this.isAdmin},
+          "",
           Validators.compose([
             Validators.required,
             // Validators.maxLength(80),
@@ -107,19 +107,7 @@ export class FacturaEditarFormComponent implements OnInit {
       producto.cantidad    = Number(this.formularioControls.stock.value)
       producto.porcentaje  = 0
 
-      // producto.estado      = 1
-      // producto.producto_id = this.producto.producto_id
-      // producto.factura_id  = this.producto.factura_id
-      // producto.comision =  Number(this.formularioControls.comision.value)
-      // producto.estado = Number(this.formularioControls.estado.value)
-      // producto.linea =  this.formularioControls.linea.value
-      // producto.marca =  this.formularioControls.marca.value
-      // producto.modelo = this.formularioControls.modelo.value
-      // producto.precio = Number(this.formularioControls.precio.value)
-      // producto.stock = Number(this.formularioControls.stock.value)
-      // producto.descripcion = String(this.formularioControls.stock.value)
-
-      console.log(producto);
+      // console.log(producto);
 
       this.FormsValues.emit(producto)
     }else{
