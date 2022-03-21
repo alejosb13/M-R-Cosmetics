@@ -46,14 +46,17 @@ import { AbonoEditarComponent } from 'app/pages/abonos/abono-editar/abono-editar
 import { AbonoFormComponent } from 'app/shared/components/forms/abono-form/abono-form.component';
 import { AbonoFacturaComponent } from 'app/pages/abonos/abono-factura/abono-factura.component';
 import { AbonoListComponent } from 'app/pages/abonos/abono-list/abono-list.component';
+
 import { CategoriaListComponent } from 'app/pages/categorias/categoria-list/categoria-list.component';
 import { CategoriaInsertarComponent } from 'app/pages/categorias/categoria-insertar/categoria-insertar.component';
 import { CategoriaEditarComponent } from 'app/pages/categorias/categoria-editar/categoria-editar.component';
 import { CategoriaFormComponent } from 'app/shared/components/forms/categoria-form/categoria-form.component';
+
 import { FrecuenciaListadoComponent } from 'app/pages/frecuencias/frecuencia-listado/frecuencia-listado.component';
 import { FrecuenciaEditarComponent } from 'app/pages/frecuencias/frecuencia-editar/frecuencia-editar.component';
 import { FrecuenciaInsertarComponent } from 'app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component';
 import { FrecuenciaFormComponent } from 'app/shared/components/forms/frecuencia-form/frecuencia-form.component';
+import { FacturaEditarFormComponent } from 'app/shared/factura-form/factura-form.component';
 
 
 @NgModule({
@@ -72,44 +75,45 @@ import { FrecuenciaFormComponent } from 'app/shared/components/forms/frecuencia-
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    
+
     ClientesComponent,
     ClienteEditarComponent,
     ClienteInsertarComponent,
     ClienteFormComponent,
     ClientesFacturasComponent,
-    
+
     ProductosComponent,
     ProductoEditarComponent,
     ProductoInsertarComponent,
     ProductoFormComponent,
-    
+
     UsuariosComponent,
     UsuariosEditarComponent,
     UsuarioInsertarComponent,
     UsuarioFormComponent,
-    
+
     FacturasComponent,
     FacturaEditarComponent,
     FacturaInsertarComponent,
     FacturarProductoComponent,
     FacturaDetalleComponent,
+    FacturaEditarFormComponent,
 
     CambiarPasswordComponent,
-    
+
     CheckoutComponent,
-    
+
     AbonoInsertarComponent,
     AbonoEditarComponent,
     AbonoFormComponent,
     AbonoListComponent,
     AbonoFacturaComponent,
-    
+
     CategoriaListComponent,
     CategoriaInsertarComponent,
     CategoriaEditarComponent,
     CategoriaFormComponent,
-    
+
     FrecuenciaListadoComponent,
     FrecuenciaEditarComponent,
     FrecuenciaInsertarComponent,

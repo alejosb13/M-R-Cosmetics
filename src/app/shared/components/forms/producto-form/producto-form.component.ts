@@ -19,31 +19,31 @@ export class ProductoFormComponent implements OnInit {
   // Frecuencias:Frecuencia[]
   daysOfWeek:string[]
   loadInfo:boolean = false;
-  
-  @ViewChild('diasCobro') diasCobroInput: ElementRef;
+
+  // @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() Id?:number
   @Output() FormsValues = new EventEmitter<Producto>();
-  
+
   constructor(
     private fb: FormBuilder,
     private _ProductosService: ProductosService,
   ) {}
 
   ngOnInit(): void {
-    
+
     this.definirValidaciones()
     this.definirValidacionesEstado()
-    
+
     if(this.Id) this.setFormValues()
   }
-  
+
   definirValidaciones(){
     this.ProductForm = this.fb.group(
       {
         marca: [
           '',
           Validators.compose([
-            Validators.required,        
+            Validators.required,
             Validators.maxLength(30),
           ]),
         ],
@@ -58,7 +58,7 @@ export class ProductoFormComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx), 
+            Validators.pattern(ValidFunctionsValidator.NumberRegEx),
             Validators.maxLength(11),
             Validators.min(1),
           ]),
@@ -76,7 +76,7 @@ export class ProductoFormComponent implements OnInit {
         //   '',
         //   Validators.compose([
         //     Validators.required,
-        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),    
+        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),
         //     Validators.maxLength(11),
         //   ]),
         // ],
@@ -85,7 +85,7 @@ export class ProductoFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.maxLength(50),
-            
+
             // Validators.maxLength(12),
           ]),
         ],
@@ -94,7 +94,7 @@ export class ProductoFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.maxLength(200),
-            
+
             // Validators.maxLength(12),
           ]),
         ],
@@ -104,11 +104,11 @@ export class ProductoFormComponent implements OnInit {
         //     Validators.required,
         //   ]),
         // ],
-        
+
       }
-    ); 
+    );
   }
-  
+
   get formularioStadoControls(){
     return this.EstadoForm.controls
   }
@@ -124,16 +124,16 @@ export class ProductoFormComponent implements OnInit {
           ]),
         ],
       }
-    ); 
+    );
   }
-  
+
   setEstadoValues(estado:number){
     this.EstadoForm.patchValue({
       "estado" : estado,
     });
   }
-  
-  
+
+
   setFormValues(){
     this.loadInfo = true
     this._ProductosService.getProductoById(this.Id).subscribe((producto:Producto)=>{
@@ -147,29 +147,29 @@ export class ProductoFormComponent implements OnInit {
         "descripcion" : producto.descripcion,
         // "estado" : producto.estado,
       });
-      
+
       this.setEstadoValues(producto.estado)
       // let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
       // console.log(dias_cobro);
-      
+
       // const formArray: FormArray = this.editarClienteForm.get("dias_cobro") as FormArray; // obtengo el campo del formulario angular
       // dias_cobro.map((numberDay:number) => formArray.push(new FormControl(numberDay)) )// ingreso el valor de los dias en el formulario angular
-      
+
       // let arrayInput = Array.from(this.diasCobroInput.nativeElement.querySelectorAll('input[type="checkbox"]'))
       // arrayInput.map((input: any, i: number) => {
       //   if (dias_cobro.some((numberDay) => numberDay == input.value)) {
       //     input.setAttribute('checked', true)
       //   }
       // })
-      
+
       this.loadInfo = false
     })
-            
 
-    
+
+
 
   }
-  
+
   changeValueFormArray({ name, value, checked }) {
     // const formArray: FormArray = this.editarClienteForm.get(name) as FormArray;
 
@@ -180,7 +180,7 @@ export class ProductoFormComponent implements OnInit {
     //   formArray.removeAt(index);
     // }
   }
-  
+
   get formularioControls(){
     return this.ProductForm.controls
   }
@@ -190,10 +190,10 @@ export class ProductoFormComponent implements OnInit {
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
     // console.log(this.ProductForm.getRawValue());
-    
+
     if(this.ProductForm.valid){
       let producto = {} as Producto
-      
+
       // producto.comision =  Number(this.formularioControls.comision.value)
       producto.linea        =  this.formularioControls.linea.value
       producto.marca        =  this.formularioControls.marca.value
@@ -203,9 +203,9 @@ export class ProductoFormComponent implements OnInit {
       producto.descripcion  = String(this.formularioControls.descripcion.value)
       // producto.estado       = Number(this.formularioControls.estado.value)
       producto.estado       = Number(this.formularioStadoControls.estado.value)
- 
+
       // console.log(producto);
-      
+
       this.FormsValues.emit(producto)
     }else{
       Swal.fire({
@@ -213,6 +213,6 @@ export class ProductoFormComponent implements OnInit {
         icon: 'warning',
       })
     }
-    
+
   }
 }

@@ -23,7 +23,7 @@ export class FacturarProductoComponent implements OnInit {
 
   isAdmin:boolean
 
-  @ViewChild('diasCobro') diasCobroInput: ElementRef;
+  // @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() producto:Producto
   @Output() FormsValues = new EventEmitter<Producto>();
 

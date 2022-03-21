@@ -12,10 +12,10 @@ export interface RouteInfo {
 
 export const ROUTES: RouteInfo[] = [
     { path: '/inicio',        title: 'Inicio',            icon:'nc-icon nc-shop',               class: '' , access: 'administrador,vendedor,supervisor'},
-    { path: '/cliente',       title: 'Clientes',          icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/cliente',       title: 'Cliente',          icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,vendedor,supervisor'},
     { path: '/producto',      title: 'Producto',          icon:'fas fa-truck-loading',          class: '' , access: 'administrador,supervisor'},
     { path: '/usuario',       title: 'Usuario',           icon:'fas fa-user-tie',               class: '' , access: 'administrador,supervisor'},
-    { path: '/factura',       title: 'Facturas',          icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
+    { path: '/factura',       title: 'Factura',          icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
     { path: '/pedido',        title: 'Pedido',            icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
     { path: '/abono',         title: 'Abono',             icon:'fas fa-money-check-alt',        class: '' , access: 'administrador,vendedor,supervisor'},
     { path: '/categoria',     title: 'Categoria',         icon:'fas fa-users',                  class: '' , access: 'administrador,supervisor'},
@@ -37,11 +37,11 @@ export const ROUTES: RouteInfo[] = [
 
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
-    
+
     constructor(
         private _AuthService:AuthService
     ){}
-    
+
     ngOnInit() {
         this.menuItems = ROUTES.filter(menuItem => this._AuthService.validarRol(menuItem.access));
         // console.log(this.menuItems);

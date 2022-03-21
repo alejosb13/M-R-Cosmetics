@@ -1,0 +1,131 @@
+<form [formGroup]="ProductForm" [hidden]="loadInfo">
+  <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+      <div class="col-md-6">
+          <div class="form-group">
+              <label class="mr-1"><b>Marca: </b></label>
+              <span>{{producto.marca}}</span>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-group">
+              <label class="mr-1"><b>Modelo: </b></label>
+              <span>{{producto.modelo}}</span>
+          </div>
+      </div>
+
+      <div class="col-md-6">
+          <div class="form-group">
+              <label class="mr-1"><b>Linea: </b></label>
+              <span>{{producto.linea}}</span>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-group">
+              <label class="mr-1"><b>Descripción: </b></label>
+              <span>{{producto.descripcion}}</span>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-group">
+              <label>Cantidad <span class="text-danger">(*)</span></label>
+              <input
+                  type="number"
+                  class="form-control"
+                  name="stock"
+                  formControlName="stock"
+                  autocomplete="off"
+                  [ngClass]="{
+                  'is-invalid': ProductForm.controls['stock'].invalid && ProductForm.controls['stock'].touched,
+                  'is-valid': ProductForm.controls['stock'].valid
+                  }"
+              >
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                  validation: 'pattern',
+                  message: 'El stock debe ser numerico',
+                  control: ProductForm.controls['stock']
+                  }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                  validation: 'required',
+                  message: 'La cantidad es requerida',
+                  control: ProductForm.controls['stock']
+              }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                  validation: 'max',
+                  message: 'Supera el maximo en stock',
+                  control: ProductForm.controls['stock']
+              }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                  validation: 'min',
+                  message: 'Ingrese una cantidad valida',
+                  control: ProductForm.controls['stock']
+              }"></ng-container>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-group">
+              <label>Precio </label>
+              <input
+                  type="text"
+                  class="form-control"
+                  name="precio"
+                  formControlName="precio"
+                  autocomplete="off"
+                  [ngClass]="{
+                      'is-invalid': ProductForm.controls['precio'].invalid && ProductForm.controls['precio'].touched,
+                      'is-valid': ProductForm.controls['precio'].valid
+                  }"
+              >
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'El precio es requerido',
+              control: ProductForm.controls['precio']
+              }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'pattern',
+              message: 'El valor debe ser decimal',
+              control: ProductForm.controls['precio']
+              }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message: 'El precio debe tener como máximo 80 letras',
+              control: ProductForm.controls['precio']
+              }"></ng-container>
+          </div>
+      </div>
+
+  </div>
+  <div class="row">
+      <div class="update ml-auto mr-auto mt-3">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round"
+            (click)="EnviarFormulario()"
+          >
+            <div>Modificar</div>
+          </button>
+      </div>
+  </div>
+  <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>
+
+
+
+<div  [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando producto
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+
+  </div>
+</div>
