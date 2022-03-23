@@ -137,14 +137,14 @@
                       <span><b>Descripcion</b></span>
                       <span class=""><b>Cantidad</b></span>
                       <span class=""><b>Precio</b></span>
-                      <span class=""><b></b></span>
+                      <span *ngIf="isAdmin" class=""><b></b></span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let producto of Factura.factura_detalle">
                       <span class="texto-descripcion">{{ producto.descripcion }}</span>
                       <span class="texto-cantidad" *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
                       <span class="texto-cantidad" *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
                       <span class="texto-precio">{{ producto.precio | currency: 'USD' }}</span>
-                      <span class="texto-precio" role="button" (click)="openEditFactura(contentEditar,producto)"><i class="fas fa-pencil-alt text-warning"></i></span>
+                      <span class="texto-precio" *ngIf="isAdmin" role="button" (click)="openEditFactura(contentEditar,producto)"><i class="fas fa-pencil-alt text-warning"></i></span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="Factura.tipo_venta == 1">
                         <span><b>Pagado</b></span>

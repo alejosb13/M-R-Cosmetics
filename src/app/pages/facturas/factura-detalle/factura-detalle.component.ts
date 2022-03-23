@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { Producto } from 'app/shared/models/Producto.model';
@@ -30,17 +31,20 @@ export class FacturaDetalleComponent implements OnInit {
 
   ProductoDetalle:Producto
 
+  isAdmin:boolean
+
   constructor(
     private _FacturasService:FacturasService,
     private _ActivatedRoute: ActivatedRoute,
     private _HelpersService: HelpersService,
     private _FacturaDetalleService: FacturaDetalleService,
-
+    private _AuthService: AuthService,
     private NgbModal: NgbModal,
   ) {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin()
     this.FacturaId = Number(this._ActivatedRoute.snapshot.params.id)
     this.facturaById(this.FacturaId)
   }
