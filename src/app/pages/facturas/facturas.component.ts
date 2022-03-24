@@ -18,12 +18,12 @@ export class FacturasComponent implements OnInit {
   collectionSize = 0;
   Facturas: Factura[];
   isLoad:boolean
-  
+
   constructor(
     private _FacturasService:FacturasService,
     private _TablasService:TablasService,
   ) {}
-  
+
   ngOnInit(): void {
     this.asignarValores()
   }
@@ -31,34 +31,34 @@ export class FacturasComponent implements OnInit {
 
   asignarValores(){
     this.isLoad = true
-    
-    this._FacturasService.getFacturas().subscribe((factura:Factura[])=> {
+
+    this._FacturasService.getFacturas({estado:1}).subscribe((factura:Factura[])=> {
       console.log(factura);
-          
+
       this.Facturas = [...factura]
       this._TablasService.datosTablaStorage = [...factura]
       this._TablasService.total = factura.length
-      this._TablasService.busqueda = "" 
-      
-      this.refreshCountries() 
+      this._TablasService.busqueda = ""
+
+      this.refreshCountries()
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
-    }) 
+    })
   }
-  
+
   refreshCountries() {
     this._TablasService.datosTablaStorage = [...this.Facturas]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-  
+
   BuscarValor(){
     this._TablasService.buscar(this.Facturas)
-    
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
-    
+
   }
-  
+
   eliminar({id}:Factura){
     // console.log(id);
     Swal.fire({

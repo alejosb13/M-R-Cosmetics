@@ -1,17 +1,17 @@
 <div class="bg-white">
-  
+
     <div *ngIf="isLoad" class="container-fluid p-5">
       <div class="d-flex justify-content-center align-content-center">
         <span>
           Cargando facturas
           <i class="fas fa-circle-notch fa-spin"></i>
         </span>
-        
+
       </div>
     </div>
-    
+
     <ng-container  *ngIf="!isLoad ">
-  
+
       <div class=" card-header border-0 pt-4  bg-white">
         <!-- <a class="btn btn-primary" routerLink="/factura/agregar">
           <i class="fas fa-plus"></i>
@@ -22,7 +22,7 @@
             <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Facturas</span>
             <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
           </div>
-    
+
           <form class="d-flex align-items-center col-4 buscador">
               <div class="form-label-group w-100">
                   <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
@@ -30,10 +30,10 @@
               </div>
           </form>
         </div>
-        
+
       </div>
-  
-      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">  
+
+      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
         <table class="table table-striped" >
           <thead>
             <tr>
@@ -47,6 +47,7 @@
               <th scope="col">Estado</th>
               <th scope="col">Ver</th>
               <th scope="col">Fecha de Vencimiento</th>
+              <th scope="col">Eliminar</th>
             </tr>
 
           </thead>
@@ -72,6 +73,7 @@
                 </td>
                 <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
                 <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
+                <td><div role="button" (click)="eliminar(factura)"><i class="text-danger far fa-trash-alt"></i></div></td>
             </tr>
           </tbody>
           <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
@@ -86,7 +88,7 @@
             </tr>
           </tbody>
         </table>
-          
+
         <div class="d-flex justify-content-between p-2">
           <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
         </div>

@@ -12,22 +12,22 @@
             <div
                 *ngIf="productos.length > 0"
             >
-                <div 
-                    class="row border-top border-bottom" 
+                <div
+                    class="row border-top border-bottom"
                     *ngFor="let producto of productos; let i = index"
-                    [ngClass]="{'border-top': i % 2 == 0,'border-bottom': i % 2 == 0}"    
+                    [ngClass]="{'border-top': i % 2 == 0,'border-bottom': i % 2 == 0}"
                 >
                     <div class="row main align-items-center">
                         <div class="col">
                             <div class="row text-muted">{{ producto.nombre}}</div>
                             <div class="row">{{ producto.descripcion}}</div>
                         </div>
-                        <div class="col"> 
+                        <div class="col">
                             <span *ngIf="producto.cantidad > 1">{{producto.cantidad}} Uds.</span>
                             <span *ngIf="producto.cantidad == 1">{{producto.cantidad}} Ud.</span>
                         </div>
-                        <div class="col"> 
-                            {{producto.precio  | currency: 'USD' }} 
+                        <div class="col">
+                            {{producto.precio  | currency: 'USD' }}
                             <span (click)="deleteProduct(producto)" class="close"><i class="text-danger fas fa-trash-alt"></i></span>
                         </div>
                     </div>
@@ -55,37 +55,50 @@
             </div> -->
             <div class="form-group" >
                 <p class="font-weight-bold">Cliente <span class="text-danger">(*)</span></p>
-                <select
+                <!-- <select
                     class="form-control"
                     name="cliente"
                     autocomplete="off"
                     (change)="cambiarValores($event.target)"
-                    
-                >
-                    <option selected value="0" hidden>Seleccione un cliente</option>
-                    <option 
-                        class="text-muted" 
+
+                > -->
+                    <!-- <option selected value="0" hidden>Seleccione un cliente</option>
+                    <option
+                        class="text-muted"
                         *ngFor="let cliente of clientes"
                         [value]="cliente?.id"
                         [selected]="clienteData?.id == cliente.id"
                     >
                         {{ cliente.nombreCompleto }} - {{ cliente.nombreEmpresa }}
-                    </option>
-                </select>
-                
+                    </option> -->
+                    <input
+                      id="typeahead-focus"
+                      type="text"
+                      class="form-control"
+                      name="cliente"
+                      [(ngModel)]="cliente"
+                      (ngModelChange)="dataChangedCliente($event)"
+                      [ngbTypeahead]="search"
+                      [placement]="['top-left']"
+                      (focus)="focus$.next($any($event).target.value)"
+                      (click)="click$.next($any($event).target.value)"
+                      #instance="ngbTypeahead"
+                    />
+                <!-- </select> -->
+
             </div>
             <div class="form-group" *ngIf="clienteSelected">
-                <p class=" font-weight-bold">Categoria: {{ clienteData.categoria.tipo }} </p> 
-                <p class=" font-weight-bold">Fecha Vencimiento</p> 
+                <p class=" font-weight-bold">Categoria: {{ clienteData.categoria.tipo }} </p>
+                <p class=" font-weight-bold">Fecha Vencimiento</p>
                 <input type="date"  class="form-control" [(ngModel)]="date" >
             </div>
-            <p class=" font-weight-bold">Vendedor</p> 
+            <p class=" font-weight-bold">Vendedor</p>
             <span class="d-block mb-4"> {{ userData.nombre  }} {{ userData.apellido  }}</span>
-                <!-- <p class="font-weight-bold">GIVE CODE</p> 
+                <!-- <p class="font-weight-bold">GIVE CODE</p>
                 <input id="code" placeholder="Enter your code"> -->
-                
-            <div 
-                class="form-group" 
+
+            <div
+                class="form-group"
                 style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;"
                 *ngIf="factura.monto "
             >
@@ -96,24 +109,24 @@
                         name="tipo_venta"
                         autocomplete="off"
                         (change)="cambiarValores($event.target)"
-                        
+
                     >
                         <option selected value="0" hidden>Seleccione la operación de pago</option>
-                        <option 
-                            class="text-muted" 
+                        <option
+                            class="text-muted"
                             value="1"
                             [selected]="factura.tipo_venta == 1"
                         >
                             Credito
                         </option>
-                        <option 
-                            class="text-muted" 
+                        <option
+                            class="text-muted"
                             value="2"
                             [selected]="factura.tipo_venta == 2"
                         >
                             Contado
                         </option>
-                    </select> 
+                    </select>
                 <!-- </div> -->
                 <br>
                 <!-- <p class="d-block font-weight-bold">Tipo de Venta</p>
@@ -122,18 +135,18 @@
                     name="tcambio"
                     autocomplete="off"
                     (change)="cambiarValores($event.target)"
-                    
+
                 >
                     <option selected value="0" hidden>Seleccione la moneda</option>
-                    <option 
-                        class="text-muted" 
+                    <option
+                        class="text-muted"
                         value="1"
                         selected=""
                     >
                         USD
                     </option>
-                    <option 
-                        class="text-muted" 
+                    <option
+                        class="text-muted"
                         value="2"
                         selected=""
                     >

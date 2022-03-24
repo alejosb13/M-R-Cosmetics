@@ -73,7 +73,7 @@ export class FacturaDetalleComponent implements OnInit {
         this.Diferencia =  factura.monto
       }
 
-      this.isLoad =false
+      this.isLoad = false
     },()=> this.isLoad = false)
   }
 

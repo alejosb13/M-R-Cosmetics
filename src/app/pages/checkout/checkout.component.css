@@ -151,17 +151,19 @@ a:hover {
   background-position-y: center;
 }
 
+::ng-deep .dropdown-menu { width: 100%; }
+
 @media (max-width: 767px) {
     .card {
       margin: 3vh auto;
     }
-    
+
     .cart {
         padding: 4vh;
         border-bottom-left-radius: unset;
         border-top-right-radius: 1rem;
     }
-    
+
     .summary {
         border-top-right-radius: unset;
         border-bottom-left-radius: 1rem;

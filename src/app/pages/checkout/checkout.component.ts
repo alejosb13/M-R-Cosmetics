@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthModule } from 'app/auth/auth.module';
-import { Auth, UserAuth } from 'app/auth/login/models/auth.model';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { UserAuth } from 'app/auth/login/models/auth.model';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Cliente } from 'app/shared/models/Cliente.model';
 import { FacturaCheckout } from 'app/shared/models/FacturaCheckout.model';
@@ -11,6 +11,8 @@ import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { CheckoutService } from 'app/shared/services/checkout.service';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
+import {Observable, Subject, merge, OperatorFunction} from 'rxjs';
+import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,13 +24,21 @@ export class CheckoutComponent implements OnInit {
   productos:FacturaDetalle[] = []
   factura:FacturaCheckout
   clientes:Cliente[]
-  
-  clienteSelected:boolean = false 
-  clienteData:Cliente 
-  date:string  
-  
+
+  clienteSelected:boolean = false
+  clienteData:Cliente
+  date:string
+
+  ClientesNames:string[] = []
+
   userData:UserAuth
-  
+
+  cliente: string;
+
+  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+
   constructor(
     private _location: Location,
     public _CheckoutService:CheckoutService,
@@ -37,88 +47,103 @@ export class CheckoutComponent implements OnInit {
     private _AuthService:AuthService,
     private router:Router,
   ) {}
-  
+
   ngOnInit(): void {
-    
+
     this.getProducts()
     this.getcheckout()
     this.getClientes()
     this.getDataUser()
-    
-    
+
   }
-  
+
   getClientes(){
     this._ClientesService.getCliente().subscribe((clientes:Cliente[]) => {
       this.clientes = [...clientes]
+      this.ClientesNames = clientes.map(cliente => `${ cliente.id } - ${ cliente.nombreCompleto }`)
       this.ValidClienteSelected()
     })
   }
-  
-  getDataUser(){
-    this.userData = this._AuthService.dataStorage.user 
+
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      map(term => (term === '' ? [...this.ClientesNames]
+        : [...this.ClientesNames].filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
   }
-  
+
+  getDataUser(){
+    this.userData = this._AuthService.dataStorage.user
+  }
+
   ValidClienteSelected(){
     if(this.factura.cliente_id){
       this.clienteSelected = true
-      // console.log(this.factura);
-      // console.log(this.clientes);
+
       this.clienteData = this.clientes.find(cliente => cliente.id == this.factura.cliente_id)
-      console.log(this.clienteData);
-      
-      this.date = this._HelpersService.addDaytoDate(Number(this.clienteData.frecuencia.dias),'YYYY-MM-DD') 
-        
-      // if(this.clienteData.categoria.tipo == "A"){
-      //   this.date = this._HelpersService.addDaytoDate(60,'YYYY-MM-DD') 
-      //   // console.log(this._HelpersService.addDaytoDate(15,'YYYY-MM-DD'));
-      // }
-      // if(this.clienteData.categoria.tipo == "B"){
-      //   this.date = this._HelpersService.addDaytoDate(45,'YYYY-MM-DD') 
-      //   // console.log(this._HelpersService.addDaytoDate(30,'YYYY-MM-DD'));
-      // }
-      // if(this.clienteData.categoria.tipo == "C"){
-      //   this.date = this._HelpersService.addDaytoDate(30,'YYYY-MM-DD') 
-      //   // console.log(this._HelpersService.addDaytoDate(60,'YYYY-MM-DD'));
-      // }
+      // console.log(this.clienteData);
+
+      this.date = this._HelpersService.addDaytoDate(Number(this.clienteData.frecuencia.dias),'YYYY-MM-DD')
     }
   }
-  
+
   getProducts(){
-    this.productos = this._CheckoutService.getProductCheckout()  
+    this.productos = this._CheckoutService.getProductCheckout()
   }
-  
+
   getcheckout(){
     this.factura = this._CheckoutService.getCheckout()
   }
-  
+
   backClicked() {
     this._location.back();
   }
-  
+
+  dataChangedCliente(value:string){
+
+    this.cambiarValores({name: "cliente",value})
+  }
+
   cambiarValores(element:any) {
     let FacturaCheckout:FacturaCheckout = {...this.factura}
-    
-    if(element.name == "cliente"){  
-      FacturaCheckout.cliente_id = Number(element.value)
-      this._CheckoutService.CheckoutToStorage(FacturaCheckout)
-      
-      this.getcheckout()
-      this.ValidClienteSelected()
+
+
+    if(element.name == "cliente"){
+
+      if(element.value.includes("-")){
+        // console.log(element.value.split("-"));
+        let split:string[] = element.value.split("-")
+        let id = Number(split[0].trim())
+
+        console.log("IdCliente",id);
+        // console.log(this.cliente);
+
+        FacturaCheckout.cliente_id = id
+        // FacturaCheckout.cliente_id = Number(element.value)
+        this._CheckoutService.CheckoutToStorage(FacturaCheckout)
+
+        this.getcheckout()
+        this.ValidClienteSelected()
+      }
+
     }
 
     if(element.name == "tipo_venta"){
       FacturaCheckout.tipo_venta = Number(element.value)
       this._CheckoutService.CheckoutToStorage(FacturaCheckout)
-      
+
       this.getcheckout()
     }
-    
+
   }
-  
+
   deleteProduct(productoCheckout:FacturaDetalle) {
     console.log(productoCheckout);
-    
+
     Swal.fire({
       title: '¿Estas seguro?',
       text: "Este producto se eliminará",
@@ -136,26 +161,26 @@ export class CheckoutComponent implements OnInit {
     })
 
   }
-  
-  
+
+
   generarfactura(){
-    
+
     if(!this.hasErrorValidation()){
       let FacturaCheckout:FacturaCheckout = {...this.factura}
-    
-      FacturaCheckout.fecha_vencimiento = this._HelpersService.changeformatDate(this.date,'YYYY-MM-DD','YYYY-MM-DDThh:mm:ss') 
+
+      FacturaCheckout.fecha_vencimiento = this._HelpersService.changeformatDate(this.date,'YYYY-MM-DD','YYYY-MM-DDThh:mm:ss')
       FacturaCheckout.user_id = this.userData.userId
       FacturaCheckout.status_pagado = FacturaCheckout.tipo_venta == 1? false : true
       FacturaCheckout.iva = 0
       FacturaCheckout.estado = 1
-      
+
       this._CheckoutService.CheckoutToStorage(FacturaCheckout)
       this.getcheckout()
       // console.log(this.factura);
-      
+
       this._CheckoutService.insertFactura(this.factura).subscribe( data=>{
         this._CheckoutService.vaciarCheckout()
-        
+
         if(data.status){
           Swal.fire({
             title: '¡Pedido Generado!',
@@ -163,7 +188,7 @@ export class CheckoutComponent implements OnInit {
             icon: 'success',
             confirmButtonColor: '#34b5b8',
             confirmButtonText: 'Ok',
-            
+
           }).then((result) => {
             return this.router.navigateByUrl(`/factura/detalle/${data.factura_id}`);
           })
@@ -172,30 +197,30 @@ export class CheckoutComponent implements OnInit {
             title: 'Error',
             text: "Error generando la factura",
             icon: 'error',
-            
+
           })
         }
       },
-      
+
       (errorResponse:HttpErrorResponse)=>{
         console.log(errorResponse);
-        
+
         Swal.fire({
           title: 'Error',
           text: errorResponse.error.mensaje,
           icon: 'error',
-          
+
         })
       })
     }
 
   }
-  
+
   private hasErrorValidation():boolean{
     let error:boolean = false;
     let mensaje:string = "";
     let FacturaCheckout:FacturaCheckout = {...this.factura}
-    
+
     if(!FacturaCheckout.tipo_venta){
       mensaje = "Seleccione la operacion de pago."
       error = true
@@ -205,7 +230,7 @@ export class CheckoutComponent implements OnInit {
       mensaje = "Seleccione un cliente."
       error = true
     }
-    
+
     if(error){
       Swal.fire({
         title: '¡Error!',
@@ -215,8 +240,8 @@ export class CheckoutComponent implements OnInit {
         confirmButtonText: 'Volver'
       })
     }
-    
+
     return error;
-    
+
   }
 }
