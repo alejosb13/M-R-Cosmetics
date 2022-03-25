@@ -47,7 +47,7 @@
               <th scope="col">Estado</th>
               <th scope="col">Ver</th>
               <th scope="col">Fecha de Vencimiento</th>
-              <th scope="col">Eliminar</th>
+              <th *ngIf="isAdmin" scope="col">Eliminar</th>
             </tr>
 
           </thead>
@@ -73,7 +73,7 @@
                 </td>
                 <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
                 <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
-                <td><div role="button" (click)="eliminar(factura)"><i class="text-danger far fa-trash-alt"></i></div></td>
+                <td *ngIf="isAdmin"><div role="button" (click)="eliminar(factura)"><i class="text-danger far fa-trash-alt"></i></div></td>
             </tr>
           </tbody>
           <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">

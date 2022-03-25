@@ -75,6 +75,7 @@ export class AuthService {
 
   isAdmin():boolean{
     let roleName = this.dataStorage.user.roleName
+    // console.log("role",roleName);
 
     return roleName == "administrador" ? true : false
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { ProductosService } from 'app/shared/services/productos.service';
@@ -18,13 +19,17 @@ export class FacturasComponent implements OnInit {
   collectionSize = 0;
   Facturas: Factura[];
   isLoad:boolean
+  isAdmin:boolean
+
 
   constructor(
     private _FacturasService:FacturasService,
     private _TablasService:TablasService,
+    private _AuthService:AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
   }
 
