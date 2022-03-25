@@ -151,7 +151,7 @@ a:hover {
   background-position-y: center;
 }
 
-::ng-deep .dropdown-menu { width: 100%; }
+::ng-deep .summary .dropdown-menu { width: 100%; z-index: 99999; }
 
 @media (max-width: 767px) {
     .card {
