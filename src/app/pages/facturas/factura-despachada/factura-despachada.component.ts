@@ -1,28 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { Categoria } from 'app/shared/models/Categoria.model';
-import { CategoriaService } from 'app/shared/services/categoria.service';
+import { AuthService } from 'app/auth/login/service/auth.service';
+import { Factura } from 'app/shared/models/Factura.model';
+import { FacturasService } from 'app/shared/services/facturas.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-categoria-list',
-  templateUrl: './categoria-list.component.html',
-  styleUrls: ['./categoria-list.component.css']
+  selector: 'app-factura-despachada',
+  templateUrl: './factura-despachada.component.html',
+  styleUrls: ['./factura-despachada.component.css']
 })
-export class CategoriaListComponent implements OnInit {
+export class FacturaDespachadaComponent implements OnInit {
+
+
   page = 1;
   pageSize = environment.PageSize;
   collectionSize = 0;
-  Categorias: Categoria[];
+  Facturas: Factura[];
   isLoad:boolean
+  isAdmin:boolean
+
 
   constructor(
-    private _CategoriaService:CategoriaService,
+    private _FacturasService:FacturasService,
     private _TablasService:TablasService,
+    private _AuthService:AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
   }
 
@@ -30,12 +37,12 @@ export class CategoriaListComponent implements OnInit {
   asignarValores(){
     this.isLoad = true
 
-    this._CategoriaService.getCategoria().subscribe((categoria:Categoria[])=> {
-      // console.log(producto);
+    this._FacturasService.getFacturas({estado:1,despachado:0}).subscribe((factura:Factura[])=> {
+      // console.log(factura);
 
-      this.Categorias = [...categoria]
-      this._TablasService.datosTablaStorage = [...categoria]
-      this._TablasService.total = categoria.length
+      this.Facturas = [...factura]
+      this._TablasService.datosTablaStorage = [...factura]
+      this._TablasService.total = factura.length
       this._TablasService.busqueda = ""
 
       this.refreshCountries()
@@ -46,33 +53,33 @@ export class CategoriaListComponent implements OnInit {
   }
 
   refreshCountries() {
-    this._TablasService.datosTablaStorage = [...this.Categorias]
+    this._TablasService.datosTablaStorage = [...this.Facturas]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Categorias)
+    this._TablasService.buscar(this.Facturas)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }
 
-  eliminar({id}:Categoria){
+  despachar(id:number){
     // console.log(id);
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Esta categoria se eliminará y no podrás recuperarla.",
+      text: "Este factura será despachada.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#51cbce',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: 'Despachar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this._CategoriaService.deleteCategoria(id).subscribe((data)=>{
-          this.Categorias = this.Categorias.filter(categoria => categoria.id != id)
+        this._FacturasService.despacharFactura(id,{despachado:1}).subscribe((data)=>{
+          this.Facturas = this.Facturas.filter(factura => factura.id != id)
           this.refreshCountries()
 
           Swal.fire({
@@ -83,5 +90,4 @@ export class CategoriaListComponent implements OnInit {
       }
     })
   }
-
 }

@@ -18,13 +18,13 @@ export class AbonoListComponent implements OnInit {
 
   Abonos: Abono[];
   isLoad:boolean
-  
+
   constructor(
     // private _FacturasService:FacturasService,
     private _AbonoService:AbonoService,
     private _TablasService:TablasService,
   ) {}
-  
+
   ngOnInit(): void {
     this.asignarValores()
   }
@@ -32,39 +32,39 @@ export class AbonoListComponent implements OnInit {
 
   asignarValores(){
     this.isLoad = true
-    
+
     this._AbonoService.getAbono().subscribe((abono:Abono[])=> {
       // console.log(abono);
-          
+
       this.Abonos = [...abono]
       this._TablasService.datosTablaStorage = [...abono]
       this._TablasService.total = abono.length
-      this._TablasService.busqueda = "" 
-      
-      this.refreshCountries() 
+      this._TablasService.busqueda = ""
+
+      this.refreshCountries()
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
-    }) 
+    })
   }
-  
+
   refreshCountries() {
     this._TablasService.total = this.Abonos.length
     this._TablasService.datosTablaStorage = [...this.Abonos]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-  
+
   BuscarValor(){
     this._TablasService.buscar(this.Abonos)
-    
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
-    
+
   }
-  
+
   eliminar({id}:Abono){
     // console.log(id);
     Swal.fire({
-      title: '¿Estas seguro?',
+      title: '¿Estás seguro?',
       text: "Este abono se eliminará y no podrás recuperarlo.",
       icon: 'warning',
       showCancelButton: true,

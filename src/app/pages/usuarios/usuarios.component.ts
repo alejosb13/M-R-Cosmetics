@@ -17,12 +17,12 @@ export class UsuariosComponent implements OnInit {
   collectionSize = 0;
   Usuarios: Usuario[];
   isLoad:boolean
-  
+
   constructor(
     private _UsuariosService:UsuariosService,
     private _TablasService:TablasService,
   ) {}
-  
+
   ngOnInit(): void {
     this.asignarValores()
   }
@@ -30,39 +30,39 @@ export class UsuariosComponent implements OnInit {
 
   asignarValores(){
     this.isLoad = true
-    
+
     this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> {
       // console.log(usuarios);
-          
+
       this.Usuarios = [...usuarios]
       this._TablasService.datosTablaStorage = [...usuarios]
       this._TablasService.total = usuarios.length
-      this._TablasService.busqueda = "" 
-      
-      
-      this.refreshCountries() 
+      this._TablasService.busqueda = ""
+
+
+      this.refreshCountries()
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
-    }) 
+    })
   }
-  
+
   refreshCountries() {
     this._TablasService.datosTablaStorage = [...this.Usuarios]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-  
+
   BuscarValor(){
     this._TablasService.buscar(this.Usuarios)
-    
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
-    
+
   }
-  
+
   eliminar({id}:Usuario){
     // console.log(id);
     Swal.fire({
-      title: '¿Estas seguro?',
+      title: '¿Estás seguro?',
       text: "Este usuario se eliminará y no podrás recuperarlo.",
       icon: 'warning',
       showCancelButton: true,

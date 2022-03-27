@@ -11,6 +11,7 @@ export interface FacturaCheckout {
     fecha_vencimiento: string;
     iva: number;
     tipo_venta:number
+    despachado:number
     // tcambio: number;
     status_pagado:boolean;
     estado: number;

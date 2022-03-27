@@ -67,7 +67,7 @@ export class FacturasComponent implements OnInit {
   eliminar({id}:Factura){
     // console.log(id);
     Swal.fire({
-      title: '¿Estas seguro?',
+      title: '¿Estás seguro?',
       text: "Este factura se eliminará y no podrás recuperarlo.",
       icon: 'warning',
       showCancelButton: true,

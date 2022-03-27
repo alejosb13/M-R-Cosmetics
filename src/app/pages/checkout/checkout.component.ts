@@ -145,7 +145,7 @@ export class CheckoutComponent implements OnInit {
     console.log(productoCheckout);
 
     Swal.fire({
-      title: '¿Estas seguro?',
+      title: '¿Estás seguro?',
       text: "Este producto se eliminará",
       icon: 'warning',
       showCancelButton: true,
@@ -173,6 +173,7 @@ export class CheckoutComponent implements OnInit {
       FacturaCheckout.status_pagado = FacturaCheckout.tipo_venta == 1? false : true
       FacturaCheckout.iva = 0
       FacturaCheckout.estado = 1
+      FacturaCheckout.despachado = 0
 
       this._CheckoutService.CheckoutToStorage(FacturaCheckout)
       this.getcheckout()

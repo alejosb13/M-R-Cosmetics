@@ -57,6 +57,7 @@ import { FrecuenciaEditarComponent } from 'app/pages/frecuencias/frecuencia-edit
 import { FrecuenciaInsertarComponent } from 'app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component';
 import { FrecuenciaFormComponent } from 'app/shared/components/forms/frecuencia-form/frecuencia-form.component';
 import { FacturaEditarFormComponent } from 'app/shared/factura-form/factura-form.component';
+import { FacturaDespachadaComponent } from 'app/pages/facturas/factura-despachada/factura-despachada.component';
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { FacturaEditarFormComponent } from 'app/shared/factura-form/factura-form
     FacturarProductoComponent,
     FacturaDetalleComponent,
     FacturaEditarFormComponent,
+    FacturaDespachadaComponent,
 
     CambiarPasswordComponent,
 

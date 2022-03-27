@@ -17,12 +17,12 @@ export class ProductosComponent implements OnInit {
   collectionSize = 0;
   Productos: Producto[];
   isLoad:boolean
-  
+
   constructor(
     private _ProductosService:ProductosService,
     private _TablasService:TablasService,
   ) {}
-  
+
   ngOnInit(): void {
     this.asignarValores()
   }
@@ -30,38 +30,38 @@ export class ProductosComponent implements OnInit {
 
   asignarValores(){
     this.isLoad = true
-    
+
     this._ProductosService.getProducto().subscribe((producto:Producto[])=> {
       // console.log(producto);
-          
+
       this.Productos = [...producto]
       this._TablasService.datosTablaStorage = [...producto]
       this._TablasService.total = producto.length
-      this._TablasService.busqueda = "" 
-      
-      this.refreshCountries() 
+      this._TablasService.busqueda = ""
+
+      this.refreshCountries()
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
-    }) 
+    })
   }
-  
+
   refreshCountries() {
     this._TablasService.datosTablaStorage = [...this.Productos]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-  
+
   BuscarValor(){
     this._TablasService.buscar(this.Productos)
-    
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
-    
+
   }
-  
+
   eliminar({id}:Producto){
     // console.log(id);
     Swal.fire({
-      title: '¿Estas seguro?',
+      title: '¿Estás seguro?',
       text: "Este producto se eliminará y no podrás recuperarlo.",
       icon: 'warning',
       showCancelButton: true,

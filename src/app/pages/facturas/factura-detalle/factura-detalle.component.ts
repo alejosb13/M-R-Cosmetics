@@ -139,4 +139,28 @@ export class FacturaDetalleComponent implements OnInit {
     })
   }
 
+  despachar(id:number){
+    // console.log(id);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Este factura será regresada a la seccion de facturas despachadas.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#51cbce',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Realizar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this._FacturasService.despacharFactura(id,{despachado:0}).subscribe((data)=>{
+          this.facturaById(this.FacturaId)
+          Swal.fire({
+            text: data[0],
+            icon: 'success',
+          })
+        })
+      }
+    })
+  }
 }

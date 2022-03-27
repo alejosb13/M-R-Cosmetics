@@ -40,6 +40,7 @@ import { CategoriaEditarComponent } from "app/pages/categorias/categoria-editar/
 import { FrecuenciaListadoComponent } from "app/pages/frecuencias/frecuencia-listado/frecuencia-listado.component";
 import { FrecuenciaEditarComponent } from "app/pages/frecuencias/frecuencia-editar/frecuencia-editar.component";
 import { FrecuenciaInsertarComponent } from "app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component";
+import { FacturaDespachadaComponent } from "app/pages/facturas/factura-despachada/factura-despachada.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
@@ -90,9 +91,9 @@ export const AdminLayoutRoutes: Routes = [
     data: { role: [ADMINISTRADOR, SUPERVISOR, VENDEDOR] },
     children: [
       { path: "", component: FacturasComponent },
-      // { path: 'agregar',      component: FacturaInsertarComponent},
       { path: "detalle/:id", component: FacturaDetalleComponent },
       { path: "editar/:id", component: FacturaEditarComponent },
+      { path: "despachar", component: FacturaDespachadaComponent },
     ],
   },
   {

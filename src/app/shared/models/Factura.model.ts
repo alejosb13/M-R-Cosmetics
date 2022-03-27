@@ -14,6 +14,7 @@ export interface Factura {
     tcambio: number;
     tipo_venta?:number;
     estado: number;
+    despachado: number;
     user?: Usuario;
     cliente?: Cliente;
     factura_historial?: FacturaHistorial[];

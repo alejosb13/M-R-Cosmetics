@@ -18,12 +18,12 @@ export class ClientesComponent implements OnInit {
   collectionSize = 0;
   Clientes: Cliente[];
   isLoad:boolean
-  
+
   constructor(
     private _ClientesService:ClientesService,
     private _TablasService:TablasService,
   ) {}
-  
+
   ngOnInit(): void {
     this.asignarValores()
   }
@@ -31,10 +31,10 @@ export class ClientesComponent implements OnInit {
 
   asignarValores(){
     this.isLoad = true
-    
+
     this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> {
       console.log(clientes);
-      clientes.map(cliente=>{ 
+      clientes.map(cliente=>{
         const regex = /,/g;
         cliente.dias_cobro = cliente.dias_cobro.replace(regex," - ")
         return cliente
@@ -42,31 +42,31 @@ export class ClientesComponent implements OnInit {
       this.Clientes = [...clientes]
       this._TablasService.datosTablaStorage = [...clientes]
       this._TablasService.total = clientes.length
-      this._TablasService.busqueda = "" 
-      
-      this.refreshCountries() 
+      this._TablasService.busqueda = ""
+
+      this.refreshCountries()
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
-    }) 
+    })
   }
-  
+
   refreshCountries() {
     this._TablasService.datosTablaStorage = [...this.Clientes]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-  
+
   BuscarValor(){
     this._TablasService.buscar(this.Clientes)
-    
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
-    
+
   }
-  
+
   eliminar({id}:Cliente){
     // console.log(id);
     Swal.fire({
-      title: '¿Estas seguro?',
+      title: '¿Estás seguro?',
       text: "Este cliente se eliminará y no podrás recuperarlo.",
       icon: 'warning',
       showCancelButton: true,
