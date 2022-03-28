@@ -1,0 +1,104 @@
+<form [formGroup]="ReciboForm" [hidden]="loadInfo">
+  <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Mínimo <span class="text-danger">(*)</span></label>
+            <input
+              type="text"
+              class="form-control"
+              name="min"
+              formControlName="min"
+              autocomplete="off"
+              [ngClass]="{
+              'is-invalid': ReciboForm.controls['min'].invalid && ReciboForm.controls['min'].touched,
+              'is-valid': ReciboForm.controls['min'].valid
+              }"
+            >
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'El mínimo es requerida',
+                control: ReciboForm.controls['min']
+            }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'maxlength',
+                message: 'El mínimo debe tener como máximo 20 numeros',
+                control: ReciboForm.controls['min']
+            }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'min',
+                message: 'El valor debe ser mayor a 0',
+                control: ReciboForm.controls['min']
+            }"></ng-container>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Máximo <span class="text-danger">(*)</span></label>
+            <input
+                type="text"
+                class="form-control"
+                name="max"
+                formControlName="max"
+                autocomplete="off"
+                [ngClass]="{
+                'is-invalid': ReciboForm.controls['max'].invalid && ReciboForm.controls['max'].touched,
+                'is-valid': ReciboForm.controls['max'].valid
+                }"
+            >
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'El máximo es requerida',
+              control: ReciboForm.controls['max']
+          }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'min',
+            message: 'El valor debe ser mayor a 0',
+            control: ReciboForm.controls['max']
+        }"></ng-container>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message: 'El máximo debe tener como máximo 20 numeros',
+              control: ReciboForm.controls['max']
+          }"></ng-container>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="update ml-auto mr-auto">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round"
+            (click)="EnviarFormulario()"
+          >
+            <div *ngIf="recibo">Actualizar</div>
+            <div *ngIf="!recibo">Agregar</div>
+          </button>
+      </div>
+  </div>
+  <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>
+
+
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando producto
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+
+  </div>
+</div>
+
+<!-- Mínimo
+Máximo -->

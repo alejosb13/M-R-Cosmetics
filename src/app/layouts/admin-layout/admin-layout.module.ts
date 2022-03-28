@@ -58,6 +58,7 @@ import { FrecuenciaInsertarComponent } from 'app/pages/frecuencias/frecuencia-in
 import { FrecuenciaFormComponent } from 'app/shared/components/forms/frecuencia-form/frecuencia-form.component';
 import { FacturaEditarFormComponent } from 'app/shared/factura-form/factura-form.component';
 import { FacturaDespachadaComponent } from 'app/pages/facturas/factura-despachada/factura-despachada.component';
+import { ReciboModalFormComponent } from 'app/shared/components/forms/recibo-modal-form/recibo-modal-form.component';
 
 
 @NgModule({
@@ -120,6 +121,8 @@ import { FacturaDespachadaComponent } from 'app/pages/facturas/factura-despachad
     FrecuenciaEditarComponent,
     FrecuenciaInsertarComponent,
     FrecuenciaFormComponent,
+
+    ReciboModalFormComponent
   ]
 })
 

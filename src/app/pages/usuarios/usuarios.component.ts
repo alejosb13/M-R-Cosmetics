@@ -1,9 +1,16 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Role } from 'app/auth/login/models/auth.model';
+import { Recibo } from 'app/shared/models/Recibo.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
+import { HelpersService } from 'app/shared/services/helpers.service';
+import { ReciboService } from 'app/shared/services/recibo.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-usuarios',
@@ -16,11 +23,19 @@ export class UsuariosComponent implements OnInit {
   pageSize = environment.PageSize;
   collectionSize = 0;
   Usuarios: Usuario[];
+
+  recibo:Recibo
+  idUsuario:number
+
   isLoad:boolean
+  Vendedor = Role.Vendedor
 
   constructor(
     private _UsuariosService:UsuariosService,
     private _TablasService:TablasService,
+    private _ReciboService:ReciboService,
+    private _HelpersService:HelpersService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -32,7 +47,7 @@ export class UsuariosComponent implements OnInit {
     this.isLoad = true
 
     this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> {
-      // console.log(usuarios);
+      console.log(usuarios);
 
       this.Usuarios = [...usuarios]
       this._TablasService.datosTablaStorage = [...usuarios]
@@ -58,6 +73,8 @@ export class UsuariosComponent implements OnInit {
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }
+
+
 
   eliminar({id}:Usuario){
     // console.log(id);
@@ -85,4 +102,77 @@ export class UsuariosComponent implements OnInit {
       }
     })
   }
+
+  modificarRangoRecibo(content:any,recibo:Recibo,userId:number){
+    this.recibo    = recibo
+    this.idUsuario = userId
+    // console.log(this.recibo);
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {}, (reason) => {});
+  }
+
+  agregarRangoRecibo(content:any,userId:number){
+    this.recibo = undefined
+    this.idUsuario = userId
+
+    // console.log(this.recibo);
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {}, (reason) => {});
+
+  }
+
+  FormsValues(recibo:Recibo){
+    console.log("[reciboForm]",recibo);
+
+    recibo.user_id = this.idUsuario
+    if(this.recibo){
+      this._ReciboService.updateRecibo(this.recibo.id,recibo).subscribe(userResp =>{
+        // console.log(data);
+        this._TablasService.datosTablaStorage = this.Usuarios.map((usuario)=>{
+          if(usuario.id == userResp.user_id) usuario.recibo = userResp
+
+          return usuario
+        })
+
+        Swal.fire({
+          text: "Recibo modificado con exito",
+          icon: 'success',
+        }).then((result) => {
+          // if (result.isConfirmed) window.location.reload()
+        })
+      },(HttpErrorResponse :HttpErrorResponse)=>{
+        let error:string =  HttpErrorResponse.error[0]
+
+        Swal.fire({
+          title: "Error",
+          html: error,
+          icon: 'error',
+        })
+      })
+    }else{
+      this._ReciboService.insertRecibo(recibo).subscribe(userResp =>{
+        this._TablasService.datosTablaStorage = this.Usuarios.map((usuario)=>{
+          if(usuario.id == userResp.user_id) usuario.recibo = userResp
+
+          return usuario
+        })
+        Swal.fire({
+          text: "Recibo agregado con exito",
+          icon: 'success',
+        }).then((result) => {
+          // if (result.isConfirmed) window.location.reload()
+        })
+      },(HttpErrorResponse :HttpErrorResponse)=>{
+        let error:string =  HttpErrorResponse.error[0]
+
+        Swal.fire({
+          title: "Error",
+          html: error,
+          icon: 'error',
+        })
+      })
+    }
+
+  }
+
 }
