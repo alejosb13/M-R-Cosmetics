@@ -12,7 +12,7 @@ const ClienteURL = `${environment.urlAPI}cliente`
   providedIn: 'root'
 })
 export class ClientesService {
-  
+
   total:number = 0
   busqueda:string = ""
   datosTablaStorage:Cliente[] = []
@@ -22,68 +22,68 @@ export class ClientesService {
     private http: HttpClient
   ) {}
 
-  
+
   headerJson_Token():HttpHeaders{
-    // const DataUSerStorage = this.authService.getAuthFromLocalStorage() 
-    
+    // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
+
     let config = {
       ContentType: 'application/json',
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
-    
+
     return new HttpHeaders(config);
   }
-  
+
   // public methods
-  getCliente(): Observable<Cliente[]> { 
+  getCliente(): Observable<Cliente[]> {
 
     return this.http.get<Cliente[]>(
-      ClienteURL, 
+      ClienteURL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  getClienteById(Id:number): Observable<any> { 
+  getClienteById(Id:number): Observable<Cliente> {
     const URL = `${ClienteURL}/${Id}`
-    
-    return this.http.get(
+
+    return this.http.get<Cliente>(
       URL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
-  
-  insertCliente(data:Cliente): Observable<any> { 
+
+  insertCliente(data:Cliente): Observable<any> {
 
     return this.http.post<Cliente>(
-      ClienteURL, 
-      data,
-      {headers: this.headerJson_Token(), responseType: "json" }
-    );
-  }
-  
-  updateCliente(Id:number,data:Cliente): Observable<any> { 
-    const URL = `${ClienteURL}/${Id}`
-    
-    return this.http.put<Cliente>(
-      URL, 
+      ClienteURL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  deleteCliente(id:number): Observable<any> { 
+  updateCliente(Id:number,data:Cliente): Observable<any> {
+    const URL = `${ClienteURL}/${Id}`
+
+    return this.http.put<Cliente>(
+      URL,
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  deleteCliente(id:number): Observable<any> {
     const URL = `${ClienteURL}/${id}`
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}
     );
   }
-  
-  getClientexFactura(id:number): Observable<Factura[]> { 
+
+  getClientexFactura(id:number): Observable<Factura[]> {
     const URL = `${ClienteURL}/factura/${id}`
     return this.http.get<Factura[]>(
       URL, {headers: this.headerJson_Token()}
     );
   }
-  
-  
+
+
 }

@@ -15,64 +15,64 @@ export class UsuariosService {
   ) {}
 
   headerJson_Token():HttpHeaders{
-    // const DataUSerStorage = this.authService.getAuthFromLocalStorage() 
-    
+    // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
+
     let config = {
       ContentType: 'application/json',
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
-    
+
     return new HttpHeaders(config);
   }
-  
-  // public methods
-  getUsuario(): Observable<any> { 
 
-    return this.http.get(
-      UsuarioURL, 
+  // public methods
+  getUsuario(): Observable<Usuario[]> {
+
+    return this.http.get<Usuario[]>(
+      UsuarioURL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  getUsuarioById(Id:number): Observable<any> { 
+  getUsuarioById(Id:number): Observable<Usuario> {
     const URL = `${UsuarioURL}/${Id}`
-    
-    return this.http.get(
+
+    return this.http.get<Usuario>(
       URL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
-  
-  insertUsuario(data:UsuarioServ): Observable<any> { 
+
+  insertUsuario(data:UsuarioServ): Observable<any> {
 
     return this.http.post<Usuario>(
-      UsuarioURL, 
+      UsuarioURL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
-  
-  updateUsuario(Id:number,data:UsuarioServ): Observable<any> { 
+
+  updateUsuario(Id:number,data:UsuarioServ): Observable<any> {
     const URL = `${UsuarioURL}/${Id}`
-    
+
     return this.http.put<Usuario>(
-      URL, 
+      URL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  updatePassword(Id:number,data:any): Observable<any> { 
+  updatePassword(Id:number,data:any): Observable<any> {
     const URL = `${environment.urlAPI}update-password/${Id}`
-    
+
     return this.http.put<any>(
-      URL, 
+      URL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  deleteUsuario(id:number): Observable<any> { 
+  deleteUsuario(id:number): Observable<any> {
     const URL = `${UsuarioURL}/${id}`
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}

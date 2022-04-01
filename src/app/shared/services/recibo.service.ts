@@ -34,6 +34,14 @@ export class ReciboService {
     );
   }
 
+  getNumeroRecibo(userId:number): Observable<any> {
+    const URL = `${ReciboURL}/number/${userId}`
+    return this.http.get<any>(
+      URL,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   getReciboById(Id:number): Observable<Recibo> {
     const URL = `${ReciboURL}/${Id}`
 

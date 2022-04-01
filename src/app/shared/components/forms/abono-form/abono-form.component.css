@@ -1,0 +1,3 @@
+
+::ng-deep .tipehead .dropdown-menu { width: 100%; z-index: 99999; }
+/* ::ng-deep .dropdown-item.active, ::ng-deep .dropdown-item:active{ text-decoration: none; background-color: #007bff;} */

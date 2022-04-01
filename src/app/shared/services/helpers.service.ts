@@ -83,4 +83,12 @@ export class HelpersService {
     downloadLink.click();
   }
 
+  obtenerId(clienteString:string):number {
+    let split:string[] = clienteString.split("-")
+    let id = Number(split[0].trim())
+
+    console.log("IdCliente",id);
+    return id
+  }
+
 }

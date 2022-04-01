@@ -13,11 +13,11 @@ export interface Factura {
     iva: number;
     tcambio: number;
     tipo_venta?:number;
-    estado: number;
+    status: number;
     despachado: number;
     user?: Usuario;
     cliente?: Cliente;
-    factura_historial?: FacturaHistorial[];
+    // factura_historial?: FacturaHistorial[];
     factura_detalle?: FacturaDetalle[];
     created_at?: Date;
     updated_at?: Date;

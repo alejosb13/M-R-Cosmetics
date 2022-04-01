@@ -1,6 +1,7 @@
 import { Categoria } from "app/shared/models/Categoria.model";
 import { Factura } from "app/shared/models/Factura.model";
 import { Frecuencia } from "app/shared/models/Frecuencia.model";
+import { FacturaHistorial } from "./FacturaHistorial.model";
 
 export interface Cliente {
     id?: number;
@@ -19,6 +20,7 @@ export interface Cliente {
     frecuencia?: Frecuencia;
     categoria?: Categoria;
     facturas?: Factura[];
+    factura_historial?: FacturaHistorial[];
     estado: number;
     created_at?: Date;
     updated_at?: Date;

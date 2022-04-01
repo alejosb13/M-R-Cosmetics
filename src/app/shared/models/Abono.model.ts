@@ -4,7 +4,7 @@ import { Usuario } from "./Usuario.model";
 
 export interface Abono{
     id: number;
-    factura_id: number;
+    cliente_id: number;
     user_id: number;
     precio: number;
     estado: number;
