@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
@@ -86,6 +87,14 @@ export class FacturasComponent implements OnInit, OnDestroy {
           Swal.fire({
             text: data[0],
             icon: 'success',
+          })
+        },(HttpErrorResponse :HttpErrorResponse)=>{
+          // console.log(HttpErrorResponse );
+
+          Swal.fire({
+            title: "Error",
+            html: HttpErrorResponse.error[0] ,
+            icon: 'error',
           })
         })
       }

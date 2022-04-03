@@ -40,6 +40,7 @@
               <th scope="col">#</th>
               <th scope="col">Monto</th>
               <!-- <th scope="col">Factura</th> -->
+              <th scope="col">Fecha</th>
               <th scope="col">Cliente</th>
               <th scope="col">Usuario</th>
               <!-- <th scope="col">Opciones</th> -->
@@ -57,6 +58,7 @@
                         <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a>
                     </div>
                 </td> -->
+                <td >{{ abono.created_at | date:"dd-MM-yyyy" }}</td>
                 <td ><a [routerLink]="[ '/cliente','editar',abono.cliente_id]" ngbTooltip="{{ abono.cliente.nombreCompleto | uppercase }}"><i class="nc-icon nc-single-02"></i> #{{abono.cliente.id}}</a></td>
                 <td ><a [routerLink]="[ '/usuario','editar',abono.cliente_id]" ngbTooltip="{{ abono.usuario.name | uppercase }} {{ abono.usuario.apellido | uppercase }}"><i class="fa-user-tie fas"></i> #{{abono.user_id}}</a></td>
                 <!-- <td>
