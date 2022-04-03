@@ -70,7 +70,7 @@
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
               validation: 'max',
-              message: 'El monto no debe ser mayor a la diferencia',
+              message: 'El monto no debe ser mayor a el abono',
               control: AbonoForm.controls['precio']
           }"></ng-container>
         </div>
@@ -78,7 +78,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <p>Abonado: <b>{{ abonado | currency: 'USD' }}</b> </p>
+        <!-- <p>Cálculo: <b>{{ diferencia | currency: 'USD' }}</b> </p> -->
         <p>Por Abonar: <b>{{ diferencia | currency: 'USD' }}</b> </p>
         <p>Total Factura: <b>{{ montoTotal | currency: 'USD' }}</b> </p>
       </div>

@@ -55,8 +55,10 @@
               <td>{{ usuario.cargo }}</td>
               <td>{{ usuario.email }}</td>
               <td>
-                <div *ngIf="usuario.recibo &&  usuario.role_id == Vendedor" (click)="modificarRangoRecibo(modalProducto,usuario.recibo,usuario.id)" role="button"><i class="fas fa-ticket-alt text-success"></i> ({{ usuario.recibo.min }} - {{ usuario.recibo.max }})</div>
-                <div *ngIf="!usuario.recibo &&  usuario.role_id == Vendedor" (click)="agregarRangoRecibo(modalProducto,usuario.id)" role="button"><i class="fas fa-ticket-alt text-danger"></i> Agregar</div>
+                <!-- <div *ngIf="usuario.recibo &&  usuario.role_id == Vendedor" (click)="modificarRangoRecibo(modalProducto,usuario.recibo,usuario.id)" role="button"><i class="fas fa-ticket-alt text-success"></i> ({{ usuario.recibo.min }} - {{ usuario.recibo.max }})</div> -->
+                <!-- <div *ngIf="!usuario.recibo &&  usuario.role_id == Vendedor" (click)="agregarRangoRecibo(modalProducto,usuario.id)" role="button"><i class="fas fa-ticket-alt text-danger"></i> Agregar</div> -->
+                <div *ngIf="usuario.recibo " (click)="modificarRangoRecibo(modalProducto,usuario.recibo,usuario.id)" role="button"><i class="fas fa-ticket-alt text-success"></i> ({{ usuario.recibo.min }} - {{ usuario.recibo.max }})</div>
+                <div *ngIf="!usuario.recibo " (click)="agregarRangoRecibo(modalProducto,usuario.id)" role="button"><i class="fas fa-ticket-alt text-danger"></i> Agregar</div>
               </td>
               <td>
                   <span *ngIf="usuario.estado">Activo</span>

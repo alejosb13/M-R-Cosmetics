@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
-import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   templateUrl: './facturas.component.html',
   styleUrls: ['./facturas.component.css']
 })
-export class FacturasComponent implements OnInit {
+export class FacturasComponent implements OnInit, OnDestroy {
 
   page = 1;
   pageSize = environment.PageSize;
@@ -21,6 +21,7 @@ export class FacturasComponent implements OnInit {
   isLoad:boolean
   isAdmin:boolean
 
+  Subscription:Subscription
 
   constructor(
     private _FacturasService:FacturasService,
@@ -37,7 +38,7 @@ export class FacturasComponent implements OnInit {
   asignarValores(){
     this.isLoad = true
 
-    this._FacturasService.getFacturas({estado:1}).subscribe((factura:Factura[])=> {
+    this.Subscription = this._FacturasService.getFacturas({estado:1}).subscribe((factura:Factura[])=> {
       console.log(factura);
 
       this.Facturas = [...factura]
@@ -78,7 +79,7 @@ export class FacturasComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this._FacturasService.deleteFactura(id).subscribe((data)=>{
+        this.Subscription = this._FacturasService.deleteFactura(id).subscribe((data)=>{
           this.Facturas = this.Facturas.filter(factura => factura.id != id)
           this.refreshCountries()
 
@@ -89,6 +90,10 @@ export class FacturasComponent implements OnInit {
         })
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.Subscription.unsubscribe();
   }
 
 }

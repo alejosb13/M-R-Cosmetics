@@ -11,6 +11,6 @@ export interface Abono{
     created_at: Date;
     updated_at: Date;
     cliente?: Cliente;
-    factura?: Factura;
+    // factura?: Factura;
     usuario?: Usuario;
 }

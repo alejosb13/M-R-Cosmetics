@@ -85,5 +85,12 @@ export class ClientesService {
     );
   }
 
+  getClienteCalculoAbono(ClienteId:number): Observable<any> {
+    const URL = `${ClienteURL}/abono/${ClienteId}`
+    return this.http.get<any>(
+      URL, {headers: this.headerJson_Token()}
+    );
+  }
+
 
 }

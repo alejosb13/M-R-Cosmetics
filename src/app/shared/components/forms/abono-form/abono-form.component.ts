@@ -139,10 +139,19 @@ export class AbonoFormComponent implements OnInit {
       if(value?.includes("-") ){
         let clienteId:number = this._HelpersService.obtenerId(value)
         if(clienteId){
-          this._ClientesService.getClienteById(clienteId).subscribe((cliente)=>{
-            // console.log("cliente: ",cliente);
-            this.clienteId = cliente.id
-            this.generarCalculo(cliente)
+          this._ClientesService.getClienteCalculoAbono(clienteId).subscribe((dataAbono)=>{
+            console.log("cliente: ",dataAbono);
+            this.clienteId  = clienteId
+            // this.abonado    =  dataAbono.totalAbono
+            this.montoTotal = dataAbono.totalFactura
+            this.restante   =  dataAbono.saldo_restante
+            this.diferencia =  this.restante
+
+            // if(dataAbono.totalAbono >= dataAbono.totalFactura){
+            //   this.bloqueo = true
+            // }else{
+            //   this.bloqueo = false
+            // }
           })
         }else{ this.resetearValores()}
       }else{ this.resetearValores()}
@@ -197,7 +206,7 @@ export class AbonoFormComponent implements OnInit {
       console.log({
         "montoTotal: ":this.montoTotal ,
         "restante: ":this.restante ,
-        "abonado: ":this.abonado ,
+        // "abonado: ":this.abonado ,
         "facturaId: ":this.facturaId ,
         "bloqueo: ":this.bloqueo ,
       });
@@ -210,7 +219,7 @@ export class AbonoFormComponent implements OnInit {
   resetearValores(){
     this.montoTotal = 0
     this.restante   = 0
-    this.abonado    = 0
+    // this.abonado    = 0
     this.facturaId  = 0
     this.bloqueo    = false
     this.diferencia = 0
@@ -273,8 +282,8 @@ export class AbonoFormComponent implements OnInit {
   }
 
   getNumeroRecibo(){
-    this._ReciboService.getNumeroRecibo(25).subscribe((data:any) => {
-    // this._ReciboService.getNumeroRecibo(this.userId).subscribe((data:any) => {
+    // this._ReciboService.getNumeroRecibo(25).subscribe((data:any) => {
+    this._ReciboService.getNumeroRecibo(this.userId).subscribe((data:any) => {
       console.log("[recibo]: ",data);
       this.AbonoForm.get("recibo").patchValue(data.numero)
 
@@ -288,8 +297,8 @@ export class AbonoFormComponent implements OnInit {
   }
 
   getReciboUSer(){
-    // this._UsuariosService.getUsuarioById(this.userId).subscribe((usuario) => {
-    this._UsuariosService.getUsuarioById(25).subscribe((usuario) => {
+    this._UsuariosService.getUsuarioById(this.userId).subscribe((usuario) => {
+    // this._UsuariosService.getUsuarioById(25).subscribe((usuario) => {
       console.log("[getReciboUSer]",usuario);
 
       this.recibo = usuario.recibo

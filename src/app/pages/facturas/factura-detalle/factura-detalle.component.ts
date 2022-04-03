@@ -46,32 +46,32 @@ export class FacturaDetalleComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
     this.FacturaId = Number(this._ActivatedRoute.snapshot.params.id)
-    // this.facturaById(this.FacturaId)
+    this.facturaById(this.FacturaId)
   }
 
   facturaById(FacturaId:number){
     this.isLoad = true
     this._FacturasService.getFacturaById(FacturaId)
-    .pipe(
-      map((factura : Factura) => {
-        factura.factura_historial = factura.factura_historial.filter( abono => abono.estado == 1)
-        return factura
-      })
-    )
+    // .pipe(
+    //   map((factura : Factura) => {
+    //     factura.factura_historial = factura.factura_historial.filter( abono => abono.estado == 1)
+    //     return factura
+    //   })
+    // )
     .subscribe((factura:Factura)=>{
-      // console.log(factura);
+      console.log(factura);
 
       this.Factura = factura
 
-      if(factura.factura_historial.length > 0 && factura.tipo_venta == 1){
-        let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
-        let abonosStatusActive = abonos.filter((abono:any) => abono != undefined );
+      // if(factura.factura_historial.length > 0 && factura.tipo_venta == 1){
+      //   let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
+      //   let abonosStatusActive = abonos.filter((abono:any) => abono != undefined );
 
-        this.Pagado = abonosStatusActive.reduce((valorAnterior:number, valor:number) => valorAnterior + valor)
-        this.Diferencia =  factura.monto - this.Pagado
-      }else{
-        this.Diferencia =  factura.monto
-      }
+      //   this.Pagado = abonosStatusActive.reduce((valorAnterior:number, valor:number) => valorAnterior + valor)
+      //   this.Diferencia =  factura.monto - this.Pagado
+      // }else{
+      //   this.Diferencia =  factura.monto
+      // }
 
       this.isLoad = false
     },()=> this.isLoad = false)
