@@ -138,7 +138,7 @@ export class AbonoFormComponent implements OnInit {
     this.AbonoForm.get("cliente_id").valueChanges.subscribe((value)=>{
       if(value?.includes("-") ){
         let clienteId:number = this._HelpersService.obtenerId(value)
-        if(clienteId){
+        if(clienteId && clienteId != this.clienteId){
           this._ClientesService.getClienteCalculoAbono(clienteId).subscribe((dataAbono)=>{
             console.log("cliente: ",dataAbono);
             this.clienteId  = clienteId

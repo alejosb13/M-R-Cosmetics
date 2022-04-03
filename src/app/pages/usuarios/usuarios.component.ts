@@ -163,7 +163,8 @@ export class UsuariosComponent implements OnInit {
           // if (result.isConfirmed) window.location.reload()
         })
       },(HttpErrorResponse :HttpErrorResponse)=>{
-        let error:string =  HttpErrorResponse.error[0]
+        // let error:string =  HttpErrorResponse.error[0]
+        let error:string =  this._HelpersService.errorResponse(HttpErrorResponse )
 
         Swal.fire({
           title: "Error",
