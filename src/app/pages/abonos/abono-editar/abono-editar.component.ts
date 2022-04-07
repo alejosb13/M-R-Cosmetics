@@ -26,10 +26,10 @@ export class AbonoEditarComponent implements OnInit {
   ngOnInit(): void {
 
   }
-    
+
   FormValuesForm(abono:Abono){
     console.log(abono);
-    
+
     this._AbonoService.updateAbono(this.AbonoId,abono).subscribe(data =>{
       // console.log(ProductoResponse);
       Swal.fire({
@@ -43,7 +43,7 @@ export class AbonoEditarComponent implements OnInit {
     },(HttpErrorResponse:HttpErrorResponse)=>{
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
-      
+
       Swal.fire({
         title: "Error",
         html: error,
