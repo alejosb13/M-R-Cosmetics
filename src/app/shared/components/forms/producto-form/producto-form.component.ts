@@ -60,7 +60,7 @@ export class ProductoFormComponent implements OnInit {
             Validators.required,
             Validators.pattern(ValidFunctionsValidator.NumberRegEx),
             Validators.maxLength(11),
-            Validators.min(1),
+            // Validators.min(1),
           ]),
         ],
         precio: [

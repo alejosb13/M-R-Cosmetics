@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
@@ -21,6 +22,7 @@ export class FacturasComponent implements OnInit, OnDestroy {
   Facturas: Factura[];
   isLoad:boolean
   isAdmin:boolean
+  status_pagado:number
 
   Subscription:Subscription
 
@@ -28,18 +30,24 @@ export class FacturasComponent implements OnInit, OnDestroy {
     private _FacturasService:FacturasService,
     private _TablasService:TablasService,
     private _AuthService:AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
-    this.asignarValores()
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      // console.log(params.get('status_pagado'));
+      this.status_pagado = params.get('status_pagado') == 'pagadas' ? 1 : 0
+      this.asignarValores()
+    })
   }
+
 
 
   asignarValores(){
     this.isLoad = true
 
-    this.Subscription = this._FacturasService.getFacturas({estado:1}).subscribe((factura:Factura[])=> {
+    this.Subscription = this._FacturasService.getFacturas({estado:1,status_pagado:this.status_pagado}).subscribe((factura:Factura[])=> {
       console.log(factura);
 
       this.Facturas = [...factura]

@@ -123,6 +123,15 @@
                             <span *ngIf="Factura.status_pagado == 1">Finalizado</span>
                         </div>
                     </div>
+                    <div class="detalle">
+                        <div class="description">
+                            <span>Tipo Operacion</span>
+
+                        </div>
+                        <div class="value">
+                          <span >{{ Factura.tipo_venta == 1? 'Credito':'Contado'  }}</span>
+                        </div>
+                    </div>
                     <!-- <div class="detalle" *ngIf="Factura.tipo_venta == 1">
                         <div class="description">
                             <span>Historial de pago</span>

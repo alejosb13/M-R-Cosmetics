@@ -90,7 +90,7 @@ export const AdminLayoutRoutes: Routes = [
     canActivate: [AuthGuard],
     data: { role: [ADMINISTRADOR, SUPERVISOR, VENDEDOR] },
     children: [
-      { path: "", component: FacturasComponent },
+      { path: "estado/:status_pagado", component: FacturasComponent },
       { path: "detalle/:id", component: FacturaDetalleComponent },
       { path: "editar/:id", component: FacturaEditarComponent },
       { path: "despachar", component: FacturaDespachadaComponent },
