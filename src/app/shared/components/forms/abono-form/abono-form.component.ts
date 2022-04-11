@@ -169,7 +169,7 @@ export class AbonoFormComponent implements OnInit {
           Validators.maxLength(43),
           Validators.max(maximo),
           Validators.min(1),
-          Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+          Validators.pattern(ValidFunctionsValidator.DecimalRegEx),
         ])
       }
 
