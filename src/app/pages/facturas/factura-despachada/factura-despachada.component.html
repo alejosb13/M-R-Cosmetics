@@ -44,6 +44,7 @@
             <!-- <th scope="col">Tipo de Cambio</th> -->
             <!-- <th scope="col">IVA</th> -->
             <th scope="col">Operación</th>
+            <th scope="col">Vendedor</th>
             <th scope="col">Estado</th>
             <th scope="col">Ver</th>
             <th scope="col">Fecha de Vencimiento</th>
@@ -66,6 +67,9 @@
               <td>
                 <span *ngIf="factura.tipo_venta == 2">Contado</span>
                 <span *ngIf="factura.tipo_venta == 1">Credito</span>
+              </td>
+              <td>
+                {{ factura.user.name }} {{ factura.user.apellido }}
               </td>
               <td>
                 <span *ngIf="factura.status_pagado == 0">En proceso</span>
