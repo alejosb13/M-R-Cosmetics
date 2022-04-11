@@ -88,8 +88,8 @@ export class AbonoFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.maxLength(43),
-            Validators.min(1),
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+            // Validators.min(1),
+            Validators.pattern(ValidFunctionsValidator.DecimaValidCerolRegEx),
           ]),
         ],
         recibo: [
@@ -159,7 +159,7 @@ export class AbonoFormComponent implements OnInit {
 
     this.AbonoForm.valueChanges.subscribe((values)=>{
     // this.AbonoForm.get("cliente_id").valueChanges.subscribe((value)=>{
-      console.log(values);
+      console.log(this.AbonoForm.get("precio"));
       if(this.restante >0){
         this.diferencia = this.restante - values.precio
 
@@ -168,8 +168,8 @@ export class AbonoFormComponent implements OnInit {
           Validators.required,
           Validators.maxLength(43),
           Validators.max(maximo),
-          Validators.min(1),
-          Validators.pattern(ValidFunctionsValidator.DecimalRegEx),
+          // Validators.min(1),
+          Validators.pattern(ValidFunctionsValidator.DecimaValidCerolRegEx),
         ])
       }
 
