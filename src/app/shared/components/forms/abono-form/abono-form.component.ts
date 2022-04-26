@@ -80,7 +80,7 @@ export class AbonoFormComponent implements OnInit {
           '',
           Validators.compose([
             Validators.required,
-            Validators.maxLength(30),
+            // Validators.maxLength(30),
           ]),
         ],
         precio: [
@@ -105,14 +105,14 @@ export class AbonoFormComponent implements OnInit {
 
   changeValueResetForm() {
     this._CommunicationService.ReiniciarInsertarAbonoForm.subscribe((resetForm:boolean)=>{
-      console.log(resetForm);
+      // console.log(resetForm);
 
       if(resetForm){
         this.AbonoForm.reset();
         this.resetearValores()
         this.getNumeroRecibo()
 
-        this._CommunicationService.ReiniciarInsertarAbonoForm.emit(false)
+        // this._CommunicationService.ReiniciarInsertarAbonoForm.emit(false)
 
       }
 
@@ -241,7 +241,7 @@ export class AbonoFormComponent implements OnInit {
         icon: 'warning',
       })
     }else{
-      if(this.AbonoForm.valid && this.AbonoForm.get("recibo").value){
+      if(this.AbonoForm.valid && this.AbonoForm.get("recibo").value != ""){
 
         if(!this.AbonoForm.get("cliente_id").value.includes("-")){
           Swal.fire({
@@ -265,8 +265,11 @@ export class AbonoFormComponent implements OnInit {
           this.FormsValues.emit(abono)
         }
 
-
       }else{
+        console.log("[form]",this.AbonoForm);
+        console.log(this.AbonoForm.valid);
+        console.log("[recibo]",this.AbonoForm.get("recibo").value);
+
         Swal.fire({
           text: "Complete todos los campos obligatorios",
           icon: 'warning',
@@ -299,7 +302,7 @@ export class AbonoFormComponent implements OnInit {
   getReciboUSer(){
     this._UsuariosService.getUsuarioById(this.userId).subscribe((usuario) => {
     // this._UsuariosService.getUsuarioById(25).subscribe((usuario) => {
-      console.log("[getReciboUSer]",usuario);
+      // console.log("[getReciboUSer]",usuario);
 
       this.recibo = usuario.recibo
 

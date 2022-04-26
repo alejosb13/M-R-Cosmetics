@@ -1,15 +1,15 @@
 <div class="bg-white">
-  
+
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
         Cargando clientes
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
-      
+
     </div>
   </div>
-  
+
   <ng-container  *ngIf="!isLoad ">
 
     <div class=" card-header border-0 pt-4  bg-white">
@@ -22,7 +22,7 @@
           <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Clientes</span>
           <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
         </div>
-  
+
         <form class="d-flex align-items-center col-4 buscador">
             <div class="form-label-group w-100">
                 <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
@@ -30,10 +30,10 @@
             </div>
         </form>
       </div>
-      
+
     </div>
 
-    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">  
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
       <table class="table table-striped " >
         <thead>
           <tr>
@@ -63,7 +63,7 @@
               </div>
             </td>
             <td>{{ cliente.direccion_casa }}</td>
-            <td >              
+            <td >
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="{{ cliente.categoria.descripcion }}">
                   <span>({{ cliente.categoria.tipo }}) </span>
@@ -73,7 +73,7 @@
                 </div>
               </div>
             </td>
-            <td >              
+            <td >
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="{{ cliente.frecuencia.descripcion }}">
                   <a [routerLink]="[ '/frecuencia','editar', cliente.frecuencia_id ]"><i class="fas fa-stopwatch"></i></a>
@@ -83,7 +83,7 @@
 
               </div>
             </td>
-            <td >              
+            <td >
               <div class="d-flex flex-direction">
                 <div *ngIf="cliente.facturas.length > 0" class="mr-3" ngbTooltip="Facturas">
                   <a [routerLink]="[ '/cliente','factura',cliente.id]"><i class="fas fa-receipt"></i></a>
@@ -96,10 +96,10 @@
             <td>
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="Editar">
-                  <a [routerLink]="[ '/cliente','editar',cliente.id]" ><i class="fas fa-pencil-alt"></i></a>
+                  <a [routerLink]="[ '/cliente','editar',cliente.id]" ><i class="fas fa-pencil-alt text-warning"></i></a>
                 </div>
                 <div class="mr-3" ngbTooltip="Eliminar">
-                  <span class="text-primary pointer" role="button" (click)="eliminar(cliente)"><i class="fas fa-trash-alt"></i></span>
+                  <span class="text-danger pointer" role="button" (click)="eliminar(cliente)"><i class="fas fa-trash-alt"></i></span>
                 </div>
               </div>
             </td>
@@ -118,7 +118,7 @@
         </tbody>
 
       </table>
-        
+
       <div class="d-flex justify-content-between p-2">
         <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
       </div>

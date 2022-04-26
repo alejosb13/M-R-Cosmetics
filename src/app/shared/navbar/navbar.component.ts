@@ -26,22 +26,22 @@ export class NavbarComponent implements OnInit{
     @ViewChild("navbar-cmp", {static: false}) button;
 
     constructor(
-      location:Location, 
-      private renderer : Renderer2, 
-      private element : ElementRef, 
+      location:Location,
+      private renderer : Renderer2,
+      private element : ElementRef,
       private router: Router,
       public _CheckoutService: CheckoutService,
       private _AuthService:AuthService,
     ) {
       this.location = location;
-      
+
       let productosCheckout:FacturaDetalle[] = this._CheckoutService.getProductCheckout()
       if(productosCheckout.length > 0){
         // console.log("cantidad");
         // console.log(productosCheckout.length);
         this._CheckoutService.numeroProductos.next(productosCheckout.length)
       }
-      
+
       this.nativeElement = element.nativeElement;
       this.sidebarVisible = false;
     }
@@ -54,19 +54,23 @@ export class NavbarComponent implements OnInit{
           this.sidebarClose();
        });
     }
-    
+
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
-      
+
       if(titlee.charAt(0) === '#') titlee = titlee.slice( 1 );
-      
+
+      // fuerzo los titulos de las rutas
+      if(titlee.includes("devolucion/listado/producto") ) return "Devoluciones de productos";
+      if(titlee.includes("devolucion/listado/factura") )  return "Devoluciones de facturas";
+
       for(var item = 0; item < this.listTitles.length; item++){
         if( titlee.includes(this.listTitles[item].path)) return this.listTitles[item].title;
       }
-      
+
       return '';
     }
-    
+
     logout(){
       this._AuthService.logout().subscribe((data) => {
         this._AuthService.deleteSession()
@@ -74,10 +78,10 @@ export class NavbarComponent implements OnInit{
       },(error)=>{
         this._AuthService.deleteSession()
         this.router.navigateByUrl("/login");
-        
+
       })
     }
-    
+
     sidebarToggle() {
         if (this.sidebarVisible === false) {
             this.sidebarOpen();

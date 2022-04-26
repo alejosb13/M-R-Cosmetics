@@ -67,7 +67,7 @@
       </div>
       <div class="col-md-6">
           <div class="form-group">
-              <label>Precio </label>
+              <label>Precio Unidad</label>
               <input
                   type="text"
                   class="form-control"
@@ -96,6 +96,13 @@
               }"></ng-container>
           </div>
       </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+            <label class="mr-1"><b>Precio Total: </b></label>
+            <span>{{ precioTotal | currency:'USD' }}</span>
+        </div>
+    </div>
 
   </div>
   <div class="row">

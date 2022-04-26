@@ -114,6 +114,12 @@
                 }"></ng-container> -->
             </div>
         </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="mr-1"><b>Precio Unidad: </b></label>
+            <span>{{ producto.precio | currency: 'USD' }}</span>
+          </div>
+        </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Cantidad <span class="text-danger">(*)</span></label>
@@ -151,35 +157,35 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <label>Precio </label>
-                <input
-                    type="text"
-                    class="form-control"
-                    name="precio"
-                    formControlName="precio"
-                    autocomplete="off"
-                    [ngClass]="{
-                        'is-invalid': ProductForm.controls['precio'].invalid && ProductForm.controls['precio'].touched,
-                        'is-valid': ProductForm.controls['precio'].valid
-                    }"
-                >
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'required',
-                message: 'El precio es requerido',
-                control: ProductForm.controls['precio']
-                }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'pattern',
-                message: 'El valor debe ser decimal',
-                control: ProductForm.controls['precio']
-                }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                validation: 'maxlength',
-                message: 'El precio debe tener como máximo 80 letras',
-                control: ProductForm.controls['precio']
-                }"></ng-container>
-            </div>
+          <div class="form-group">
+              <label>Precio </label>
+              <input
+                  type="text"
+                  class="form-control"
+                  name="precio"
+                  formControlName="precio"
+                  autocomplete="off"
+                  [ngClass]="{
+                      'is-invalid': ProductForm.controls['precio'].invalid && ProductForm.controls['precio'].touched,
+                      'is-valid': ProductForm.controls['precio'].valid
+                  }"
+              >
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'El precio es requerido',
+              control: ProductForm.controls['precio']
+              }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'pattern',
+              message: 'El valor debe ser decimal',
+              control: ProductForm.controls['precio']
+              }"></ng-container>
+              <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message: 'El precio debe tener como máximo 80 letras',
+              control: ProductForm.controls['precio']
+              }"></ng-container>
+          </div>
         </div>
         <!-- <div class="col-md-6">
             <div class="form-group">
@@ -212,11 +218,11 @@
                 }"></ng-container>
             </div>
         </div> -->
-  
+
     </div>
     <div class="row">
         <div class="update ml-auto mr-auto">
-            <button  
+            <button
               type="submit"
               class="btn btn-primary btn-round"
               (click)="EnviarFormulario()"
@@ -233,15 +239,15 @@
       </ng-container>
     </ng-template>
   </form>
-  
-  
-   
+
+
+
   <div  [hidden]="!loadInfo" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
         Cargando producto
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
-      
+
     </div>
   </div>

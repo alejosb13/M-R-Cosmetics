@@ -8,9 +8,12 @@ import { AuthService } from 'app/auth/login/service/auth.service';
 import { Cliente } from 'app/shared/models/Cliente.model';
 import { FacturaCheckout } from 'app/shared/models/FacturaCheckout.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
+import { Recibo } from 'app/shared/models/Recibo.model';
 import { CheckoutService } from 'app/shared/services/checkout.service';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
+import { ReciboService } from 'app/shared/services/recibo.service';
+import { UsuariosService } from 'app/shared/services/usuarios.service';
 import {Observable, Subject, merge, OperatorFunction} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -35,6 +38,10 @@ export class CheckoutComponent implements OnInit {
 
   cliente: string;
 
+  userId: number;
+  recibo: Recibo;
+  numeroRecibo: number = 0;
+
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -44,12 +51,18 @@ export class CheckoutComponent implements OnInit {
     public _CheckoutService:CheckoutService,
     private _ClientesService:ClientesService,
     private _HelpersService:HelpersService,
+    private _ReciboService:ReciboService,
+    private _UsuariosService:UsuariosService,
     private _AuthService:AuthService,
     private router:Router,
-  ) {}
+  ) {
+    this.userId = Number(this._AuthService.dataStorage.user.userId)
+  }
 
   ngOnInit(): void {
 
+    this.getNumeroRecibo()
+    this.getReciboUSer()
     this.getProducts()
     this.getcheckout()
     this.getClientes()
@@ -64,6 +77,33 @@ export class CheckoutComponent implements OnInit {
       this.ValidClienteSelected()
     })
   }
+
+
+  getNumeroRecibo(){
+    // this._ReciboService.getNumeroRecibo(25).subscribe((data:any) => {
+    this._ReciboService.getNumeroRecibo(this.userId).subscribe((data:any) => {
+      console.log("[recibo]: ",data);
+      // this.AbonoForm.get("recibo").patchValue(data.numero)
+      this.numeroRecibo = data.numero
+    },()=>{
+      Swal.fire({
+        title: "No posee un numero de recibo.",
+        text: "Pide que asignen un talonario de recibos.",
+        icon: 'error',
+      })
+    })
+  }
+
+  getReciboUSer(){
+    this._UsuariosService.getUsuarioById(this.userId).subscribe((usuario) => {
+    // this._UsuariosService.getUsuarioById(25).subscribe((usuario) => {
+      // console.log("[getReciboUSer]",usuario);
+
+      this.recibo = usuario.recibo
+
+    })
+  }
+
 
   search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
     const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
@@ -166,7 +206,7 @@ export class CheckoutComponent implements OnInit {
   generarfactura(){
 
     if(!this.hasErrorValidation()){
-      let FacturaCheckout:FacturaCheckout = {...this.factura}
+      let FacturaCheckout:FacturaCheckout  = {...this.factura}
 
       FacturaCheckout.fecha_vencimiento = this._HelpersService.changeformatDate(this.date,'YYYY-MM-DD','YYYY-MM-DDThh:mm:ss')
       FacturaCheckout.user_id = this.userData.userId
@@ -179,7 +219,17 @@ export class CheckoutComponent implements OnInit {
       this.getcheckout()
       // console.log(this.factura);
 
-      this._CheckoutService.insertFactura(this.factura).subscribe( data=>{
+
+      let facturaRecibo :any ={
+        ...this.factura,
+        numero: this.numeroRecibo,
+        recibo_id: this.recibo.id,
+        rango: `${this.recibo.min}-${this.recibo.max}`,
+      }
+
+      console.log("[facturaRecibo]",facturaRecibo);
+
+      this._CheckoutService.insertFactura(facturaRecibo).subscribe( data=>{
         this._CheckoutService.vaciarCheckout()
 
         if(data.status){
@@ -201,9 +251,7 @@ export class CheckoutComponent implements OnInit {
 
           })
         }
-      },
-
-      (errorResponse:HttpErrorResponse)=>{
+      },(errorResponse:HttpErrorResponse)=>{
         console.log(errorResponse);
 
         Swal.fire({
@@ -229,6 +277,11 @@ export class CheckoutComponent implements OnInit {
 
     if(!FacturaCheckout.cliente_id){
       mensaje = "Seleccione un cliente."
+      error = true
+    }
+
+    if(this.numeroRecibo == 0){
+      mensaje = "Necesita un número de recibo para generar una factura."
       error = true
     }
 

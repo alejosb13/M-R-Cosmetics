@@ -19,13 +19,14 @@ export class FacturaEditarFormComponent implements OnInit {
   // Frecuencias:Frecuencia[]
   daysOfWeek:string[]
   loadInfo:boolean = false;
-  precio:number
+  precioTotal:number = 0
 
   // isAdmin:boolean
 
   // @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() producto:ProductoDetalle
-  @Output() FormsValues = new EventEmitter<Producto>();
+  @Output() FormsValues = new EventEmitter<FacturaDetalle>();
+  // @Output() FormsValues = new EventEmitter<Producto>();
 
   constructor(
     private fb: FormBuilder,
@@ -41,9 +42,11 @@ export class FacturaEditarFormComponent implements OnInit {
 
 
     this.definirValidaciones()
-    // // console.log(this.producto);
+    console.log(this.producto);
     this.setFormValues()
-    // this.changeValues()
+
+    this.calculatePrice()
+    this.changeValues()
   }
 
 
@@ -78,21 +81,24 @@ export class FacturaEditarFormComponent implements OnInit {
   setFormValues(){
     this.ProductForm.setValue({
       "stock" :  this.producto.cantidad,
-      "precio" : this.producto.precio,
+      "precio" : this.producto.precio_unidad,
     });
   }
 
   changeValues(){
-    this.ProductForm.get("stock").valueChanges.subscribe(valueStock=>{
-      this.ProductForm.get("precio").setValue(this.precio * valueStock)
+    this.ProductForm.valueChanges.subscribe(valuesForm=>{
 
-      // if()
-      // let precio = this.ProductForm.get("precio")?.value
-      // this.ProductForm.get("precio").setValue(precio * valueStock)
+      console.log(valuesForm);
+      this.calculatePrice()
     })
 
   }
 
+
+
+  calculatePrice(){
+    this.precioTotal = this.formularioControls.precio.value * this.formularioControls.stock.value
+  }
 
   get formularioControls(){
     return this.ProductForm.controls
@@ -103,9 +109,10 @@ export class FacturaEditarFormComponent implements OnInit {
 
     if(this.ProductForm.valid){
       let producto = {...this.producto}
-      producto.precio      = Number(this.formularioControls.precio.value)
-      producto.cantidad    = Number(this.formularioControls.stock.value)
-      producto.porcentaje  = 0
+      producto.precio         = Number(this.precioTotal)
+      producto.precio_unidad  = Number(this.formularioControls.precio.value)
+      producto.cantidad       = Number(this.formularioControls.stock.value)
+      producto.porcentaje     = 0
 
       // console.log(producto);
 

@@ -7,6 +7,7 @@ export interface FacturaCheckout {
     cliente_id: number;
     clienteFullName: string;
     monto: number;
+    precio_unidad?: number;
     nruc?: string;
     fecha_vencimiento: string;
     iva: number;

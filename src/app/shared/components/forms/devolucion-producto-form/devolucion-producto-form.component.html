@@ -1,0 +1,84 @@
+<form [formGroup]="DevolucionProductoForm" >
+  <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Cantidad <span class="text-danger">(*)</span></label>
+            <input
+                type="number"
+                class="form-control"
+                name="cantidad"
+                formControlName="cantidad"
+                autocomplete="off"
+                [ngClass]="{
+                'is-invalid': DevolucionProductoForm.controls['cantidad'].invalid && DevolucionProductoForm.controls['cantidad'].touched,
+                'is-valid': DevolucionProductoForm.controls['cantidad'].valid
+                }"
+            >
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'pattern',
+                message: 'La cantidad debe ser numerica',
+                control: DevolucionProductoForm.controls['cantidad']
+                }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'La cantidad es requerida',
+                control: DevolucionProductoForm.controls['cantidad']
+            }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'max',
+                message: 'Supera la cantidad facturada',
+                control: DevolucionProductoForm.controls['cantidad']
+            }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'min',
+                message: 'Ingrese una cantidad mayor o igual a 1',
+                control: DevolucionProductoForm.controls['cantidad']
+            }"></ng-container>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Descripción </label>
+            <input
+              type="text"
+              class="form-control"
+              name="descripcion"
+              formControlName="descripcion"
+              autocomplete="off"
+              [ngClass]="{
+                  'is-invalid': DevolucionProductoForm.controls['descripcion'].invalid && DevolucionProductoForm.controls['descripcion'].touched,
+                  'is-valid': DevolucionProductoForm.controls['descripcion'].valid
+              }"
+            >
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La descripción debe tener como máximo 255 letras',
+            control: DevolucionProductoForm.controls['descripcion']
+            }"></ng-container>
+        </div>
+    </div>
+
+  </div>
+  <div class="row">
+      <div class="update ml-auto mr-auto mt-3">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round"
+            (click)="EnviarFormulario()"
+          >
+            <div>Devolver</div>
+          </button>
+      </div>
+  </div>
+  <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>

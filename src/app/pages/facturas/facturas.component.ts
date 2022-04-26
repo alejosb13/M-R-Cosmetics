@@ -24,7 +24,7 @@ export class FacturasComponent implements OnInit, OnDestroy {
   isAdmin:boolean
   status_pagado:number
 
-  Subscription:Subscription
+  private Subscription = new Subscription();
 
   constructor(
     private _FacturasService:FacturasService,
@@ -47,7 +47,7 @@ export class FacturasComponent implements OnInit, OnDestroy {
   asignarValores(){
     this.isLoad = true
 
-    this.Subscription = this._FacturasService.getFacturas({estado:1,status_pagado:this.status_pagado}).subscribe((factura:Factura[])=> {
+    let Subscription = this._FacturasService.getFacturas({estado:1,status_pagado:this.status_pagado}).subscribe((factura:Factura[])=> {
       console.log(factura);
 
       this.Facturas = [...factura]
@@ -60,6 +60,7 @@ export class FacturasComponent implements OnInit, OnDestroy {
     },(error)=>{
       this.isLoad =false
     })
+    this.Subscription.add(Subscription)
   }
 
   refreshCountries() {
@@ -88,7 +89,7 @@ export class FacturasComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.Subscription = this._FacturasService.deleteFactura(id).subscribe((data)=>{
+        let Subscription = this._FacturasService.deleteFactura(id).subscribe((data)=>{
           this.Facturas = this.Facturas.filter(factura => factura.id != id)
           this.refreshCountries()
 
@@ -105,6 +106,8 @@ export class FacturasComponent implements OnInit, OnDestroy {
             icon: 'error',
           })
         })
+
+        this.Subscription.add(Subscription)
       }
     })
   }

@@ -42,6 +42,9 @@ import { FrecuenciaEditarComponent } from "app/pages/frecuencias/frecuencia-edit
 import { FrecuenciaInsertarComponent } from "app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component";
 import { FacturaDespachadaComponent } from "app/pages/facturas/factura-despachada/factura-despachada.component";
 
+import { DevolucionFacturaListComponent } from "app/pages/devoluciones/listado/devolucion-factura-list/devolucion-factura-list.component";
+import { DevolucionProductoListComponent } from "app/pages/devoluciones/listado/devolucion-producto-list/devolucion-producto-list.component";
+import { DevolucionSeleccionarSeccionComponent } from "app/pages/devoluciones/devolucion-seleccionar-seccion/devolucion-seleccionar-seccion.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -94,6 +97,19 @@ export const AdminLayoutRoutes: Routes = [
       { path: "detalle/:id", component: FacturaDetalleComponent },
       { path: "editar/:id", component: FacturaEditarComponent },
       { path: "despachar", component: FacturaDespachadaComponent },
+    ],
+  },
+  {
+    path: "devolucion",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR] },
+    children: [
+      { path: "", component: DevolucionSeleccionarSeccionComponent },
+      { path: "listado", children:[
+        { path: "factura", component: DevolucionFacturaListComponent },
+        { path: "producto", component: DevolucionProductoListComponent },
+      ]},
+
     ],
   },
   {

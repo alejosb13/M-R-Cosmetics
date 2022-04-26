@@ -92,5 +92,19 @@ export class ClientesService {
     );
   }
 
+  getDeudaCliente(ClienteId:number): Observable<any> {
+    const URL = `${ClienteURL}/deuda/${ClienteId}`
+    return this.http.get<any>(
+      URL, {headers: this.headerJson_Token()}
+    );
+  }
+
+  getDeudaClienteAll(): Observable<any> {
+    const URL = `${ClienteURL}/deuda`
+    return this.http.get<any>(
+      URL, {headers: this.headerJson_Token()}
+    );
+  }
+
 
 }

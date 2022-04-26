@@ -41,7 +41,7 @@ export class FacturarProductoComponent implements OnInit {
 
 
     this.definirValidaciones()
-    // console.log(this.producto);
+    console.log(this.producto);
     this.setFormValues()
     this.changeValues()
   }
@@ -161,9 +161,10 @@ export class FacturarProductoComponent implements OnInit {
 
     if(this.ProductForm.valid){
       let producto = {...this.producto}
-      producto.precio   = Number(this.formularioControls.precio.value)
-      producto.stock    = Number(this.formularioControls.stock.value)
-      producto.estado   = 1
+      producto.precio_unidad   = this.producto.precio
+      producto.precio          = Number(this.formularioControls.precio.value)
+      producto.stock           = Number(this.formularioControls.stock.value)
+      producto.estado          = 1
       // producto.comision =  Number(this.formularioControls.comision.value)
       // producto.comision =  Number(this.formularioControls.comision.value)
       // producto.estado = Number(this.formularioControls.estado.value)

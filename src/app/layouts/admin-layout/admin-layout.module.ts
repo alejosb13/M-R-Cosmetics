@@ -60,6 +60,11 @@ import { FacturaEditarFormComponent } from 'app/shared/factura-form/factura-form
 import { FacturaDespachadaComponent } from 'app/pages/facturas/factura-despachada/factura-despachada.component';
 import { ReciboModalFormComponent } from 'app/shared/components/forms/recibo-modal-form/recibo-modal-form.component';
 
+import { DevolucionSeleccionarSeccionComponent } from 'app/pages/devoluciones/devolucion-seleccionar-seccion/devolucion-seleccionar-seccion.component';
+import { DevolucionFacturaListComponent } from 'app/pages/devoluciones/listado/devolucion-factura-list/devolucion-factura-list.component';
+import { DevolucionProductoListComponent } from 'app/pages/devoluciones/listado/devolucion-producto-list/devolucion-producto-list.component';
+import { DevolucionProductoFormComponent } from 'app/shared/components/forms/devolucion-producto-form/devolucion-producto-form.component';
+
 
 @NgModule({
   imports: [
@@ -122,7 +127,12 @@ import { ReciboModalFormComponent } from 'app/shared/components/forms/recibo-mod
     FrecuenciaInsertarComponent,
     FrecuenciaFormComponent,
 
-    ReciboModalFormComponent
+    ReciboModalFormComponent,
+
+    DevolucionSeleccionarSeccionComponent,
+    DevolucionProductoListComponent,
+    DevolucionProductoFormComponent,
+    DevolucionFacturaListComponent,
   ]
 })
 

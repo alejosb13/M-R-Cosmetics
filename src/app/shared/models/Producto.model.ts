@@ -4,6 +4,7 @@ export interface Producto {
     modelo: string;
     stock: number;
     precio: number;
+    precio_unidad?: number;
     // comision: number;
     linea: string;
     descripcion: string;

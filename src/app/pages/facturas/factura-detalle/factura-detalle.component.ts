@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
+import { DevolucionProductoService } from 'app/pages/devoluciones/services/devolucion-producto.service';
+import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { Producto } from 'app/shared/models/Producto.model';
+import { ClientesService } from 'app/shared/services/clientes.service';
 import { FacturaDetalleService } from 'app/shared/services/facturaDetalle.service';
 import { FacturasService } from 'app/shared/services/facturas.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
@@ -38,6 +41,8 @@ export class FacturaDetalleComponent implements OnInit {
     private _ActivatedRoute: ActivatedRoute,
     private _HelpersService: HelpersService,
     private _FacturaDetalleService: FacturaDetalleService,
+    private _ClientesService: ClientesService,
+    private _DevolucionProductoService: DevolucionProductoService,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
   ) {
@@ -47,6 +52,18 @@ export class FacturaDetalleComponent implements OnInit {
     this.isAdmin = this._AuthService.isAdmin()
     this.FacturaId = Number(this._ActivatedRoute.snapshot.params.id)
     this.facturaById(this.FacturaId)
+  }
+
+  Validar_si_se_le_debe_al_cliente(cliente_id:number){
+    this._ClientesService.getDeudaCliente(cliente_id).subscribe((data)=>{
+      console.log("[Validar_si_se_le_debe_al_cliente]",data);
+      if (data.deuda_vendedor) {
+        Swal.fire({
+          text: `Se le debe a este cliente un total de $${data.deuda}`,
+          icon: 'warning',
+        })
+      }
+    })
   }
 
   facturaById(FacturaId:number){
@@ -62,7 +79,7 @@ export class FacturaDetalleComponent implements OnInit {
       console.log(factura);
 
       this.Factura = factura
-
+      this.Validar_si_se_le_debe_al_cliente(factura.cliente_id)
       // if(factura.factura_historial.length > 0 && factura.tipo_venta == 1){
       //   let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
       //   let abonosStatusActive = abonos.filter((abono:any) => abono != undefined );
@@ -109,6 +126,19 @@ export class FacturaDetalleComponent implements OnInit {
     });
   }
 
+  openDevolverProducto(content:any,producto:Producto) {
+
+    this.ProductoDetalle = producto
+    this.NgbModal.open(content, {ariaLabelledBy: 'modal-basic-title'})
+      .result
+        .then((result) => {
+          this.closeResult = `Closed with: ${result}`;
+        }, (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        })
+        .catch(err => {})
+  }
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -124,7 +154,7 @@ export class FacturaDetalleComponent implements OnInit {
 
   }
 
-  FormsValues(productoDetalle:ProductoDetalle){
+  FormsValues(productoDetalle:FacturaDetalle){
     console.log(productoDetalle);
 
     this._FacturaDetalleService.updateFacturaDetalle(Number(productoDetalle?.id),productoDetalle).subscribe((data)=>{
@@ -135,6 +165,23 @@ export class FacturaDetalleComponent implements OnInit {
       Swal.fire({
         text: data[0],
         icon: 'success',
+      })
+    })
+  }
+
+  FormsValuesDevolucion(DevolucionProducto:DevolucionProducto){
+    console.log("[DevolucionProductoForm]",DevolucionProducto);
+
+    this._DevolucionProductoService.insertDevolucion(DevolucionProducto).subscribe((data)=>{
+      console.log("[response]",data);
+
+      Swal.fire({
+        text: "La devolución fue realizada con exito",
+        icon: 'success',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          location.reload()
+        }
       })
     })
   }

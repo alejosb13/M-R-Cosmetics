@@ -1,147 +1,143 @@
 <div class="bg-white">
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando Detalle de factura
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+    </div>
+  </div>
 
-    <div *ngIf="isLoad" class="container-fluid p-5">
-      <div class="d-flex justify-content-center align-content-center">
-        <span>
-          Cargando Detalle de factura
-          <i class="fas fa-circle-notch fa-spin"></i>
-        </span>
-
+  <div class="container-fluid" *ngIf="!isLoad">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="mt-3 btn btn-primary mr-3" (click)="descargarPDF()">
+          <i class="fas fa-file-download fa-lg"></i> Descargar
+        </button>
+        <button
+          *ngIf="Factura.despachado == 1"
+          class="mt-3 btn btn-primary"
+          (click)="despachar(Factura.id)"
+        >
+          Marcar como no despachado
+        </button>
       </div>
     </div>
-
-    <div class="container-fluid" *ngIf="!isLoad">
-        <div class="row">
-            <div class="col-md-12">
-              <button class=" mt-3 btn btn-primary mr-3" (click)="descargarPDF()">
-                  <i class="fas fa-file-download fa-lg"></i> Descargar
-              </button>
-              <button *ngIf="Factura.despachado == 1" class=" mt-3 btn btn-primary" (click)="despachar(Factura.id)">
-                Marcar como no despachado
-              </button>
+    <div class="row mb-2">
+      <div class="col-md-6 detalle-section">
+        <div class="detalle-container">
+          <h4>Detalles de cliente</h4>
+          <div class="detalle">
+            <div class="description">
+              <span>Nombre completo</span>
             </div>
-
+            <div class="value">
+              <span>{{ Factura.cliente.nombreCompleto }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Nombre salon</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.cliente.nombreEmpresa }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Cedula</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.cliente.cedula }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Dirección</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.cliente.direccion_casa }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Dirección salon</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.cliente.direccion_negocio }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Teléfono</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.cliente.celular }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Teléfono salon</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.cliente.telefono }}</span>
+            </div>
+          </div>
         </div>
-        <div class="row mb-2">
-            <div class="col-md-6 detalle-section">
-                <div class="detalle-container">
-                    <h4>Detalles de cliente</h4>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Nombre completo</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.nombreCompleto }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Nombre salon</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.nombreEmpresa }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Cedula</span>
-
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.cedula }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Dirección</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.direccion_casa }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Dirección salon</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.direccion_negocio }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Teléfono</span>
-
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.celular }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Teléfono salon</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.cliente.telefono }}</span>
-                        </div>
-                    </div>
-                </div>
+      </div>
+      <div class="col-md-6 detalle-section">
+        <div class="detalle-container">
+          <h4>Detalle factura</h4>
+          <div class="detalle">
+            <div class="description">
+              <span>factura</span>
             </div>
-            <div class="col-md-6 detalle-section">
-                <div class="detalle-container">
-                    <h4>Detalle factura</h4>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>factura</span>
-                        </div>
-                        <div class="value">
-                            <span>#{{ Factura.id }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Fecha</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.created_at | date:"dd-MM-yyyy" }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Fecha vencimiento</span>
-                        </div>
-                        <div class="value">
-                            <span>{{ Factura.fecha_vencimiento | date:"dd-MM-yyyy" }}</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Estado</span>
-
-                        </div>
-                        <div class="value">
-                            <span *ngIf="Factura.status_pagado == 0">En proceso</span>
-                            <span *ngIf="Factura.status_pagado == 1">Finalizado</span>
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Vendedor</span>
-
-                        </div>
-                        <div class="value">
-                          {{ Factura.user.name }} {{ Factura.user.apellido }}
-                        </div>
-                    </div>
-                    <div class="detalle">
-                        <div class="description">
-                            <span>Tipo Operacion</span>
-
-                        </div>
-                        <div class="value">
-                          <span >{{ Factura.tipo_venta == 1? 'Credito':'Contado'  }}</span>
-                        </div>
-                    </div>
-                    <!-- <div class="detalle" *ngIf="Factura.tipo_venta == 1">
+            <div class="value">
+              <span>#{{ Factura.id }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Fecha</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.created_at | date: "dd-MM-yyyy" }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Fecha vencimiento</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.fecha_vencimiento | date: "dd-MM-yyyy" }}</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Estado</span>
+            </div>
+            <div class="value">
+              <span *ngIf="Factura.status_pagado == 0">En proceso</span>
+              <span *ngIf="Factura.status_pagado == 1">Finalizado</span>
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Vendedor</span>
+            </div>
+            <div class="value">
+              {{ Factura.user.name }} {{ Factura.user.apellido }}
+            </div>
+          </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Tipo Operacion</span>
+            </div>
+            <div class="value">
+              <span>{{ Factura.tipo_venta == 1 ? "Credito" : "Contado" }}</span>
+            </div>
+          </div>
+          <!-- <div class="detalle" *ngIf="Factura.tipo_venta == 1">
                         <div class="description">
                             <span>Historial de pago</span>
                         </div>
@@ -149,112 +145,284 @@
                             <a class="mostrar_modal" role="button" (click)="open(content)" >Mostrar</a>
                         </div>
                     </div> -->
-                </div>
-            </div>
         </div>
-        <div class="row  detalle-section">
-            <div class="col-md-12  detalle-section">
-                <ul class="list-group list">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <span><b>Descripcion</b></span>
-                      <span class=""><b>Cantidad</b></span>
-                      <span class=""><b>Precio</b></span>
-                      <span *ngIf="isAdmin" class=""><b></b></span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let producto of Factura.factura_detalle">
-                      <span class="texto-descripcion">{{ producto.descripcion }}</span>
-                      <span class="texto-cantidad" *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
-                      <span class="texto-cantidad" *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
-                      <span class="texto-precio">{{ producto.precio | currency: 'USD' }}</span>
-                      <span class="texto-precio" *ngIf="isAdmin" role="button" (click)="openEditFactura(contentEditar,producto)"><i class="fas fa-pencil-alt text-warning"></i></span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="Factura.tipo_venta == 1">
-                        <span><b>Abonado</b></span>
-
-                        <span class=""><b>{{ Factura.monto - Factura.saldo_restante  | currency: 'USD'}}</b></span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="Factura.tipo_venta == 1">
-                        <span><b>Por Abonar</b></span>
-
-                        <span class=""><b>{{ Factura.saldo_restante | currency: 'USD'}}</b></span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><b>Total</b></span>
-
-                        <span class=""><b>{{ Factura.monto | currency: 'USD' }}</b></span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+      </div>
     </div>
+    <!-- <div class="row detalle-section">
+      <div class="col-md-12 detalle-section">
+        <ul class="list-group list">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span><b>Descripcion</b></span>
+            <span class=""><b>Cantidad</b></span>
+            <span class=""><b>Precio</b></span>
+            <span *ngIf="isAdmin" class=""><b>Devolver</b></span>
+            <span *ngIf="isAdmin" class=""><b></b></span>
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let producto of Factura.factura_detalle"
+          >
+            <span class="texto-descripcion">{{ producto.descripcion }}</span>
+            <span class="texto-cantidad" *ngIf="producto.cantidad > 1"
+              >{{ producto.cantidad }} Uds</span
+            >
+            <span class="texto-cantidad" *ngIf="producto.cantidad == 1"
+              >{{ producto.cantidad }} Ud</span
+            >
+            <span class="texto-precio">{{
+              producto.precio | currency: "USD"
+            }}</span>
+            <span
+              class="texto-precio"
+              *ngIf="isAdmin"
+              role="button"
+              (click)="openEditFactura(contentEditar, producto)"
+              ><i class="fas fa-pencil-alt text-warning"></i
+            ></span>
+            <span
+              class="texto-precio"
+              *ngIf="isAdmin"
+              role="button"
+              (click)="openEditFactura(contentEditar, producto)"
+              ><i class="fas fa-pencil-alt text-warning"></i
+            ></span>
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngIf="Factura.tipo_venta == 1"
+          >
+            <span><b>Abonado</b></span>
+
+            <span class=""
+              ><b>{{
+                Factura.monto - Factura.saldo_restante | currency: "USD"
+              }}</b></span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngIf="Factura.tipo_venta == 1"
+          >
+            <span><b>Por Abonar</b></span>
+
+            <span class=""
+              ><b>{{ Factura.saldo_restante | currency: "USD" }}</b></span
+            >
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <span><b>Total</b></span>
+
+            <span class=""
+              ><b>{{ Factura.monto | currency: "USD" }}</b></span
+            >
+          </li>
+        </ul>
+      </div>
+    </div> -->
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+      <table class="table  table-hover" >
+        <thead class="border-bottom border-1">
+          <tr>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio X Unidad</th>
+            <th scope="col">Precio</th>
+            <th *ngIf="isAdmin" scope="col">Devolver</th>
+            <th *ngIf="isAdmin" scope="col">Editar</th>
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let producto of Factura.factura_detalle">
+            <td>{{ producto.descripcion }}</td>
+            <td>
+              <span *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
+              <span *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
+            </td>
+            <td>{{ producto.precio_unidad | currency: "USD" }}</td>
+            <td>{{ producto.precio | currency: "USD" }}</td>
+            <td>
+              <span
+              class="texto-precio"
+              *ngIf="isAdmin"
+              role="button"
+              (click)="openDevolverProducto(contentDevolver, producto)"
+              ><i class="fas fa-undo"></i></span>
+            </td>
+            <td>
+              <span
+              class="texto-precio"
+              *ngIf="isAdmin"
+              role="button"
+              (click)="openEditFactura(contentEditar, producto)"
+              ><i class="fas fa-pencil-alt text-warning"></i
+              ></span>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="border border-1" >
+          <tr *ngIf="Factura.tipo_venta == 1" class="background-color-important border-bottom border-1">
+            <td [attr.colspan]="(isAdmin)?5:3" >Abonado</td>
+            <td><b>{{ Factura.monto - Factura.saldo_restante | currency: "USD" }}</b></td>
+          </tr>
+          <tr *ngIf="Factura.tipo_venta == 1" class="background-color-important border-bottom border-1">
+            <td [attr.colspan]="(isAdmin)?5:3" >Por Abonar</td>
+            <td><b>{{ Factura.saldo_restante | currency: "USD" }}</b></td>
+          </tr>
+          <tr class="background-color-important ">
+            <td [attr.colspan]="(isAdmin)?5:3 "  >Total</td>
+            <td><b>{{ Factura.monto | currency: "USD" }}</b></td>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
+  </div>
 </div>
 
 <!-- Modal -->
 <ng-template #content let-modal>
-    <div class="modal-header">
-        <div>
-            <h4 class="modal-title" id="modal-basic-title">Historial de pago</h4>
-            <h5><small>Factura #{{ FacturaId }} </small></h5>
-        </div>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="fas fa-times"></i></button>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Historial de pago</h4>
+      <h5>
+        <small>Factura #{{ FacturaId }} </small>
+      </h5>
     </div>
-    <div class="modal-body">
-        <div class="list-group">
-            <div
-                class="list-group-item list-group-item-action flex-column align-items-star position-relative"
-                role="button"
-                *ngFor="let itemHistorial of Factura.cliente.factura_historial; let i=index;"
-                (click)="Collaps(i)"
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="list-group">
+      <div
+        class="list-group-item list-group-item-action flex-column align-items-star position-relative"
+        role="button"
+        *ngFor="
+          let itemHistorial of Factura.cliente.factura_historial;
+          let i = index
+        "
+        (click)="Collaps(i)"
+      >
+        <div
+          class="d-flex w-100 justify-content-between align-items-center"
+          type="button"
+        >
+          <div>
+            <small
+              >Fecha: {{ itemHistorial.updated_at | date: "dd-MM-yyyy" }}</small
             >
-                <div class="d-flex w-100 justify-content-between align-items-center" type="button" >
-                    <div>
-                        <small>Fecha: {{ itemHistorial.updated_at | date:"dd-MM-yyyy" }}</small>
-                        <p class="mb-1"><b>Pagó</b></p>
-                        <a [routerLink]="[ '/abono','editar',itemHistorial.id ]" target="_blank">Ver Pago</a>
-                    </div>
-                    <div>
-                        <span><b>{{ itemHistorial.precio | currency: 'USD' }}</b></span>
-                    </div>
-                </div>
-                <div *ngIf="i === expandedIndex" class="animate__animated animate__pulse ">
-                    <div class="card">
-                      <div class="card-body">
-                        Usuario: {{ itemHistorial.name }} {{ itemHistorial.apellido }}
-                      </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-group-item list-group-item-action flex-column align-items-star position-relative">
-                <div class="d-flex w-100 justify-content-between align-items-center" >
-                    <div>
-                        <p class="mb-1"><b>Total pagado</b></p>
-                    </div>
-                    <div>
-                        <span><b>{{ Pagado | currency: 'USD' }}</b></span>
-                    </div>
-                </div>
-            </div>
-
+            <p class="mb-1"><b>Pagó</b></p>
+            <a
+              [routerLink]="['/abono', 'editar', itemHistorial.id]"
+              target="_blank"
+              >Ver Pago</a
+            >
+          </div>
+          <div>
+            <span
+              ><b>{{ itemHistorial.precio | currency: "USD" }}</b></span
+            >
+          </div>
         </div>
+        <div
+          *ngIf="i === expandedIndex"
+          class="animate__animated animate__pulse"
+        >
+          <div class="card">
+            <div class="card-body">
+              Usuario: {{ itemHistorial.name }} {{ itemHistorial.apellido }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="list-group-item list-group-item-action flex-column align-items-star position-relative"
+      >
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <div>
+            <p class="mb-1"><b>Total pagado</b></p>
+          </div>
+          <div>
+            <span
+              ><b>{{ Pagado | currency: "USD" }}</b></span
+            >
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modal.close('Save click')"
+    >
+      Aceptar
+    </button>
+  </div>
 </ng-template>
 
 <ng-template #contentEditar let-modal>
-
   <div class="modal-header">
     <div>
-        <h4 class="modal-title" id="modal-basic-title">Modificar producto facturado</h4>
+      <h4 class="modal-title" id="modal-basic-title">
+        Modificar producto facturado
+      </h4>
     </div>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="fas fa-times"></i></button>
-</div>
-<div class="modal-body">
-  <app-factura-editar-form [producto]="ProductoDetalle" (FormsValues)="FormsValues($event)" ></app-factura-editar-form>
-</div>
-<!-- <div class="modal-footer">
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-factura-editar-form
+      [producto]="ProductoDetalle"
+      (FormsValues)="FormsValues($event)"
+    ></app-factura-editar-form>
+  </div>
+  <!-- <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
+</div> -->
+</ng-template>
+
+<ng-template #contentDevolver let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">
+        Devolver producto facturado
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-devolucion-producto-form
+      [producto]="ProductoDetalle"
+      (FormsValues)="FormsValuesDevolucion($event)"
+    ></app-devolucion-producto-form>
+  </div>
+  <!-- <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
 </div> -->
 </ng-template>
