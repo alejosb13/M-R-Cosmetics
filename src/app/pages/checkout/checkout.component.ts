@@ -67,6 +67,8 @@ export class CheckoutComponent implements OnInit {
     this.getcheckout()
     this.getClientes()
     this.getDataUser()
+    console.log("Factura",this.factura);
+    console.log("Factura",(this.factura.tipo_venta == 1 && this.factura.tipo_venta));
 
   }
 

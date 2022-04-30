@@ -95,15 +95,14 @@
             <p class=" font-weight-bold">Vendedor</p>
             <span class="d-block mb-4"> {{ userData.nombre  }} {{ userData.apellido  }}</span>
 
-            <p class=" font-weight-bold">Numero de Recibo: <b>{{ (numeroRecibo == 0)?"Sin numero asignado": numeroRecibo  }}</b></p>
-                <!-- <p class="font-weight-bold">GIVE CODE</p>
-                <input id="code" placeholder="Enter your code"> -->
+            <!-- <p class="font-weight-bold">GIVE CODE</p>
+              <input id="code" placeholder="Enter your code"> -->
 
             <div
                 class="form-group"
                 style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;"
                 *ngIf="factura.monto "
-            >
+                >
                 <!-- <div class="col-md-12"> -->
                     <p class="d-block font-weight-bold">Operación de pago <span class="text-danger">(*)</span></p>
                     <select
@@ -115,30 +114,30 @@
                     >
                         <option selected value="0" hidden>Seleccione la operación de pago</option>
                         <option
-                            class="text-muted"
-                            value="1"
+                        class="text-muted"
+                        value="1"
                             [selected]="factura.tipo_venta == 1"
                         >
-                            Credito
-                        </option>
-                        <option
+                        Credito
+                      </option>
+                      <option
                             class="text-muted"
                             value="2"
                             [selected]="factura.tipo_venta == 2"
                         >
-                            Contado
+                        Contado
                         </option>
                     </select>
-                <!-- </div> -->
+                    <!-- </div> -->
                 <br>
                 <!-- <p class="d-block font-weight-bold">Tipo de Venta</p>
                 <select
-                    class="form-control"
+                class="form-control"
                     name="tcambio"
                     autocomplete="off"
                     (change)="cambiarValores($event.target)"
 
-                >
+                    >
                     <option selected value="0" hidden>Seleccione la moneda</option>
                     <option
                         class="text-muted"
@@ -146,21 +145,22 @@
                         selected=""
                     >
                         USD
-                    </option>
+                      </option>
                     <option
-                        class="text-muted"
+                    class="text-muted"
                         value="2"
                         selected=""
-                    >
+                        >
                         Contado
                     </option>
-                </select>  -->
+                  </select>  -->
                 <!-- <br> -->
+                <p *ngIf="factura.tipo_venta == 2 && factura.tipo_venta" class=" font-weight-bold">Numero de Recibo: <b>{{ (numeroRecibo == 0)?"Sin numero asignado": numeroRecibo  }}</b></p>
                 <div class="d-flex justify-content-between">
                     <div class="font-weight-bold">Precio total </div>
                     <div class="text-right font-weight-bold"> {{factura.monto | currency: 'USD'}}</div>
-                </div>
+                  </div>
             <button class="btn btn-primary" (click)="generarfactura()">Generar Factura</button>
-        </div>
+          </div>
     </div>
 </div>

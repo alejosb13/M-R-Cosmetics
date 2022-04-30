@@ -38,6 +38,8 @@ export class AbonoListComponent implements OnInit {
 
       this.Abonos = [...abono]
       this._TablasService.datosTablaStorage = [...abono]
+      console.log("abono",this.Abonos);
+
       this._TablasService.total = abono.length
       this._TablasService.busqueda = ""
 

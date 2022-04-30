@@ -1,5 +1,6 @@
 import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
+import { ReciboHistorial } from "./ReciboHistorial.model";
 import { Usuario } from "./Usuario.model";
 
 export interface Abono{
@@ -12,5 +13,6 @@ export interface Abono{
     updated_at: Date;
     cliente?: Cliente;
     // factura?: Factura;
+    recibo_historial?: ReciboHistorial;
     usuario?: Usuario;
 }

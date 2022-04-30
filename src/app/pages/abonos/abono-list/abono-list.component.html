@@ -38,8 +38,8 @@
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Recibo</th>
               <th scope="col">Monto</th>
-              <!-- <th scope="col">Factura</th> -->
               <th scope="col">Fecha</th>
               <th scope="col">Cliente</th>
               <th scope="col">Usuario</th>
@@ -49,25 +49,26 @@
           </thead>
           <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
             <tr *ngFor="let abono of _TablasService.datosTablaStorage; let i = index">
-                <th scope="row">{{ i+1 }}</th>
-                <td>
-                  {{ abono.precio}}
-                </td>
-                <!-- <td>
-                    <div class="mr-3" ngbTooltip="Factura">
-                        <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a>
-                    </div>
-                </td> -->
-                <td >{{ abono.created_at | date:"dd-MM-yyyy" }}</td>
-                <td ><a [routerLink]="[ '/cliente','editar',abono.cliente_id]" ngbTooltip="{{ abono.cliente.nombreCompleto | uppercase }}"><i class="nc-icon nc-single-02"></i> #{{abono.cliente.id}}</a></td>
-                <td ><a [routerLink]="[ '/usuario','editar',abono.cliente_id]" ngbTooltip="{{ abono.usuario.name | uppercase }} {{ abono.usuario.apellido | uppercase }}"><i class="fa-user-tie fas"></i> #{{abono.user_id}}</a></td>
-                <!-- <td>
-                  <div class="d-flex flex-direction">
-                    <div class="mr-3" ngbTooltip="Eliminar">
-                      <span class="text-primary pointer" role="button" (click)="eliminar(abono)"><i class="fas fa-trash-alt text-danger"></i></span>
-                    </div>
+              <th scope="row">{{ abono.id }}</th>
+              <td>
+                  <div class="mr-3" ngbTooltip="Factura">
+                      <!-- <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a> -->
+                    #{{ abono.recibo_historial.numero }}
                   </div>
-                </td> -->
+              </td>
+              <td>
+                {{ abono.precio | currency:"USD"}}
+              </td>
+              <td >{{ abono.created_at | date:"dd-MM-yyyy" }}</td>
+              <td ><a [routerLink]="[ '/cliente','editar',abono.cliente_id]" ngbTooltip="{{ abono.cliente.nombreCompleto | uppercase }}"><i class="nc-icon nc-single-02"></i> #{{abono.cliente.id}}</a></td>
+              <td ><a [routerLink]="[ '/usuario','editar',abono.cliente_id]" ngbTooltip="{{ abono.usuario.name | uppercase }} {{ abono.usuario.apellido | uppercase }}"><i class="fa-user-tie fas"></i> #{{abono.user_id}}</a></td>
+              <!-- <td>
+                <div class="d-flex flex-direction">
+                  <div class="mr-3" ngbTooltip="Eliminar">
+                    <span class="text-primary pointer" role="button" (click)="eliminar(abono)"><i class="fas fa-trash-alt text-danger"></i></span>
+                  </div>
+                </div>
+              </td> -->
             </tr>
           </tbody>
           <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
