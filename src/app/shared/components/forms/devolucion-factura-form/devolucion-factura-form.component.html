@@ -1,0 +1,48 @@
+<form [formGroup]="DevolucionFacturaForm" >
+  <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Descripción</label>
+            <input
+              type="text"
+              class="form-control"
+              name="descripcion"
+              formControlName="descripcion"
+              autocomplete="off"
+              [ngClass]="{
+                  'is-invalid': DevolucionFacturaForm.controls['descripcion'].invalid && DevolucionFacturaForm.controls['descripcion'].touched,
+                  'is-valid': DevolucionFacturaForm.controls['descripcion'].valid
+              }"
+            >
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La descripción debe tener como máximo 255 letras',
+            control: DevolucionFacturaForm.controls['descripcion']
+            }"></ng-container>
+        </div>
+    </div>
+
+  </div>
+  <div class="row">
+      <div class="update ml-auto mr-auto mt-3">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round"
+            (click)="EnviarFormulario()"
+          >
+            <div>Devolver</div>
+          </button>
+      </div>
+  </div>
+  <ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>

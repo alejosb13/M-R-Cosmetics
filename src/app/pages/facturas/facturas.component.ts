@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturasService } from 'app/shared/services/facturas.service';
@@ -8,6 +9,7 @@ import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { DevolucionFacturaService } from '../devoluciones/services/devolucion-factura.service';
 
 @Component({
   selector: 'app-facturas',
@@ -23,14 +25,17 @@ export class FacturasComponent implements OnInit, OnDestroy {
   isLoad:boolean
   isAdmin:boolean
   status_pagado:number
+  Factura: Factura;
 
   private Subscription = new Subscription();
 
   constructor(
     private _FacturasService:FacturasService,
     private _TablasService:TablasService,
+    private _DevolucionFacturaService:DevolucionFacturaService,
     private _AuthService:AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private NgbModal: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -75,40 +80,65 @@ export class FacturasComponent implements OnInit, OnDestroy {
 
   }
 
-  eliminar({id}:Factura){
-    // console.log(id);
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "Este factura se eliminará y no podrás recuperarlo.",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#51cbce',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
+  // eliminar({id}:Factura){
+  //   // console.log(id);
+  //   Swal.fire({
+  //     title: '¿Estás seguro?',
+  //     text: "Este factura se eliminará y no podrás recuperarlo.",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#51cbce',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Eliminar',
+  //     cancelButtonText: 'Cancelar'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
 
-        let Subscription = this._FacturasService.deleteFactura(id).subscribe((data)=>{
-          this.Facturas = this.Facturas.filter(factura => factura.id != id)
-          this.refreshCountries()
+  //       let Subscription = this._FacturasService.deleteFactura(id).subscribe((data)=>{
+  //         this.Facturas = this.Facturas.filter(factura => factura.id != id)
+  //         this.refreshCountries()
 
-          Swal.fire({
-            text: data[0],
-            icon: 'success',
-          })
-        },(HttpErrorResponse :HttpErrorResponse)=>{
-          // console.log(HttpErrorResponse );
+  //         Swal.fire({
+  //           text: data[0],
+  //           icon: 'success',
+  //         })
+  //       },(HttpErrorResponse :HttpErrorResponse)=>{
+  //         // console.log(HttpErrorResponse );
 
-          Swal.fire({
-            title: "Error",
-            html: HttpErrorResponse.error[0] ,
-            icon: 'error',
-          })
-        })
+  //         Swal.fire({
+  //           title: "Error",
+  //           html: HttpErrorResponse.error[0] ,
+  //           icon: 'error',
+  //         })
+  //       })
 
-        this.Subscription.add(Subscription)
-      }
+  //       this.Subscription.add(Subscription)
+  //     }
+  //   })
+  // }
+
+  openDevolverFactura(content:any,Factura:Factura){
+    this.Factura = Factura
+    this.NgbModal.open(content, {ariaLabelledBy: 'modal-basic-title'})
+      .result
+        .then((result) => {})
+        .catch(err => {})
+  }
+
+  FormsValuesDevolucion(DevolucionProducto:any){
+    console.log("[DevolucionFacturaForm]",DevolucionProducto);
+
+    this._DevolucionFacturaService.insertDevolucion(DevolucionProducto).subscribe((data)=>{
+      console.log("[response]",data);
+
+      Swal.fire({
+        text: "La devolución fue realizada con exito",
+        icon: 'success',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          location.reload()
+        }
+      })
     })
   }
 

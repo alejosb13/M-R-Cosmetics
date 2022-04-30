@@ -78,7 +78,7 @@
                 </td> -->
                 <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
                 <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
-                <td *ngIf="isAdmin"><div role="button" (click)="eliminar(factura)"><i class="text-danger far fa-trash-alt"></i></div></td>
+                <td *ngIf="isAdmin"><div role="button" (click)="openDevolverFactura(contentDevolver, factura)"><i class="text-danger far fa-trash-alt"></i></div></td>
             </tr>
           </tbody>
           <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
@@ -100,3 +100,30 @@
       </div>
     </ng-container>
   </div>
+
+  <ng-template #contentDevolver let-modal>
+    <div class="modal-header">
+      <div>
+        <h4 class="modal-title" id="modal-basic-title">
+          Devolver factura
+        </h4>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-devolucion-factura-form
+        [factura]="Factura"
+        (FormsValues)="FormsValuesDevolucion($event)"
+      ></app-devolucion-factura-form>
+    </div>
+    <!-- <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
+  </div> -->
+  </ng-template>

@@ -64,6 +64,7 @@ import { DevolucionSeleccionarSeccionComponent } from 'app/pages/devoluciones/de
 import { DevolucionFacturaListComponent } from 'app/pages/devoluciones/listado/devolucion-factura-list/devolucion-factura-list.component';
 import { DevolucionProductoListComponent } from 'app/pages/devoluciones/listado/devolucion-producto-list/devolucion-producto-list.component';
 import { DevolucionProductoFormComponent } from 'app/shared/components/forms/devolucion-producto-form/devolucion-producto-form.component';
+import { DevolucionFacturaFormComponent } from 'app/shared/components/forms/devolucion-factura-form/devolucion-factura-form.component';
 
 
 @NgModule({
@@ -132,7 +133,9 @@ import { DevolucionProductoFormComponent } from 'app/shared/components/forms/dev
     DevolucionSeleccionarSeccionComponent,
     DevolucionProductoListComponent,
     DevolucionProductoFormComponent,
+
     DevolucionFacturaListComponent,
+    DevolucionFacturaFormComponent,
   ]
 })
 
