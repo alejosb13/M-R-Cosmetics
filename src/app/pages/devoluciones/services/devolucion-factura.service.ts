@@ -3,6 +3,7 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
+import { DevolucionFactura } from 'app/shared/models/DevolucionFactura.model';
 
 const DevolucionFActuraURL = `${environment.urlAPI}devolucion-factura`
 @Injectable({
@@ -26,7 +27,7 @@ export class DevolucionFacturaService {
   }
 
   // public methods
-  getProductosDevueltos(options:any = {}): Observable<DevolucionProducto[]> {
+  getFacturaDevueltos(options:any = {}): Observable<DevolucionFactura[]> {
     let URL = DevolucionFActuraURL
 
     if(Object.keys(options).length > 0){
@@ -38,16 +39,16 @@ export class DevolucionFacturaService {
 
       URL = URLOptions
     }
-    return this.http.get<DevolucionProducto[]>(
+    return this.http.get<DevolucionFactura[]>(
       URL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  getProductoDevueltoId(Id:number): Observable<DevolucionProducto> {
+  getFacturaDevueltoId(Id:number): Observable<DevolucionFactura> {
     const URL = `${DevolucionFActuraURL}/${Id}`
 
-    return this.http.get<DevolucionProducto>(
+    return this.http.get<DevolucionFactura>(
       URL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
@@ -62,10 +63,10 @@ export class DevolucionFacturaService {
     );
   }
 
-  updateDevolucion(Id:number,data:DevolucionProducto): Observable<any> {
+  updateDevolucion(Id:number,data:DevolucionFactura): Observable<any> {
     const URL = `${DevolucionFActuraURL}/${Id}`
 
-    return this.http.put<DevolucionProducto>(
+    return this.http.put<DevolucionFactura>(
       URL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }

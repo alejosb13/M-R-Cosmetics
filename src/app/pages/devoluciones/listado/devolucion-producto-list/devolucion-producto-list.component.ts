@@ -56,30 +56,30 @@ export class DevolucionProductoListComponent implements OnInit {
 
   }
 
-  eliminar(devolucion:DevolucionProducto){
-    console.log(devolucion);
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "Esta devolución se eliminará y no podrás recuperarla.",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#51cbce',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
+  // eliminar(devolucion:DevolucionProducto){
+  //   console.log(devolucion);
+  //   Swal.fire({
+  //     title: '¿Estás seguro?',
+  //     text: "Esta devolución se eliminará y no podrás recuperarla.",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#51cbce',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Eliminar',
+  //     cancelButtonText: 'Cancelar'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
 
-        this._DevolucionProductoService.deleteDevolucion(devolucion.id).subscribe((data)=>{
-          this.DevolucionProducto = this.DevolucionProducto.filter(devolucionProducto => devolucionProducto.id != devolucion.id)
-          this.refreshCountries()
+  //       this._DevolucionProductoService.deleteDevolucion(devolucion.id).subscribe((data)=>{
+  //         this.DevolucionProducto = this.DevolucionProducto.filter(devolucionProducto => devolucionProducto.id != devolucion.id)
+  //         this.refreshCountries()
 
-          Swal.fire({
-            text: data[0],
-            icon: 'success',
-          })
-        })
-      }
-    })
-  }
+  //         Swal.fire({
+  //           text: data[0],
+  //           icon: 'success',
+  //         })
+  //       })
+  //     }
+  //   })
+  // }
 }

@@ -43,7 +43,7 @@
             <th scope="col">Descripcion producto</th>
             <th scope="col">Factura</th>
             <th scope="col">Usuario</th>
-            <th scope="col">Opciones</th>
+            <th scope="col">Fecha</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -59,11 +59,7 @@
             <td> <a [routerLink]="[ '/factura','detalle',DevolucionProducto.factura_detalle.factura_id ]">Detalle</a> </td>
             <td>{{ DevolucionProducto.user.name }} {{ DevolucionProducto.user.apellido }}</td>
             <td>
-              <div class="d-flex flex-direction">
-                <div class="mr-3" ngbTooltip="Eliminar">
-                  <span class="text-primary pointer" role="button" (click)="eliminar(DevolucionProducto)"><i class="fas fa-trash-alt text-danger"></i></span>
-                </div>
-              </div>
+              {{ DevolucionProducto.created_at | date: 'dd/MM/yyyy' }}
             </td>
           </tr>
         </tbody>
