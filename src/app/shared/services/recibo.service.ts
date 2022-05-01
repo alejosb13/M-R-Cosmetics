@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Recibo } from '../models/Recibo.model';
 import { environment } from 'environments/environment';
+import { ReciboHistorial, ReciboHistorialContado } from '../models/ReciboHistorial.model';
 
 const ReciboURL = `${environment.urlAPI}recibos`
 
@@ -76,4 +77,43 @@ export class ReciboService {
       URL, {headers: this.headerJson_Token()}
     );
   }
+
+  getReciboHistorialContado(options={}): Observable<ReciboHistorialContado[]> {
+    let URL = `${ReciboURL}/historial/contado`
+
+    if(Object.keys(options).length > 0){
+      let URLOptions = `${URL}?`
+
+      for (const key in options) {
+        URLOptions += `${key}=${options[key]}&`
+      }
+
+      URL = URLOptions
+    }
+
+    return this.http.get<ReciboHistorialContado[]>(
+      URL,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getReciboHistorialCredito(options={}): Observable<ReciboHistorial[]> {
+    let URL = `${ReciboURL}/historial/credito`
+
+    if(Object.keys(options).length > 0){
+      let URLOptions = `${URL}?`
+
+      for (const key in options) {
+        URLOptions += `${key}=${options[key]}&`
+      }
+
+      URL = URLOptions
+    }
+
+    return this.http.get<ReciboHistorial[]>(
+      URL,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
 }

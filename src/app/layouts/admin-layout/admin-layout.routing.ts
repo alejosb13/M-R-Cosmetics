@@ -45,6 +45,9 @@ import { FacturaDespachadaComponent } from "app/pages/facturas/factura-despachad
 import { DevolucionFacturaListComponent } from "app/pages/devoluciones/listado/devolucion-factura-list/devolucion-factura-list.component";
 import { DevolucionProductoListComponent } from "app/pages/devoluciones/listado/devolucion-producto-list/devolucion-producto-list.component";
 import { DevolucionSeleccionarSeccionComponent } from "app/pages/devoluciones/devolucion-seleccionar-seccion/devolucion-seleccionar-seccion.component";
+import { ReciboSeleccionarSeccionComponent } from "app/pages/recibos/recibo-seleccionar-seccion/recibo-seleccionar-seccion.component";
+import { RecibosContadoListComponent } from "app/pages/recibos/listados/recibos-contado-list/recibos-contado-list.component";
+import { RecibosCreditoListComponent } from "app/pages/recibos/listados/recibos-credito-list/recibos-credito-list.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -110,6 +113,18 @@ export const AdminLayoutRoutes: Routes = [
         { path: "producto", component: DevolucionProductoListComponent },
       ]},
 
+    ],
+  },
+  {
+    path: "recibos",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR] },
+    children: [
+      { path: "", component: ReciboSeleccionarSeccionComponent },
+      { path: "listado", children:[
+        { path: "contado", component: RecibosContadoListComponent },
+        { path: "credito", component: RecibosCreditoListComponent },
+      ]},
     ],
   },
   {
