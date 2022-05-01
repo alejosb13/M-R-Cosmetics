@@ -5,6 +5,7 @@ import { Location} from '@angular/common';
 import { CheckoutService } from '../services/checkout.service';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { AuthService } from 'app/auth/login/service/auth.service';
+import { UserAuth } from 'app/auth/login/models/auth.model';
 
 @Component({
     moduleId: module.id,
@@ -21,6 +22,8 @@ export class NavbarComponent implements OnInit{
     private toggleButton;
     private sidebarVisible: boolean;
 
+    UserInfo:UserAuth
+
 
     public isCollapsed = true;
     @ViewChild("navbar-cmp", {static: false}) button;
@@ -36,23 +39,20 @@ export class NavbarComponent implements OnInit{
       this.location = location;
 
       let productosCheckout:FacturaDetalle[] = this._CheckoutService.getProductCheckout()
-      if(productosCheckout.length > 0){
-        // console.log("cantidad");
-        // console.log(productosCheckout.length);
-        this._CheckoutService.numeroProductos.next(productosCheckout.length)
-      }
+      if(productosCheckout.length > 0) this._CheckoutService.numeroProductos.next(productosCheckout.length)
 
       this.nativeElement = element.nativeElement;
       this.sidebarVisible = false;
     }
 
     ngOnInit(){
-        this.listTitles = ROUTES.filter(listTitle => listTitle);
-        var navbar : HTMLElement = this.element.nativeElement;
-        this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
-        this.router.events.subscribe((event) => {
-          this.sidebarClose();
-       });
+      this.UserInfo = this._AuthService.dataStorage.user
+      this.listTitles = ROUTES.filter(listTitle => listTitle);
+      var navbar : HTMLElement = this.element.nativeElement;
+      this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
+      this.router.events.subscribe((event) => {
+        this.sidebarClose();
+      });
     }
 
     getTitle(){
