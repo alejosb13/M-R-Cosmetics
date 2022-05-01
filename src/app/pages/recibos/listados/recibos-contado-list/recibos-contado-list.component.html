@@ -49,7 +49,7 @@
           <tr *ngFor="let Recibo of _TablasService.datosTablaStorage">
             <th scope="row">#{{ Recibo.numero }}</th>
             <td> <a [routerLink]="[ '/factura','detalle',Recibo.factura_id ]">Detalle</a> </td>
-            <td>#{{ Recibo.factura.monto | currency:"USD"}}</td>
+            <td>{{ Recibo.factura.monto | currency:"USD"}}</td>
             <td>{{ Recibo.recibo.user.name }} {{ Recibo.recibo.user.apellido }}</td>
             <td>
               {{ Recibo.created_at | date: 'dd/MM/yyyy' }}
