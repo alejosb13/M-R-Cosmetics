@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'app/auth/login/service/auth.service';
 import { ReciboHistorialContado } from 'app/shared/models/ReciboHistorial.model';
 import { ReciboService } from 'app/shared/services/recibo.service';
 import { TablasService } from 'app/shared/services/tablas.service';
@@ -17,13 +18,16 @@ export class RecibosContadoListComponent implements OnInit {
   collectionSize = 0;
   Recibos: ReciboHistorialContado[];
   isLoad:boolean
+  isAdmin:boolean
 
   constructor(
     private _ReciboService:ReciboService,
     private _TablasService:TablasService,
+    private _AuthService:AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
   }
 

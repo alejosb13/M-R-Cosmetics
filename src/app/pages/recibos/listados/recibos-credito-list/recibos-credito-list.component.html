@@ -43,7 +43,7 @@
             <th scope="col">Monto Abono</th>
             <th scope="col">Usuario</th>
             <th scope="col">Fecha</th>
-            <th scope="col">Eliminar</th>
+            <th *ngIf="isAdmin" scope="col">Eliminar</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -56,7 +56,7 @@
             <td>
               {{ Recibo.created_at | date: 'dd/MM/yyyy' }}
             </td>
-            <td>
+            <td *ngIf="isAdmin" >
               <div (click)="eliminar(Recibo)" role="button"><i class="text-danger far fa-trash-alt"></i></div>
             </td>
           </tr>

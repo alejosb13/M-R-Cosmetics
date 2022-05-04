@@ -27,7 +27,9 @@
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/assets/scss/paper-dashboard.scss",
               "node_modules/ngx-toastr/toastr.css",
-              "src/assets/css/floating-labels.css"
+              "src/assets/css/floating-labels.css",
+              "src/styles.css"
+
             ],
             "scripts": []
           },
