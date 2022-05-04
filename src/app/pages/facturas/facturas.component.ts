@@ -53,7 +53,7 @@ export class FacturasComponent implements OnInit, OnDestroy {
     this.isLoad = true
 
     let Subscription = this._FacturasService.getFacturas({estado:1,status_pagado:this.status_pagado}).subscribe((factura:Factura[])=> {
-      console.log(factura);
+      // console.log(factura);
 
       this.Facturas = [...factura]
       this._TablasService.datosTablaStorage = [...factura]
@@ -74,7 +74,12 @@ export class FacturasComponent implements OnInit, OnDestroy {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Facturas)
+    let camposPorFiltrar:any[] = [
+      ['cliente','nombreCompleto'],
+      ['id',],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Facturas,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

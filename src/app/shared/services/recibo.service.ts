@@ -116,4 +116,22 @@ export class ReciboService {
     );
   }
 
+  deleteReciboHistorialContado(id:number): Observable<any> {
+    let URL = `${ReciboURL}/historial/contado/${id}`
+
+    return this.http.delete<any>(
+      URL,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  deleteReciboHistorialCredito(id:number): Observable<any> {
+    let URL = `${ReciboURL}/historial/credito/${id}`
+
+    return this.http.delete<any>(
+      URL,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
 }

@@ -58,8 +58,11 @@ export class FacturaDespachadaComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Facturas)
-
+    let camposPorFiltrar:any[] = [
+      ['cliente','nombreCompleto'],
+      ['id',],
+    ];
+    this._TablasService.buscarEnCampos(this.Facturas,camposPorFiltrar)
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }

@@ -39,21 +39,26 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">ID Abono</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Monto Abono</th>
             <th scope="col">Usuario</th>
             <th scope="col">Fecha</th>
+            <th scope="col">Eliminar</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
           <tr *ngFor="let Recibo of _TablasService.datosTablaStorage">
             <th scope="row">#{{ Recibo.numero }}</th>
             <td>#{{ Recibo.factura_historial_id }}</td>
+            <td>{{ Recibo.factura_historial.cliente.nombreCompleto }}</td>
             <td>{{ Recibo.factura_historial.precio | currency:"USD"}}</td>
             <td>{{ Recibo.recibo.user.name }} {{ Recibo.recibo.user.apellido }}</td>
             <td>
               {{ Recibo.created_at | date: 'dd/MM/yyyy' }}
             </td>
-
+            <td>
+              <div (click)="eliminar(Recibo)" role="button"><i class="text-danger far fa-trash-alt"></i></div>
+            </td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
