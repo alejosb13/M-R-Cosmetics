@@ -1,31 +1,34 @@
-<!-- <div class="row">
+<div class="row">
+  <!-- <div class="col-md-12">
+    <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+  </div> -->
   <div class="col-lg-3 col-md-6 col-sm-6">
-    <div class="card card-stats">
+    <div class="card card-stats" [routerLink]="[ '/logistica','cartera']" role="button">
       <div class="card-body ">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-globe text-warning"></i>
+              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
+              <i class="fas fa-receipt"></i>
             </div>
           </div>
-          <div class="col-7 col-md-8">
+          <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
-              <p class="card-category">Capacity</p>
-              <p class="card-title">150GB
-                <p>
+              <!-- <p class="card-category">Cartera</p> -->
+              <p class="card-title">Cartera<p>
             </div>
           </div>
         </div>
       </div>
-      <div class="card-footer ">
+      <!-- <div class="card-footer ">
         <hr>
         <div class="stats">
           <i class="fa fa-refresh"></i> Update Now
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
-  <div class="col-lg-3 col-md-6 col-sm-6">
+  <!-- <div class="col-lg-3 col-md-6 col-sm-6">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row">
@@ -50,8 +53,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-6">
+  </div> -->
+  <!-- <div class="col-lg-3 col-md-6 col-sm-6">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row">
@@ -76,8 +79,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-6">
+  </div> -->
+  <!-- <div class="col-lg-3 col-md-6 col-sm-6">
     <div class="card card-stats">
       <div class="card-body ">
         <div class="row">
@@ -123,7 +126,7 @@
     </div>
   </div>
 </div> -->
-<!-- <div class="row"> 
+<!-- <div class="row">
   <div class="col-md-4">
     <div class="card ">
       <div class="card-header ">
@@ -169,3 +172,48 @@
     </div>
   </div>
 </div> -->
+
+
+<ng-template #contentEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">
+        Filtros
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <p class=" font-weight-bold">Desde</p>
+          <input type="date"  class="form-control" [(ngModel)]="dateIni" >
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group" >
+          <p class=" font-weight-bold">Hasta</p>
+          <input type="date"  class="form-control" [(ngModel)]="dateFin" >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger " (click)="limpiarFiltros()">Limpiar <i class="fas fa-eraser"></i></button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar <i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+</ng-template>

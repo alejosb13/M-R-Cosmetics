@@ -1,0 +1,3 @@
+::ng-deep .wrapper .main-panel[data-active-color="danger"] dashboard-cmp .fas{
+  color: #ef8157 !important;
+}

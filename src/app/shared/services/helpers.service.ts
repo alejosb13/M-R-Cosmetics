@@ -91,4 +91,33 @@ export class HelpersService {
     return id
   }
 
+  siUnaFechaEsIgualOAnterior(inicio:string,fin:string):boolean{
+    return moment(inicio).isAfter(fin);
+  }
+
+  InicioYFinDeMes(fecha:string):{ date: string; primerDiaDelMes: number; ultimoDiaDelMes: number; }{
+    let date:string;
+
+    if(fecha){
+      date = fecha
+    }else{
+      date = this.changeformatDate(this.currentDay(),'MM/DD/YYYY',"YYYY-MM-DD")
+    }
+
+    // console.log("currentDate",this.currentDay());
+
+    // moment("1995-12-25") <- año-mes-dia
+    let diasDelMes:number[] = Array.from(Array(moment(date).daysInMonth()), (_, i) => i + 1)
+    // console.log("diasDelMes",diasDelMes);
+
+    let primerDiaDelMes = 1
+    let ultimoDiaDelMes = diasDelMes.length
+
+    return{
+      date,
+      primerDiaDelMes,
+      ultimoDiaDelMes
+    }
+  }
+
 }

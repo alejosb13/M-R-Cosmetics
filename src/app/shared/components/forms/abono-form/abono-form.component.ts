@@ -43,8 +43,8 @@ export class AbonoFormComponent implements OnInit {
 
   ClientesNames:string[] = []
 
-  userId:number
   clienteId:number
+  userId:number
   recibo:Recibo
   // numeroRecibo:number = 0
 

@@ -68,6 +68,7 @@ import { DevolucionFacturaFormComponent } from 'app/shared/components/forms/devo
 import { RecibosContadoListComponent } from 'app/pages/recibos/listados/recibos-contado-list/recibos-contado-list.component';
 import { RecibosCreditoListComponent } from 'app/pages/recibos/listados/recibos-credito-list/recibos-credito-list.component';
 import { ReciboSeleccionarSeccionComponent } from 'app/pages/recibos/recibo-seleccionar-seccion/recibo-seleccionar-seccion.component';
+import { CarteraComponent } from 'app/pages/logistica/cartera/cartera.component';
 
 
 @NgModule({
@@ -142,6 +143,8 @@ import { ReciboSeleccionarSeccionComponent } from 'app/pages/recibos/recibo-sele
 
     DevolucionFacturaListComponent,
     DevolucionFacturaFormComponent,
+
+    CarteraComponent,
   ]
 })
 
