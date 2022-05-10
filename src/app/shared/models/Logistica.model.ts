@@ -9,4 +9,6 @@ export interface CarteraDateBodyForm{
   dateIni: string,
   dateFin: string,
   userId : number
+  tipo_venta : number
+  status_pagado : number
 }

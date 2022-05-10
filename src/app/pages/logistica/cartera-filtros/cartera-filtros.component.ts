@@ -2,11 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
-import { Cliente } from 'app/shared/models/Cliente.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { CarteraDate, CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
-import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
 import { TablasService } from 'app/shared/services/tablas.service';
@@ -15,13 +13,12 @@ import { environment } from 'environments/environment';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
-
 @Component({
-  selector: 'app-cartera',
-  templateUrl: './cartera.component.html',
-  styleUrls: ['./cartera.component.css']
+  selector: 'app-cartera-filtros',
+  templateUrl: './cartera-filtros.component.html',
+  styleUrls: ['./cartera-filtros.component.css']
 })
-export class CarteraComponent implements OnInit {
+export class CarteraFiltrosComponent implements OnInit {
   page = 1;
   pageSize = environment.PageSize;
   collectionSize = 0;
@@ -65,7 +62,7 @@ export class CarteraComponent implements OnInit {
 
     // this.setCurrentDate();
     this.aplicarFiltros();
-    // this.asignarValores()
+    this.asignarValores()
   }
 
 
@@ -159,7 +156,7 @@ export class CarteraComponent implements OnInit {
     this.status_pagado = 0 // por pagar
 
     if(this.isAdmin) this.resetUser();
-
+    this.aplicarFiltros();
     console.log(this.filtros);
   }
 

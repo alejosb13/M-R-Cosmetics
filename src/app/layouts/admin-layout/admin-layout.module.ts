@@ -69,6 +69,7 @@ import { RecibosContadoListComponent } from 'app/pages/recibos/listados/recibos-
 import { RecibosCreditoListComponent } from 'app/pages/recibos/listados/recibos-credito-list/recibos-credito-list.component';
 import { ReciboSeleccionarSeccionComponent } from 'app/pages/recibos/recibo-seleccionar-seccion/recibo-seleccionar-seccion.component';
 import { CarteraComponent } from 'app/pages/logistica/cartera/cartera.component';
+import { CarteraFiltrosComponent } from 'app/pages/logistica/cartera-filtros/cartera-filtros.component';
 
 
 @NgModule({
@@ -145,6 +146,7 @@ import { CarteraComponent } from 'app/pages/logistica/cartera/cartera.component'
     DevolucionFacturaFormComponent,
 
     CarteraComponent,
+    CarteraFiltrosComponent,
   ]
 })
 

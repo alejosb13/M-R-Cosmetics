@@ -49,6 +49,7 @@ import { ReciboSeleccionarSeccionComponent } from "app/pages/recibos/recibo-sele
 import { RecibosContadoListComponent } from "app/pages/recibos/listados/recibos-contado-list/recibos-contado-list.component";
 import { RecibosCreditoListComponent } from "app/pages/recibos/listados/recibos-credito-list/recibos-credito-list.component";
 import { CarteraComponent } from "app/pages/logistica/cartera/cartera.component";
+import { CarteraFiltrosComponent } from "app/pages/logistica/cartera-filtros/cartera-filtros.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -79,6 +80,7 @@ export const AdminLayoutRoutes: Routes = [
     children: [
       // { path: "", component: ClientesComponent },
       { path: "cartera", component: CarteraComponent },
+      { path: "cartera-filtros", component: CarteraFiltrosComponent },
     ],
   },
 
