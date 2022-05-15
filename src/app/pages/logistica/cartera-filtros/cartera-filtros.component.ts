@@ -32,6 +32,8 @@ export class CarteraFiltrosComponent implements OnInit {
   dateFin: string;
   tipoVenta = 1 //credito
   status_pagado = 0 // por pagar
+  allDates:boolean = false
+
   // user:number
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
@@ -74,6 +76,7 @@ export class CarteraFiltrosComponent implements OnInit {
       userId: this.filtros.userId,
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
+      allDates: this.filtros.allDates,
     };
 
     this._LogisticaService.getCarteraForDate(bodyForm).subscribe((data:CarteraDate)=> {
@@ -157,7 +160,7 @@ export class CarteraFiltrosComponent implements OnInit {
 
     if(this.isAdmin) this.resetUser();
     this.aplicarFiltros();
-    console.log(this.filtros);
+    // console.log(this.filtros);
   }
 
   aplicarFiltros() {
@@ -171,6 +174,7 @@ export class CarteraFiltrosComponent implements OnInit {
       userId : this.userId,
       tipo_venta : this.tipoVenta,
       status_pagado : this.status_pagado,
+      allDates: this.filtros.allDates,
     };
 
     this.asignarValores()

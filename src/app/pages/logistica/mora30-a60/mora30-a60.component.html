@@ -3,7 +3,7 @@
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
-        Cargando Facturas
+        Cargando Facturas en mora
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
 
@@ -21,7 +21,7 @@
           <div class="d-flex flex-row justify-content-between mt-3">
             <div class="card-title align-items-start flex-column">
               <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
-              <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de facturas: {{ _TablasService.total }}</span>
+              <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de facturas en mora: {{ _TablasService.total }}</span>
             </div>
 
             <form class="d-flex align-items-center col-4 buscador pr-0">
@@ -35,8 +35,8 @@
 
 
       <div class="col-md-12 d-flex justify-content-between flex-wrap">
-        <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span>
-        <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+        <!-- <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span> -->
+        <!-- <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button> -->
       </div>
 
 
@@ -46,19 +46,17 @@
       <table class="table table-striped " >
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre Cliente</th>
-            <th scope="col">Nombre Empresa</th>
-            <th scope="col">Monto Factura</th>
-            <th scope="col" *ngIf="filtros.tipo_venta == 1" >Saldo</th>
-            <!-- <th scope="col">Tipo de Cambio</th> -->
-            <!-- <th scope="col">IVA</th> -->
-            <th scope="col">Operación</th>
-            <th scope="col">Vendedor</th>
-            <!-- <th scope="col">Estado</th> -->
-            <th scope="col">Ver</th>
-            <th scope="col">Fecha de Vencimiento</th>
-          </tr>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre Cliente</th>
+              <th scope="col">Nombre Empresa</th>
+              <th scope="col">Monto Factura</th>
+              <th scope="col">Saldo</th>
+              <th scope="col">Vendedor</th>
+              <th scope="col">Ver</th>
+              <th scope="col">Fecha de Vencimiento</th>
+              <th scope="col">Días Vencidos</th>
+            </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
           <tr *ngFor="let factura of _TablasService.datosTablaStorage">
@@ -70,27 +68,20 @@
               {{ factura.cliente.nombreEmpresa }}
             </td>
             <td>{{ factura.monto  | currency: 'USD' }}</td>
-            <td *ngIf="filtros.tipo_venta == 1">{{ factura.saldo_restante  | currency: 'USD' }}</td>
-            <!-- <td>{{ factura.tcambio }}</td> -->
-            <!-- <td>{{ factura.iva }}%</td> -->
-            <td>
-              <span *ngIf="factura.tipo_venta == 2">Contado</span>
-              <span *ngIf="factura.tipo_venta == 1">Credito</span>
-            </td>
+            <td>{{ (factura.tipo_venta == 2)?'-':factura.saldo_restante  | currency: 'USD' }}</td>
             <td>
               {{ factura.user.name }} {{ factura.user.apellido }}
             </td>
             <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
             <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
+            <td>{{ factura.diferenciaDias > 1? factura.diferenciaDias+' días': factura.diferenciaDias+' día'  }} </td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
           <tr >
             <td colspan="9">
               <div class="container d-flex align-items-center justify-content-center">
-                <!-- <div class="alert alert-info w-100 text-center" > -->
-                  <h5>No existen Facturas</h5>
-                <!-- </div> -->
+                  <h5>No existen Facturas en mora</h5>
               </div>
             </td>
           </tr>
@@ -162,7 +153,7 @@
             #instance="ngbTypeahead"
           />
         </div>
-      </div>
+        </div>
 
       <!-- <div class="col-md-6">
         <div class="form-group" >

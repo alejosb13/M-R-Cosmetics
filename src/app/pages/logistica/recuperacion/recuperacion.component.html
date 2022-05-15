@@ -3,7 +3,7 @@
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
-        Cargando Facturas
+        Cargando recibos
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
 
@@ -21,7 +21,7 @@
           <div class="d-flex flex-row justify-content-between mt-3">
             <div class="card-title align-items-start flex-column">
               <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
-              <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de facturas: {{ _TablasService.total }}</span>
+              <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de recibos: {{ _TablasService.total }}</span>
             </div>
 
             <form class="d-flex align-items-center col-4 buscador pr-0">
@@ -35,8 +35,12 @@
 
 
       <div class="col-md-12 d-flex justify-content-between flex-wrap">
-        <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span>
-        <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+        <p>
+          <span class="font-weight-bold d-block">Monto total recibos: {{ total | currency:"USD"}}</span>
+          <span class="font-weight-bold d-block">Monto total recibos abonos: {{ totalContado | currency:"USD"}}</span>
+          <span class="font-weight-bold d-block">Monto total recibos facturas: {{ totalCredito | currency:"USD"}}</span>
+        </p>
+        <button class="btn btn-primary align-self-center" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
       </div>
 
 
@@ -46,42 +50,33 @@
       <table class="table table-striped " >
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <!-- <th scope="col">#</th> -->
+            <th scope="col">Número Recibo</th>
             <th scope="col">Nombre Cliente</th>
-            <th scope="col">Nombre Empresa</th>
-            <th scope="col">Monto Factura</th>
-            <th scope="col" *ngIf="filtros.tipo_venta == 1" >Saldo</th>
-            <!-- <th scope="col">Tipo de Cambio</th> -->
-            <!-- <th scope="col">IVA</th> -->
             <th scope="col">Operación</th>
-            <th scope="col">Vendedor</th>
-            <!-- <th scope="col">Estado</th> -->
-            <th scope="col">Ver</th>
-            <th scope="col">Fecha de Vencimiento</th>
+            <th scope="col">monto</th>
+            <th scope="col">Fecha</th>
+
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
-          <tr *ngFor="let factura of _TablasService.datosTablaStorage">
-            <th scope="row">{{ factura.id }}</th>
+          <tr *ngFor="let Recibo of _TablasService.datosTablaStorage">
+            <!-- <th scope="row">{{ Recibo.id }}</th> -->
+            <th>
+              #{{ Recibo.numero }}
+            </th>
             <td>
-              {{ factura.cliente.nombreCompleto }}
+              {{  Recibo.factura_historial_id? Recibo.factura_historial.cliente.nombreCompleto:Recibo.factura.cliente.nombreCompleto }}
             </td>
             <td>
-              {{ factura.cliente.nombreEmpresa }}
-            </td>
-            <td>{{ factura.monto  | currency: 'USD' }}</td>
-            <td *ngIf="filtros.tipo_venta == 1">{{ factura.saldo_restante  | currency: 'USD' }}</td>
-            <!-- <td>{{ factura.tcambio }}</td> -->
-            <!-- <td>{{ factura.iva }}%</td> -->
-            <td>
-              <span *ngIf="factura.tipo_venta == 2">Contado</span>
-              <span *ngIf="factura.tipo_venta == 1">Credito</span>
+              {{ Recibo.factura_historial_id? "ABONO": "FACTURA" }}
             </td>
             <td>
-              {{ factura.user.name }} {{ factura.user.apellido }}
+              <!-- {{ Recibo.factura_historial_id? Recibo.factura_historial.precio: Recibo.factura.monto }} -->
+              <span *ngIf="Recibo.factura_historial_id"> {{  Recibo.factura_historial.precio | currency:"USD"}}</span>
+              <span *ngIf="!Recibo.factura_historial_id"> {{  Recibo.factura.monto | currency:"USD"}}</span>
             </td>
-            <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
-            <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
+            <td>{{ Recibo.created_at |date:"dd-MM-yyyy" }}</td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
@@ -89,7 +84,7 @@
             <td colspan="9">
               <div class="container d-flex align-items-center justify-content-center">
                 <!-- <div class="alert alert-info w-100 text-center" > -->
-                  <h5>No existen Facturas</h5>
+                  <h5>No existen Recibos</h5>
                 <!-- </div> -->
               </div>
             </td>
@@ -163,25 +158,6 @@
           />
         </div>
       </div>
-
-      <!-- <div class="col-md-6">
-        <div class="form-group" >
-          <p class=" font-weight-bold">Operación</p>
-          <select [(ngModel)]="tipoVenta" class="form-control">
-            <option value="1">Credito</option>
-            <option value="2">Contado</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group" >
-          <p class=" font-weight-bold">Estados</p>
-          <select [(ngModel)]="status_pagado" class="form-control">
-            <option value="1">Pagadas</option>
-            <option value="0">Sin pagar</option>
-          </select>
-        </div>
-      </div> -->
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">

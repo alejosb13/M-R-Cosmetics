@@ -50,17 +50,36 @@ export class TablasService {
   filtrarBusquedaEnCampos(valoresFila:any,busqueda:string,campos:string[]):boolean {
     let busquedaMinuscula = busqueda.toLowerCase()
     let tieneCoincidencia = false
-    // console.log("[valoresFila]",valoresFila);
-    // console.log("[campos]",campos);
+    console.log("[valoresFila]",valoresFila);
+    console.log("[campos]",campos);
 
     let valuesSelect:any[] = campos.map((campo:string)=>{
       let valor = ""
 
-      if(campo.length == 1) valor = valoresFila[campo[0]]
-      if(campo.length == 2) valor = valoresFila[campo[0]][campo[1]]
-      if(campo.length == 3) valor = valoresFila[campo[0]][campo[1]][campo[2]]
-      if(campo.length == 4) valor = valoresFila[campo[0]][campo[1]][campo[2]][campo[3]]
-      if(campo.length == 5) valor = valoresFila[campo[0]][campo[1]][campo[2]][campo[3]][campo[4]]
+      if(campo.length == 1)
+      if(valoresFila[campo[0]]){
+        valor = valoresFila[campo[0]]
+      }
+
+      if(campo.length == 2)
+      if(valoresFila[campo[0]][campo[1]]){
+        valor = valoresFila[campo[0]][campo[1]]
+      }
+
+      if(campo.length == 3)
+      if(valoresFila.hasOwnProperty(campo[0])  && valoresFila[campo[0]].hasOwnProperty(campo[1]) && valoresFila[campo[0]][campo[1]].hasOwnProperty(campo[2])){
+        valor = valoresFila[campo[0]][campo[1]][campo[2]]
+      }
+
+      if(campo.length == 4)
+      if(valoresFila[campo[0]][campo[1]][campo[2]][campo[3]]){
+        valor = valoresFila[campo[0]][campo[1]][campo[2]][campo[3]]
+      }
+
+      if(campo.length == 5)
+      if(valoresFila[campo[0]][campo[1]][campo[2]][campo[3]][campo[4]]){
+        valor = valoresFila[campo[0]][campo[1]][campo[2]][campo[3]][campo[4]]
+      }
 
       return String(valor).toLowerCase()
     })

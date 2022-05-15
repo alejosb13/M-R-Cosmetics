@@ -70,6 +70,9 @@ import { RecibosCreditoListComponent } from 'app/pages/recibos/listados/recibos-
 import { ReciboSeleccionarSeccionComponent } from 'app/pages/recibos/recibo-seleccionar-seccion/recibo-seleccionar-seccion.component';
 import { CarteraComponent } from 'app/pages/logistica/cartera/cartera.component';
 import { CarteraFiltrosComponent } from 'app/pages/logistica/cartera-filtros/cartera-filtros.component';
+import { RecuperacionComponent } from 'app/pages/logistica/recuperacion/recuperacion.component';
+import { Mora30A60Component } from 'app/pages/logistica/mora30-a60/mora30-a60.component';
+import { Mora60A90Component } from 'app/pages/logistica/mora60-a90/mora60-a90.component';
 
 
 @NgModule({
@@ -147,6 +150,9 @@ import { CarteraFiltrosComponent } from 'app/pages/logistica/cartera-filtros/car
 
     CarteraComponent,
     CarteraFiltrosComponent,
+    RecuperacionComponent,
+    Mora30A60Component,
+    Mora60A90Component,
   ]
 })
 

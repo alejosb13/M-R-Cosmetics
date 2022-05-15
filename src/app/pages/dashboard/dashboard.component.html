@@ -2,7 +2,7 @@
   <!-- <div class="col-md-12">
     <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
   </div> -->
-  <div class="col-lg-3 col-md-6 col-sm-6">
+  <div class="col-md-6">
     <div class="card card-stats" [routerLink]="[ '/logistica','cartera']" role="button">
       <div class="card-body ">
         <div class="row">
@@ -17,6 +17,87 @@
             <div class="numbers">
               <!-- <p class="card-category">Cartera</p> -->
               <p class="card-title">Cartera<p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card-footer ">
+        <hr>
+        <div class="stats">
+          <i class="fa fa-refresh"></i> Update Now
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="col-md-6" *ngIf="isAdmin">
+    <div class="card card-stats" [routerLink]="[ '/logistica','recuperacion']" role="button">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
+              <!-- <i class="fas fa-receipt"></i> -->
+              <i class="fas fa-file-alt"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8 d-flex align-items-center">
+            <div class="numbers">
+              <!-- <p class="card-category">Cartera</p> -->
+              <p class="card-title">Recuperación<p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card-footer ">
+        <hr>
+        <div class="stats">
+          <i class="fa fa-refresh"></i> Update Now
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="col-md-6" *ngIf="isAdmin">
+    <div class="card card-stats" [routerLink]="[ '/logistica','recuperacion']" role="button">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
+              <!-- <i class="fas fa-receipt"></i> -->
+              <i class="fas fa-user-clock"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8 d-flex align-items-center">
+            <div class="numbers">
+              <!-- <p class="card-category">Cartera</p> -->
+              <p class="card-title">Mora 30-60<p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card-footer ">
+        <hr>
+        <div class="stats">
+          <i class="fa fa-refresh"></i> Update Now
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="col-md-6" *ngIf="isAdmin">
+    <div class="card card-stats" [routerLink]="[ '/logistica','recuperacion']" role="button">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
+              <!-- <i class="fas fa-receipt"></i> -->
+              <i class="fas fa-user-clock"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8 d-flex align-items-center">
+            <div class="numbers">
+              <!-- <p class="card-category">Cartera</p> -->
+              <p class="card-title">Mora 60-90<p>
             </div>
           </div>
         </div>

@@ -2,11 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
-import { Cliente } from 'app/shared/models/Cliente.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { CarteraDate, CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
-import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
 import { TablasService } from 'app/shared/services/tablas.service';
@@ -15,27 +13,29 @@ import { environment } from 'environments/environment';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
-
 @Component({
-  selector: 'app-cartera',
-  templateUrl: './cartera.component.html',
-  styleUrls: ['./cartera.component.css']
+  selector: 'app-recuperacion',
+  templateUrl: './recuperacion.component.html',
+  styleUrls: ['./recuperacion.component.css']
 })
-export class CarteraComponent implements OnInit {
+export class RecuperacionComponent implements OnInit {
   page = 1;
   pageSize = environment.PageSize;
   collectionSize = 0;
   isLoad:boolean
   isAdmin:boolean
 
-  Data: Factura[];
+  Data: any[];
   total = 0;
+  totalContado = 0;
+  totalCredito = 0;
   filtros: any = {};
   dateIni: string;
   dateFin: string;
   tipoVenta = 1 //credito
   status_pagado = 0 // por pagar
   allDates:boolean = false
+
   // user:number
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
@@ -66,7 +66,7 @@ export class CarteraComponent implements OnInit {
 
     // this.setCurrentDate();
     this.aplicarFiltros();
-    // this.asignarValores()
+    this.asignarValores()
   }
 
 
@@ -81,13 +81,21 @@ export class CarteraComponent implements OnInit {
       allDates: this.filtros.allDates,
     };
 
-    this._LogisticaService.getCarteraForDate(bodyForm).subscribe((data:CarteraDate)=> {
+    this._LogisticaService.getRecuperacionForDate(bodyForm).subscribe((data:any)=> {
       // console.log(recibos);
-      this.Data = [...data.factura]
-      this._TablasService.datosTablaStorage = [...data.factura]
-      this._TablasService.total = data.factura.length
+      let dataResponse = []
+      if(data.recibo.hasOwnProperty('recibo_historial') && data.recibo.hasOwnProperty('recibo_historial_contado')){
+        dataResponse = [...data.recibo.recibo_historial, ...data.recibo.recibo_historial_contado]
+      }
+      console.log(dataResponse);
+
+      this.Data = dataResponse
+      this._TablasService.datosTablaStorage = dataResponse
+      this._TablasService.total = dataResponse.length
       this._TablasService.busqueda = ""
 
+      this.totalContado = data.total_contado
+      this.totalCredito = data.total_credito
       this.total = data.total
 
       this.refreshCountries()
@@ -103,7 +111,13 @@ export class CarteraComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Data)
+    let camposPorFiltrar:any[] = [
+      ['numero',],
+      ['factura_historial','cliente','nombreCompleto'],
+      ['factura','cliente','nombreCompleto'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Data,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
@@ -161,13 +175,11 @@ export class CarteraComponent implements OnInit {
     this.status_pagado = 0 // por pagar
 
     if(this.isAdmin) this.resetUser();
-
-    console.log(this.filtros);
+    this.aplicarFiltros();
+    // console.log(this.filtros);
   }
 
   aplicarFiltros() {
-    console.log(this.allDates);
-
     if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
 
     if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
@@ -176,8 +188,6 @@ export class CarteraComponent implements OnInit {
       dateIni: this.dateIni,
       dateFin: this.dateFin,
       userId : this.userId,
-      tipo_venta : this.tipoVenta,
-      status_pagado : this.status_pagado,
       allDates: this.allDates,
     };
 

@@ -11,4 +11,5 @@ export interface CarteraDateBodyForm{
   userId : number
   tipo_venta : number
   status_pagado : number
+  allDates : boolean
 }

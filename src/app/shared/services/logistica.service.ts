@@ -36,5 +36,32 @@ export class LogisticaService {
     );
   }
 
+  getRecuperacionForDate(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/recibo-date`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getMora30A60(bodyform:CarteraDateBodyForm): Observable<CarteraDate> {
+
+    return this.http.post<any>(
+      `${Logistica}/mora-30-60`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getMora60A90(bodyform:CarteraDateBodyForm): Observable<CarteraDate> {
+
+    return this.http.post<any>(
+      `${Logistica}/mora-60-90`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
 
 }

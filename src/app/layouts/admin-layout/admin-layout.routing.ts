@@ -50,6 +50,9 @@ import { RecibosContadoListComponent } from "app/pages/recibos/listados/recibos-
 import { RecibosCreditoListComponent } from "app/pages/recibos/listados/recibos-credito-list/recibos-credito-list.component";
 import { CarteraComponent } from "app/pages/logistica/cartera/cartera.component";
 import { CarteraFiltrosComponent } from "app/pages/logistica/cartera-filtros/cartera-filtros.component";
+import { RecuperacionComponent } from "app/pages/logistica/recuperacion/recuperacion.component";
+import { Mora30A60Component } from "app/pages/logistica/mora30-a60/mora30-a60.component";
+import { Mora60A90Component } from "app/pages/logistica/mora60-a90/mora60-a90.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -80,7 +83,10 @@ export const AdminLayoutRoutes: Routes = [
     children: [
       // { path: "", component: ClientesComponent },
       { path: "cartera", component: CarteraComponent },
+      { path: "recuperacion", component: RecuperacionComponent },
       { path: "cartera-filtros", component: CarteraFiltrosComponent },
+      { path: "mora30-60", component: Mora30A60Component },
+      { path: "mora60-90", component: Mora60A90Component },
     ],
   },
 

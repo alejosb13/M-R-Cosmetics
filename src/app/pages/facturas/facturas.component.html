@@ -41,7 +41,8 @@
               <th scope="col">#</th>
               <th scope="col">Nombre Cliente</th>
               <th scope="col">Nombre Empresa</th>
-              <th scope="col">Monto</th>
+              <th scope="col">Monto Factura</th>
+              <th scope="col">Saldo</th>
               <!-- <th scope="col">Tipo de Cambio</th> -->
               <!-- <th scope="col">IVA</th> -->
               <th scope="col">Operación</th>
@@ -63,6 +64,7 @@
                   {{ factura.cliente.nombreEmpresa }}
                 </td>
                 <td>{{ factura.monto  | currency: 'USD' }}</td>
+                <td>{{ (factura.tipo_venta == 2)?'-':factura.saldo_restante  | currency: 'USD' }}</td>
                 <!-- <td>{{ factura.tcambio }}</td> -->
                 <!-- <td>{{ factura.iva }}%</td> -->
                 <td>
