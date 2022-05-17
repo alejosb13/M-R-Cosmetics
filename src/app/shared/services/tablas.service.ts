@@ -50,8 +50,8 @@ export class TablasService {
   filtrarBusquedaEnCampos(valoresFila:any,busqueda:string,campos:string[]):boolean {
     let busquedaMinuscula = busqueda.toLowerCase()
     let tieneCoincidencia = false
-    console.log("[valoresFila]",valoresFila);
-    console.log("[campos]",campos);
+    // console.log("[valoresFila]",valoresFila);
+    // console.log("[campos]",campos);
 
     let valuesSelect:any[] = campos.map((campo:string)=>{
       let valor = ""

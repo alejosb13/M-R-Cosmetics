@@ -55,7 +55,16 @@ export class RecibosCreditoListComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Recibos)
+    let camposPorFiltrar:any[] = [
+      ['numero'],
+      ['factura_historial_id'],
+      ['factura_historial','precio'],
+      ['factura_historial','cliente','nombreCompleto'],
+      ['recibo','user','name'],
+      ['recibo','user','apellido'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Recibos,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

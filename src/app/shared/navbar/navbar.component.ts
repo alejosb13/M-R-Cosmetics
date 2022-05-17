@@ -64,6 +64,11 @@ export class NavbarComponent implements OnInit{
       if(titlee.includes("devolucion/listado/producto") ) return "Devoluciones de productos";
       if(titlee.includes("devolucion/listado/factura") )  return "Devoluciones de facturas";
 
+      if(titlee.includes("logistica/cartera") )  return "Cartera";
+      if(titlee.includes("logistica/recuperacion") )  return "Recuperación";
+      if(titlee.includes("logistica/mora30-60") )  return "Mora 30-60";
+      if(titlee.includes("logistica/mora60-90") )  return "Mora 60-90";
+
       for(var item = 0; item < this.listTitles.length; item++){
         if( titlee.includes(this.listTitles[item].path)) return this.listTitles[item].title;
       }

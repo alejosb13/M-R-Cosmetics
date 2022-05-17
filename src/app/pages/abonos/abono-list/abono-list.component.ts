@@ -57,7 +57,16 @@ export class AbonoListComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Abonos)
+    let camposPorFiltrar:any[] = [
+      ['cliente','nombreCompleto'],
+      ['usuario','name'],
+      ['recibo_historial','numero'],
+      ['recibo_historial','id'],
+
+    ];
+
+    this._TablasService.buscarEnCampos(this.Abonos,camposPorFiltrar)
+
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

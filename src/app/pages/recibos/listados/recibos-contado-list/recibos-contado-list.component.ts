@@ -55,7 +55,15 @@ export class RecibosContadoListComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Recibos)
+    let camposPorFiltrar:any[] = [
+      ['numero'],
+      ['factura','monto'],
+      ['factura','cliente','nombreCompleto'],
+      ['recibo','user','name'],
+      ['recibo','user','apellido'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Recibos,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
