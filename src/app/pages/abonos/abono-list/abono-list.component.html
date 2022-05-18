@@ -40,6 +40,8 @@
               <th scope="col">#</th>
               <th scope="col">Recibo</th>
               <th scope="col">Monto</th>
+              <th scope="col">Metodo Pago</th>
+              <th scope="col">Detalle Pago</th>
               <th scope="col">Fecha</th>
               <th scope="col">Cliente</th>
               <th scope="col">Usuario</th>
@@ -59,9 +61,11 @@
               <td>
                 {{ abono.precio | currency:"USD"}}
               </td>
+              <td > {{ abono.metodo_pago? abono.metodo_pago.tipoPago : '--' }}</td>
+              <td > {{ abono.metodo_pago? abono.metodo_pago.detalle : '--' }}</td>
               <td >{{ abono.created_at | date:"dd-MM-yyyy" }}</td>
-              <td ><a [routerLink]="[ '/cliente','editar',abono.cliente_id]" ngbTooltip="{{ abono.cliente.nombreCompleto | uppercase }}"><i class="nc-icon nc-single-02"></i> #{{abono.cliente.id}}</a></td>
-              <td ><a [routerLink]="[ '/usuario','editar',abono.cliente_id]" ngbTooltip="{{ abono.usuario.name | uppercase }} {{ abono.usuario.apellido | uppercase }}"><i class="fa-user-tie fas"></i> #{{abono.user_id}}</a></td>
+              <td ><a class="text-dark" [routerLink]="[ '/cliente','editar',abono.cliente_id]" >{{ abono.cliente.nombreCompleto }}</a></td>
+              <td ><a class="text-dark" [routerLink]="[ '/usuario','editar',abono.cliente_id]" >{{ abono.usuario.name }} {{ abono.usuario.apellido }}"</a></td>
               <!-- <td>
                 <div class="d-flex flex-direction">
                   <div class="mr-3" ngbTooltip="Eliminar">

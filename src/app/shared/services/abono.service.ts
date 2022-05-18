@@ -16,56 +16,56 @@ export class AbonoService {
     private http: HttpClient
   ) {}
 
-  
+
   headerJson_Token():HttpHeaders{
-    // const DataUSerStorage = this.authService.getAuthFromLocalStorage() 
-    
+    // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
+
     let config = {
       ContentType: 'application/json',
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
-    
+
     return new HttpHeaders(config);
   }
-  
+
   // public methods
-  getAbono(): Observable<Abono[]> { 
+  getAbono(): Observable<Abono[]> {
 
     return this.http.get<Abono[]>(
-      AbonoURL, 
+      AbonoURL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  getAbonoById(Id:number): Observable<any> { 
+  getAbonoById(Id:number): Observable<any> {
     const URL = `${AbonoURL}/${Id}`
-    
+
     return this.http.get(
       URL,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
-  
-  insertAbono(data:Abono): Observable<any> { 
 
-    return this.http.post<Abono>(
-      AbonoURL, 
+  insertAbono(data:any): Observable<any> {
+
+    return this.http.post<any>(
+      AbonoURL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
-  
-  updateAbono(Id:number,data:Abono): Observable<any> { 
+
+  updateAbono(Id:number,data:Abono): Observable<any> {
     const URL = `${AbonoURL}/${Id}`
-    
+
     return this.http.put<Abono>(
-      URL, 
+      URL,
       data,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
 
-  deleteAbono(id:number): Observable<any> { 
+  deleteAbono(id:number): Observable<any> {
     const URL = `${AbonoURL}/${id}`
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}

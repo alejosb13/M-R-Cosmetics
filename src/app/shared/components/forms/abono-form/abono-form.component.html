@@ -75,6 +75,65 @@
           }"></ng-container>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Metodo de pago<span class="text-danger">(*)</span></label>
+          <!-- <input
+              type="number"
+              class="form-control"
+              name="metodo_pago"
+              formControlName="metodo_pago"
+              autocomplete="off"
+              [ngClass]="{
+              'is-invalid': AbonoForm.controls['metodo_pago'].invalid && AbonoForm.controls['metodo_pago'].touched,
+              'is-valid': AbonoForm.controls['metodo_pago'].valid
+              }"
+          > -->
+
+          <select
+            id="my-select"
+            class="form-control"
+            name="metodo_pago"
+            formControlName="metodo_pago"
+            [ngClass]="{
+              'is-invalid': AbonoForm.controls['metodo_pago'].invalid && AbonoForm.controls['metodo_pago'].touched,
+              'is-valid': AbonoForm.controls['metodo_pago'].valid
+            }"
+          >
+            <option selected value="" hidden>Seleccione el metodo de pago</option>
+            <option *ngFor="let TipoMetodo of TiposMetodos" [value]="TipoMetodo.id">{{ TipoMetodo.nombre }}</option>
+          </select>
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El metodo de pago es requerido',
+            control: AbonoForm.controls['metodo_pago']
+          }"></ng-container>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Detalle de pago (Opcional)</label>
+          <input
+              type="text"
+              class="form-control"
+              name="detalle_pago"
+              formControlName="detalle_pago"
+              autocomplete="off"
+              [ngClass]="{
+              'is-invalid': AbonoForm.controls['detalle_pago'].invalid && AbonoForm.controls['detalle_pago'].touched,
+              'is-valid': AbonoForm.controls['detalle_pago'].valid
+              }"
+          >
+
+          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El detalle de pago tiene un limite de 120 caracteres.',
+            control: AbonoForm.controls['detalle_pago']
+          }"></ng-container>
+
+
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-12">

@@ -27,7 +27,7 @@ export class AbonoInsertarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  FormValuesForm(abono:FacturaReciboHistorial){
+  FormValuesForm(abono:any){
     console.log(abono);
 
     this._AbonoService.insertAbono(abono).subscribe(data =>{

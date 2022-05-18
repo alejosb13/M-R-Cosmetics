@@ -6,6 +6,7 @@ import { Abono } from 'app/shared/models/Abono.model';
 import { Cliente } from 'app/shared/models/Cliente.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturaHistorial } from 'app/shared/models/FacturaHistorial.model';
+import { TiposMetodos } from 'app/shared/models/MetodoPago.model';
 import { Recibo } from 'app/shared/models/Recibo.model';
 import { ReciboHistorial } from 'app/shared/models/ReciboHistorial.model';
 import { ClientesService } from 'app/shared/services/clientes.service';
@@ -29,6 +30,7 @@ export class AbonoFormComponent implements OnInit {
   @Output() FormsValues:EventEmitter<any> = new EventEmitter();
   // @Input() resetForm:boolean = false;
   // @Output() resetFormChange:EventEmitter<boolean> = new EventEmitter(false);
+  TiposMetodos = TiposMetodos
 
   loadInfo:boolean = false;
   AbonoForm:FormGroup
@@ -92,6 +94,19 @@ export class AbonoFormComponent implements OnInit {
             Validators.pattern(ValidFunctionsValidator.DecimaValidCerolRegEx),
           ]),
         ],
+        metodo_pago: [
+          '',
+          Validators.compose([
+            Validators.required,
+
+          ]),
+        ],
+        detalle_pago: [
+          '',
+          Validators.compose([
+            Validators.maxLength(120),
+          ]),
+        ],
         recibo: [
           {value:"",disabled:true},
           Validators.compose([
@@ -108,9 +123,15 @@ export class AbonoFormComponent implements OnInit {
       // console.log(resetForm);
 
       if(resetForm){
-        this.AbonoForm.reset();
+        this.AbonoForm.reset({
+          cliente_id: this.formularioControls.cliente_id.value,
+        });
         this.resetearValores()
-        this.getNumeroRecibo()
+
+        setTimeout(()=>{
+          this.getNumeroRecibo()
+          this.getClientesObserbable()
+        },450)
 
         // this._CommunicationService.ReiniciarInsertarAbonoForm.emit(false)
 
@@ -139,27 +160,16 @@ export class AbonoFormComponent implements OnInit {
       if(value?.includes("-") ){
         let clienteId:number = this._HelpersService.obtenerId(value)
         if(clienteId && clienteId != this.clienteId){
-          this._ClientesService.getClienteCalculoAbono(clienteId).subscribe((dataAbono)=>{
-            console.log("cliente: ",dataAbono);
-            this.clienteId  = clienteId
-            // this.abonado    =  dataAbono.totalAbono
-            this.montoTotal = dataAbono.totalFactura
-            this.restante   =  dataAbono.saldo_restante
-            this.diferencia =  this.restante
+          this.clienteId  = clienteId
+          this.getClientesObserbable()
 
-            // if(dataAbono.totalAbono >= dataAbono.totalFactura){
-            //   this.bloqueo = true
-            // }else{
-            //   this.bloqueo = false
-            // }
-          })
         }else{ this.resetearValores()}
       }else{ this.resetearValores()}
     })
 
     this.AbonoForm.valueChanges.subscribe((values)=>{
     // this.AbonoForm.get("cliente_id").valueChanges.subscribe((value)=>{
-      console.log(this.AbonoForm.get("precio"));
+      // console.log(this.AbonoForm.get("precio"));
       if(this.restante >0){
         this.diferencia = this.restante - values.precio
 
@@ -176,8 +186,26 @@ export class AbonoFormComponent implements OnInit {
     })
   }
 
+  getClientesObserbable(){
+    this._ClientesService.getClienteCalculoAbono(this.clienteId)
+    .subscribe((dataAbono)=>{
+      console.log("cliente: ",dataAbono);
+
+      // this.abonado    =  dataAbono.totalAbono
+      this.montoTotal = dataAbono.totalFactura
+      this.restante   =  dataAbono.saldo_restante
+      this.diferencia =  this.restante
+
+      // if(dataAbono.totalAbono >= dataAbono.totalFactura){
+      //   this.bloqueo = true
+      // }else{
+      //   this.bloqueo = false
+      // }
+    })
+  }
+
   generarCalculo(cliente:Cliente){
-    console.log("[cliente]",cliente);
+    // console.log("[cliente]",cliente);
 
     if(cliente.facturas.length > 0){
       let facturas:Factura[] = [...cliente.facturas]
@@ -203,13 +231,13 @@ export class AbonoFormComponent implements OnInit {
         this.bloqueo = false
       }
 
-      console.log({
-        "montoTotal: ":this.montoTotal ,
-        "restante: ":this.restante ,
-        // "abonado: ":this.abonado ,
-        "facturaId: ":this.facturaId ,
-        "bloqueo: ":this.bloqueo ,
-      });
+      // console.log({
+      //   "montoTotal: ":this.montoTotal ,
+      //   "restante: ":this.restante ,
+      //   // "abonado: ":this.abonado ,
+      //   "facturaId: ":this.facturaId ,
+      //   "bloqueo: ":this.bloqueo ,
+      // });
 
     }else{
       this.resetearValores()
@@ -233,7 +261,7 @@ export class AbonoFormComponent implements OnInit {
   EnviarFormulario(){
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
-    // console.log(this.AbonoForm.getRawValue());
+    console.log(this.AbonoForm.getRawValue());
 
     if(this.bloqueo){
       Swal.fire({
@@ -251,7 +279,7 @@ export class AbonoFormComponent implements OnInit {
 
         }else{
           // validar ue tenga recibo
-          let abono:FacturaReciboHistorial  = {} as FacturaReciboHistorial
+          let abono:any  = {} as any
 
           abono.cliente_id  = this.clienteId
           abono.user_id     = this.userId
@@ -260,15 +288,18 @@ export class AbonoFormComponent implements OnInit {
           abono.numero      = Number(this.formularioControls.recibo.value)
           abono.recibo_id   = Number(this.recibo.id)
           abono.rango       = `${this.recibo.min}-${this.recibo.max}`
+          abono.metodo_pago = Number(this.formularioControls.metodo_pago.value)
+          abono.detalle_pago = this.formularioControls.detalle_pago.value
 
+          // console.log(abono);
 
           this.FormsValues.emit(abono)
         }
 
       }else{
-        console.log("[form]",this.AbonoForm);
-        console.log(this.AbonoForm.valid);
-        console.log("[recibo]",this.AbonoForm.get("recibo").value);
+        // console.log("[form]",this.AbonoForm);
+        // console.log(this.AbonoForm.valid);
+        // console.log("[recibo]",this.AbonoForm.get("recibo").value);
 
         Swal.fire({
           text: "Complete todos los campos obligatorios",
@@ -287,7 +318,7 @@ export class AbonoFormComponent implements OnInit {
   getNumeroRecibo(){
     // this._ReciboService.getNumeroRecibo(25).subscribe((data:any) => {
     this._ReciboService.getNumeroRecibo(this.userId).subscribe((data:any) => {
-      console.log("[recibo]: ",data);
+      // console.log("[recibo]: ",data);
       this.AbonoForm.get("recibo").patchValue(data.numero)
 
     },()=>{
