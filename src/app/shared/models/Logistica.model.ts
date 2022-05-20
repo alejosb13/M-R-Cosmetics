@@ -6,10 +6,15 @@ export interface CarteraDate{
 }
 
 export interface CarteraDateBodyForm{
-  dateIni: string,
-  dateFin: string,
+  dateIni: string
+  dateFin: string
   userId : number
   tipo_venta : number
   status_pagado : number
-  allDates : boolean
+  allDates? : boolean
+  allUsers? : boolean
+  allNumber? : boolean
+  numDesde?:number
+  numHasta?:number
+  numRecibo?:number
 }

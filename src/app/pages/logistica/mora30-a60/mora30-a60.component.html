@@ -34,9 +34,9 @@
         </div>
 
 
-      <div class="col-md-12 d-flex justify-content-between flex-wrap">
+      <div class="col-md-12 d-flex justify-content-between flex-wrap" *ngIf="isAdmin">
         <!-- <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span> -->
-        <!-- <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button> -->
+        <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
       </div>
 
 
@@ -116,15 +116,15 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" value="true" [(ngModel)]="allDates">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" value="true" [(ngModel)]="allUsers">
           <label class="form-check-label" for="flexCheckDefault">
-            Todos
+            Todos los usuarios
           </label>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <div class="form-group">
           <p class=" font-weight-bold">Desde</p>
           <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateIni" >
@@ -135,7 +135,7 @@
           <p class=" font-weight-bold">Hasta</p>
           <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateFin" >
         </div>
-      </div>
+      </div> -->
       <div class="col-md-6" *ngIf="isAdmin">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>

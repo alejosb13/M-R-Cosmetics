@@ -1,3 +1,5 @@
+import { Usuario } from "./Usuario.model";
+
 export interface Recibo {
   id?: number;
   min: number;
@@ -7,4 +9,5 @@ export interface Recibo {
   estado: number;
   created_at?: Date;
   updated_at?: Date;
+  user?: Usuario;
 }

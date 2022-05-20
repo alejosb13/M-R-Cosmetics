@@ -37,8 +37,8 @@
       <div class="col-md-12 d-flex justify-content-between flex-wrap">
         <p>
           <span class="font-weight-bold d-block">Monto total recibos: {{ total | currency:"USD"}}</span>
-          <span class="font-weight-bold d-block">Monto total recibos abonos: {{ totalContado | currency:"USD"}}</span>
-          <span class="font-weight-bold d-block">Monto total recibos facturas: {{ totalCredito | currency:"USD"}}</span>
+          <!-- <span class="font-weight-bold d-block">Monto total recibos abonos: {{ totalContado | currency:"USD"}}</span>
+          <span class="font-weight-bold d-block">Monto total recibos facturas: {{ totalCredito | currency:"USD"}}</span> -->
         </p>
         <button class="btn btn-primary align-self-center" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
       </div>
@@ -53,7 +53,9 @@
             <!-- <th scope="col">#</th> -->
             <th scope="col">Número Recibo</th>
             <th scope="col">Nombre Cliente</th>
+            <th scope="col">Vendedor</th>
             <th scope="col">Operación</th>
+            <th scope="col">Metodo de pago</th>
             <th scope="col">monto</th>
             <th scope="col">Fecha</th>
 
@@ -69,7 +71,15 @@
               {{  Recibo.factura_historial_id? Recibo.factura_historial.cliente.nombreCompleto:Recibo.factura.cliente.nombreCompleto }}
             </td>
             <td>
+              {{ userQuery.name }} {{ userQuery.apellido }}
+            </td>
+            <td>
               {{ Recibo.factura_historial_id? "ABONO": "FACTURA" }}
+            </td>
+            <td>
+              <div *ngIf="Recibo.factura_historial_id">
+                {{ Recibo.factura_historial.metodo_pago ?  Recibo.factura_historial.metodo_pago.tipoPago : '--' }}
+              </div>
             </td>
             <td>
               <!-- {{ Recibo.factura_historial_id? Recibo.factura_historial.precio: Recibo.factura.monto }} -->
@@ -140,10 +150,32 @@
           <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateFin" >
         </div>
       </div>
-      <div class="col-md-6" *ngIf="isAdmin">
+
+      <div class="col-md-12" *ngIf="isAdmin">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="allNumber" value="true" [(ngModel)]="allNumber">
+          <label class="form-check-label" for="allNumber">
+            Todos los números
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-12" *ngIf="isAdmin">
+        <div class="form-group">
+          <p class=" font-weight-bold">Número mayor o igual que</p>
+          <input [disabled]="allNumber" type="number"  class="form-control" [(ngModel)]="numRecibo" >
+        </div>
+      </div>
+      <!-- <div class="col-md-6" *ngIf="isAdmin">
+        <div class="form-group" >
+          <p class=" font-weight-bold">Número hasta</p>
+          <input [disabled]="allNumber" type="number"  class="form-control" [(ngModel)]="numHasta" >
+        </div>
+      </div> -->
+      <div class="col-md-12" *ngIf="isAdmin">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>
-          <input
+          <!-- <input
             id="typeahead-focus"
             type="text"
             class="form-control"
@@ -155,7 +187,11 @@
             (focus)="focus$.next($any($event).target.value)"
             (click)="click$.next($any($event).target.value)"
             #instance="ngbTypeahead"
-          />
+          /> -->
+          <select name="" id="" class="form-control" [(ngModel)]="userId">
+            <!-- <option value="0">Todos los usuarios</option> -->
+            <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
+          </select>
         </div>
       </div>
     </div>

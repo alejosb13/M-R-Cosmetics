@@ -31,7 +31,7 @@ export class Mora30A60Component implements OnInit {
   dateFin: string;
   tipoVenta = 1 //credito
   status_pagado = 0 // por pagar
-  allDates:boolean = false
+  allUsers:boolean = false
   // user:number
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
@@ -74,7 +74,7 @@ export class Mora30A60Component implements OnInit {
       userId: this.filtros.userId,
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
-      allDates: this.filtros.allDates,
+      allUsers: this.filtros.allUsers,
     };
 
     this._LogisticaService.getMora30A60(bodyForm).subscribe((data:CarteraDate)=> {
@@ -167,7 +167,7 @@ export class Mora30A60Component implements OnInit {
   }
 
   aplicarFiltros() {
-    console.log(this.allDates);
+    console.log(this.allUsers);
 
     if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
 
@@ -179,7 +179,7 @@ export class Mora30A60Component implements OnInit {
       userId : this.userId,
       tipo_venta : this.tipoVenta,
       status_pagado : this.status_pagado,
-      allDates: this.allDates,
+      allUsers: this.allUsers,
     };
 
     this.asignarValores()

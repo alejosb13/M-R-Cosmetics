@@ -25,6 +25,7 @@ export class RecuperacionComponent implements OnInit {
   isLoad:boolean
   isAdmin:boolean
 
+  userQuery:Usuario
   Data: any[];
   total = 0;
   totalContado = 0;
@@ -35,7 +36,10 @@ export class RecuperacionComponent implements OnInit {
   tipoVenta = 1 //credito
   status_pagado = 0 // por pagar
   allDates:boolean = false
-
+  // numDesde:number
+  // numHasta:number
+  numRecibo:number
+  allNumber:boolean = true
   // user:number
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
@@ -66,7 +70,7 @@ export class RecuperacionComponent implements OnInit {
 
     // this.setCurrentDate();
     this.aplicarFiltros();
-    this.asignarValores()
+    // this.asignarValores()
   }
 
 
@@ -75,10 +79,14 @@ export class RecuperacionComponent implements OnInit {
     let bodyForm: CarteraDateBodyForm = {
       dateIni: this.filtros.dateIni,
       dateFin: this.filtros.dateFin,
-      userId: this.filtros.userId,
+      userId: Number(this.filtros.userId),
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
       allDates: this.filtros.allDates,
+      allNumber: this.filtros.allNumber,
+      // numDesde:this.filtros.numDesde,
+      // numHasta:this.filtros.numHasta
+      numRecibo: Number(this.filtros.numRecibo)
     };
 
     this._LogisticaService.getRecuperacionForDate(bodyForm).subscribe((data:any)=> {
@@ -86,6 +94,7 @@ export class RecuperacionComponent implements OnInit {
       let dataResponse = []
       if(data.recibo.hasOwnProperty('recibo_historial') && data.recibo.hasOwnProperty('recibo_historial_contado')){
         dataResponse = [...data.recibo.recibo_historial, ...data.recibo.recibo_historial_contado]
+        this.userQuery = data.recibo.user
       }
       console.log(dataResponse);
 
@@ -171,8 +180,15 @@ export class RecuperacionComponent implements OnInit {
 
   limpiarFiltros() {
     this.setCurrentDate();
-    this.tipoVenta = 1
-    this.status_pagado = 0 // por pagar
+
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    // this.tipoVenta = 1
+    // this.status_pagado = 0 // por pagar
+    // this.numDesde = 0
+    // this.numHasta = 0
+    this.numRecibo = 0
+    this.allNumber = true
+    this.allDates = false
 
     if(this.isAdmin) this.resetUser();
     this.aplicarFiltros();
@@ -189,6 +205,10 @@ export class RecuperacionComponent implements OnInit {
       dateFin: this.dateFin,
       userId : this.userId,
       allDates: this.allDates,
+      allNumber: this.allNumber,
+      // numDesde: this.numDesde ? this.numDesde : 0,
+      // numHasta: this.numHasta ? this.numHasta : 0,
+      numRecibo: this.numRecibo ? this.numRecibo : 0,
     };
 
     this.asignarValores()

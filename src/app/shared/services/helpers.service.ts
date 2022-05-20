@@ -53,10 +53,10 @@ export class HelpersService {
     while (countDays < days) {
       // Si no es sabado ni domingo
       currentDay.add(1, 'days');
-      if (currentDay.isoWeekday() !== 6 && currentDay.isoWeekday() !== 7) {
+      // if (currentDay.isoWeekday() !== 6 && currentDay.isoWeekday() !== 7) {// Sabado y domingo no se cuentan
         countDays++
         // console.log(countDays,currentDay.format('MM/DD/YYYY'));
-      }
+      // }
     }
 
     return currentDay.format(format)
