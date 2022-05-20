@@ -53,6 +53,8 @@ import { CarteraFiltrosComponent } from "app/pages/logistica/cartera-filtros/car
 import { RecuperacionComponent } from "app/pages/logistica/recuperacion/recuperacion.component";
 import { Mora30A60Component } from "app/pages/logistica/mora30-a60/mora30-a60.component";
 import { Mora60A90Component } from "app/pages/logistica/mora60-a90/mora60-a90.component";
+import { ClientesNuevosComponent } from "app/pages/logistica/clientes-nuevos/clientes-nuevos.component";
+import { IncentivosComponent } from "app/pages/logistica/incentivos/incentivos.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -87,6 +89,8 @@ export const AdminLayoutRoutes: Routes = [
       { path: "cartera-filtros", component: CarteraFiltrosComponent },
       { path: "mora30-60", component: Mora30A60Component },
       { path: "mora60-90", component: Mora60A90Component },
+      { path: "clientes-nuevos", component: ClientesNuevosComponent },
+      { path: "incentivos", component: IncentivosComponent },
     ],
   },
 

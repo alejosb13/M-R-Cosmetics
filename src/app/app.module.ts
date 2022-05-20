@@ -16,7 +16,6 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule } from "@angular/common/http";
 
-
 @NgModule({
   declarations: [
     AppComponent,

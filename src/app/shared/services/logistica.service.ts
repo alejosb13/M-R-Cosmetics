@@ -63,5 +63,23 @@ export class LogisticaService {
     );
   }
 
+  getclienteNew(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/cliente-new`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getIncentivo(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/incentivo`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
 
 }
