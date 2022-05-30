@@ -49,8 +49,17 @@ export class DevolucionFacturaListComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.FacturasDevueltas)
+    // this._TablasService.buscar(this.FacturasDevueltas)
+    // console.log("sii");
 
+    let camposPorFiltrar:any[] = [
+      ['descripcion'],
+      ['user','name'],
+      ['user','apellido'],
+      ['id'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.FacturasDevueltas,camposPorFiltrar)
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }

@@ -68,7 +68,15 @@ export class UsuariosComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Usuarios)
+    let camposPorFiltrar:any[] = [
+      ['name'],
+      ['apellido'],
+      ['cargo'],
+      ['email'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Usuarios,camposPorFiltrar)
+
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

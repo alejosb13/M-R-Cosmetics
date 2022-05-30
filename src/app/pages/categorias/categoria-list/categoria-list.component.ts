@@ -51,7 +51,13 @@ export class CategoriaListComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Categorias)
+    let camposPorFiltrar:any[] = [
+      ['tipo'],
+      ['valor_dias'],
+      ['id'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Categorias,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

@@ -26,7 +26,7 @@ export class ClientesFacturasComponent implements OnInit {
   ) {
     this.ClienteId = Number(route.snapshot.params.id);
   }
-  
+
   ngOnInit(): void {
 
     this.asignarValores()
@@ -35,33 +35,39 @@ export class ClientesFacturasComponent implements OnInit {
 
   asignarValores(){
     this.isLoad = true
-    
+
     this._ClientesService.getClientexFactura(this.ClienteId).subscribe((facturas:Factura[])=> {
       // console.log(facturas);
-          
+
       this.Facturas = [...facturas]
       this._TablasService.datosTablaStorage = [...facturas]
       this._TablasService.total = facturas.length
       this._TablasService.busqueda = ""
-      
-      this.refreshCountries() 
+
+      this.refreshCountries()
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
-    }) 
+    })
   }
-  
+
   refreshCountries() {
     this._TablasService.datosTablaStorage = [...this.Facturas]
     .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
-  
+
   BuscarValor(){
-    this._TablasService.buscar(this.Facturas)
-    
+    let camposPorFiltrar:any[] = [
+      ['cliente','nombreCompleto'],
+      ['cliente','nombreEmpresa'],
+      ['id'],
+    ];
+
+    this._TablasService.buscarEnCampos(this.Facturas,camposPorFiltrar)
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
-    
+
   }
-  
+
 
 }

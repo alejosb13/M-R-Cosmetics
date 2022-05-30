@@ -52,7 +52,13 @@ export class ProductosComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Productos)
+    let camposPorFiltrar:any[] = [
+      ['descripcion'],
+      ['marca'],
+      ['modelo'],
+      ['linea'],
+    ];
+    this._TablasService.buscarEnCampos(this.Productos,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

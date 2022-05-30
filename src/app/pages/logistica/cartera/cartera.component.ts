@@ -103,8 +103,14 @@ export class CarteraComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Data)
-
+    // this._TablasService.buscar(this.Data)
+    let camposPorFiltrar:any[] = [
+      ['cliente','nombreCompleto'],
+      ['cliente','nombreEmpresa'],
+      ['user','name'],
+      ['user','apellido'],
+    ];
+    this._TablasService.buscarEnCampos(this.Data,camposPorFiltrar)
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }

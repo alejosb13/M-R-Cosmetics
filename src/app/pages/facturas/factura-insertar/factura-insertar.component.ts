@@ -134,7 +134,12 @@ export class FacturaInsertarComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Productos)
+    // console.log("si");
+
+    let camposPorFiltrar:any[] = [
+      ['descripcion'],
+    ];
+    this._TablasService.buscarEnCampos(this.Productos,camposPorFiltrar)
 
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 

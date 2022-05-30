@@ -57,8 +57,17 @@ export class ClientesComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.Clientes)
+    // this._TablasService.buscar(this.Clientes)
+    let camposPorFiltrar:any[] = [
+      ['nombreCompleto'],
+      ['nombreEmpresa'],
+      ['dias_cobro'],
+      ['direccion_negocio'],
+      ['direccion_casa'],
+      ['id'],
+    ];
 
+    this._TablasService.buscarEnCampos(this.Clientes,camposPorFiltrar)
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }

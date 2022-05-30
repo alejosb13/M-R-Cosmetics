@@ -50,8 +50,16 @@ export class DevolucionProductoListComponent implements OnInit {
   }
 
   BuscarValor(){
-    this._TablasService.buscar(this.DevolucionProducto)
+    // this._TablasService.buscar(this.DevolucionProducto)
+    let camposPorFiltrar:any[] = [
+      ['descripcion'],
+      ['user','name'],
+      ['user','apellido'],
+      ['factura_detalle','producto','descripcion'],
+      ['id'],
+    ];
 
+    this._TablasService.buscarEnCampos(this.DevolucionProducto,camposPorFiltrar)
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }
