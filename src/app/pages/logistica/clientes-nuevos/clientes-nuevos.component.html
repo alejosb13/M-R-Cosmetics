@@ -167,6 +167,16 @@
           <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateFin" >
         </div>
       </div>
+      <div class="col-md-12" *ngIf="isAdmin">
+        <div class="form-group" >
+          <p class=" font-weight-bold">Usuarios</p>
+          <select name="" id="" class="form-control" [(ngModel)]="userId">
+            <option value="0">Todos los usuarios</option>
+            <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
+          </select>
+        </div>
+      </div>
+
       <!-- <div class="col-md-6" *ngIf="isAdmin">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>

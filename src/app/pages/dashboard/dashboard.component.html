@@ -110,13 +110,16 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" *ngIf="isAdmin">
+  <div class="col-md-6" >
     <div class="card card-stats" [routerLink]="[ '/logistica','clientes-nuevos']" role="button">
       <div class="card-body ">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
-              <i class="fas fa-user"></i>
+              <!-- <i class="fas fa-user"></i> -->
+              <div class="imagen">
+                <img src="assets/img/clientes.png" style="width: 70px;">
+              </div>
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
@@ -135,7 +138,7 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" *ngIf="isAdmin">
+  <div class="col-md-6" >
     <div class="card card-stats" [routerLink]="[ '/logistica','incentivos']" role="button">
       <div class="card-body ">
         <div class="row">

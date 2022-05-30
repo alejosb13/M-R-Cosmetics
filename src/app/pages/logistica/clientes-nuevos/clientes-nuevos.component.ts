@@ -60,7 +60,7 @@ export class ClientesNuevosComponent implements OnInit {
 
 
     if(this.isAdmin){
-      // this.getUsers();
+      this.getUsers();
     }
 
     // this.setCurrentDate();
@@ -74,8 +74,9 @@ export class ClientesNuevosComponent implements OnInit {
     let bodyForm: CarteraDateBodyForm = {
       dateIni: this.filtros.dateIni,
       dateFin: this.filtros.dateFin,
-      // userId: this.filtros.userId,
+      userId: this.filtros.userId,
       allDates: this.filtros.allDates,
+
     };
 
     this._LogisticaService.getclienteNew(bodyForm).subscribe((data:Cliente[])=> {
@@ -160,8 +161,9 @@ export class ClientesNuevosComponent implements OnInit {
 
   limpiarFiltros() {
     this.setCurrentDate();
-    this.tipoVenta = 1
-    this.status_pagado = 0 // por pagar
+    // this.tipoVenta = 1
+    // this.status_pagado = 0 // por pagar
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
 
     if(this.isAdmin) this.resetUser();
 
@@ -178,7 +180,7 @@ export class ClientesNuevosComponent implements OnInit {
     this.filtros = {
       dateIni: this.dateIni,
       dateFin: this.dateFin,
-      // userId : this.userId:0,
+      userId : this.userId?this.userId:0,
       allDates: this.allDates,
     };
 
