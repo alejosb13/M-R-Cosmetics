@@ -148,10 +148,16 @@
               type="submit"
               class="btn btn-primary btn-round"
               (click)="EnviarFormulario()"
-              [disabled]="bloqueo"
+              [disabled]="bloqueo || disableBoton"
             >
               <!-- <div *ngIf="Id">Actualizar</div> -->
-              <div >Agregar</div>
+              <div *ngIf="disableBoton">
+                Agregando
+                <i class="fas fa-spinner fa-pulse"></i>
+              </div>
+              <div *ngIf="!disableBoton">
+                Agregar
+              </div>
             </button>
         </div>
     </div>

@@ -42,6 +42,7 @@ export class AbonoInsertarComponent implements OnInit {
           // this.router.navigate([`abono`]);
         }
       })
+      this._CommunicationService.BottonAgregarAbonoActive.emit(false)
     },(HttpErrorResponse:HttpErrorResponse)=>{
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);

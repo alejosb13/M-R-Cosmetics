@@ -42,6 +42,7 @@ export class AbonoFormComponent implements OnInit {
   abonado:number    = 0
   facturaId:number  = 0
   bloqueo:boolean   = false
+  disableBoton:boolean = false
 
   ClientesNames:string[] = []
 
@@ -67,12 +68,21 @@ export class AbonoFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ValidacionBotonAgregar()
     this.getNumeroRecibo()
     this.definirValidaciones()
     this.getClientes()
     this.getReciboUSer()
     this.changeValues()
     this.changeValueResetForm()
+  }
+
+  ValidacionBotonAgregar(){
+    this._CommunicationService.BottonAgregarAbonoActive.subscribe((active:boolean)=>{
+      console.log("disableBoton",active);
+      this.disableBoton = active
+    })
+    // this._CommunicationService.BottonAgregarAbonoActive.emit(false)
   }
 
   definirValidaciones(){
@@ -294,6 +304,7 @@ export class AbonoFormComponent implements OnInit {
           // console.log(abono);
 
           this.FormsValues.emit(abono)
+          this._CommunicationService.BottonAgregarAbonoActive.emit(true)
         }
 
       }else{
