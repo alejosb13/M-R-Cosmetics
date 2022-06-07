@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { Producto } from '../models/Producto.model';
+import { ProductosService } from '../services/productos.service';
 import { ValidFunctionsValidator } from '../validations/valid-functions.validator';
 
 type ProductoDetalle = Producto & FacturaDetalle
@@ -20,7 +21,7 @@ export class FacturaEditarFormComponent implements OnInit {
   daysOfWeek:string[]
   loadInfo:boolean = false;
   precioTotal:number = 0
-
+  produ:Producto
   // isAdmin:boolean
 
   // @ViewChild('diasCobro') diasCobroInput: ElementRef;
@@ -30,6 +31,7 @@ export class FacturaEditarFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private _ProductosService: ProductosService,
     // private _AuthService: AuthService,
   ) {}
 
@@ -41,14 +43,30 @@ export class FacturaEditarFormComponent implements OnInit {
     // this.isAdmin = this._AuthService.isAdmin()
 
 
+    console.log("[ModalEdirtar]",this.producto);
     this.definirValidaciones()
-    console.log(this.producto);
     this.setFormValues()
+    this.getProducto()
 
     this.calculatePrice()
     this.changeValues()
   }
 
+  getProducto(){
+    this._ProductosService.getProductoById(this.producto.producto_id).subscribe((producto)=> {
+      console.log(producto.stock);
+      console.log(this.producto.cantidad);
+      console.log(producto.stock + this.producto.cantidad);
+
+      // this.produ = producto
+      this.ProductForm.get("stock").setValidators([
+        Validators.required,
+        Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+        Validators.max(producto.stock + this.producto.cantidad),
+        Validators.min(1),
+      ])
+    })
+  }
 
   definirValidaciones(){
     this.ProductForm = this.fb.group(
