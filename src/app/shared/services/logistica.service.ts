@@ -45,6 +45,15 @@ export class LogisticaService {
     );
   }
 
+  getClientesInactivos(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/cliente-inactivo`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   getMora30A60(bodyform:CarteraDateBodyForm): Observable<CarteraDate> {
 
     return this.http.post<any>(

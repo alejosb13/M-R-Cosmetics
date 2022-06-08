@@ -37,11 +37,13 @@ export class ClientesFacturasComponent implements OnInit {
     this.isLoad = true
 
     this._ClientesService.getClientexFactura(this.ClienteId).subscribe((facturas:Factura[])=> {
-      // console.log(facturas);
-
-      this.Facturas = [...facturas]
-      this._TablasService.datosTablaStorage = [...facturas]
-      this._TablasService.total = facturas.length
+      let newfact  = facturas.filter(factura =>{
+        if(factura.status == 1) return factura
+      })
+      console.log(newfact);
+      this.Facturas = [...newfact]
+      this._TablasService.datosTablaStorage = [...newfact]
+      this._TablasService.total = newfact.length
       this._TablasService.busqueda = ""
 
       this.refreshCountries()
