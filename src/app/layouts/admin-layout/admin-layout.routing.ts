@@ -56,6 +56,7 @@ import { Mora60A90Component } from "app/pages/logistica/mora60-a90/mora60-a90.co
 import { ClientesNuevosComponent } from "app/pages/logistica/clientes-nuevos/clientes-nuevos.component";
 import { IncentivosComponent } from "app/pages/logistica/incentivos/incentivos.component";
 import { ClienteInactivosComponent } from "app/pages/logistica/cliente-inactivos/cliente-inactivos.component";
+import { ClienteDetalleComponent } from "app/pages/clientes/cliente-detalle/cliente-detalle.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -76,6 +77,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "agregar", component: ClienteInsertarComponent },
       { path: "editar/:id", component: ClienteEditarComponent },
       { path: "factura/:id", component: ClientesFacturasComponent },
+      { path: "estado-cuenta/:id", component: ClienteDetalleComponent },
     ],
   },
 

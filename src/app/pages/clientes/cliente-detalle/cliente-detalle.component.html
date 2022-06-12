@@ -1,0 +1,120 @@
+<div class="bg-white">
+    <div *ngIf="isLoad" class="container-fluid p-5">
+      <div class="d-flex justify-content-center align-content-center">
+        <span>
+          Cargando Estado cuenta de cliente...
+          <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="container-fluid" *ngIf="!isLoad">
+      <div class="row">
+        <div class="col-md-12">
+          <button class="mt-3 btn btn-primary mr-3" (click)="descargarPDF()">
+            <i class="fas fa-file-download fa-lg"></i> Descargar
+          </button>
+        </div>
+      </div>
+      <h4 class="pl-4 pt-4">Detalles de cliente</h4>
+      <div class="row mb-2">
+        <div class="col-md-6 detalle-section">
+          <div class="detalle-container">
+            <div class="detalle">
+              <div class="description">
+                <span>Nombre completo</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.nombreCompleto }}</span>
+              </div>
+            </div>
+            <div class="detalle">
+              <div class="description">
+                <span>Nombre salón</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.nombreEmpresa }}</span>
+              </div>
+            </div>
+            <div class="detalle">
+              <div class="description">
+                <span>Cedula</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.cedula }}</span>
+              </div>
+            </div>
+            <div class="detalle">
+              <div class="description">
+                <span>Teléfono</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.celular }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 detalle-section">
+          <div class="detalle-container">
+            <div class="detalle">
+              <div class="description">
+                <span>Teléfono salón</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.telefono }}</span>
+              </div>
+            </div>
+            <div class="detalle">
+              <div class="description">
+                <span>Dirección</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.direccion_casa }}</span>
+              </div>
+            </div>
+            <div class="detalle">
+              <div class="description">
+                <span>Dirección salón</span>
+              </div>
+              <div class="value">
+                <span>{{ Cliente.direccion_negocio }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+        <table class="table  table-hover" >
+          <thead class="border-bottom border-1">
+            <tr>
+              <th scope="col">No.Doc</th>
+              <th scope="col">Tipo Documento</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Fecha Vencimiento</th>
+              <th scope="col">Credito</th>
+              <th scope="col">Abono</th>
+              <th scope="col">Saldo</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr *ngFor="let EstadoCuenta of _TablasService.datosTablaStorage">
+              <td>{{ EstadoCuenta.numero_documento }}</td>
+              <td>{{ EstadoCuenta.tipo_documento }}</td>
+              <td>{{ EstadoCuenta.fecha | date: "dd-MM-yyyy" }}</td>
+              <td>{{ EstadoCuenta.f_vencimiento | date: "dd-MM-yyyy" }}</td>
+              <td>{{ EstadoCuenta.credito | currency: "USD" }}</td>
+              <td>{{ EstadoCuenta.abono  | currency: "USD"}}</td>
+              <td>{{ EstadoCuenta.saldo | currency: "USD" }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-between p-2">
+          <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+

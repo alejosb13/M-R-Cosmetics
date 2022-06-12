@@ -72,6 +72,10 @@ export class HelpersService {
     return moment().format('MM/DD/YYYY')
   }
 
+  currentFullDay():string{
+    return moment().format('MM/DD/YYYY HH:mm:ss')
+  }
+
   downloadFile(data: any,nameFile:string) {
     let dataType = data.type;
     let binaryData = [];

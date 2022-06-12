@@ -44,6 +44,7 @@
             <th scope="col">Direccion de casa</th>
             <th scope="col">Categoria</th>
             <th scope="col">Frecuencia</th>
+            <th scope="col">E.Cuenta</th>
             <th scope="col">Facturacion</th>
             <th scope="col">Opciones</th>
           </tr>
@@ -82,6 +83,9 @@
                 </div>
 
               </div>
+            </td>
+            <td >
+              <a [routerLink]="[ '/cliente','estado-cuenta',cliente.id ]">Ver detalle</a>
             </td>
             <td >
               <div class="d-flex flex-direction">

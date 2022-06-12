@@ -1,0 +1,71 @@
+.detalle-section{
+  padding: 0.85rem 1.25rem;
+}
+.detalle-container {
+  padding: 0px 1.25rem;
+}
+
+.detalle-container .detalle {
+  display: flex;
+  position: relative;
+  padding: 0.25rem 0px;
+  margin-bottom: -1px;
+
+}
+
+.detalle-container .detalle .description {
+  font-weight: 700;
+  color:#000;
+  /* flex: 0; */
+  min-width: 149px;
+  /* flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 145px; */
+}
+.detalle-container .detalle .value {
+  color:#000;
+  flex: 1;
+  /* flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 50%; */
+}
+
+.table th,
+.table td
+{
+  border-top: none;
+}
+
+.list .list-group-item:first-child{
+  border: none !important;
+}
+
+.list .list-group-item:nth-child(2){
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.list .texto-descripcion {
+  width: 230px;
+}
+
+.list .texto-cantidad {
+  width: 169px;
+}
+
+.list .texto-precio {
+  width: 78px;
+  text-align: right;
+}
+
+.background-color-important {
+  background-color: #f5f5f5 !important;
+}
+
+
+@media (max-width: 767.98px) {
+  .detalle-container .detalle .description {
+      text-align: left;
+  }
+  .detalle-container .detalle .value {
+      text-align: right;
+  }
+}

@@ -76,6 +76,7 @@ import { Mora60A90Component } from 'app/pages/logistica/mora60-a90/mora60-a90.co
 import { ClientesNuevosComponent } from 'app/pages/logistica/clientes-nuevos/clientes-nuevos.component';
 import { IncentivosComponent } from 'app/pages/logistica/incentivos/incentivos.component';
 import { ClienteInactivosComponent } from 'app/pages/logistica/cliente-inactivos/cliente-inactivos.component';
+import { ClienteDetalleComponent } from 'app/pages/clientes/cliente-detalle/cliente-detalle.component';
 
 
 @NgModule({
@@ -159,6 +160,7 @@ import { ClienteInactivosComponent } from 'app/pages/logistica/cliente-inactivos
     ClientesNuevosComponent,
     IncentivosComponent,
     ClienteInactivosComponent,
+    ClienteDetalleComponent,
   ]
 })
 

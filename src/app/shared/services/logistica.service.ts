@@ -90,5 +90,18 @@ export class LogisticaService {
     );
   }
 
+  getEstadoCuentaCliente(clienteData:any): Observable<any> {
 
+    return this.http.post<any>(
+      `${Logistica}/estado-de-cuenta`,
+      clienteData,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getEstadoCuentaClientePDF(clienteId:any): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.http.get(`${environment.urlAPI}pdf/estado_cuenta/${clienteId}`, { headers: headers, responseType: 'blob' });
+  }
 }
