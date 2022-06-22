@@ -99,6 +99,14 @@ export class LogisticaService {
     );
   }
 
+  getProductoLogistica(): Observable<{"productos": number,"monto_total": number}> {
+
+    return this.http.get<any>(
+      `${Logistica}/producto-logistica`,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   getEstadoCuentaClientePDF(clienteId:any): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');

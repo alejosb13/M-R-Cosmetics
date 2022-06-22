@@ -1,17 +1,17 @@
 <div class="bg-white">
-  
+
     <div *ngIf="isLoad" class="container-fluid p-5">
       <div class="d-flex justify-content-center align-content-center">
         <span>
           Cargando productos
           <i class="fas fa-circle-notch fa-spin"></i>
         </span>
-        
+
       </div>
     </div>
-    
+
     <ng-container  *ngIf="!isLoad ">
-  
+
       <div class=" card-header border-0 pt-4  bg-white">
         <a class="btn btn-primary" routerLink="/producto/agregar">
           <i class="fas fa-plus"></i>
@@ -19,10 +19,12 @@
         </a>
         <div class="d-flex flex-row justify-content-between mt-3">
           <div class="card-title align-items-start flex-column">
-            <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Productos</span>
-            <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
+            <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"><b>Productos</b></span>
+            <span class="fuvi-text-black mt-1 fw-bold fs-5 "><b>Total de filas tabla: {{ _TablasService.total }}</b></span><br>
+            <span class="fuvi-text-black mt-1 fw-bold fs-5 "><b>Número de items: {{ productos }}</b></span><br>
+            <span class="fuvi-text-black mt-1 fw-bold fs-5 "><b>Suma precio de items  : {{ monto_total | currency: 'USD' }}</b></span>
           </div>
-    
+
           <form class="d-flex align-items-center col-4 buscador">
               <div class="form-label-group w-100">
                   <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
@@ -30,10 +32,10 @@
               </div>
           </form>
         </div>
-        
+
       </div>
-  
-      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">  
+
+      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
         <table class="table table-striped" >
           <thead>
             <tr>
@@ -78,7 +80,7 @@
               </td>
             </tr>
           </tbody>
-          
+
           <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
             <tr >
               <td colspan="9">
@@ -91,7 +93,7 @@
             </tr>
           </tbody>
         </table>
-          
+
         <div class="d-flex justify-content-between p-2">
           <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
         </div>

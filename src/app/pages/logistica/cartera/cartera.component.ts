@@ -75,7 +75,7 @@ export class CarteraComponent implements OnInit {
     let bodyForm: CarteraDateBodyForm = {
       dateIni: this.filtros.dateIni,
       dateFin: this.filtros.dateFin,
-      userId: this.filtros.userId,
+      userId: Number(this.filtros.userId),
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
       allDates: this.filtros.allDates,
@@ -181,7 +181,7 @@ export class CarteraComponent implements OnInit {
     this.filtros = {
       dateIni: this.dateIni,
       dateFin: this.dateFin,
-      userId : this.userId,
+      userId : Number(this.userId),
       tipo_venta : this.tipoVenta,
       status_pagado : this.status_pagado,
       allDates: this.allDates,

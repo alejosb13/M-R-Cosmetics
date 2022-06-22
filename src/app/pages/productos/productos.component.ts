@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Producto } from 'app/shared/models/Producto.model';
+import { LogisticaService } from 'app/shared/services/logistica.service';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
@@ -18,13 +19,18 @@ export class ProductosComponent implements OnInit {
   Productos: Producto[];
   isLoad:boolean
 
+  productos:number = 0
+  monto_total:number = 0
+
   constructor(
     private _ProductosService:ProductosService,
     private _TablasService:TablasService,
+    private _LogisticaService:LogisticaService,
   ) {}
 
   ngOnInit(): void {
     this.asignarValores()
+    this.getLogisticaProductos()
   }
 
 
@@ -43,6 +49,14 @@ export class ProductosComponent implements OnInit {
       this.isLoad =false
     },(error)=>{
       this.isLoad =false
+    })
+  }
+
+  getLogisticaProductos(){
+
+    this._LogisticaService.getProductoLogistica().subscribe((data:{"productos": number,"monto_total": number})=> {
+      this.productos = data.productos
+      this.monto_total = data.monto_total
     })
   }
 
