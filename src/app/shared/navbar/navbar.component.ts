@@ -71,6 +71,7 @@ export class NavbarComponent implements OnInit{
       if(titlee.includes("logistica/clientes-nuevos") ) return "Clientes nuevos";
       if(titlee.includes("logistica/incentivo") )       return "Incentivos";
       if(titlee.includes("logistica/clientes-inactivos") )       return "Clientes Inactivos";
+      if(titlee.includes("factura/entrega/0") )       return "Factura Por Entregar";
 
       for(var item = 0; item < this.listTitles.length; item++){
         if( titlee.includes(this.listTitles[item].path)) return this.listTitles[item].title;

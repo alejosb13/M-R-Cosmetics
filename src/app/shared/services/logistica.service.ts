@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Recibo } from '../models/Recibo.model';
 import { environment } from 'environments/environment';
 import { CarteraDate, CarteraDateBodyForm } from '../models/Logistica.model';
+import { Cliente } from '../models/Cliente.model';
 
 const Logistica = `${environment.urlAPI}logistica`
 
@@ -58,6 +59,15 @@ export class LogisticaService {
 
     return this.http.post<any>(
       `${Logistica}/mora-30-60`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getClientesReactivados(bodyform:CarteraDateBodyForm): Observable<Cliente[]> {
+
+    return this.http.post<any>(
+      `${Logistica}/clientes-reactivados`,
       bodyform,
       {headers: this.headerJson_Token(), responseType: "json" }
     );

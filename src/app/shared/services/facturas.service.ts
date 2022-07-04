@@ -104,4 +104,12 @@ export class FacturasService {
       {headers: this.headerJson_Token()}
     );
   }
+
+  entregarFactura(id:number): Observable<any> {
+    const URL = `${FacturaURL}/entregada/${id}`
+    return this.http.put(
+      URL,
+      {headers: this.headerJson_Token()}
+    );
+  }
 }

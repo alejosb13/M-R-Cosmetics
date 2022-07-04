@@ -77,6 +77,8 @@ import { ClientesNuevosComponent } from 'app/pages/logistica/clientes-nuevos/cli
 import { IncentivosComponent } from 'app/pages/logistica/incentivos/incentivos.component';
 import { ClienteInactivosComponent } from 'app/pages/logistica/cliente-inactivos/cliente-inactivos.component';
 import { ClienteDetalleComponent } from 'app/pages/clientes/cliente-detalle/cliente-detalle.component';
+import { ClientesReactivadosComponent } from 'app/pages/logistica/clientes-reactivados/clientes-reactivados.component';
+import { FacturasEntregadasComponent } from 'app/pages/facturas/facturas-entregadas/facturas-entregadas.component';
 
 
 @NgModule({
@@ -119,6 +121,7 @@ import { ClienteDetalleComponent } from 'app/pages/clientes/cliente-detalle/clie
     FacturaDetalleComponent,
     FacturaEditarFormComponent,
     FacturaDespachadaComponent,
+    FacturasEntregadasComponent,
 
     CambiarPasswordComponent,
 
@@ -161,6 +164,7 @@ import { ClienteDetalleComponent } from 'app/pages/clientes/cliente-detalle/clie
     IncentivosComponent,
     ClienteInactivosComponent,
     ClienteDetalleComponent,
+    ClientesReactivadosComponent,
   ]
 })
 

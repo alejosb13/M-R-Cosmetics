@@ -57,6 +57,8 @@ import { ClientesNuevosComponent } from "app/pages/logistica/clientes-nuevos/cli
 import { IncentivosComponent } from "app/pages/logistica/incentivos/incentivos.component";
 import { ClienteInactivosComponent } from "app/pages/logistica/cliente-inactivos/cliente-inactivos.component";
 import { ClienteDetalleComponent } from "app/pages/clientes/cliente-detalle/cliente-detalle.component";
+import { ClientesReactivadosComponent } from "app/pages/logistica/clientes-reactivados/clientes-reactivados.component";
+import { FacturasEntregadasComponent } from "app/pages/facturas/facturas-entregadas/facturas-entregadas.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -95,6 +97,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "clientes-nuevos", component: ClientesNuevosComponent },
       { path: "incentivos", component: IncentivosComponent },
       { path: "clientes-inactivos", component: ClienteInactivosComponent },
+      { path: "clientes-reactivados", component: ClientesReactivadosComponent },
     ],
   },
 
@@ -124,6 +127,7 @@ export const AdminLayoutRoutes: Routes = [
     data: { role: [ADMINISTRADOR, SUPERVISOR, VENDEDOR] },
     children: [
       { path: "estado/:status_pagado", component: FacturasComponent },
+      { path: "entrega/:status_entrega", component: FacturasEntregadasComponent },
       { path: "detalle/:id", component: FacturaDetalleComponent },
       { path: "editar/:id", component: FacturaEditarComponent },
       { path: "despachar", component: FacturaDespachadaComponent },
