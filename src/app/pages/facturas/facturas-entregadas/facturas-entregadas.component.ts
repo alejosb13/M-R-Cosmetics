@@ -52,7 +52,12 @@ export class FacturasEntregadasComponent implements OnInit {
   asignarValores(){
     this.isLoad = true
 
-    let Subscription = this._FacturasService.getFacturas({estado:1,status_entrega:this.status_entrega}).subscribe((factura:Factura[])=> {
+    let Subscription = this._FacturasService.getFacturas({
+      estado:1,
+      status_entrega:this.status_entrega,
+      created_at:"2022-07-01 00:00:00"
+    })
+    .subscribe((factura:Factura[])=> {
       // console.log(factura);
 
       this.Facturas = [...factura]
