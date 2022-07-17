@@ -151,7 +151,7 @@ export class CarteraComponent implements OnInit {
       allDates: this.filtros.allDates,
     };
 
-    this._LogisticaService.getEstadoCuentaClientePDF(bodyForm).subscribe((data)=>{
+    this._LogisticaService.carteraPDF(bodyForm).subscribe((data)=>{
       // console.log(data);
       this._HelpersService.downloadFile(data,`Cartera_${this.userId}_${ this._HelpersService.changeformatDate(this._HelpersService.currentFullDay(),'MM/DD/YYYY HH:mm:ss',"DD-MM-YYYY_HH:mm:ss") }`)
 

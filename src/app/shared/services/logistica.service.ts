@@ -117,7 +117,13 @@ export class LogisticaService {
     );
   }
 
-  getEstadoCuentaClientePDF(data:CarteraDateBodyForm): Observable<any> {
+  getEstadoCuentaClientePDF(clienteId:any): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.http.get(`${environment.urlAPI}pdf/estado_cuenta/${clienteId}`, { headers: headers, responseType: 'blob' });
+  }
+
+  carteraPDF(data:CarteraDateBodyForm): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
     return this.http.post(`${environment.urlAPI}pdf/cartera`,data, { headers: headers, responseType: 'blob' });
