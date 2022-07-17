@@ -141,6 +141,23 @@ export class CarteraComponent implements OnInit {
     };
   }
 
+  descargarPDF(){
+    let bodyForm: CarteraDateBodyForm = {
+      dateIni: this.filtros.dateIni,
+      dateFin: this.filtros.dateFin,
+      userId: Number(this.filtros.userId),
+      tipo_venta: this.filtros.tipo_venta,
+      status_pagado: this.filtros.status_pagado,
+      allDates: this.filtros.allDates,
+    };
+
+    this._LogisticaService.getEstadoCuentaClientePDF(bodyForm).subscribe((data)=>{
+      // console.log(data);
+      this._HelpersService.downloadFile(data,`Cartera_${this.userId}_${ this._HelpersService.changeformatDate(this._HelpersService.currentFullDay(),'MM/DD/YYYY HH:mm:ss',"DD-MM-YYYY_HH:mm:ss") }`)
+
+    })
+  }
+
 
 
   openFiltros(content: any) {

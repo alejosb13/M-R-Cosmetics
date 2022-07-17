@@ -55,7 +55,8 @@ export class FacturasEntregadasComponent implements OnInit {
     let Subscription = this._FacturasService.getFacturas({
       estado:1,
       status_entrega:this.status_entrega,
-      created_at:"2022-07-01 00:00:00"
+      created_at:"2022-07-01 00:00:00",
+      despachado:1
     })
     .subscribe((factura:Factura[])=> {
       // console.log(factura);

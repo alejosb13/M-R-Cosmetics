@@ -17,6 +17,12 @@
         <i class="fas fa-plus"></i>
         Agregar
       </a> -->
+
+      <div class="col-md-12">
+        <button class="mt-3 btn btn-primary mr-3" (click)="descargarPDF()">
+          <i class="fas fa-file-download fa-lg"></i> Descargar
+        </button>
+      </div>
         <div class="col-md-12">
           <div class="d-flex flex-row justify-content-between mt-3">
             <div class="card-title align-items-start flex-column">
@@ -58,13 +64,15 @@
             <!-- <th scope="col">Estado</th> -->
             <th scope="col">Ver</th>
             <th scope="col">Fecha de Vencimiento</th>
+            <th scope="col">Ultimo Pago</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
           <tr *ngFor="let factura of _TablasService.datosTablaStorage">
             <th scope="row">{{ factura.id }}</th>
             <td>
-              {{ factura.cliente.nombreCompleto }}
+              <a [routerLink]="[ '/cliente','estado-cuenta',factura.cliente.id ]" target="_blank" class="text-dark">{{ factura.cliente.nombreCompleto }}</a>
+
             </td>
             <td>
               {{ factura.cliente.nombreEmpresa }}
@@ -82,6 +90,12 @@
             </td>
             <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
             <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
+            <td>
+              <span *ngIf="factura.cliente.factura_historial">
+                {{ factura.cliente.factura_historial.created_at |date:"dd-MM-yyyy" }}
+              </span>
+              <span *ngIf="!factura.cliente.factura_historial"> No posee pagos</span>
+            </td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
