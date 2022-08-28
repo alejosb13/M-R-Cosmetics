@@ -59,6 +59,7 @@ import { ClienteInactivosComponent } from "app/pages/logistica/cliente-inactivos
 import { ClienteDetalleComponent } from "app/pages/clientes/cliente-detalle/cliente-detalle.component";
 import { ClientesReactivadosComponent } from "app/pages/logistica/clientes-reactivados/clientes-reactivados.component";
 import { FacturasEntregadasComponent } from "app/pages/facturas/facturas-entregadas/facturas-entregadas.component";
+import { VentasComponent } from "app/pages/logistica/ventas/ventas.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -98,6 +99,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "incentivos", component: IncentivosComponent },
       { path: "clientes-inactivos", component: ClienteInactivosComponent },
       { path: "clientes-reactivados", component: ClientesReactivadosComponent },
+      { path: "ventas", component: VentasComponent },
     ],
   },
 

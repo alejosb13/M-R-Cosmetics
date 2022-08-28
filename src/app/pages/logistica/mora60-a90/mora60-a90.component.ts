@@ -72,14 +72,14 @@ export class Mora60A90Component implements OnInit {
     let bodyForm: CarteraDateBodyForm = {
       dateIni: this.filtros.dateIni,
       dateFin: this.filtros.dateFin,
-      userId: this.filtros.userId,
+      userId: Number(this.filtros.userId),
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
       allUsers: this.filtros.allUsers,
     };
 
     this._LogisticaService.getMora60A90(bodyForm).subscribe((data:CarteraDate)=> {
-      console.log(data);
+      // console.log(data);
       this.Data = [...data.factura]
       this._TablasService.datosTablaStorage = [...data.factura]
       this._TablasService.total = data.factura.length

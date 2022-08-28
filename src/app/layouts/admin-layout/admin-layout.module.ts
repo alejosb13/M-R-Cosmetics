@@ -79,6 +79,8 @@ import { ClienteInactivosComponent } from 'app/pages/logistica/cliente-inactivos
 import { ClienteDetalleComponent } from 'app/pages/clientes/cliente-detalle/cliente-detalle.component';
 import { ClientesReactivadosComponent } from 'app/pages/logistica/clientes-reactivados/clientes-reactivados.component';
 import { FacturasEntregadasComponent } from 'app/pages/facturas/facturas-entregadas/facturas-entregadas.component';
+import { VentasComponent } from 'app/pages/logistica/ventas/ventas.component';
+import { MetaFormComponent } from 'app/shared/components/forms/meta-form/meta-form.component';
 
 
 @NgModule({
@@ -165,6 +167,9 @@ import { FacturasEntregadasComponent } from 'app/pages/facturas/facturas-entrega
     ClienteInactivosComponent,
     ClienteDetalleComponent,
     ClientesReactivadosComponent,
+    
+    VentasComponent,
+    MetaFormComponent
   ]
 })
 

@@ -2,9 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Role } from 'app/auth/login/models/auth.model';
+import { Meta } from 'app/shared/models/meta.model';
 import { Recibo } from 'app/shared/models/Recibo.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
+import { MetaService } from 'app/shared/services/meta.service';
 import { ReciboService } from 'app/shared/services/recibo.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
@@ -25,6 +27,7 @@ export class UsuariosComponent implements OnInit {
   Usuarios: Usuario[];
 
   recibo:Recibo
+  meta:Meta
   idUsuario:number
 
   isLoad:boolean
@@ -35,6 +38,7 @@ export class UsuariosComponent implements OnInit {
     private _TablasService:TablasService,
     private _ReciboService:ReciboService,
     private _HelpersService:HelpersService,
+    private _MetaService:MetaService,
     private modalService: NgbModal
   ) {}
 
@@ -129,6 +133,24 @@ export class UsuariosComponent implements OnInit {
 
   }
 
+  modificarMeta(content:any,meta:Meta){
+    this.meta = meta
+
+    console.log(this.meta );
+    
+    this.idUsuario = meta.user_id
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {}, (reason) => {});
+
+  }
+
+  agregarMeta(content:any,userId:number){
+    this.meta = undefined
+    this.idUsuario = userId
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {}, (reason) => {});
+  }
+
   FormsValues(recibo:Recibo){
     console.log("[reciboForm]",recibo);
 
@@ -184,4 +206,56 @@ export class UsuariosComponent implements OnInit {
 
   }
 
+  FormsValuesMeta(meta:Meta){
+    console.log("[reciboFormService]",meta);
+
+    meta.user_id = this.idUsuario
+    if(this.meta){
+      this._MetaService.updateMeta(this.meta.id,meta).subscribe(userResp =>{
+        this._TablasService.datosTablaStorage = this.Usuarios.map((usuario)=>{
+          if(usuario.id == userResp.user_id) usuario.meta = userResp
+
+          return usuario
+        })
+
+        Swal.fire({
+          text: "Meta modificada con exito",
+          icon: 'success',
+        })
+      },(HttpErrorResponse :HttpErrorResponse)=>{
+        let error:string =  HttpErrorResponse.error[0]
+
+        Swal.fire({
+          title: "Error",
+          html: error,
+          icon: 'error',
+        })
+      })
+      
+    }else{
+      this._MetaService.insertMeta(meta).subscribe(userResp =>{
+        this._TablasService.datosTablaStorage = this.Usuarios.map((usuario)=>{
+          if(usuario.id == userResp.user_id) usuario.meta = userResp
+
+          return usuario
+        })
+        Swal.fire({
+          text: "Meta agregada con exito",
+          icon: 'success',
+        }).then((result) => {
+          // if (result.isConfirmed) window.location.reload()
+        })
+      },(HttpErrorResponse :HttpErrorResponse)=>{
+        // let error:string =  HttpErrorResponse.error[0]
+        let error:string =  this._HelpersService.errorResponse(HttpErrorResponse )
+
+        Swal.fire({
+          title: "Error",
+          html: error,
+          icon: 'error',
+        })
+      })
+    }
+
+  }
 }

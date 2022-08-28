@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
       let password           = String(this.formularioControls.password.value)
 
       this._AuthService.login(email,password).subscribe(data => {
-        console.log(data);
+        // console.log(data);
         
         let Auth:Auth = {...data}  
         this._AuthService.dataStorage = {...Auth}

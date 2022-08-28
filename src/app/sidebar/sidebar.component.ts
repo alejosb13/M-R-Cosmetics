@@ -17,7 +17,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/factura/estado/no-pagadas',  title: 'Factura sin pagar',    icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/factura/estado/pagadas',     title: 'Factura Pagadas',      icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/factura/despachar',          title: 'F. Por Despachar',     icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
-  { path: '/factura/entrega/0',          title: 'F. Por Entregar',        icon:'fas fa-receipt',                class: '' , access: 'administrador'},
+  { path: '/factura/entrega/0',          title: 'F. Por Entregar',      icon:'fas fa-receipt',                class: '' , access: 'administrador'},
   { path: '/pedido',                     title: 'Pedido',               icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/devolucion',                 title: 'Devoluciones',         icon:'fas fa-undo',                   class: '' , access: 'administrador'},
   { path: '/recibos',                    title: 'Recibos',              icon:'fas fa-file-invoice-dollar',    class: '' , access: 'administrador'},

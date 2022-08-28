@@ -31,7 +31,7 @@ export class AbonoInsertarComponent implements OnInit {
     console.log(abono);
 
     this._AbonoService.insertAbono(abono).subscribe(data =>{
-      console.log(data);
+      // console.log(data);
       Swal.fire({
         text: "Abono insertado con exito",
         icon: 'success',

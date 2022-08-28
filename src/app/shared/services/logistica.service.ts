@@ -128,4 +128,13 @@ export class LogisticaService {
     headers = headers.set('Accept', 'application/pdf');
     return this.http.post(`${environment.urlAPI}pdf/cartera`,data, { headers: headers, responseType: 'blob' });
   }
+
+  getMetaForDate(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/ventas`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }

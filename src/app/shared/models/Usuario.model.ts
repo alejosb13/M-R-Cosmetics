@@ -1,4 +1,5 @@
 import { Factura } from "./Factura.model";
+import { Meta } from "./meta.model";
 import { Recibo } from "./Recibo.model";
 
 export interface Usuario {
@@ -11,6 +12,7 @@ export interface Usuario {
   estado: number;
   factura: Factura[];
   recibo?: Recibo;
+  meta?: Meta;
   role_id?: number;
   created_at?: Date;
   updated_at?: Date;
