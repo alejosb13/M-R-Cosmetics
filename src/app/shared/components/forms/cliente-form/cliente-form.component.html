@@ -356,8 +356,11 @@
             class="btn btn-primary btn-round"
             (click)="EnviarFormulario()"
           >
-            <div *ngIf="clienteId">Actualizar</div>
-            <div *ngIf="!clienteId">Agregar</div>
+            <div *ngIf="clienteId && !_ClientesService.IsLoad">Actualizar</div>
+            <div *ngIf="clienteId && _ClientesService.IsLoad">Actualizando <i class="fas fa-spinner fa-pulse"></i></div>
+            
+            <div *ngIf="!clienteId && !_ClientesService.IsLoad">Agregar</div>
+            <div *ngIf="!clienteId && _ClientesService.IsLoad">Agregando <i class="fas fa-spinner fa-pulse"></i></div>
           </button>
       </div>
   </div>

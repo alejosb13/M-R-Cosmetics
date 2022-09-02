@@ -30,7 +30,9 @@ export class ClienteEditarComponent implements OnInit {
   ngOnInit(): void {}
   
   ClientValuesForm(cliente:Cliente){
+    this._ClientesService.IsLoad = true;
     this._ClientesService.updateCliente(this.clienteId,cliente).subscribe(data =>{
+      this._ClientesService.IsLoad = false;
       // console.log(data);
       Swal.fire({
         text: "Cliente modificado con exito",
@@ -39,6 +41,7 @@ export class ClienteEditarComponent implements OnInit {
         if (result.isConfirmed) window.location.reload()
       })
     },(HttpErrorResponse :HttpErrorResponse)=>{
+      this._ClientesService.IsLoad = false;
       // console.log(HttpErrorResponse );
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse )
 

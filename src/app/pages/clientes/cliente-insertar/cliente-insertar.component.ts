@@ -23,7 +23,9 @@ export class ClienteInsertarComponent implements OnInit {
   }
 
   ClientValuesForm(cliente:Cliente){
+    this._ClientesService.IsLoad = true;
     this._ClientesService.insertCliente(cliente).subscribe(ClienteResponse =>{
+      this._ClientesService.IsLoad = false;
       console.log(ClienteResponse);
       Swal.fire({
         text: "Cliente Insertado con exito",
@@ -34,6 +36,7 @@ export class ClienteInsertarComponent implements OnInit {
         }
       })
     },(HttpErrorResponse:HttpErrorResponse)=>{
+      this._ClientesService.IsLoad = false;
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
       

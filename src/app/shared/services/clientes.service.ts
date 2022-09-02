@@ -16,7 +16,7 @@ export class ClientesService {
   total:number = 0
   busqueda:string = ""
   datosTablaStorage:Cliente[] = []
-
+  public IsLoad: boolean = false
 
   constructor(
     private http: HttpClient
