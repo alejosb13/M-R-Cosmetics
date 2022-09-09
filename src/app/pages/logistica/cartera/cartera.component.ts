@@ -30,6 +30,7 @@ export class CarteraComponent implements OnInit {
 
   Data: Factura[];
   total = 0;
+  recuperacion = 0;
   filtros: any = {};
   dateIni: string;
   dateFin: string;
@@ -89,6 +90,7 @@ export class CarteraComponent implements OnInit {
       this._TablasService.busqueda = ""
 
       this.total = data.total
+      this.recuperacion = data.recuperacion
 
       this.refreshCountries()
       this.isLoad =false

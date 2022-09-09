@@ -3,6 +3,7 @@ import { Factura } from "./Factura.model";
 export interface CarteraDate{
   factura: Factura[];
   total:number;
+  recuperacion?:number;
 }
 
 export interface CarteraDateBodyForm{

@@ -35,7 +35,7 @@ export class ClienteFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private _CategoriaService: CategoriaService,
-    private _ClientesService: ClientesService,
+    public _ClientesService: ClientesService,
     private _FrecuenciaService: FrecuenciaService,
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,

@@ -32,6 +32,8 @@ export class VentasComponent implements OnInit {
   total = 0;
   meta = 0;
   Vmeta = 0;
+  recuperacion_monto = 0;
+  recuperacion = 0;
   filtros: any = {};
   dateIni: string;
   dateFin: string;
@@ -92,6 +94,9 @@ export class VentasComponent implements OnInit {
         this.total = data.total;
         this.meta = data.meta;
         this.Vmeta = data.meta_monto;
+
+        this.recuperacion_monto = data.recuperacion_monto;
+        this.recuperacion = data.recuperacion;
 
         this.refreshCountries();
         this.isLoad = false;

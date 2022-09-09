@@ -39,12 +39,15 @@
           </div>
         </div>
 
-
       <div class="col-md-12 d-flex justify-content-between flex-wrap">
-        <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span>
-        <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+        <div>
+          <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span> <br>
+          <!-- <span class="font-weight-bold">Recuperación: {{ recuperacion | currency:"USD"}}</span><br> -->
+        </div>
+        <div>
+          <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+        </div>
       </div>
-
 
     </div>
 
@@ -100,7 +103,7 @@
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
           <tr >
-            <td colspan="9">
+            <td colspan="10">
               <div class="container d-flex align-items-center justify-content-center">
                 <!-- <div class="alert alert-info w-100 text-center" > -->
                   <h5>No existen Facturas</h5>

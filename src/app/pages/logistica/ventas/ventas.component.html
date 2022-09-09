@@ -45,7 +45,9 @@
         <div>
           <span class="font-weight-bold">Monto total facturas: {{ total | currency: "USD" }}</span> <br>
           <span class="font-weight-bold">Meta: {{ meta }}%</span><br>
-          <span class="font-weight-bold">Valor meta: {{ Vmeta| currency: "USD" }}</span>
+          <span class="font-weight-bold">Monto meta: {{ Vmeta| currency: "USD" }}</span><br>
+          <span class="font-weight-bold">Meta recuperación: {{ recuperacion_monto | currency:"USD"}}</span><br> 
+          <span class="font-weight-bold">Porcentaje recuperado: {{ recuperacion }}%</span><br>
         </div>
         <div>
           <button class="btn btn-primary" (click)="openFiltros(contentEditar)">
@@ -116,7 +118,7 @@
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
           <tr>
-            <td colspan="9">
+            <td colspan="10">
               <div
                 class="container d-flex align-items-center justify-content-center"
               >
