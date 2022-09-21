@@ -3,6 +3,33 @@
     <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
   </div> -->
   <div class="col-md-6">
+    <div class="card card-stats" [routerLink]="[ '/logistica','recuperacion-mensual']" role="button">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
+              <!-- <i class="fas fa-receipt"></i> -->
+              <i class="fas fa-file-alt"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8 d-flex align-items-center">
+            <div class="numbers text-left">
+              <!-- <p class="card-category">Cartera</p> -->
+              <p class="card-title">Recuperación Mensual<p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card-footer ">
+        <hr>
+        <div class="stats">
+          <i class="fa fa-refresh"></i> Update Now
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="col-md-6">
     <div class="card card-stats" [routerLink]="[ '/logistica','cartera']" role="button">
       <div class="card-body ">
         <div class="row">
@@ -199,7 +226,7 @@
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
+            <div class="numbers text-left">
               <p class="card-title">Cliente Reactivados<p>
             </div>
           </div>

@@ -81,6 +81,7 @@ import { ClientesReactivadosComponent } from 'app/pages/logistica/clientes-react
 import { FacturasEntregadasComponent } from 'app/pages/facturas/facturas-entregadas/facturas-entregadas.component';
 import { VentasComponent } from 'app/pages/logistica/ventas/ventas.component';
 import { MetaFormComponent } from 'app/shared/components/forms/meta-form/meta-form.component';
+import { Recuperacion85Component } from 'app/pages/logistica/recuperacion85/recuperacion85.component';
 
 
 @NgModule({
@@ -169,7 +170,8 @@ import { MetaFormComponent } from 'app/shared/components/forms/meta-form/meta-fo
     ClientesReactivadosComponent,
     
     VentasComponent,
-    MetaFormComponent
+    MetaFormComponent,
+    Recuperacion85Component
   ]
 })
 

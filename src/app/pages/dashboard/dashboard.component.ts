@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
 
   public isAdmin;
   public userId: number;
+  public recuperacionPorcentaje: number;
 
   //filtros
   public filtros: any = {};
@@ -23,12 +24,12 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private _AuthService: AuthService,
+    // private _LogisticaService: LogisticaService,
   ) {}
 
   ngOnInit() {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
-
   }
 
 

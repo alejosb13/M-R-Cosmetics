@@ -137,4 +137,13 @@ export class LogisticaService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getRecuperacion(bodyform:{ userId: number}): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/recuperacion`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }
