@@ -44,8 +44,8 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Nombre Completo</th>
-            <th scope="col">Total Facturas</th>
-            <th scope="col">Total Abonos</th>
+            <!-- <th scope="col">Total Facturas</th> -->
+            <!-- <th scope="col">Total Abonos</th> -->
             <th scope="col">Abonos del mes</th>
             <th scope="col">Meta</th>
             <th scope="col">Recuperacion %</th>
@@ -59,12 +59,12 @@
             <td>
               {{ Recuperacion.user.name }} {{  Recuperacion.user.apellido }}
             </td>
-            <td>
+            <!-- <td>
               {{ Recuperacion.facturasTotal|currency:"USD"}}
             </td>
             <td>
               {{ Recuperacion.abonosTotal|currency:"USD"}}
-            </td>
+            </td> -->
             <td>
               {{ Recuperacion.abonosTotalLastMount|currency:"USD"}}
             </td>
