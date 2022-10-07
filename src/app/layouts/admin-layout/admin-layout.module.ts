@@ -82,6 +82,8 @@ import { FacturasEntregadasComponent } from 'app/pages/facturas/facturas-entrega
 import { VentasComponent } from 'app/pages/logistica/ventas/ventas.component';
 import { MetaFormComponent } from 'app/shared/components/forms/meta-form/meta-form.component';
 import { Recuperacion85Component } from 'app/pages/logistica/recuperacion85/recuperacion85.component';
+import { SeccionesConfigComponent } from 'app/pages/configuracion/secciones-config/secciones-config.component';
+import { MigrarInformacionVendedorComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component';
 
 
 @NgModule({
@@ -171,7 +173,10 @@ import { Recuperacion85Component } from 'app/pages/logistica/recuperacion85/recu
     
     VentasComponent,
     MetaFormComponent,
-    Recuperacion85Component
+    Recuperacion85Component,
+
+    SeccionesConfigComponent,
+    MigrarInformacionVendedorComponent
   ]
 })
 

@@ -1,0 +1,60 @@
+<div class="bg-white container-fluid">
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- <h3 class="text-center"></h3> -->
+        <p>
+          <ngb-alert [dismissible]="false">
+            <strong><i class="fas fa-exclamation-triangle"></i>  ¡Advertencia!</strong> Este proceso Eliminara cualquier
+            rastro de existencia del usuario anterior y se le asignara al
+            destinatario.
+          </ngb-alert>
+        </p>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <p class="font-weight-bold">Usuario que posse la informacion</p>
+        <select name="" id="" class="form-control" [(ngModel)]="currentUSerID">
+          <option
+            *ngFor="let usuario of userStore"
+            [selected]="usuario.id == userId"
+            [value]="usuario.id"
+            [disabled]="migrationUserID == usuario.id"
+          >
+            {{ usuario.name }} {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <i class="fas fa-arrow-down fa-3x text-success"></i>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-6">
+        <p class="font-weight-bold">
+          Usuario al que se le realizara la migracion
+        </p>
+        <select name="" id="" class="form-control" [(ngModel)]="migrationUserID">
+          <option
+            *ngFor="let usuario of userStore"
+            [selected]="usuario.id == userId"
+            [disabled]="currentUSerID == usuario.id"
+            [value]="usuario.id"
+          >
+            {{ usuario.name }} {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <br><br>
+    <button [disabled]="!valitData" (click)="sendDataMigracion()" *ngIf="!isLoad" class="btn btn-primary d-block m-auto">Migrar informacion</button>
+    <button [disabled]="!valitData" (click)="sendDataMigracion()" *ngIf="isLoad" class="btn btn-primary d-block m-auto">Migrando <i class="fas fa-spinner fa-pulse"></i></button>
+    <!-- <div *ngIf="clienteId && !_ClientesService.IsLoad">Actualizar</div> -->
+    <!-- <div *ngIf="clienteId && _ClientesService.IsLoad">Actualizando <i class="fas fa-spinner fa-pulse"></i></div> -->
+  </div>
+</div>

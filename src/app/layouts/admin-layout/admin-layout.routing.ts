@@ -61,6 +61,8 @@ import { ClientesReactivadosComponent } from "app/pages/logistica/clientes-react
 import { FacturasEntregadasComponent } from "app/pages/facturas/facturas-entregadas/facturas-entregadas.component";
 import { VentasComponent } from "app/pages/logistica/ventas/ventas.component";
 import { Recuperacion85Component } from "app/pages/logistica/recuperacion85/recuperacion85.component";
+import { SeccionesConfigComponent } from "app/pages/configuracion/secciones-config/secciones-config.component";
+import { MigrarInformacionVendedorComponent } from "app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component";
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";
@@ -203,6 +205,16 @@ export const AdminLayoutRoutes: Routes = [
       { path: "", component: FrecuenciaListadoComponent },
       { path: "agregar", component: FrecuenciaInsertarComponent },
       { path: "editar/:id", component: FrecuenciaEditarComponent },
+    ],
+  },
+  {
+    path: "configuracion",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR, SUPERVISOR] },
+    children: [
+      { path: "", component: SeccionesConfigComponent },
+      { path: "migracion-vendedor", component: MigrarInformacionVendedorComponent },
+
     ],
   },
 
