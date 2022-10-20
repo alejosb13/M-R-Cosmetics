@@ -5,17 +5,25 @@
         <!-- <h3 class="text-center"></h3> -->
         <p>
           <ngb-alert [dismissible]="false">
-            <strong><i class="fas fa-exclamation-triangle"></i>  ¡Advertencia!</strong> Este proceso Eliminara cualquier
-            rastro de existencia del usuario anterior y se le asignara al
-            destinatario.
+            <strong
+              ><i class="fas fa-exclamation-triangle"></i> ¡Advertencia!</strong
+            >
+            Una vez que realices este proceso no podrás revertirlo.
           </ngb-alert>
+          <!-- <ngb-alert [dismissible]="false">
+            <strong
+              ><i class="fas fa-exclamation-triangle"></i> ¡Advertencia!</strong
+            >
+            Este proceso eliminará cualquier rastro de existencia del usuario
+            anterior y se le asignará al destinatario.
+          </ngb-alert> -->
         </p>
       </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <p class="font-weight-bold">Usuario que posse la informacion</p>
-        <select name="" id="" class="form-control" [(ngModel)]="currentUSerID">
+        <p class="font-weight-bold">Vendedor que posee el cliente</p>
+        <select class="form-control" [(ngModel)]="currentUSerID">
           <option
             *ngFor="let usuario of userStore"
             [selected]="usuario.id == userId"
@@ -27,19 +35,32 @@
         </select>
       </div>
     </div>
-    <br>
-    <div class="row justify-content-center">
-      <div class="col-md-6 text-center">
+    <br />
+
+    <app-list-client-migration
+      *ngIf="currentUSerID"
+      [UserId]="currentUSerID"
+      (idClientesEvent)="listadoIdClientes($event)"
+    ></app-list-client-migration>
+
+    <div
+      class="row justify-content-center align-items-center"
+      *ngIf="validacionPasos.paso2"
+    >
+      <div class="col-md-12 text-center">
         <i class="fas fa-arrow-down fa-3x text-success"></i>
       </div>
-    </div>
-    <br>
-    <div class="row justify-content-center align-items-center">
-      <div class="col-md-6">
+      
+      <div class="col-md-6 mt-3">
         <p class="font-weight-bold">
-          Usuario al que se le realizara la migracion
+          Vendedor que se le realizara la migración
         </p>
-        <select name="" id="" class="form-control" [(ngModel)]="migrationUserID">
+        <select
+          name=""
+          id=""
+          class="form-control"
+          [(ngModel)]="migrationUserID"
+        >
           <option
             *ngFor="let usuario of userStore"
             [selected]="usuario.id == userId"
@@ -51,9 +72,24 @@
         </select>
       </div>
     </div>
-    <br><br>
-    <button [disabled]="!valitData" (click)="sendDataMigracion()" *ngIf="!isLoad" class="btn btn-primary d-block m-auto">Migrar informacion</button>
-    <button [disabled]="!valitData" (click)="sendDataMigracion()" *ngIf="isLoad" class="btn btn-primary d-block m-auto">Migrando <i class="fas fa-spinner fa-pulse"></i></button>
+
+    <br /><br />
+    <button
+      [disabled]="!valitData"
+      (click)="sendDataMigracion()"
+      *ngIf="!isLoad && validacionPasos.paso2 && validacionPasos.paso3"
+      class="btn btn-primary d-block m-auto"
+    >
+      Migrar informacion
+    </button>
+    <button
+      [disabled]="!valitData"
+      (click)="sendDataMigracion()"
+      *ngIf="isLoad && validacionPasos.paso2 && validacionPasos.paso3"
+      class="btn btn-primary d-block m-auto"
+    >
+      Migrando <i class="fas fa-spinner fa-pulse"></i>
+    </button>
     <!-- <div *ngIf="clienteId && !_ClientesService.IsLoad">Actualizar</div> -->
     <!-- <div *ngIf="clienteId && _ClientesService.IsLoad">Actualizando <i class="fas fa-spinner fa-pulse"></i></div> -->
   </div>

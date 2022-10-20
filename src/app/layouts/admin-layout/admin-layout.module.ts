@@ -84,6 +84,7 @@ import { MetaFormComponent } from 'app/shared/components/forms/meta-form/meta-fo
 import { Recuperacion85Component } from 'app/pages/logistica/recuperacion85/recuperacion85.component';
 import { SeccionesConfigComponent } from 'app/pages/configuracion/secciones-config/secciones-config.component';
 import { MigrarInformacionVendedorComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component';
+import { ListClientMigrationComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/list-client-migration/list-client-migration.component';
 
 
 @NgModule({
@@ -176,7 +177,8 @@ import { MigrarInformacionVendedorComponent } from 'app/pages/configuracion/migr
     Recuperacion85Component,
 
     SeccionesConfigComponent,
-    MigrarInformacionVendedorComponent
+    MigrarInformacionVendedorComponent,
+    ListClientMigrationComponent
   ]
 })
 

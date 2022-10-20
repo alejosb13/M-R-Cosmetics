@@ -15,6 +15,8 @@ export class MigrarInformacionVendedorComponent implements OnInit {
   userIdString: string;
   userStore: Usuario[];
 
+  idClientes: number[] = [];
+
   isLoad: boolean = false;
 
   constructor(
@@ -33,48 +35,75 @@ export class MigrarInformacionVendedorComponent implements OnInit {
   }
 
   sendDataMigracion() {
-    this.isLoad = true;
-    Swal.fire({
-      title: "¿Estas seguro?",
-      text: "Una vez que realices este proceso no podrás recuperar la información del usuario anterior.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#34b5b8",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, estoy seguro",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._ConfiguracionService
-          .migracion(this.currentUSerID, this.migrationUserID)
-          .subscribe(
-            (data: any) => {
-              this.isLoad = false;
-
-              console.log(data);
-              Swal.fire({
-                text: data.mensaje,
-                icon: "success",
-              });
-            },
-            (error) => {
-              console.log(error);
-              
-              this.isLoad = false;
-              Swal.fire({
-                title: "Error",
-                text: "Hay un problema al realizar el proceso",
-                icon: "error",
-              });
-            }
-          );
-      }else{
-        this.isLoad = false;
-      }
-    });
+    if(this.idClientes.length > 0){
+      this.isLoad = true;
+      Swal.fire({
+        title: "¿Estas seguro?",
+        text: "Una vez que realices este proceso no podrás revertirlo.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#34b5b8",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, estoy seguro",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this._ConfiguracionService
+            .migracion(this.currentUSerID, this.migrationUserID, this.idClientes)
+            .subscribe(
+              (data: any) => {
+                this.isLoad = false;
+  
+                console.log(data);
+                Swal.fire({
+                  text: data.mensaje,
+                  icon: "success",
+                });
+                this.currentUSerID = null
+                this.idClientes = []
+                this.migrationUserID = 0
+              },
+              (error) => {
+                console.log(error);
+  
+                this.currentUSerID = null
+                this.isLoad = false;
+                this.idClientes = []
+                this.migrationUserID = 0
+                Swal.fire({
+                  title: "Error",
+                  text: "Hay un problema al realizar el proceso",
+                  icon: "error",
+                });
+              }
+            );
+        } else {
+          this.isLoad = false;
+        }
+      });
+      
+    }
   }
 
-  get valitData():boolean{
-    return (this.currentUSerID && this.migrationUserID && this.currentUSerID>0 && this.migrationUserID>0)? true :  false
+  get valitData(): boolean {
+    return this.currentUSerID &&
+      this.migrationUserID &&
+      this.currentUSerID > 0 &&
+      this.migrationUserID > 0
+      ? true
+      : false;
+  }
+
+  listadoIdClientes(IdClientes: number[]) {
+    console.log("listadoIdClientes()", IdClientes);
+
+    this.idClientes = IdClientes;
+  }
+
+  get validacionPasos() {
+    return {
+      paso2: this.idClientes.length > 0,
+      paso3: this.migrationUserID > 0,
+    };
   }
 }

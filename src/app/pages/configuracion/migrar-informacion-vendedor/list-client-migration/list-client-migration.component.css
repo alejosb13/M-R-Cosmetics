@@ -1,0 +1,11 @@
+.list-group-flush {
+  max-height: 350px;
+  overflow: auto;
+}
+
+.container-list {
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}

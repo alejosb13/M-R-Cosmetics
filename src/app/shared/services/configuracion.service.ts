@@ -25,13 +25,14 @@ export class ConfiguracionService {
     return new HttpHeaders(config);
   }
 
-  migracion(userFrom:number,userTo:number): Observable<any> {
+  migracion(userFrom:number,userTo:number,idclientes:number[]): Observable<any> {
 
     return this.http.post(
       `${ConfiguracionURL}/migracion`,
       {
         userFrom,
-        userTo
+        userTo,
+        idclientes
       },
       {headers: this.headerJson_Token(), responseType: "json" }
     );

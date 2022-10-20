@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <i class="fas fa-arrow-down fa-3x text-success"></i>
+    </div>
+    <div class="col-md-12 text-center" *ngIf="isLoad">
+      <span>
+        Cargando clientes del usuario seleccionado
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="col-md-12 d-flex flex-column container-list" *ngIf="!isLoad">
+      <div
+        class="header-list d-flex align-content-center align-items-center justify-content-end"
+      >
+        <button
+          class="btn btn-primary mr-3"
+          (click)="allSelected()"
+        >
+          Seleccionar todos
+        </button>
+        <div class="form-label-group w-25 mb-0">
+          <input
+            type="email"
+            id="inputEmail"
+            placeholder="Buscar"
+            name="buscar"
+            class="form-control form-control-sm ng-untouched ng-pristine ng-valid"
+            [(ngModel)]="_TablasService.busqueda"
+            (keydown)="buscar()"
+            (change)="buscar()"
+          />
+          <label _ngcontent-nsg-c119="" for="inputEmail">Buscar</label>
+        </div>
+      </div>
+
+      <ul class="list-group list-group-flush">
+        <!-- <li class="list-group-item">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            value="0"
+            (change)="allSelected($event.target)"
+          />
+          Seleccionar todos
+        </li> -->
+        <li class="list-group-item" *ngFor="let cliente of _TablasService.datosTablaStorage">
+          <input
+            class="form-check-input me-1"
+            type="checkbox"
+            value="{{ cliente.id }}"
+            [checked]="cliente.checked"
+            (change)="inputChange($event.target)"
+          />
+          {{ cliente.id }} - {{ cliente.nombreCompleto }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

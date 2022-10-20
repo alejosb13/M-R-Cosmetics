@@ -27,3 +27,8 @@ export interface Cliente {
 }
 
 
+export interface ClienteCheck extends Cliente{
+    checked:boolean;
+}
+
+

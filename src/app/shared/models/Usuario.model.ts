@@ -1,3 +1,4 @@
+import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
 import { Meta } from "./meta.model";
 import { Recibo } from "./Recibo.model";
@@ -13,6 +14,7 @@ export interface Usuario {
   factura: Factura[];
   recibo?: Recibo;
   meta?: Meta;
+  clientes?: Cliente[];
   role_id?: number;
   created_at?: Date;
   updated_at?: Date;
