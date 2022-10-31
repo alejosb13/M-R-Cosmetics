@@ -85,7 +85,7 @@ import { Recuperacion85Component } from 'app/pages/logistica/recuperacion85/recu
 import { SeccionesConfigComponent } from 'app/pages/configuracion/secciones-config/secciones-config.component';
 import { MigrarInformacionVendedorComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component';
 import { ListClientMigrationComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/list-client-migration/list-client-migration.component';
-
+import { ProductosVendedorComponent } from 'app/pages/logistica/productos-vendedor/productos-vendedor.component';
 
 @NgModule({
   imports: [
@@ -178,7 +178,8 @@ import { ListClientMigrationComponent } from 'app/pages/configuracion/migrar-inf
 
     SeccionesConfigComponent,
     MigrarInformacionVendedorComponent,
-    ListClientMigrationComponent
+    ListClientMigrationComponent,
+    ProductosVendedorComponent
   ]
 })
 

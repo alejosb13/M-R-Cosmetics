@@ -138,6 +138,15 @@ export class LogisticaService {
     );
   }
 
+  getProductosVendedidos(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/productos-vendidos`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   getRecuperacion(bodyform:{ userId: number}): Observable<any> {
 
     return this.http.post<any>(

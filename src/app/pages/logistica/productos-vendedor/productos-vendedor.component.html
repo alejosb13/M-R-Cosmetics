@@ -1,0 +1,134 @@
+<div class="bg-white">
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando Productos
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
+      <div
+        class="col-md-12 d-flex justify-content-between flex-wrap align-items-center"
+      >
+        <div>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5"
+            >Total de productos: {{ total }}</span
+          >
+        </div>
+        <div>
+          <button class="btn btn-primary" (click)="openFiltros(contentEditar)">
+            Filtros <i class="fas fa-filter"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body py-3 px-6 bg-white">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        [closeOthers]="true"
+        [destroyOnHide]="false"
+      >
+        <ngb-panel *ngFor="let data of Datos">
+          <ng-template ngbPanelHeader>
+            <div class="d-flex align-items-center justify-content-between">
+              <button ngbPanelToggle class="">
+                {{ data.user.name }} {{ data.user.apellido }} -
+                <span class="badge badge-primary badge-pill">{{
+                  data.totalProductos
+                }}</span>
+              </button>
+            </div>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <ul class="list-group">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let producto of data.productos"
+              >
+                {{ producto.descripcion }}
+                <span class="badge badge-primary badge-pill">{{
+                  producto.cantidad
+                }}</span>
+              </li>
+            </ul>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #contentEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros()">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

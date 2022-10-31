@@ -267,6 +267,30 @@
       </div> -->
     </div>
   </div>
+  <div class="col-md-6" *ngIf="isAdmin">
+    <div class="card card-stats" [routerLink]="[ '/logistica','productos-vendedores']" role="button">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8 d-flex align-items-center">
+            <div class="numbers text-left">
+              <p class="card-title">Productos Vendidos<p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card-footer ">
+        <hr>
+        <div class="stats">
+          <i class="fa fa-refresh"></i> Update Now
+        </div>
+      </div> -->
+    </div>
+  </div>
   <!-- <div class="col-lg-3 col-md-6 col-sm-6">
     <div class="card card-stats">
       <div class="card-body ">

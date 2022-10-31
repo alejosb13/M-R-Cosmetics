@@ -1,0 +1,48 @@
+.form-check input.form-check-input {
+  opacity: 1;
+  position: static;
+  visibility: visible;
+  margin-left: 0px;
+}
+
+.form-check .form-check-label {
+  padding-left: 10px;
+}
+
+
+.badge.badge-primary{
+  font-size: 14px;
+}
+
+ngb-accordion ::ng-deep .card {
+  background-color: #f7f7f7;
+}
+ngb-accordion ::ng-deep .card .card-header{
+  padding: 0px;
+}
+
+ngb-accordion ::ng-deep .card .card-header button{
+  width: 100%;
+  border: none;
+  padding: 20px 15px;
+  border-radius: 10px;
+  text-align: left;
+  outline: none;
+  background-color: transparent;
+}
+
+ngb-accordion ::ng-deep .collapse {
+  transition: transform .6s, opacity .4s, max-height .3s ease;
+  opacity: 0;
+  max-height: 0;
+  display: block !important;
+}
+
+ngb-accordion ::ng-deep .collapse.show {
+  opacity: 1;
+  max-height: 600px;
+  overflow: auto;
+}
+ngb-accordion ::ng-deep .list-group > li:hover {
+  background-color: #e8e8e8;
+}
