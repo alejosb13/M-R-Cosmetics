@@ -3,10 +3,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Factura } from 'app/shared/models/Factura.model';
+import { TypesFiltersForm } from 'app/shared/models/FiltersForm';
 import { CarteraDate, CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
+import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
@@ -42,6 +44,8 @@ export class Mora30A60Component implements OnInit {
   userIdString: string;
   userStore: Usuario[];
 
+  FilterSection:TypesFiltersForm = "mora30_60Filter"
+
   constructor(
     private _TablasService:TablasService,
     private _AuthService:AuthService,
@@ -49,6 +53,7 @@ export class Mora30A60Component implements OnInit {
     private NgbModal: NgbModal,
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
+    private _RememberFiltersService: RememberFiltersService,
   ) {}
 
   ngOnInit(): void {
@@ -117,7 +122,7 @@ export class Mora30A60Component implements OnInit {
       this.userStore = usuarios
       this.USersNames = usuarios.map(usuario => `${ usuario.id } - ${ usuario.name } ${ usuario.apellido }`)
 
-      this.resetUser()
+      // this.resetUser()
     })
   }
 
@@ -148,7 +153,7 @@ export class Mora30A60Component implements OnInit {
   }
 
   resetUser(){
-    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    // this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.userStore.map(usuario => {
       if(usuario.id == this.userId){
         this.userIdString = `${ usuario.id } - ${ usuario.name } ${ usuario.apellido }`
@@ -159,29 +164,48 @@ export class Mora30A60Component implements OnInit {
   limpiarFiltros() {
     this.setCurrentDate();
     this.tipoVenta = 1
+    this.allUsers = false
     this.status_pagado = 0 // por pagar
 
     if(this.isAdmin) this.resetUser();
-
-    console.log(this.filtros);
+    this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
+    this.aplicarFiltros();
+    // console.log(this.filtros);
   }
 
-  aplicarFiltros() {
-    console.log(this.allUsers);
+  aplicarFiltros(submit:boolean = false) {
+    let filtrosStorage = this._RememberFiltersService.getFilterStorage()
+    if(filtrosStorage.hasOwnProperty(this.FilterSection) && !submit){
+      this.filtros = {...filtrosStorage[this.FilterSection]} 
 
-    if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
+      this.dateIni = this.filtros.dateIni
+      this.dateFin = this.filtros.dateFin
+      this.userId = Number(this.filtros.userId)
+      this.tipoVenta = this.filtros.tipo_venta
+      this.status_pagado = this.filtros.status_pagado
+      this.allUsers = this.filtros.allUsers
 
-    if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+    }else{
+      if(!submit){
+        this.userId = Number(this._AuthService.dataStorage.user.userId);
+      }
 
-    this.filtros = {
-      dateIni: this.dateIni,
-      dateFin: this.dateFin,
-      userId : this.userId,
-      tipo_venta : this.tipoVenta,
-      status_pagado : this.status_pagado,
-      allUsers: this.allUsers,
-    };
+      if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
+  
+      if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+  
+      this.filtros = {
+        dateIni: this.dateIni,
+        dateFin: this.dateFin,
+        userId : Number(this.userId),
+        tipo_venta : this.tipoVenta,
+        status_pagado : this.status_pagado,
+        allUsers: this.allUsers,
+      };
+      
+    }
 
+    this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
     this.asignarValores()
   }
 

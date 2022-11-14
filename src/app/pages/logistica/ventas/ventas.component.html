@@ -46,8 +46,8 @@
           <span class="font-weight-bold">Monto total facturas: {{ total | currency: "USD" }}</span> <br>
           <span class="font-weight-bold">Meta: {{ meta }}%</span><br>
           <span class="font-weight-bold">Monto meta: {{ Vmeta| currency: "USD" }}</span><br>
-          <span class="font-weight-bold">Meta recuperación: {{ recuperacion_monto | currency:"USD"}}</span><br> 
-          <span class="font-weight-bold">Porcentaje recuperado: {{ recuperacion }}%</span><br>
+          <!-- <span class="font-weight-bold">Meta recuperación: {{ recuperacion_monto | currency:"USD"}}</span><br> 
+          <span class="font-weight-bold">Porcentaje recuperado: {{ recuperacion }}%</span><br> -->
         </div>
         <div>
           <button class="btn btn-primary" (click)="openFiltros(contentEditar)">
@@ -257,7 +257,7 @@
         </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="aplicarFiltros()">
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
           Aplicar <i class="fas fa-search"></i>
         </button>
       </div>

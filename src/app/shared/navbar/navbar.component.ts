@@ -6,6 +6,7 @@ import { CheckoutService } from '../services/checkout.service';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { UserAuth } from 'app/auth/login/models/auth.model';
+import { RememberFiltersService } from '../services/remember-filters.service';
 
 @Component({
     moduleId: module.id,
@@ -35,6 +36,7 @@ export class NavbarComponent implements OnInit{
       private router: Router,
       public _CheckoutService: CheckoutService,
       private _AuthService:AuthService,
+      private _RememberFiltersService:RememberFiltersService,
     ) {
       this.location = location;
 
@@ -85,9 +87,11 @@ export class NavbarComponent implements OnInit{
 
     logout(){
       this._AuthService.logout().subscribe((data) => {
+        this._RememberFiltersService.deleteAllFilterStorage()
         this._AuthService.deleteSession()
         this.router.navigateByUrl("/login");
       },(error)=>{
+        this._RememberFiltersService.deleteAllFilterStorage()
         this._AuthService.deleteSession()
         this.router.navigateByUrl("/login");
 

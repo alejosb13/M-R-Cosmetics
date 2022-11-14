@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
-import { Factura } from 'app/shared/models/Factura.model';
-import { CarteraDate, CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
+import { TypesFiltersForm } from 'app/shared/models/FiltersForm';
+import { CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
+import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
@@ -50,6 +51,8 @@ export class RecuperacionComponent implements OnInit {
   userIdString: string;
   userStore: Usuario[];
 
+  FilterSection:TypesFiltersForm = "recuperacionFilter"
+
   constructor(
     private _TablasService:TablasService,
     private _AuthService:AuthService,
@@ -57,6 +60,7 @@ export class RecuperacionComponent implements OnInit {
     private NgbModal: NgbModal,
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
+    private _RememberFiltersService: RememberFiltersService,
   ) {}
 
   ngOnInit(): void {
@@ -139,7 +143,7 @@ export class RecuperacionComponent implements OnInit {
       this.userStore = usuarios
       this.USersNames = usuarios.map(usuario => `${ usuario.id } - ${ usuario.name } ${ usuario.apellido }`)
 
-      this.resetUser()
+      // this.resetUser()
     })
   }
 
@@ -181,7 +185,7 @@ export class RecuperacionComponent implements OnInit {
   limpiarFiltros() {
     this.setCurrentDate();
 
-    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    // this.userId = Number(this._AuthService.dataStorage.user.userId);
     // this.tipoVenta = 1
     // this.status_pagado = 0 // por pagar
     // this.numDesde = 0
@@ -191,26 +195,47 @@ export class RecuperacionComponent implements OnInit {
     this.allDates = false
 
     if(this.isAdmin) this.resetUser();
+    this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
     this.aplicarFiltros();
     // console.log(this.filtros);
   }
 
-  aplicarFiltros() {
-    if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
+  aplicarFiltros(submit:boolean = false) {
+    let filtrosStorage = this._RememberFiltersService.getFilterStorage()
 
-    if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+    if(filtrosStorage.hasOwnProperty(this.FilterSection) && !submit){
+      this.filtros = {...filtrosStorage[this.FilterSection]} 
 
-    this.filtros = {
-      dateIni: this.dateIni,
-      dateFin: this.dateFin,
-      userId : this.userId,
-      allDates: this.allDates,
-      allNumber: this.allNumber,
-      // numDesde: this.numDesde ? this.numDesde : 0,
-      // numHasta: this.numHasta ? this.numHasta : 0,
-      numRecibo: this.numRecibo ? this.numRecibo : 0,
-    };
+      this.dateIni = this.filtros.dateIni
+      this.dateFin = this.filtros.dateFin
+      this.userId = Number(this.filtros.userId)
+      this.allDates = this.filtros.allDates
+      this.allNumber = this.filtros.allNumber
+      this.numRecibo = this.filtros.numRecibo
+    
+    }else{
+      if(!submit){
+        this.userId = Number(this._AuthService.dataStorage.user.userId);
+      }
 
+      if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
+
+      if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+  
+      this.filtros = {
+        dateIni: this.dateIni,
+        dateFin: this.dateFin,
+        userId : this.userId,
+        allDates: this.allDates,
+        allNumber: this.allNumber,
+        // numDesde: this.numDesde ? this.numDesde : 0,
+        // numHasta: this.numHasta ? this.numHasta : 0,
+        numRecibo: this.numRecibo ? this.numRecibo : 0,
+      };
+
+    }
+    
+    this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
     this.asignarValores()
   }
 

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
 import Swal from 'sweetalert2';
 import { Auth } from './models/auth.model';
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private _AuthService: AuthService,
     private router: Router,
+    private _RememberFiltersService: RememberFiltersService,
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +73,7 @@ export class LoginComponent implements OnInit {
         
         let Auth:Auth = {...data}  
         this._AuthService.dataStorage = {...Auth}
+        this._RememberFiltersService.deleteAllFilterStorage()
         this.router.navigateByUrl("/inicio");
       },error=> {
         Swal.fire({
