@@ -10,6 +10,7 @@ import { MetaService } from 'app/shared/services/meta.service';
 import { ReciboService } from 'app/shared/services/recibo.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
+import logger from 'app/utils/logger';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 
@@ -136,7 +137,7 @@ export class UsuariosComponent implements OnInit {
   modificarMeta(content:any,meta:Meta){
     this.meta = meta
 
-    console.log(this.meta );
+    logger.log(this.meta );
     
     this.idUsuario = meta.user_id
 
@@ -207,7 +208,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   FormsValuesMeta(meta:Meta){
-    console.log("[reciboFormService]",meta);
+    logger.log("[reciboFormService]",meta);
 
     meta.user_id = this.idUsuario
     if(this.meta){

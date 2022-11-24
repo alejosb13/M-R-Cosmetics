@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import logger from 'app/utils/logger';
 import Swal from 'sweetalert2';
 import { Auth } from './models/auth.model';
 import { AuthService } from './service/auth.service';
@@ -76,6 +77,8 @@ export class LoginComponent implements OnInit {
         this._RememberFiltersService.deleteAllFilterStorage()
         this.router.navigateByUrl("/inicio");
       },error=> {
+        logger.log(error);
+        
         Swal.fire({
           text: "Usuario o contraseña incorrectos",
           icon: 'warning',

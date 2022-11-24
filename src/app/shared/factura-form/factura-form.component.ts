@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import logger from 'app/utils/logger';
 // import { AuthService } from 'app/auth/login/service/auth.service';
 import Swal from 'sweetalert2';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
@@ -43,7 +44,7 @@ export class FacturaEditarFormComponent implements OnInit {
     // this.isAdmin = this._AuthService.isAdmin()
 
 
-    console.log("[ModalEdirtar]",this.producto);
+    logger.log("[ModalEdirtar]",this.producto);
     this.definirValidaciones()
     this.setFormValues()
     this.getProducto()
@@ -54,9 +55,9 @@ export class FacturaEditarFormComponent implements OnInit {
 
   getProducto(){
     this._ProductosService.getProductoById(this.producto.producto_id).subscribe((producto)=> {
-      console.log(producto.stock);
-      console.log(this.producto.cantidad);
-      console.log(producto.stock + this.producto.cantidad);
+      logger.log(producto.stock);
+      logger.log(this.producto.cantidad);
+      logger.log(producto.stock + this.producto.cantidad);
 
       // this.produ = producto
       this.ProductForm.get("stock").setValidators([
@@ -106,7 +107,7 @@ export class FacturaEditarFormComponent implements OnInit {
   changeValues(){
     this.ProductForm.valueChanges.subscribe(valuesForm=>{
 
-      console.log(valuesForm);
+      logger.log(valuesForm);
       this.calculatePrice()
     })
 

@@ -6,6 +6,7 @@ import { Factura } from '../models/Factura.model';
 import { FacturaCheckout } from '../models/FacturaCheckout.model';
 import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { Producto } from '../models/Producto.model';
+import logger from 'app/utils/logger';
 
 const FacturaURL = `${environment.urlAPI}facturas`
 @Injectable({
@@ -89,7 +90,7 @@ export class CheckoutService {
     }
 
     let FacturaCheckout: FacturaCheckout = {...this.dataStorage}
-    console.log(FacturaCheckout);
+    logger.log(FacturaCheckout);
 
     if(Object.keys(FacturaCheckout).length > 0 ){
       let ProductoExistente = FacturaCheckout.factura_detalle.find(FacturaDetalleStorage => FacturaDetalleStorage.producto_id == factura_detalle.producto_id)

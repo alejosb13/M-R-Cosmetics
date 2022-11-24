@@ -1,3 +1,8 @@
 ngb-pagination .pagination{
   flex-wrap: wrap;
 }
+
+.sweet-alert-blur{
+  background-color: rgba(81, 203, 206, 0.3) !important;
+  backdrop-filter: blur(10px); 
+}

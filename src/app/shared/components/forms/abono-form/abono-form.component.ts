@@ -15,6 +15,7 @@ import { HelpersService } from 'app/shared/services/helpers.service';
 import { ReciboService } from 'app/shared/services/recibo.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import logger from 'app/utils/logger';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -199,7 +200,7 @@ export class AbonoFormComponent implements OnInit {
   getClientesObserbable(){
     this._ClientesService.getClienteCalculoAbono(this.clienteId)
     .subscribe((dataAbono)=>{
-      console.log("cliente: ",dataAbono);
+      logger.log("cliente: ",dataAbono);
 
       // this.abonado    =  dataAbono.totalAbono
       this.montoTotal = dataAbono.totalFactura

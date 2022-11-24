@@ -7,6 +7,7 @@ import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { UserAuth } from 'app/auth/login/models/auth.model';
 import { RememberFiltersService } from '../services/remember-filters.service';
+import logger from 'app/utils/logger';
 
 @Component({
     moduleId: module.id,
@@ -134,7 +135,7 @@ export class NavbarComponent implements OnInit{
       collapse(){
         this.isCollapsed = !this.isCollapsed;
         const navbar = document.getElementsByTagName('nav')[0];
-        console.log(navbar);
+        logger.log(navbar);
         if (!this.isCollapsed) {
           navbar.classList.remove('navbar-transparent');
           navbar.classList.add('bg-white');

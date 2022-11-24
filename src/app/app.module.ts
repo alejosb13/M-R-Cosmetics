@@ -14,7 +14,9 @@ import { AppRoutes } from './app.routing';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthModule } from "./auth/auth.module";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { ErrorInterceptor } from "./interceptors/error.interceptor";
+import { BasicAuthInterceptor } from "./interceptors/basic-auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -35,7 +37,10 @@ import { HttpClientModule } from "@angular/common/http";
     ReactiveFormsModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

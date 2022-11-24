@@ -64,6 +64,7 @@ import { Recuperacion85Component } from "app/pages/logistica/recuperacion85/recu
 import { SeccionesConfigComponent } from "app/pages/configuracion/secciones-config/secciones-config.component";
 import { MigrarInformacionVendedorComponent } from "app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component";
 import { ProductosVendedorComponent } from "app/pages/logistica/productos-vendedor/productos-vendedor.component";
+
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
 const SUPERVISOR    = "supervisor";

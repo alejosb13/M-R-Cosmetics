@@ -4,6 +4,7 @@ import { AuthService } from 'app/auth/login/service/auth.service';
 import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import logger from 'app/utils/logger';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,7 +24,7 @@ export class DevolucionFacturaFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log("[factura-Form]",this.factura);
+    logger.log("[factura-Form]",this.factura);
 
     this.definirValidaciones()
   }

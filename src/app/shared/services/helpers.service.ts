@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import logger from 'app/utils/logger';
 import * as moment from 'moment';
 
 @Injectable({
@@ -91,7 +92,7 @@ export class HelpersService {
     let split:string[] = clienteString.split("-")
     let id = Number(split[0].trim())
 
-    console.log("IdCliente",id);
+    logger.log("IdCliente",id);
     return id
   }
 
