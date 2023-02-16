@@ -37,4 +37,24 @@ export class ConfiguracionService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getTaza(): Observable<any> {
+
+    return this.http.get(
+      `${ConfiguracionURL}/taza-cambio`,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  setTaza(monto:number,user_id:number): Observable<any> {
+
+    return this.http.post(
+      `${ConfiguracionURL}/taza-cambio`,
+      {
+        monto,
+        user_id
+      },
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }

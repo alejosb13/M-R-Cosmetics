@@ -1,0 +1,88 @@
+<div class="bg-white container-fluid">
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-12">
+        <!-- <h3 class="text-center"></h3> -->
+        <!-- <p>
+          <ngb-alert [dismissible]="false">
+            <strong>!</strong> Better check yourself, you're not looking too good.
+          </ngb-alert>
+        </p> -->
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12 text-center mb-5" >
+        <span class="h3 text-primary font-weight-bolder">
+          Cotización del dolar
+        </span>
+      </div>
+
+      <div class="col-12 text-center" *ngIf="isLoad">
+        <span class="h3">
+          Cargando cotización
+          <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+      </div>
+
+      <div class="col-12" *ngIf="!isLoad">
+        <span class="h3 d-block text-center font-weight-bolder"
+          >1 dolar = {{ tazaMonto }} C$</span
+        >
+        <br />
+        <button
+          class="btn btn-primary mx-auto d-block"
+          (click)="openFiltros(contentEditar)"
+        >
+          Modificar
+        </button>
+      </div>
+      <div class="col-7">
+        <!-- <a class="btn btn-primary btn-block" [routerLink]="[ '/configuracion/migracion-vendedor' ]">Migrar información de vendedor</a> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #contentEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Ingrese el nuevo monto</p>
+  
+          <input
+            type="text"
+            class="form-control"
+            name="cliente"
+            [(ngModel)]="montoString"
+            appOnlyNumberAndPoint
+            appBlockCopyPaste
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button  class="btn btn-primary" (click)="actualizarTaza(true)">
+          Actualizar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

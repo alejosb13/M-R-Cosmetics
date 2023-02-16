@@ -86,6 +86,8 @@ import { SeccionesConfigComponent } from 'app/pages/configuracion/secciones-conf
 import { MigrarInformacionVendedorComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component';
 import { ListClientMigrationComponent } from 'app/pages/configuracion/migrar-informacion-vendedor/list-client-migration/list-client-migration.component';
 import { ProductosVendedorComponent } from 'app/pages/logistica/productos-vendedor/productos-vendedor.component';
+import { TazaCotizacionComponent } from '../../pages/configuracion/taza-cotizacion/taza-cotizacion.component';
+import { DirectivesModule } from '../../shared/directives/directives.module';
 
 @NgModule({
   imports: [
@@ -94,6 +96,7 @@ import { ProductosVendedorComponent } from 'app/pages/logistica/productos-vended
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
+    DirectivesModule
   ],
   declarations: [
     DashboardComponent,
@@ -179,7 +182,9 @@ import { ProductosVendedorComponent } from 'app/pages/logistica/productos-vended
     SeccionesConfigComponent,
     MigrarInformacionVendedorComponent,
     ListClientMigrationComponent,
-    ProductosVendedorComponent
+    TazaCotizacionComponent,
+    
+    ProductosVendedorComponent,
   ]
 })
 
