@@ -33,7 +33,7 @@ export class TazaCotizacionComponent implements OnInit {
   getTaza() {
     this.isLoad = true;
     this._ConfiguracionService.getTaza().subscribe(({ data }) => {
-      console.log(data);
+      // console.log(data);
       this.tazaMonto = data.monto;
       this.montoString = data.monto;
       this.isLoad = false;
@@ -54,7 +54,7 @@ export class TazaCotizacionComponent implements OnInit {
     this._ConfiguracionService
       .setTaza(Number(this.montoString), this.userId)
       .subscribe((data) => {
-        console.log(data);
+        // console.log(data);
         this.modalService.dismissAll();
         this.getTaza();
       });
@@ -65,7 +65,7 @@ export class TazaCotizacionComponent implements OnInit {
     const regex = new RegExp("[a-zA-Z,]*$", "g")
     
     // this.tazaMonto = Number(text.replace(regex , "")) 
-    console.log(this.tazaMonto);
+    // console.log(this.tazaMonto);
 
     
   }

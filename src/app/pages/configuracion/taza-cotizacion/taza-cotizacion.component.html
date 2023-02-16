@@ -60,17 +60,23 @@
   <div class="modal-body">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <div class="form-group">
-          <p class="font-weight-bold">Ingrese el nuevo monto</p>
-  
+
+        <p class="font-weight-bold">Ingrese el nuevo monto</p>
+        <div class="input-group">
+          
+          <span class="input-group-text">1$ =</span>
           <input
-            type="text"
-            class="form-control"
-            name="cliente"
-            [(ngModel)]="montoString"
-            appOnlyNumberAndPoint
-            appBlockCopyPaste
+          type="text"
+          class="form-control text-right"
+          name="cliente"
+          [(ngModel)]="montoString"
+          appOnlyNumberAndPoint
+          appBlockCopyPaste
           />
+          <span class="input-group-text">C$</span>
+        </div>
+        <div class="form-group">
+  
         </div>
       </div>
     </div>
