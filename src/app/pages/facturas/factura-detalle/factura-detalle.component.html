@@ -10,10 +10,21 @@
 
   <div class="container-fluid" *ngIf="!isLoad">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 d-flex" *ngIf="isAdmin">
         <button class="mt-3 btn btn-primary mr-3" (click)="descargarPDF()">
           <i class="fas fa-file-download fa-lg"></i> Descargar
         </button>
+        <div *ngIf="!isLoadtazaMonto">
+          <button *ngIf="existTaza" class="mt-3 btn btn-primary mr-3" (click)="openModal(contentEditarTaza)">
+            <i class="fas fa-pencil-alt "></i
+              > Editar Cotizacion
+          </button>
+          <button *ngIf="!existTaza" class="mt-3 btn btn-primary mr-3" (click)="openModal(contentEditarTaza)">
+            <i class="fas fa-pencil-alt "></i
+              > Agregar Cotizacion
+          </button>
+
+        </div>
         <button
           *ngIf="Factura.despachado == 1"
           class="mt-3 btn btn-primary"
@@ -137,6 +148,14 @@
               <span>{{ Factura.tipo_venta == 1 ? "Credito" : "Contado" }}</span>
             </div>
           </div>
+          <div class="detalle">
+            <div class="description">
+              <span>Cotización</span>
+            </div>
+            <div class="value">
+              <span>{{ tazaMonto }} C$</span>
+            </div>
+          </div>
           <!-- <div class="detalle" *ngIf="Factura.tipo_venta == 1">
                         <div class="description">
                             <span>Historial de pago</span>
@@ -148,81 +167,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="row detalle-section">
-      <div class="col-md-12 detalle-section">
-        <ul class="list-group list">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <span><b>Descripcion</b></span>
-            <span class=""><b>Cantidad</b></span>
-            <span class=""><b>Precio</b></span>
-            <span *ngIf="isAdmin" class=""><b>Devolver</b></span>
-            <span *ngIf="isAdmin" class=""><b></b></span>
-          </li>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            *ngFor="let producto of Factura.factura_detalle"
-          >
-            <span class="texto-descripcion">{{ producto.descripcion }}</span>
-            <span class="texto-cantidad" *ngIf="producto.cantidad > 1"
-              >{{ producto.cantidad }} Uds</span
-            >
-            <span class="texto-cantidad" *ngIf="producto.cantidad == 1"
-              >{{ producto.cantidad }} Ud</span
-            >
-            <span class="texto-precio">{{
-              producto.precio | currency: "USD"
-            }}</span>
-            <span
-              class="texto-precio"
-              *ngIf="isAdmin"
-              role="button"
-              (click)="openEditFactura(contentEditar, producto)"
-              ><i class="fas fa-pencil-alt text-warning"></i
-            ></span>
-            <span
-              class="texto-precio"
-              *ngIf="isAdmin"
-              role="button"
-              (click)="openEditFactura(contentEditar, producto)"
-              ><i class="fas fa-pencil-alt text-warning"></i
-            ></span>
-          </li>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            *ngIf="Factura.tipo_venta == 1"
-          >
-            <span><b>Abonado</b></span>
-
-            <span class=""
-              ><b>{{
-                Factura.monto - Factura.saldo_restante | currency: "USD"
-              }}</b></span
-            >
-          </li>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            *ngIf="Factura.tipo_venta == 1"
-          >
-            <span><b>Por Abonar</b></span>
-
-            <span class=""
-              ><b>{{ Factura.saldo_restante | currency: "USD" }}</b></span
-            >
-          </li>
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <span><b>Total</b></span>
-
-            <span class=""
-              ><b>{{ Factura.monto | currency: "USD" }}</b></span
-            >
-          </li>
-        </ul>
-      </div>
-    </div> -->
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
       <table class="table  table-hover" >
@@ -425,4 +369,56 @@
   <!-- <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
 </div> -->
+</ng-template>
+
+<ng-template #contentEditarTaza let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <p class="font-weight-bold">Taza de factura actual</p>
+        <div class="input-group">
+          
+          <span class="input-group-text">1$ =</span>
+          <input
+          type="text"
+          class="form-control text-right"
+          [(ngModel)]="tazaMonto"
+          appOnlyNumberAndPoint
+          appBlockCopyPaste
+          />
+          <span class="input-group-text">C$</span>
+        </div>
+        <div class="form-group">
+  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button *ngIf="existTaza"  class="btn btn-primary" (click)="actualizarTaza()">
+          Actualizar
+        </button>
+        <button *ngIf="!existTaza"  class="btn btn-primary" (click)="agregarTaza()">
+          Agregar
+        </button>
+      </div>
+    </div>
+  </div>
 </ng-template>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { DevolucionProductoService } from 'app/pages/devoluciones/services/devolucion-producto.service';
 import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
@@ -13,13 +13,15 @@ import { FacturasService } from 'app/shared/services/facturas.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { ConfiguracionService } from '../../../shared/services/configuracion.service';
 
 type ProductoDetalle = Producto & FacturaDetalle
 
 @Component({
   selector: 'app-factura-detalle',
   templateUrl: './factura-detalle.component.html',
-  styleUrls: ['./factura-detalle.component.css']
+  styleUrls: ['./factura-detalle.component.css'],
+  providers: [NgbModalConfig, NgbModal],
 })
 export class FacturaDetalleComponent implements OnInit {
   isLoad:boolean = false;
@@ -36,6 +38,10 @@ export class FacturaDetalleComponent implements OnInit {
 
   isAdmin:boolean
 
+  tazaMonto: number = 0;
+  isLoadtazaMonto: boolean = false;
+  existTaza: boolean = false;
+
   constructor(
     private _FacturasService:FacturasService,
     private _ActivatedRoute: ActivatedRoute,
@@ -45,6 +51,7 @@ export class FacturaDetalleComponent implements OnInit {
     private _DevolucionProductoService: DevolucionProductoService,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
+    private _ConfiguracionService: ConfiguracionService,
   ) {
   }
 
@@ -52,6 +59,7 @@ export class FacturaDetalleComponent implements OnInit {
     this.isAdmin = this._AuthService.isAdmin()
     this.FacturaId = Number(this._ActivatedRoute.snapshot.params.id)
     this.facturaById(this.FacturaId)
+    this.getTazaFactura()
   }
 
   Validar_si_se_le_debe_al_cliente(cliente_id:number){
@@ -105,6 +113,21 @@ export class FacturaDetalleComponent implements OnInit {
       this._HelpersService.downloadFile(data,`Detalle_Factura_${this.FacturaId}`)
 
     })
+  }
+
+  actualizarTaza(){
+    
+    this._ConfiguracionService.updateTazaFactura(Number(this.tazaMonto),this.FacturaId).subscribe(({ data }) => {
+      this.getTazaFactura()
+      // this.NgbModal.dismissAll()
+    });
+  }
+
+  agregarTaza(){
+    
+    this._ConfiguracionService.setTazaFactura(Number(this.tazaMonto),this.FacturaId).subscribe(({ data }) => {
+      this.getTazaFactura()
+    });
   }
 
 
@@ -209,5 +232,28 @@ export class FacturaDetalleComponent implements OnInit {
         })
       }
     })
+  }
+
+  openModal(content: any) {
+    this.NgbModal.open(content);
+  }
+
+  getTazaFactura() {
+    this.isLoadtazaMonto = true
+    this.NgbModal.dismissAll()
+
+    this._ConfiguracionService.getTazaFactura(this.FacturaId).subscribe(({ data }) => {
+      this.isLoadtazaMonto = false
+      console.log("factura taza",data);
+      if(data){
+        this.existTaza = true
+        this.tazaMonto = data.monto;
+      }else{
+        this.existTaza = false
+      }
+      
+    },()=>{
+      this.isLoadtazaMonto = false
+    });
   }
 }

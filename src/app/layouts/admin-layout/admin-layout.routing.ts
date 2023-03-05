@@ -213,7 +213,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "configuracion",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, SUPERVISOR] },
+    data: { role: [ADMINISTRADOR] },
     children: [
       { path: "", component: SeccionesConfigComponent },
       { path: "migracion-vendedor", component: MigrarInformacionVendedorComponent },
