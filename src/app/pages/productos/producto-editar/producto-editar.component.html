@@ -1,15 +1,18 @@
 <div class="row">
-    <div class="col-md-12">
-        <div class="card card-user">
-            <div class="card-header">
-                <h5 class="card-title">Editar Producto</h5>
-            </div>
-            <div class="card-body px-4">
-              <!-- <app-cliente-form (FormsValues)="ClientValuesForm($event)" [clienteId]="clienteId"></app-cliente-form> -->
-              <app-producto-form (FormsValues)="ProductoValuesForm($event)" [Id]="productoId"></app-producto-form>
-            </div>
-        </div>
+  <div class="col-md-12">
+    <div class="card card-user">
+      <div class="card-header">
+        <h5 class="card-title">Editar Producto</h5>
+      </div>
+      <div class="card-body px-4">
+        <!-- <app-cliente-form (FormsValues)="ClientValuesForm($event)" [clienteId]="clienteId"></app-cliente-form> -->
+        <app-producto-form
+          (FormsValues)="ProductoValuesForm($event)"
+          [Id]="productoId"
+        ></app-producto-form>
+
+        <app-regalo-producto-form [id]="productoId"></app-regalo-producto-form>
+      </div>
     </div>
+  </div>
 </div>
-
-

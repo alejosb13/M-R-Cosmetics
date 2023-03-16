@@ -46,7 +46,7 @@
             <th scope="col">Frecuencia</th>
             <th scope="col">E.Cuenta</th>
             <th scope="col">Facturacion</th>
-            <th scope="col">Opciones</th>
+            <th scope="col" *ngIf="isAdmin">Opciones</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -98,7 +98,7 @@
               </div>
             </td>
             <td>
-              <div class="d-flex flex-direction">
+              <div class="d-flex flex-direction" *ngIf="isAdmin">
                 <div class="mr-3" ngbTooltip="Editar">
                   <a [routerLink]="[ '/cliente','editar',cliente.id]" ><i class="fas fa-pencil-alt text-warning"></i></a>
                 </div>

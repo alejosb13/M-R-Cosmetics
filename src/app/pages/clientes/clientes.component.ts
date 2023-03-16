@@ -4,6 +4,7 @@ import { Cliente } from '../../shared/models/Cliente.model';
 import { ClientesService } from '../../shared/services/clientes.service';
 import Swal from 'sweetalert2';
 import { environment } from 'environments/environment';
+import { AuthService } from '../../auth/login/service/auth.service';
 
 
 @Component({
@@ -18,13 +19,16 @@ export class ClientesComponent implements OnInit {
   collectionSize = 0;
   Clientes: Cliente[];
   isLoad:boolean
+  isAdmin:boolean
 
   constructor(
     private _ClientesService:ClientesService,
     private _TablasService:TablasService,
+    private _AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
   }
 

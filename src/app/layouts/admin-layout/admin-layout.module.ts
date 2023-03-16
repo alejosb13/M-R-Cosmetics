@@ -88,6 +88,9 @@ import { ListClientMigrationComponent } from 'app/pages/configuracion/migrar-inf
 import { ProductosVendedorComponent } from 'app/pages/logistica/productos-vendedor/productos-vendedor.component';
 import { TazaCotizacionComponent } from '../../pages/configuracion/taza-cotizacion/taza-cotizacion.component';
 import { DirectivesModule } from '../../shared/directives/directives.module';
+import { RegaloProductoFormComponent } from '../../shared/components/forms/regalo-producto-form/regalo-producto-form.component';
+import { RegalosListComponent } from '../../pages/regalos/regalos-list/regalos-list.component';
+import { CargarRegaloComponent } from '../../shared/components/forms/cargar-regalo/cargar-regalo.component';
 
 @NgModule({
   imports: [
@@ -117,6 +120,9 @@ import { DirectivesModule } from '../../shared/directives/directives.module';
     ProductoEditarComponent,
     ProductoInsertarComponent,
     ProductoFormComponent,
+    RegaloProductoFormComponent,
+    RegalosListComponent,
+    CargarRegaloComponent,
 
     UsuariosComponent,
     UsuariosEditarComponent,

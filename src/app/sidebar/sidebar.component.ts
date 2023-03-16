@@ -20,11 +20,11 @@ export const ROUTES: RouteInfo[] = [
   { path: '/factura/entrega/0',          title: 'F. Por Entregar',      icon:'fas fa-receipt',                class: '' , access: 'administrador'},
   { path: '/pedido',                     title: 'Pedido',               icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/devolucion',                 title: 'Devoluciones',         icon:'fas fa-undo',                   class: '' , access: 'administrador'},
-  { path: '/recibos',                    title: 'Recibos',              icon:'fas fa-file-invoice-dollar',    class: '' , access: 'administrador'},
+  { path: '/recibos',                    title: 'Recibos',              icon:'fas fa-file-invoice-dollar',    class: '' , access: 'administrador,supervisor'},
   { path: '/abono',                      title: 'Abono',                icon:'fas fa-money-check-alt',        class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/categoria',                  title: 'Categoria',            icon:'fas fa-users',                  class: '' , access: 'administrador,supervisor'},
   { path: '/frecuencia',                 title: 'Frecuencia',           icon:'fas fa-business-time',          class: '' , access: 'administrador,supervisor'},
-  { path: '/configuracion',              title: 'Configuración',        icon:'fas fa-cog',                    class: '' , access: 'administrador,supervisor'},
+  { path: '/configuracion',              title: 'Configuración',        icon:'fas fa-cog',                    class: '' , access: 'administrador'},
   // { path: '/icons',         title: 'Icons',             icon:'nc-diamond',    class: '' },<i class="fas fa-undo"></i>
   // { path: '/maps',          title: 'Maps',              icon:'nc-pin-3',      class: '' },
   // { path: '/notifications', title: 'Notifications',     icon:'nc-bell-55',    class: '' },

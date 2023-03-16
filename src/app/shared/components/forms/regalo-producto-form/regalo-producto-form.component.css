@@ -1,0 +1,37 @@
+.cliente {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.vendedor {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.header-group {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 20px;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+.header{
+  margin-bottom: 15px ;
+  margin-top: 15px ;
+}
+
+button.btn.btn-success {
+  font-size: 17px;
+  padding: 6px 14px;
+}
+
+.carga-producto {
+  min-width: 112px;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+.carga-producto input{
+  width: 100%;
+  max-width: 90px;
+}

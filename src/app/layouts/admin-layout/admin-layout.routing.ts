@@ -158,7 +158,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "recibos",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR] },
+    data: { role: [ADMINISTRADOR,SUPERVISOR] },
     children: [
       { path: "", component: ReciboSeleccionarSeccionComponent },
       { path: "listado", children:[
@@ -170,7 +170,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "checkout",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, VENDEDOR] },
+    data: { role: [ADMINISTRADOR, VENDEDOR,SUPERVISOR] },
     children: [{ path: "", component: CheckoutComponent }],
   },
   {

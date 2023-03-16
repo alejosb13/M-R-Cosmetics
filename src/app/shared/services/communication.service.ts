@@ -6,6 +6,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 export class CommunicationService {
   ReiniciarInsertarAbonoForm: EventEmitter<boolean> = new EventEmitter(false);
   BottonAgregarAbonoActive: EventEmitter<boolean> = new EventEmitter(false);
+  RefreshList: EventEmitter<boolean> = new EventEmitter(false);
   // DeleteReferralSource: EventEmitter<any> = new EventEmitter();
   // DeleteDOL: EventEmitter<any> = new EventEmitter();
   // DeletePatient: EventEmitter<any> = new EventEmitter();

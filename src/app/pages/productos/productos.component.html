@@ -48,7 +48,7 @@
               <th scope="col">Descripcion</th>
               <!-- <th scope="col">Comision</th> -->
               <th scope="col">Estado</th>
-              <th scope="col">Opciones</th>
+              <th scope="col" *ngIf="isAdmin">Opciones</th>
             </tr>
 
           </thead>
@@ -68,7 +68,7 @@
                     <span *ngIf="producto.estado">Activo</span>
                     <span *ngIf="!producto.estado">Inactivo</span>
                 </td>
-              <td>
+              <td *ngIf="isAdmin">
                 <div class="d-flex flex-direction">
                   <div class="mr-3" ngbTooltip="Editar">
                     <a [routerLink]="[ '/producto','editar',producto.id]" ><i class="fas fa-pencil-alt"></i></a>

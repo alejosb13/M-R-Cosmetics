@@ -13,6 +13,7 @@ import { UsuariosService } from 'app/shared/services/usuarios.service';
 import logger from 'app/utils/logger';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../auth/login/service/auth.service';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class UsuariosComponent implements OnInit {
 
   isLoad:boolean
   Vendedor = Role.Vendedor
+  
+  isAdmin:boolean
 
   constructor(
     private _UsuariosService:UsuariosService,
@@ -40,26 +43,29 @@ export class UsuariosComponent implements OnInit {
     private _ReciboService:ReciboService,
     private _HelpersService:HelpersService,
     private _MetaService:MetaService,
-    private modalService: NgbModal
-  ) {}
-
-  ngOnInit(): void {
-    this.asignarValores()
-  }
-
-
-  asignarValores(){
-    this.isLoad = true
-
-    this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> {
-      console.log(usuarios);
-
-      this.Usuarios = [...usuarios]
-      this._TablasService.datosTablaStorage = [...usuarios]
+    private modalService: NgbModal,
+    private _AuthService: AuthService,
+    
+    ) {}
+    
+    ngOnInit(): void {
+      this.isAdmin = this._AuthService.isAdmin()
+      this.asignarValores()
+    }
+    
+    
+    asignarValores(){
+      this.isLoad = true
+      
+      this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> {
+        console.log(usuarios);
+        
+        this.Usuarios = [...usuarios]
+        this._TablasService.datosTablaStorage = [...usuarios]
       this._TablasService.total = usuarios.length
       this._TablasService.busqueda = ""
-
-
+      
+      
       this.refreshCountries()
       this.isLoad =false
     },(error)=>{

@@ -5,6 +5,7 @@ import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../auth/login/service/auth.service';
 
 @Component({
   selector: 'app-productos',
@@ -21,14 +22,17 @@ export class ProductosComponent implements OnInit {
 
   productos:number = 0
   monto_total:number = 0
+  isAdmin:boolean
 
   constructor(
     private _ProductosService:ProductosService,
     private _TablasService:TablasService,
-    private _LogisticaService:LogisticaService,
+    private _LogisticaService:LogisticaService,    
+    private _AuthService: AuthService,
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
+    this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
     this.getLogisticaProductos()
   }

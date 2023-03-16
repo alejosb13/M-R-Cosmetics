@@ -1,0 +1,90 @@
+<div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+  <table class="table table-hover">
+    <thead class="border-bottom border-1">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Descripcion</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Ver</th>
+        <th scope="col">Opciones</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="!loading; else elseTemplate">
+      <ng-container *ngIf="regalos.length > 0; else elseTemplateproduct">
+        <tr *ngFor="let regalo of regalos">
+          <td>{{ regalo.data.id }}</td>
+          <td>{{ regalo.data.descripcion }}</td>
+          <td>{{ regalo.cantidad }}</td>
+          <td>
+            <div class="mr-3">
+              <a target="_blank"  [routerLink]="['/producto', 'editar', regalo.data.id]"
+                >Ver producto</a>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex flex-direction">
+              <div class="mr-3" ngbTooltip="Editar">
+                <span class="pointer" ><i class="fas fa-pencil-alt text-warning" (click)="editarRegalo(regalo)" ></i></span>
+              </div>
+              <div class="mr-3" ngbTooltip="Eliminar">
+                <span class="text-danger pointer" role="button" (click)="eliminar(regalo)"><i class="fas fa-trash-alt"></i></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #elseTemplate>
+  <tbody>
+    <tr>
+      <td colspan="5">
+        <div
+          class="d-flex text-center justify-content-center align-content-center w-100 py-5"
+        >
+          <span class="w-100">
+            Cargando Regalos del producto
+            <i class="fas fa-circle-notch fa-spin"></i>
+          </span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</ng-template>
+
+<ng-template #elseTemplateproduct>
+  <tr>
+    <td colspan="5">
+      <div class="container d-flex align-items-center justify-content-center">
+        <!-- <div class="alert alert-info w-100 text-center" > -->
+        <h5>No hay regalos agregados a este producto.</h5>
+        <!-- </div> -->
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+
+
+<ng-template
+    #modalProductoEditar
+    let-modal
+>
+  <div class="modal-header">
+      <button
+          type="button"
+          class="close btn-icon btn-sm pointer"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+      >
+          <i class="fas fa-times"></i>
+      </button>
+  </div>
+  <div class="modal-body">
+    <div class="container cortar-preview">
+      <app-cargar-regalo (FormsValues)="FormsValues($event)" [regalo]="regaloSelected" [producto]="regaloSelected.data"></app-cargar-regalo>
+    </div>
+  </div>
+</ng-template>

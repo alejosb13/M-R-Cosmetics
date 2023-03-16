@@ -1,4 +1,5 @@
 import { Producto } from "./Producto.model";
+import { RegaloFacturado } from './Regalo';
 
 export interface FacturaDetalle {
     id?: number;
@@ -15,4 +16,5 @@ export interface FacturaDetalle {
     created_at?: Date;
     updated_at?: Date;
     producto?: Producto;
+    regalo_facturado?: RegaloFacturado[];
 }

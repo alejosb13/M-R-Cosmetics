@@ -206,6 +206,24 @@
               ><i class="fas fa-pencil-alt text-warning"></i
               ></span>
             </td>
+
+          </tr>
+          <tr *ngFor="let regalo of Regalos">
+            <td>{{ regalo.detalle_regalo.descripcion }}</td>
+            <td>
+              <span *ngIf="regalo.cantidad_regalada > 1">{{ regalo.cantidad_regalada }} Uds</span>
+              <span *ngIf="regalo.cantidad_regalada == 1">{{ regalo.cantidad_regalada }} Ud</span>
+            </td>
+
+            <td colspan="4">
+              <span
+              class="texto-precio "
+              *ngIf="isAdmin"
+              role="button"
+              ><i class="fas fa-gift fa-lg text-danger"></i> Regalo</span>
+              </td>
+
+
           </tr>
         </tbody>
         <tfoot class="border border-1" >
@@ -421,4 +439,33 @@
       </div>
     </div>
   </div>
+</ng-template>
+
+<ng-template #condicionRegalo let-producto>
+<tr>
+  <td>{{ producto.descripcion }}</td>
+  <td>
+    <span *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
+    <span *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
+  </td>
+  <td>{{ producto.precio_unidad | currency: "USD" }}</td>
+  <td>{{ producto.precio | currency: "USD" }}</td>
+  <td>
+    <span
+    class="texto-precio"
+    *ngIf="isAdmin"
+    role="button"
+    (click)="openDevolverProducto(contentDevolver, producto)"
+    ><i class="fas fa-undo"></i></span>
+  </td>
+  <td>
+    <span
+    class="texto-precio"
+    *ngIf="isAdmin"
+    role="button"
+    (click)="openEditFactura(contentEditar, producto)"
+    ><i class="fas fa-pencil-alt text-warning"></i
+    ></span>
+  </td>
+</tr>
 </ng-template>

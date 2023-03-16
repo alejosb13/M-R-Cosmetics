@@ -7,6 +7,7 @@ import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { Producto } from 'app/shared/models/Producto.model';
+import { RegaloFacturado } from 'app/shared/models/Regalo';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { FacturaDetalleService } from 'app/shared/services/facturaDetalle.service';
 import { FacturasService } from 'app/shared/services/facturas.service';
@@ -14,6 +15,7 @@ import { HelpersService } from 'app/shared/services/helpers.service';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { ConfiguracionService } from '../../../shared/services/configuracion.service';
+import { RegaloService } from '../../../shared/services/regalo.service';
 
 type ProductoDetalle = Producto & FacturaDetalle
 
@@ -42,6 +44,8 @@ export class FacturaDetalleComponent implements OnInit {
   isLoadtazaMonto: boolean = false;
   existTaza: boolean = false;
 
+  Regalos: RegaloFacturado[] = [] ;
+
   constructor(
     private _FacturasService:FacturasService,
     private _ActivatedRoute: ActivatedRoute,
@@ -52,6 +56,7 @@ export class FacturaDetalleComponent implements OnInit {
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
     private _ConfiguracionService: ConfiguracionService,
+    private _RegaloService: RegaloService,
   ) {
   }
 
@@ -74,6 +79,22 @@ export class FacturaDetalleComponent implements OnInit {
     })
   }
 
+  ValidarRegalos(ids:number[]){
+    ids.map((id)=>{
+
+      // console.log("[ValidarRegalos]",ids);
+      this._RegaloService.getRegalosXdetalleFactura(id).subscribe((data)=>{
+        // console.log(facturaDetalles);
+        if(data.regalo_facturado && data.regalo_facturado.length > 0 ){
+          this.Regalos = [...this.Regalos, ...data.regalo_facturado]
+        }
+
+        console.log("[ValidarRegalos response]",data);
+
+      })
+    })
+  }
+
   facturaById(FacturaId:number){
     this.isLoad = true
     this._FacturasService.getFacturaById(FacturaId)
@@ -87,6 +108,13 @@ export class FacturaDetalleComponent implements OnInit {
       console.log(factura);
 
       this.Factura = factura
+
+      let idsDetalles:number[] = this.Factura.factura_detalle.map((detalle)=>(
+        detalle.id
+      ))
+      // console.log(idsDetalles);
+      
+      this.ValidarRegalos(idsDetalles)
       this.Validar_si_se_le_debe_al_cliente(factura.cliente_id)
       // if(factura.factura_historial.length > 0 && factura.tipo_venta == 1){
       //   let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
