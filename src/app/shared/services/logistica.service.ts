@@ -99,6 +99,14 @@ export class LogisticaService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+  getIncentivoSupervisor(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/incentivo-supervisor`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 
   getEstadoCuentaCliente(clienteData:any): Observable<any> {
 

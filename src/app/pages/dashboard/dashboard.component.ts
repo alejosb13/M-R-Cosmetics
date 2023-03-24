@@ -13,7 +13,8 @@ import { LogisticaService } from "app/shared/services/logistica.service";
 })
 export class DashboardComponent implements OnInit {
 
-  public isAdmin;
+  public isAdmin:boolean;
+  public isSupervisor:boolean;
   public userId: number;
   public recuperacionPorcentaje: number;
 
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
+    this.isSupervisor = this._AuthService.isSupervisor();
   }
 
 

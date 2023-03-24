@@ -2,12 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
-import { Cliente } from 'app/shared/models/Cliente.model';
 import { Factura } from 'app/shared/models/Factura.model';
 import { TypesFiltersForm } from 'app/shared/models/FiltersForm';
 import { CarteraDate, CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
-import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
 import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
@@ -29,6 +27,7 @@ export class CarteraComponent implements OnInit {
   collectionSize = 0;
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
 
   Data: Factura[];
   total = 0;
@@ -63,10 +62,11 @@ export class CarteraComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
 
 
 
-    if(this.isAdmin){
+    if(this.isAdmin || this.isSupervisor){
       this.getUsers();
     }
 
@@ -189,7 +189,7 @@ export class CarteraComponent implements OnInit {
     this.status_pagado = 0 // por pagar
     this.allDates = false
 
-    if(this.isAdmin) this.resetUser();
+    if(this.isAdmin || this.isSupervisor) this.resetUser();
 
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
     this.aplicarFiltros()

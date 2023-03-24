@@ -150,7 +150,7 @@
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
+            <div class="numbers text-left">
               <!-- <p class="card-category">Cartera</p> -->
               <p class="card-title">Clientes nuevos<p>
             </div>
@@ -189,6 +189,24 @@
       </div> -->
     </div>
   </div>
+  <div class="col-md-6" *ngIf="isSupervisor || isAdmin">
+    <div class="card card-stats" [routerLink]="[ '/logistica','incentivos-supervisor']" role="button">
+      <div class="card-body ">
+        <div class="row">
+          <div class="col-5 col-md-4">
+            <div class="icon-big text-center icon-warning">
+              <i class="fas fa-percent"></i>
+            </div>
+          </div>
+          <div class="col-7 col-md-8 d-flex align-items-center">
+            <div class="numbers text-left">
+              <p class="card-title">Incentivos Supervisor<p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="col-md-6" >
     <div class="card card-stats" [routerLink]="[ '/logistica','clientes-inactivos']" role="button">
       <div class="card-body ">
@@ -199,7 +217,7 @@
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
+            <div class="numbers text-left">
               <p class="card-title">Cliente Inactivos<p>
             </div>
           </div>

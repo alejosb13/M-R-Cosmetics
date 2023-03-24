@@ -28,6 +28,7 @@ export class ClientesNuevosComponent implements OnInit {
   collectionSize = 0;
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
 
   Data: Cliente[];
   total = 0;
@@ -62,10 +63,11 @@ export class ClientesNuevosComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
     // this.userId = Number(this._AuthService.dataStorage.user.userId);
 
 
-    if(this.isAdmin){
+    if(this.isAdmin || this.isSupervisor){
       this.getUsers();
     }
 
@@ -172,7 +174,7 @@ export class ClientesNuevosComponent implements OnInit {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.allDates = false;
 
-    if(this.isAdmin) this.resetUser();
+    if(this.isAdmin || this.isSupervisor) this.resetUser();
 
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
     this.aplicarFiltros();

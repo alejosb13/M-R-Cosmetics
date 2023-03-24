@@ -167,7 +167,7 @@
           <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateFin" >
         </div>
       </div>
-      <div class="col-md-12" *ngIf="isAdmin">
+      <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
         <div class="form-group" >
           <p class=" font-weight-bold">Usuarios</p>
           <select name="" id="" class="form-control" [(ngModel)]="userId">

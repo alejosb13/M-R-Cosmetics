@@ -73,6 +73,7 @@ export class NavbarComponent implements OnInit{
       if(titlee.includes("logistica/mora30-60") )             return "Mora 30-60";
       if(titlee.includes("logistica/mora60-90") )             return "Mora 60-90";
       if(titlee.includes("logistica/clientes-nuevos") )       return "Clientes nuevos";
+      if(titlee.includes("logistica/incentivos-supervisor") )  return "Incentivos de Supervisor";
       if(titlee.includes("logistica/incentivo") )             return "Incentivos";
       if(titlee.includes("logistica/ventas") )                return "Ventas";
       if(titlee.includes("logistica/clientes-inactivos") )    return "Clientes Inactivos";

@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Categoria } from 'app/shared/models/Categoria.model';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
 import { Auth } from '../models/auth.model';
+enum Roles {
+  ADMINISTRADOR = "administrador",
+  VENDEDOR = "vendedor",
+  SUPERVISOR = "supervisor",
+
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +83,14 @@ export class AuthService {
     let roleName = this.dataStorage.user.roleName
     // console.log("role",roleName);
 
-    return roleName == "administrador" ? true : false
+    return roleName == Roles.ADMINISTRADOR ? true : false
+  }
+
+  isSupervisor():boolean{
+    let roleName = this.dataStorage.user.roleName
+    // console.log("role",roleName);
+
+    return roleName == Roles.SUPERVISOR ? true : false
   }
 
   set dataStorage(value:Auth ){

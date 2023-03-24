@@ -25,6 +25,7 @@ export class RecuperacionComponent implements OnInit {
   collectionSize = 0;
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
 
   userQuery:Usuario
   Data: any[];
@@ -65,10 +66,11 @@ export class RecuperacionComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
     this.userId = Number(this._AuthService.dataStorage.user.userId);
 
 
-    if(this.isAdmin){
+    if(this.isAdmin || this.isSupervisor){
       this.getUsers();
     }
 
@@ -194,7 +196,7 @@ export class RecuperacionComponent implements OnInit {
     this.allNumber = true
     this.allDates = false
 
-    if(this.isAdmin) this.resetUser();
+    if(this.isAdmin || this.isSupervisor) this.resetUser();
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
     this.aplicarFiltros();
     // console.log(this.filtros);

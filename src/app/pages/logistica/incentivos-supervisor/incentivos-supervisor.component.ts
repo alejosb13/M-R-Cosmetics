@@ -2,12 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
-import { Cliente } from 'app/shared/models/Cliente.model';
-import { Factura } from 'app/shared/models/Factura.model';
 import { TypesFiltersForm } from 'app/shared/models/FiltersForm';
-import { CarteraDate, CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
+import { CarteraDateBodyForm } from 'app/shared/models/Logistica.model';
 import { Usuario } from 'app/shared/models/Usuario.model';
-import { ClientesService } from 'app/shared/services/clientes.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
 import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
@@ -15,14 +12,14 @@ import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, filter, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-clientes-reactivados',
-  templateUrl: './clientes-reactivados.component.html',
-  styleUrls: ['./clientes-reactivados.component.css']
+  selector: 'app-incentivos-supervisor',
+  templateUrl: './incentivos-supervisor.component.html',
+  styleUrls: ['./incentivos-supervisor.component.css']
 })
-export class ClientesReactivadosComponent implements OnInit {
+export class IncentivosSupervisorComponent implements OnInit {
   page = 1;
   pageSize = environment.PageSize;
   collectionSize = 0;
@@ -30,14 +27,24 @@ export class ClientesReactivadosComponent implements OnInit {
   isAdmin:boolean
   isSupervisor:boolean
 
-  Data: Cliente[];
+  userQuery:Usuario
+  Data: any[];
   total = 0;
+  totalrecuperacion5 = 0;
+  totalFactura2 = 0;
+  porcentaje5 = 0;
+  totalContado = 0;
+  totalCredito = 0;
   filtros: any = {};
   dateIni: string;
   dateFin: string;
   tipoVenta = 1 //credito
   status_pagado = 0 // por pagar
   allDates:boolean = false
+  // numDesde:number
+  // numHasta:number
+  numRecibo:number
+  allNumber:boolean = true
   // user:number
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
@@ -48,7 +55,7 @@ export class ClientesReactivadosComponent implements OnInit {
   userIdString: string;
   userStore: Usuario[];
 
-  FilterSection:TypesFiltersForm = "clientesReactivadosFilter"
+  FilterSection:TypesFiltersForm = "incentivosFilter"
 
   constructor(
     private _TablasService:TablasService,
@@ -85,14 +92,29 @@ export class ClientesReactivadosComponent implements OnInit {
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
       allDates: this.filtros.allDates,
+      allNumber: this.filtros.allNumber,
+      // numDesde:this.filtros.numDesde,
+      // numHasta:this.filtros.numHasta
+      numRecibo: Number(this.filtros.numRecibo)
     };
 
-    this._LogisticaService.getClientesReactivados(bodyForm).subscribe((data:Cliente[])=> {
-      // console.log(recibos);
-      this.Data = [...data]
-      this._TablasService.datosTablaStorage = [...data]
-      this._TablasService.total = data.length
+    this._LogisticaService.getIncentivoSupervisor(bodyForm).subscribe((data:any)=> {
+      console.log(data);
+      // let dataResponse = []
+      // if(data.recibo.hasOwnProperty('recibo_historial') && data.recibo.hasOwnProperty('recibo_historial_contado')){
+      //   dataResponse = [...data.recibo.recibo_historial, ...data.recibo.recibo_historial_contado]
+      //   this.userQuery = data.recibo.user
+      // }
+      // console.log(dataResponse);
+
+      this.Data = data.dataVendedores
+      this._TablasService.datosTablaStorage = data.dataVendedores
+      this._TablasService.total = data.dataVendedores.length
       this._TablasService.busqueda = ""
+
+      this.total = data.totalFacturaVendedores2Porciento + data.totalRecuperacionVendedores
+      this.totalrecuperacion5 = data.totalRecuperacionVendedores
+      this.totalFactura2 = data.totalFacturaVendedores2Porciento 
 
       this.refreshCountries()
       this.isLoad =false
@@ -107,15 +129,14 @@ export class ClientesReactivadosComponent implements OnInit {
   }
 
   BuscarValor(){
-    // this._TablasService.buscar(this.Data)
     let camposPorFiltrar:any[] = [
-      ['cliente','nombreCompleto'],
-      ['cliente','nombreEmpresa'],
-      ['user','name'],
-      ['user','apellido'],
-      ['factura','id'],
+      ['numero',],
+      ['factura_historial','cliente','nombreCompleto'],
+      ['factura','cliente','nombreCompleto'],
     ];
+
     this._TablasService.buscarEnCampos(this.Data,camposPorFiltrar)
+
     if(this._TablasService.busqueda ==""){this.refreshCountries()}
 
   }
@@ -123,11 +144,19 @@ export class ClientesReactivadosComponent implements OnInit {
 
 
   getUsers(){
-    this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[]) => {
+    this._UsuariosService.getUsuario()
+    .pipe(
+      tap((val)=>console.log(val)),
+      map(usuarios =>{
+        return usuarios.filter((usuario)=>usuario.role_id == 4)
+      }),
+      tap((val)=>console.log(val)),
+    )
+    .subscribe((usuarios:Usuario[]) => {
       this.userStore = usuarios
       this.USersNames = usuarios.map(usuario => `${ usuario.id } - ${ usuario.name } ${ usuario.apellido }`)
 
-      this.resetUser()
+      // this.resetUser()
     })
   }
 
@@ -168,15 +197,21 @@ export class ClientesReactivadosComponent implements OnInit {
 
   limpiarFiltros() {
     this.setCurrentDate();
-    this.tipoVenta = 1
-    this.status_pagado = 0 // por pagar
+
+    // this.userId = Number(this._AuthService.dataStorage.user.userId);
+    // this.tipoVenta = 1
+    // this.status_pagado = 0 // por pagar
+    // this.numDesde = 0
+    // this.numHasta = 0
+    this.numRecibo = 0
+    this.allNumber = true
     this.allDates = false
 
     if(this.isAdmin || this.isSupervisor) this.resetUser();
 
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
     this.aplicarFiltros();
-
+    // console.log(this.filtros);
   }
 
   aplicarFiltros(submit:boolean = false) {
@@ -188,27 +223,30 @@ export class ClientesReactivadosComponent implements OnInit {
       this.dateIni = this.filtros.dateIni
       this.dateFin = this.filtros.dateFin
       this.userId = Number(this.filtros.userId)
-      this.tipoVenta = this.filtros.tipo_venta
-      this.status_pagado = this.filtros.status_pagado
       this.allDates = this.filtros.allDates
-      
+      this.allNumber = this.filtros.allNumber
+      this.numRecibo = this.filtros.numRecibo
+    
     }else{
       if(!submit){
         this.userId = Number(this._AuthService.dataStorage.user.userId);
       }
-      if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
 
+      if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
+  
       if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
   
       this.filtros = {
         dateIni: this.dateIni,
         dateFin: this.dateFin,
         userId : Number(this.userId),
-        tipo_venta : this.tipoVenta,
-        status_pagado : this.status_pagado,
         allDates: this.allDates,
+        allNumber: this.allNumber,
+        // numDesde: this.numDesde ? this.numDesde : 0,
+        // numHasta: this.numHasta ? this.numHasta : 0,
+        numRecibo: this.numRecibo ? this.numRecibo : 0,
       };
-  
+
     }
 
     this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
@@ -242,4 +280,5 @@ export class ClientesReactivadosComponent implements OnInit {
 
     }
   }
+
 }

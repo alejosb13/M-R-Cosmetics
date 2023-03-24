@@ -151,7 +151,7 @@
         </div>
       </div>
 
-      <div class="col-md-12" *ngIf="isAdmin">
+      <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" id="allNumber" value="true" [(ngModel)]="allNumber">
           <label class="form-check-label" for="allNumber">
@@ -160,7 +160,7 @@
         </div>
       </div>
 
-      <div class="col-md-12" *ngIf="isAdmin">
+      <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
         <div class="form-group">
           <p class=" font-weight-bold">Número mayor o igual que</p>
           <input [disabled]="allNumber" type="number"  class="form-control" [(ngModel)]="numRecibo" >
@@ -172,7 +172,7 @@
           <input [disabled]="allNumber" type="number"  class="form-control" [(ngModel)]="numHasta" >
         </div>
       </div> -->
-      <div class="col-md-12" *ngIf="isAdmin">
+      <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>
           <!-- <input

@@ -173,7 +173,7 @@
           <input [disabled]="allNumber" type="number"  class="form-control" [(ngModel)]="numHasta" >
         </div>
       </div> -->
-      <div class="col-md-12" *ngIf="isAdmin">
+      <div class="col-md-12" *ngIf="isAdmin ||isSupervisor">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>
           <!-- <input

@@ -24,6 +24,7 @@ export class CarteraFiltrosComponent implements OnInit {
   collectionSize = 0;
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
 
   Data: Factura[];
   total = 0;
@@ -55,10 +56,12 @@ export class CarteraFiltrosComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
+
     this.userId = Number(this._AuthService.dataStorage.user.userId);
 
 
-    if(this.isAdmin){
+    if(this.isAdmin || this.isSupervisor){
       this.getUsers();
     }
 
@@ -158,7 +161,7 @@ export class CarteraFiltrosComponent implements OnInit {
     this.tipoVenta = 1
     this.status_pagado = 0 // por pagar
 
-    if(this.isAdmin) this.resetUser();
+    if(this.isAdmin || this.isSupervisor) this.resetUser();
     this.aplicarFiltros();
     // console.log(this.filtros);
   }

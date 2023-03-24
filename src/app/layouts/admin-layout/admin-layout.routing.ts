@@ -65,6 +65,7 @@ import { SeccionesConfigComponent } from "app/pages/configuracion/secciones-conf
 import { MigrarInformacionVendedorComponent } from "app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component";
 import { ProductosVendedorComponent } from "app/pages/logistica/productos-vendedor/productos-vendedor.component";
 import { TazaCotizacionComponent } from '../../pages/configuracion/taza-cotizacion/taza-cotizacion.component';
+import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component';
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
@@ -103,6 +104,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "mora60-90", component: Mora60A90Component },
       { path: "clientes-nuevos", component: ClientesNuevosComponent },
       { path: "incentivos", component: IncentivosComponent },
+      { path: "incentivos-supervisor", component: IncentivosSupervisorComponent },
       { path: "clientes-inactivos", component: ClienteInactivosComponent },
       { path: "clientes-reactivados", component: ClientesReactivadosComponent },
       { path: "ventas", component: VentasComponent },

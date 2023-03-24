@@ -91,6 +91,7 @@ import { DirectivesModule } from '../../shared/directives/directives.module';
 import { RegaloProductoFormComponent } from '../../shared/components/forms/regalo-producto-form/regalo-producto-form.component';
 import { RegalosListComponent } from '../../pages/regalos/regalos-list/regalos-list.component';
 import { CargarRegaloComponent } from '../../shared/components/forms/cargar-regalo/cargar-regalo.component';
+import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component';
 
 @NgModule({
   imports: [
@@ -177,6 +178,7 @@ import { CargarRegaloComponent } from '../../shared/components/forms/cargar-rega
     Mora60A90Component,
     ClientesNuevosComponent,
     IncentivosComponent,
+    IncentivosSupervisorComponent,
     ClienteInactivosComponent,
     ClienteDetalleComponent,
     ClientesReactivadosComponent,

@@ -26,6 +26,7 @@ export class ClienteInactivosComponent implements OnInit {
   collectionSize = 0;
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
 
   userQuery:Usuario
   Data: any[];
@@ -66,15 +67,16 @@ export class ClienteInactivosComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
     this.userId = Number(this._AuthService.dataStorage.user.userId);
 
     this.userId = 0;
-    if(!this.isAdmin){
+    if(!this.isAdmin || !this.isSupervisor){
       this.userId = Number(this._AuthService.dataStorage.user.userId);
     }
 
 
-    if(this.isAdmin){
+    if(this.isAdmin || this.isSupervisor){
       this.getUsers();
     }
 
