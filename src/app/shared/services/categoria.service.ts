@@ -11,6 +11,8 @@ const CategoriaURL = `${environment.urlAPI}categorias`
 })
 export class CategoriaService {
 
+  isLoad:boolean = false
+
   constructor(
     private http: HttpClient
   ) {}

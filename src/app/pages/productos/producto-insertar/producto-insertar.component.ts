@@ -25,7 +25,23 @@ export class ProductoInsertarComponent implements OnInit {
   }
 
   ProductValuesForm(producto:Producto){
+    Swal.fire({
+      title: "Creando producto",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey:false,
+      allowOutsideClick:false,
+      allowEnterKey:false,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    
+    this._ProductosService.IsLoad = true;
+
     this._ProductosService.insertProducto(producto).subscribe(ProductoResponse =>{
+      this._ProductosService.IsLoad = false;
+
       console.log(ProductoResponse);
       Swal.fire({
         text: "Producto insertado con exito",
@@ -36,6 +52,8 @@ export class ProductoInsertarComponent implements OnInit {
         }
       })
     },(HttpErrorResponse:HttpErrorResponse)=>{
+      this._ProductosService.IsLoad = false;
+
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
       

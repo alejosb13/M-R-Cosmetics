@@ -25,6 +25,7 @@ export class RecibosCreditoListComponent implements OnInit {
   Recibos: ReciboHistorial[];
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
 
   filtros: any = {};
   dateIni: string;
@@ -59,6 +60,7 @@ export class RecibosCreditoListComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
 
     this.getUsers()
     this.asignarValores()
@@ -70,7 +72,18 @@ export class RecibosCreditoListComponent implements OnInit {
     this.isLoad = true
     console.log(filtros);
 
-    this._ReciboService.getReciboHistorialCredito(filtros).subscribe((recibos:ReciboHistorial[])=> {
+    this._ReciboService.getReciboHistorialCredito(filtros)
+    .pipe(
+      map((recibos)=>{
+        // console.log(this.userId);
+        
+        if (this.isAdmin || this.isSupervisor) return recibos;
+
+        return recibos.filter((recibo) => recibo.recibo.user_id == this.userId);
+        
+      })
+    )
+    .subscribe((recibos:ReciboHistorial[])=> {
 
       if(!filtros.hasOwnProperty('filtrarRecivosList')){
         this.ReciboNames = recibos.map(recibos => `${ recibos.numero } - ${ recibos.recibo.user.name } ${ recibos.recibo.user.apellido }`)

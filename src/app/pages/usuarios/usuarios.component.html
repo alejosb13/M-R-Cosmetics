@@ -51,6 +51,7 @@
             <th scope="col">Cargo</th>
             <th scope="col">Email</th>
             <th scope="col">Recibo</th>
+            <th scope="col">U.Recibo</th>
             <th scope="col">Meta</th>
             <th scope="col">Estado</th>
             <th *ngIf="isAdmin " scope="col">Opciones</th>
@@ -63,8 +64,6 @@
             <td>{{ usuario.cargo }}</td>
             <td>{{ usuario.email }}</td>
             <td>
-              <!-- <div *ngIf="usuario.recibo &&  usuario.role_id == Vendedor" (click)="modificarRangoRecibo(modalProducto,usuario.recibo,usuario.id)" role="button"><i class="fas fa-ticket-alt text-success"></i> ({{ usuario.recibo.min }} - {{ usuario.recibo.max }})</div> -->
-              <!-- <div *ngIf="!usuario.recibo &&  usuario.role_id == Vendedor" (click)="agregarRangoRecibo(modalProducto,usuario.id)" role="button"><i class="fas fa-ticket-alt text-danger"></i> Agregar</div> -->
               <div
                 *ngIf="usuario.recibo"
                 (click)="
@@ -87,6 +86,14 @@
                 role="button"
               >
                 <i class="fas fa-ticket-alt text-danger"></i> Agregar
+              </div>
+            </td>
+            <td>
+              <div *ngIf="usuario.ultimo_recibo">
+                <b>{{usuario.ultimo_recibo.numero}}</b>
+              </div>
+              <div *ngIf="!usuario.ultimo_recibo">
+                ---
               </div>
             </td>
             <td>

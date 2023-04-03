@@ -36,19 +36,42 @@
           </div>
       </div>
       <div class="col-md-6">
+        <ng-container *ngIf="isAdmin">
           <div class="form-group">
-              <label>Usuario<span class="text-danger"></span></label>
-              <select
-                class="form-control"
-                id="exampleFormControlSelect1"
-                name="user_id"
-                formControlName="user_id"
-                autocomplete="off"
-              >
-                <option selected value="" hidden>Seleccione un usuario</option>
-                <option *ngFor="let usuario of Usuarios" value="{{ usuario.id}}">{{ usuario.name }} {{ usuario.apelido }}</option>
-              </select>
-          </div>
+            <label>Usuario<span class="text-danger"></span></label>
+            <select
+              class="form-control"
+              id="exampleFormControlSelect1"
+              name="user_id"
+              formControlName="user_id"
+              autocomplete="off"
+            >
+              <option selected value="" hidden>Seleccione un usuario</option>
+              <option *ngFor="let usuario of Usuarios" value="{{ usuario.id}}">{{ usuario.name }} {{ usuario.apelido }}</option>
+            </select>
+        </div>
+        </ng-container>
+        <ng-container *ngIf="!isAdmin">
+          <div class="form-group">
+            <label>Usuario<span class="text-danger"></span></label>
+            <input
+              type="text"
+              class="form-control disabled"
+              [readOnly]="true"
+              [value]="_AuthService.dataStorage.user.nombre + ' ' +_AuthService.dataStorage.user.apellido"
+            >
+
+            <input
+              type="text"
+              class="form-control disabled d-none"
+              name="user_id"
+              formControlName="user_id"
+              autocomplete="off"
+          >
+        </div>
+        </ng-container>
+        
+          
       </div>
       <hr class="hr w-100">
   </div>

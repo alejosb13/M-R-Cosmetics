@@ -14,6 +14,7 @@ import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -156,10 +157,25 @@ export class CarteraComponent implements OnInit {
       allDates: this.filtros.allDates,
     };
 
+        Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this._LogisticaService.carteraPDF(bodyForm).subscribe((data)=>{
       // console.log(data);
       this._HelpersService.downloadFile(data,`Cartera_${this.userId}_${ this._HelpersService.changeformatDate(this._HelpersService.currentFullDay(),'MM/DD/YYYY HH:mm:ss',"DD-MM-YYYY_HH:mm:ss") }`)
-
+      Swal.fire(
+        '',
+        'Descarga Completada',
+        'success'
+      )
     })
   }
 

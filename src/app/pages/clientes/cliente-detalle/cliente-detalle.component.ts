@@ -7,6 +7,7 @@ import { HelpersService } from 'app/shared/services/helpers.service';
 import { LogisticaService } from 'app/shared/services/logistica.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cliente-detalle',
@@ -60,11 +61,25 @@ export class ClienteDetalleComponent implements OnInit {
   }
 
   descargarPDF(){
-
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this._LogisticaService.getEstadoCuentaClientePDF(this.ClienteId).subscribe((data)=>{
       // console.log(data);
       this._HelpersService.downloadFile(data,`Estado_Cuenta_${this.ClienteId}_${ this._HelpersService.changeformatDate(this._HelpersService.currentFullDay(),'MM/DD/YYYY HH:mm:ss',"DD-MM-YYYY_HH:mm:ss") }`)
-
+      Swal.fire(
+        '',
+        'Descarga Completada',
+        'success'
+      )
     })
   }
 

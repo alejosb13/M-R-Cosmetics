@@ -9,6 +9,7 @@ const FrecuenciaURL = `${environment.urlAPI}frecuencias`
   providedIn: 'root'
 })
 export class FrecuenciaService {
+  isLoad:boolean = false;
 
   constructor(
     private http: HttpClient

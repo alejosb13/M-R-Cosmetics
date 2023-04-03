@@ -226,6 +226,7 @@
             <button  
               type="submit"
               class="btn btn-primary btn-round"
+              [disabled]="_ProductosService.IsLoad"
               (click)="EnviarFormulario()"
             >
               <div *ngIf="Id">Actualizar</div>

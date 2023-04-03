@@ -223,6 +223,18 @@ export class FacturaDetalleComponent implements OnInit {
   FormsValuesDevolucion(DevolucionProducto:DevolucionProducto){
     console.log("[DevolucionProductoForm]",DevolucionProducto);
 
+    Swal.fire({
+      title: "Cargando la devolución",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this._DevolucionProductoService.insertDevolucion(DevolucionProducto).subscribe((data)=>{
       console.log("[response]",data);
 

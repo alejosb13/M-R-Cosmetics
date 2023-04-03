@@ -19,6 +19,7 @@ import logger from 'app/utils/logger';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { AbonoService } from '../../../services/abono.service';
 
 type FacturaReciboHistorial = Abono & ReciboHistorial
 
@@ -63,6 +64,7 @@ export class AbonoFormComponent implements OnInit {
     private _ReciboService:ReciboService,
     private _UsuariosService:UsuariosService,
     private _HelpersService:HelpersService,
+    public _AbonoService:AbonoService,
     private _CommunicationService:CommunicationService,
   ) {
     this.userId = Number(this._AuthService.dataStorage.user.userId)

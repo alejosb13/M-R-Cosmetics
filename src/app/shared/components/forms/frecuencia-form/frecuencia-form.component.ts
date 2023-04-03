@@ -23,7 +23,7 @@ export class FrecuenciaFormComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private _FrecuenciaService: FrecuenciaService,
+    public _FrecuenciaService: FrecuenciaService,
   ) {}
 
   ngOnInit(): void {

@@ -13,10 +13,15 @@
     <ng-container  *ngIf="!isLoad ">
 
       <div class=" card-header border-0 pt-4  bg-white">
-        <a class="btn btn-primary" routerLink="/producto/agregar">
+        <a class="btn btn-primary" routerLink="/producto/agregar" *ngIf="isAdmin">
           <i class="fas fa-plus"></i>
           Agregar
         </a>
+        <button class="btn btn-primary" (click)="descargarInventario()" *ngIf="isAdmin">
+          <i class="fas fa-file-download"></i>
+          &nbsp;
+          Inventario
+        </button>
         <div class="d-flex flex-row justify-content-between mt-3">
           <div class="card-title align-items-start flex-column">
             <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"><b>Productos</b></span>

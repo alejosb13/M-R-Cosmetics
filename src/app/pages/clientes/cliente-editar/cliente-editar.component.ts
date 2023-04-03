@@ -30,6 +30,18 @@ export class ClienteEditarComponent implements OnInit {
   ngOnInit(): void {}
   
   ClientValuesForm(cliente:Cliente){
+    Swal.fire({
+      title: "Creando cliente",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey:false,
+      allowOutsideClick:false,
+      allowEnterKey:false,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    
     this._ClientesService.IsLoad = true;
     this._ClientesService.updateCliente(this.clienteId,cliente).subscribe(data =>{
       this._ClientesService.IsLoad = false;

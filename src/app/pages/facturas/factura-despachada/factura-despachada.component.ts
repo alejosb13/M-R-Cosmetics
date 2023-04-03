@@ -5,6 +5,7 @@ import { FacturasService } from 'app/shared/services/facturas.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-factura-despachada',
@@ -20,7 +21,8 @@ export class FacturaDespachadaComponent implements OnInit {
   Facturas: Factura[];
   isLoad:boolean
   isAdmin:boolean
-
+  userId:number
+  isSupervisor:boolean
 
   constructor(
     private _FacturasService:FacturasService,
@@ -30,6 +32,8 @@ export class FacturaDespachadaComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.isSupervisor = this._AuthService.isSupervisor()
     this.asignarValores()
   }
 
@@ -37,7 +41,15 @@ export class FacturaDespachadaComponent implements OnInit {
   asignarValores(){
     this.isLoad = true
 
-    this._FacturasService.getFacturas({estado:1,despachado:0}).subscribe((factura:Factura[])=> {
+    this._FacturasService.getFacturas({estado:1,despachado:0})
+    .pipe(
+      map((facturas) => {
+        if (this.isAdmin || this.isSupervisor) return facturas;
+        
+        return facturas.filter((factura) => factura.user_id == this.userId);
+      })
+    )
+    .subscribe((factura:Factura[])=> {
       // console.log(factura);
 
       this.Facturas = [...factura]

@@ -5,6 +5,7 @@ import { ClientesService } from '../../shared/services/clientes.service';
 import Swal from 'sweetalert2';
 import { environment } from 'environments/environment';
 import { AuthService } from '../../auth/login/service/auth.service';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -20,6 +21,8 @@ export class ClientesComponent implements OnInit {
   Clientes: Cliente[];
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
+  userId:number
 
   constructor(
     private _ClientesService:ClientesService,
@@ -29,6 +32,9 @@ export class ClientesComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
+    this.userId = Number(this._AuthService.dataStorage.user.userId)
+
     this.asignarValores()
   }
 
@@ -36,7 +42,17 @@ export class ClientesComponent implements OnInit {
   asignarValores(){
     this.isLoad = true
 
-    this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> {
+    this._ClientesService.getCliente()
+    .pipe(
+      map((clientes)=>{
+      // console.log(this.userId);
+      
+      if (this.isAdmin || this.isSupervisor) return clientes;
+
+      return clientes.filter((cliente) => cliente.user_id == this.userId);
+      
+    }))
+    .subscribe((clientes:Cliente[])=> {
       console.log(clientes);
       clientes.map(cliente=>{
         const regex = /,/g;

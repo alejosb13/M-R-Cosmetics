@@ -2,6 +2,7 @@ import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
 import { Meta } from "./meta.model";
 import { Recibo } from "./Recibo.model";
+import { ReciboHistorial } from './ReciboHistorial.model';
 
 export interface Usuario {
   id?: number;
@@ -14,6 +15,7 @@ export interface Usuario {
   factura: Factura[];
   recibo?: Recibo;
   meta?: Meta;
+  ultimo_recibo?: ReciboHistorial;
   clientes?: Cliente[];
   role_id?: number;
   created_at?: Date;

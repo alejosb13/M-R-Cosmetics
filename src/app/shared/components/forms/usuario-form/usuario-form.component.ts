@@ -28,7 +28,7 @@ export class UsuarioFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private _RolesService: RolesService,
-    private _UsuariosService: UsuariosService,
+    public _UsuariosService: UsuariosService,
   ) { 
     this._RolesService.getRole().subscribe((roles:Role[]) => this.Roles = [...roles]);
   }

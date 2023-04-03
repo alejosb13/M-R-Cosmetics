@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 export class CategoriaInsertarComponent implements OnInit {
   constructor(
     // private _ClientesService: ClientesService,
-    private _CategoriaService:CategoriaService,
+    public _CategoriaService:CategoriaService,
     private router:Router,
     private _HelpersService:HelpersService
   ) { }
@@ -23,7 +23,22 @@ export class CategoriaInsertarComponent implements OnInit {
   }
 
   ValuesForm(categoria:Categoria){
+    Swal.fire({
+      title: "Creando la categoria",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey:false,
+      allowOutsideClick:false,
+      allowEnterKey:false,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    this._CategoriaService.isLoad = true
+
     this._CategoriaService.insertCategoria(categoria).subscribe(data =>{
+    this._CategoriaService.isLoad = false
+
       console.log(data);
       Swal.fire({
         text: "Categoria insertada con exito",
@@ -36,6 +51,7 @@ export class CategoriaInsertarComponent implements OnInit {
     },(HttpErrorResponse:HttpErrorResponse)=>{
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
+    this._CategoriaService.isLoad = false
       
       Swal.fire({
         title: "Error",

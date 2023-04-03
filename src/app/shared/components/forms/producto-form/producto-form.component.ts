@@ -26,7 +26,7 @@ export class ProductoFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _ProductosService: ProductosService,
+    public _ProductosService: ProductosService,
   ) {}
 
   ngOnInit(): void {

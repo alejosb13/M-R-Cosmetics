@@ -30,8 +30,24 @@ export class ProductoEditarComponent implements OnInit {
   ngOnInit(): void {}
   
   ProductoValuesForm(producto:Producto){
+    Swal.fire({
+      title: "Modificando producto",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey:false,
+      allowOutsideClick:false,
+      allowEnterKey:false,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    
+    this._ProductosService.IsLoad = true;
+
     this._ProductosService.updateProducto(this.productoId,producto).subscribe(data =>{
       // console.log(data);
+      this._ProductosService.IsLoad = false;
+
       Swal.fire({
         text: "Producto modificado con exito",
         icon: 'success',
@@ -41,6 +57,7 @@ export class ProductoEditarComponent implements OnInit {
     },(HttpErrorResponse :HttpErrorResponse)=>{
       // console.log(HttpErrorResponse );
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse )
+      this._ProductosService.IsLoad = false;
 
       Swal.fire({
         title: "Error",

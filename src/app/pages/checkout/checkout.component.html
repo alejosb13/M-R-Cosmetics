@@ -160,7 +160,7 @@
                     <div class="font-weight-bold">Precio total </div>
                     <div class="text-right font-weight-bold"> {{factura.monto | currency: 'USD'}}</div>
                   </div>
-            <button class="btn btn-primary" (click)="generarfactura()">Generar Factura</button>
+            <button class="btn btn-primary" [disabled]="isLoad" (click)="generarfactura()">Generar Factura</button>
           </div>
     </div>
 </div>

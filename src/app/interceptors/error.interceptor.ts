@@ -39,7 +39,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           
         if (error.status == 401 && error.error.message === "Unauthorized" || error.status == 401 && error.error.message === "Unauthenticated.") {
           Swal.fire({
-            title: 'Sessión expirada',
+            title: 'Sesión expirada',
             text: "Debe volver a iniciar sesión",
             icon: 'warning',
             confirmButtonColor: '#51cbce',

@@ -4,6 +4,8 @@ import { AbonoService } from 'app/shared/services/abono.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
+import { map } from 'rxjs/operators';
+import { AuthService } from '../../../auth/login/service/auth.service';
 
 @Component({
   selector: 'app-abono-list',
@@ -19,13 +21,21 @@ export class AbonoListComponent implements OnInit {
   Abonos: Abono[];
   isLoad:boolean
 
+  isAdmin:boolean
+  isSupervisor:boolean
+  userId:number
+
   constructor(
     // private _FacturasService:FacturasService,
     private _AbonoService:AbonoService,
     private _TablasService:TablasService,
+    private _AuthService:AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
+    this.userId = Number(this._AuthService.dataStorage.user.userId)
     this.asignarValores()
   }
 
@@ -33,7 +43,17 @@ export class AbonoListComponent implements OnInit {
   asignarValores(){
     this.isLoad = true
 
-    this._AbonoService.getAbono().subscribe((abono:Abono[])=> {
+    this._AbonoService.getAbono()
+    .pipe(
+      map((abonos)=>{
+      // console.log(this.userId);
+      
+      if (this.isAdmin || this.isSupervisor) return abonos;
+
+      return abonos.filter((abono) => abono.user_id == this.userId);
+      
+    }))
+    .subscribe((abono:Abono[])=> {
       // console.log(abono);
 
       this.Abonos = [...abono]

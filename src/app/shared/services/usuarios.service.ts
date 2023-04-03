@@ -14,6 +14,7 @@ export class UsuariosService {
     private http: HttpClient
   ) {}
 
+  isLoad:boolean = false
   headerJson_Token():HttpHeaders{
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
 

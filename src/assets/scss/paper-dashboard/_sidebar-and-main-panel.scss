@@ -158,14 +158,15 @@
         a.logo-mini,
         a.logo-normal{
             @extend .animation-transition-general;
+            font-size: 0.95rem;
         }
 
         a.logo-mini{
             opacity: 1;
             float: left;
-            width: 34px;
+            width: 49px;
             text-align: center;
-            margin-left: 10px;
+            margin-left: 4px;
             margin-right: 12px;
         }
 

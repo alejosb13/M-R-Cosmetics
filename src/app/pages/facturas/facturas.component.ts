@@ -10,6 +10,7 @@ import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { DevolucionFacturaService } from '../devoluciones/services/devolucion-factura.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-facturas',
@@ -24,8 +25,10 @@ export class FacturasComponent implements OnInit, OnDestroy {
   Facturas: Factura[];
   isLoad:boolean
   isAdmin:boolean
+  isSupervisor:boolean
   status_pagado:number
   Factura: Factura;
+  userId:number;
 
   private Subscription = new Subscription();
 
@@ -40,6 +43,9 @@ export class FacturasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.isSupervisor = this._AuthService.isSupervisor()
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
+
     this.route.paramMap.subscribe((params: ParamMap) => {
       // console.log(params.get('status_pagado'));
       this.status_pagado = params.get('status_pagado') == 'pagadas' ? 1 : 0
@@ -52,7 +58,18 @@ export class FacturasComponent implements OnInit, OnDestroy {
   asignarValores(){
     this.isLoad = true
 
-    let Subscription = this._FacturasService.getFacturas({estado:1,status_pagado:this.status_pagado}).subscribe((factura:Factura[])=> {
+    let Subscription = this._FacturasService.getFacturas({estado:1,status_pagado:this.status_pagado})
+    .pipe(
+      map((facturas)=>{
+        // console.log(this.userId);
+        
+        if (this.isAdmin || this.isSupervisor) return facturas;
+
+        return facturas.filter((factura) => factura.user_id == this.userId);
+        
+      })
+    )
+    .subscribe((factura:Factura[])=> {
       // console.log(factura);
 
       this.Facturas = [...factura]
@@ -132,6 +149,18 @@ export class FacturasComponent implements OnInit, OnDestroy {
 
   FormsValuesDevolucion(DevolucionProducto:any){
     console.log("[DevolucionFacturaForm]",DevolucionProducto);
+
+    Swal.fire({
+      title: "Cargando la devolución",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     this._DevolucionFacturaService.insertDevolucion(DevolucionProducto).subscribe((data)=>{
       console.log("[response]",data);

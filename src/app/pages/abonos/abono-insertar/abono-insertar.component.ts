@@ -28,9 +28,25 @@ export class AbonoInsertarComponent implements OnInit {
   ngOnInit(): void {}
 
   FormValuesForm(abono:any){
-    console.log(abono);
+    // console.log(abono);
+
+    Swal.fire({
+      title: "Creando el recibo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey:false,
+      allowOutsideClick:false,
+      allowEnterKey:false,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+
+    this._AbonoService.isLoad = true
 
     this._AbonoService.insertAbono(abono).subscribe(data =>{
+      this._AbonoService.isLoad = false
+
       // console.log(data);
       Swal.fire({
         text: "Abono insertado con exito",
@@ -44,6 +60,8 @@ export class AbonoInsertarComponent implements OnInit {
       })
       this._CommunicationService.BottonAgregarAbonoActive.emit(false)
     },(HttpErrorResponse:HttpErrorResponse)=>{
+      this._AbonoService.isLoad = false
+
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
 

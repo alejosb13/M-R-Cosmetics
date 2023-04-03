@@ -11,7 +11,7 @@ const AbonoURL = `${environment.urlAPI}abonos`
   providedIn: 'root'
 })
 export class AbonoService {
-
+  isLoad: boolean = false
   constructor(
     private http: HttpClient
   ) {}

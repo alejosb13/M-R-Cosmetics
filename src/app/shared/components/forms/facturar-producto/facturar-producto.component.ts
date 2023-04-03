@@ -179,10 +179,19 @@ export class FacturarProductoComponent implements OnInit {
 
       this.FormsValues.emit(producto)
     }else{
-      Swal.fire({
-        text: "Complete todos los campos obligatorios",
-        icon: 'warning',
-      })
+      if(!this.ProductForm.get("stock").valid){
+        Swal.fire({
+          text: "La cantidad del producto supera el maximo en stock",
+          icon: 'warning',
+        })
+
+      }else{
+        Swal.fire({
+          text: "Complete todos los campos obligatorios",
+          icon: 'warning',
+        })
+
+      }
     }
 
   }

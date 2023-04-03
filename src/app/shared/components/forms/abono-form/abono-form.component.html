@@ -148,7 +148,7 @@
               type="submit"
               class="btn btn-primary btn-round"
               (click)="EnviarFormulario()"
-              [disabled]="bloqueo || disableBoton"
+              [disabled]="bloqueo || disableBoton || _AbonoService.isLoad"
             >
               <!-- <div *ngIf="Id">Actualizar</div> -->
               <div *ngIf="disableBoton">

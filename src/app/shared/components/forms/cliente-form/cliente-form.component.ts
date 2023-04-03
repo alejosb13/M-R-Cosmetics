@@ -11,6 +11,7 @@ import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.
 import Swal from 'sweetalert2';
 import { Usuario } from 'app/shared/models/Usuario.model';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
+import { AuthService } from '../../../../auth/login/service/auth.service';
 
 
 @Component({
@@ -28,6 +29,10 @@ export class ClienteFormComponent implements OnInit {
   daysOfWeek:string[]
   loadInfo:boolean = false;
 
+  userId:number ;
+  isAdmin:boolean = false;
+  isSupervisor:boolean = false;
+
   @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() clienteId?:number
   @Output() FormsValues = new EventEmitter<Cliente>();
@@ -39,6 +44,7 @@ export class ClienteFormComponent implements OnInit {
     private _FrecuenciaService: FrecuenciaService,
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,
+    private _AuthService: AuthService,
 
   ) {
     this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
@@ -51,6 +57,10 @@ export class ClienteFormComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log(this.Categorias);
+
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.isAdmin = this._AuthService.isAdmin();
+    this.isSupervisor = this._AuthService.isSupervisor();
 
     this.definirValidaciones()
     this.definirValidacionesEstado()
@@ -167,6 +177,12 @@ export class ClienteFormComponent implements OnInit {
         // ],
       }
     );
+
+    if(!(this.isAdmin || this.isSupervisor)){
+      this.editarClienteForm.patchValue({
+        user_id: this._AuthService.dataStorage.user.userId
+      })
+    }
   }
 
   definirValidacionesEstado(){

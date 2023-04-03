@@ -9,6 +9,7 @@ import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-facturas-entregadas',
@@ -25,7 +26,9 @@ export class FacturasEntregadasComponent implements OnInit {
   isAdmin:boolean
   status_entrega:number
   Factura: Factura;
-
+  
+  isSupervisor:boolean
+  userId:number
   private Subscription = new Subscription();
 
   constructor(
@@ -39,6 +42,10 @@ export class FacturasEntregadasComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.isSupervisor = this._AuthService.isSupervisor()
+
+
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.status_entrega = Number(params.get('status_entrega')) == 1 ? 1 : 0
       console.log("this.status_entrega",this.status_entrega);
@@ -58,6 +65,14 @@ export class FacturasEntregadasComponent implements OnInit {
       created_at:"2022-07-01 00:00:00",
       despachado:1
     })
+    .pipe(
+      map((facturas)=>{
+        // console.log(this.userId);
+        if (this.isAdmin || this.isSupervisor) return facturas;
+
+        return facturas.filter((factura) => factura.user_id == this.userId);
+      })
+    )
     .subscribe((factura:Factura[])=> {
       // console.log(factura);
 

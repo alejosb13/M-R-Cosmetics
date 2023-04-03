@@ -125,7 +125,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "producto",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, SUPERVISOR] },
+    data: { role: [ADMINISTRADOR] },
     children: [
       { path: "", component: ProductosComponent },
       { path: "agregar", component: ProductoInsertarComponent },

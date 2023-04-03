@@ -12,6 +12,7 @@ const ProductoURL = `${environment.urlAPI}productos`
 export class ProductosService {
   
   // private productoStorage:Producto
+  IsLoad:boolean = false
   
   constructor(
     private http: HttpClient
@@ -78,5 +79,15 @@ export class ProductosService {
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}
     );
+  }
+
+  inventario(): Observable<any> { 
+    const URL = `${environment.urlAPI}pdf/productos/inventario`
+
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+
+    return this.http.get(URL, { headers: headers, responseType: 'blob' });
+
   }
 }

@@ -22,7 +22,7 @@ export class CategoriaFormComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private _CategoriaService: CategoriaService,
+    public _CategoriaService: CategoriaService,
   ) {}
 
   ngOnInit(): void {

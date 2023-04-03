@@ -6,6 +6,7 @@ import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth/login/service/auth.service';
+import { HelpersService } from '../../shared/services/helpers.service';
 
 @Component({
   selector: 'app-productos',
@@ -29,6 +30,7 @@ export class ProductosComponent implements OnInit {
     private _TablasService:TablasService,
     private _LogisticaService:LogisticaService,    
     private _AuthService: AuthService,
+    private _HelpersService: HelpersService,
   ) {}
 
   ngOnInit(): void {    
@@ -109,4 +111,38 @@ export class ProductosComponent implements OnInit {
     })
   }
 
+  descargarInventario(){
+    // console.log(id);
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this._ProductosService.inventario().subscribe((data)=>{
+      const date = new Date();
+
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+
+      // This arrangement can be altered based on how we want the date's format to appear.
+      let currentDate = `${day}-${month}-${year}`;
+          // console.log(data);
+      this._HelpersService.downloadFile(data,`Inventario_${currentDate}`)
+
+      Swal.fire(
+        '',
+        'Descarga Completada',
+        'success'
+      )
+
+    })
+  }
 }

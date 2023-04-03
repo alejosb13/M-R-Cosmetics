@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Abono } from 'app/shared/models/Abono.model';
 import { AbonoService } from 'app/shared/services/abono.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./abono-editar.component.css']
 })
 export class AbonoEditarComponent implements OnInit {
-
+  isLoad:boolean = false
   AbonoId:number= 0
   constructor(
     private _AbonoService: AbonoService,
@@ -28,9 +28,22 @@ export class AbonoEditarComponent implements OnInit {
   }
 
   FormValuesForm(abono:Abono){
-    console.log(abono);
+    // console.log(abono);
+    Swal.fire({
+      title: "Creando recibo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey:false,
+      allowOutsideClick:false,
+      allowEnterKey:false,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    this._AbonoService.isLoad = true
 
-    this._AbonoService.updateAbono(this.AbonoId,abono).subscribe(data =>{
+    this._AbonoService.updateAbono(this.AbonoId,abono).subscribe(data => {
+      this._AbonoService.isLoad = false
       // console.log(ProductoResponse);
       Swal.fire({
         text: "Abono modificado con exito",
@@ -41,6 +54,7 @@ export class AbonoEditarComponent implements OnInit {
         }
       })
     },(HttpErrorResponse:HttpErrorResponse)=>{
+      this._AbonoService.isLoad = false
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
 
