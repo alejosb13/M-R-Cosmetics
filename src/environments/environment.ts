@@ -9,5 +9,5 @@ export const environment = {
   appVersion: "1.0",
   USERDATA_KEY_STORAGE:"MRCosmetic",
   CHECKOUT_KEY_STORAGE:"Checkout",
-  PageSize: 10,
+  PageSize: 15,
 };

@@ -115,7 +115,20 @@
     <div class="row">
     </div>
     <div class="row">
-      <div class="col-md-12" *ngIf="isAdmin">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class=" font-weight-bold">Desde</p>
+          <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateIni" >
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group" >
+          <p class=" font-weight-bold">Hasta</p>
+          <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateFin" >
+        </div>
+      </div>
+
+      <!-- <div class="col-md-12" *ngIf="isAdmin">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>
           <select name="" id="" class="form-control" [(ngModel)]="userId">
@@ -123,7 +136,7 @@
             <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
           </select>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">
@@ -132,7 +145,7 @@
         <button class="btn btn-danger " (click)="limpiarFiltros()">Limpiar <i class="fas fa-eraser"></i></button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar <i class="fas fa-search"></i></button>
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">Aplicar <i class="fas fa-search"></i></button>
       </div>
     </div>
   </div>

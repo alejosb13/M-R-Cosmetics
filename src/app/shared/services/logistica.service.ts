@@ -155,7 +155,7 @@ export class LogisticaService {
     );
   }
 
-  getRecuperacion(bodyform:{ userId: number}): Observable<any> {
+  getRecuperacion(bodyform:CarteraDateBodyForm): Observable<any> {
 
     return this.http.post<any>(
       `${Logistica}/recuperacion`,
