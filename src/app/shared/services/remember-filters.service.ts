@@ -5,6 +5,7 @@ import {
   FiltersForm,
   TypesFiltersForm,
 } from "../models/FiltersForm";
+import { FiltrosList } from "../models/Listados.model";
 
 @Injectable({
   providedIn: "root",
@@ -34,7 +35,10 @@ export class RememberFiltersService {
    * @param form - Nombre que se le asignara al filtro en el storage
    * @param filter - Filtros que se guardaran en el storage
    */
-  setFilterStorage(form: TypesFiltersForm, filter: CreateFiltersForm) {
+  setFilterStorage(
+    form: TypesFiltersForm,
+    filter: CreateFiltersForm | FiltrosList
+  ) {
     let Filters = {
       ...this.getFilterStorage(),
       [form]: filter,

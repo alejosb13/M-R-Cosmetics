@@ -1,131 +1,157 @@
 <div class="bg-white">
-
-    <div *ngIf="isLoad" class="container-fluid p-5">
-      <div class="d-flex justify-content-center align-content-center">
-        <span>
-          Cargando facturas
-          <i class="fas fa-circle-notch fa-spin"></i>
-        </span>
-
-      </div>
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando facturas
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
     </div>
-
-    <ng-container  *ngIf="!isLoad ">
-
-      <div class=" card-header border-0 pt-4  bg-white">
-        <!-- <a class="btn btn-primary" routerLink="/factura/agregar">
-          <i class="fas fa-plus"></i>
-          Agregar
-        </a> -->
-        <div class="d-flex flex-row justify-content-between mt-3">
-          <div class="card-title align-items-start flex-column">
-            <a href="" class="btn-primary btn" routerLink="/factura/despachar">Por despachar</a>
-            <span class="d-block card-label fw-bolder fs-3 mb-1">Facturas</span>
-            <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
-          </div>
-
-          <form class="d-flex align-items-center col-4 buscador">
-              <div class="form-label-group w-100">
-                  <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
-                  <label for="inputEmail">Buscar</label>
-              </div>
-          </form>
-        </div>
-
-      </div>
-
-      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
-        <table class="table table-striped" >
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nombre Cliente</th>
-              <th scope="col">Nombre Empresa</th>
-              <th scope="col">Monto Factura</th>
-              <th scope="col">Saldo</th>
-              <!-- <th scope="col">Tipo de Cambio</th> -->
-              <!-- <th scope="col">IVA</th> -->
-              <th scope="col">Operación</th>
-              <th scope="col">Vendedor</th>
-              <!-- <th scope="col">Estado</th> -->
-              <th scope="col">Ver</th>
-              <th scope="col">Fecha de Vencimiento</th>
-              <th *ngIf="isAdmin" scope="col">Devolver</th>
-            </tr>
-
-          </thead>
-          <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
-            <tr *ngFor="let factura of _TablasService.datosTablaStorage">
-                <th scope="row">{{ factura.id }}</th>
-                <td>
-                  {{ factura.cliente.nombreCompleto }}
-                </td>
-                <td>
-                  {{ factura.cliente.nombreEmpresa }}
-                </td>
-                <td>{{ factura.monto  | currency: 'USD' }}</td>
-                <td>{{ (factura.tipo_venta == 2)?'-':factura.saldo_restante  | currency: 'USD' }}</td>
-                <!-- <td>{{ factura.tcambio }}</td> -->
-                <!-- <td>{{ factura.iva }}%</td> -->
-                <td>
-                  <span *ngIf="factura.tipo_venta == 2">Contado</span>
-                  <span *ngIf="factura.tipo_venta == 1">Credito</span>
-                </td>
-                <td>
-                  {{ factura.user.name }} {{ factura.user.apellido }}
-                </td>
-                <!-- <td>
-                  <span *ngIf="factura.status_pagado == 0">En proceso</span>
-                  <span *ngIf="factura.status_pagado == 1">Finalizado</span>
-                </td> -->
-                <td> <a [routerLink]="[ '/factura','detalle',factura.id ]">Detalle</a> </td>
-                <td>{{ factura.fecha_vencimiento |date:"dd-MM-yyyy" }}</td>
-                <td *ngIf="isAdmin"><div role="button" (click)="openDevolverFactura(contentDevolver, factura)"><i class="fas fa-undo text-danger"></i></div></td>
-            </tr>
-          </tbody>
-          <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
-            <tr >
-              <td colspan="10">
-                <div class="container d-flex align-items-center justify-content-center">
-                  <!-- <div class="alert alert-info w-100 text-center" > -->
-                    <h5>No existen Facturas</h5>
-                  <!-- </div> -->
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="d-flex justify-content-between p-2">
-          <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
-        </div>
-      </div>
-    </ng-container>
   </div>
 
-  <ng-template #contentDevolver let-modal>
-    <div class="modal-header">
-      <div>
-        <h4 class="modal-title" id="modal-basic-title">
-          Devolver factura
-        </h4>
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
+      <div class="d-flex flex-row justify-content-between mt-3">
+        <div class="card-title align-items-start flex-column">
+          <a href="" class="btn-primary btn" routerLink="/factura/despachar"
+            >Por despachar</a
+          >
+          <span class="d-block card-label fw-bolder fs-3 mb-1">Facturas</span>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5"
+            >Total: {{ listadoData.total }}</span
+          >
+        </div>
+
+        <form
+          class="d-flex align-items-center justify-content-end col-4 buscador"
+        >
+          <div class="form-label-group w-75 input-group">
+            <input
+              type="email"
+              id="inputEmail"
+              class="form-control form-control-sm pt-1"
+              placeholder="Buscar"
+              name="buscar"
+              [(ngModel)]="listadoFilter.filter"
+            />
+            <button
+              class="btn btn-primary my-0"
+              (click)="BuscarValor()"
+              type="button"
+              id="button-addon2"
+            >
+              Buscar
+            </button>
+          </div>
+        </form>
       </div>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <i class="fas fa-times"></i>
-      </button>
     </div>
-    <div class="modal-body">
-      <app-devolucion-factura-form
-        [factura]="Factura"
-        (FormsValues)="FormsValuesDevolucion($event)"
-      ></app-devolucion-factura-form>
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre Cliente</th>
+            <th scope="col">Nombre Empresa</th>
+            <th scope="col">Monto Factura</th>
+            <th scope="col">Saldo</th>
+            <th scope="col">Operación</th>
+            <th scope="col">Vendedor</th>
+            <th scope="col">Ver</th>
+            <th scope="col">Fecha de Vencimiento</th>
+            <th *ngIf="isAdmin" scope="col">Devolver</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="Facturas.length > 0">
+          <tr *ngFor="let factura of Facturas">
+            <th scope="row">{{ factura.id }}</th>
+            <td>
+              {{ factura.cliente.nombreCompleto }}
+            </td>
+            <td>
+              {{ factura.cliente.nombreEmpresa }}
+            </td>
+            <td>{{ factura.monto | currency : "USD" }}</td>
+            <td>
+              {{
+                factura.tipo_venta == 2
+                  ? "-"
+                  : (factura.saldo_restante | currency : "USD")
+              }}
+            </td>
+            <td>
+              <span *ngIf="factura.tipo_venta == 2">Contado</span>
+              <span *ngIf="factura.tipo_venta == 1">Credito</span>
+            </td>
+            <td>{{ factura.user.name }} {{ factura.user.apellido }}</td>
+            <td>
+              <a [routerLink]="['/factura', 'detalle', factura.id]">Detalle</a>
+            </td>
+            <td>{{ factura.fecha_vencimiento | date : "dd-MM-yyyy" }}</td>
+            <td *ngIf="isAdmin">
+              <div
+                role="button"
+                (click)="openDevolverFactura(contentDevolver, factura)"
+              >
+                <i class="fas fa-undo text-danger"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="Facturas.length == 0">
+          <tr>
+            <td colspan="10">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
+                <h5>No existen Facturas</h5>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between p-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li
+              class="page-item"
+              *ngFor="let listado of listadoData.links"
+              (click)="newPage(listado)"
+              [ngClass]="{
+                active: listado.active,
+                disabled: listado.url == null
+              }"
+            >
+              <span class="page-link pointer">
+                <span aria-hidden="true" [innerHTML]="listado.label"></span>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
-    <!-- <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Aceptar</button>
-  </div> -->
-  </ng-template>
+  </ng-container>
+</div>
+
+<ng-template #contentDevolver let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Devolver factura</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-devolucion-factura-form
+      [factura]="Factura"
+      (FormsValues)="FormsValuesDevolucion($event)"
+    ></app-devolucion-factura-form>
+  </div>
+</ng-template>

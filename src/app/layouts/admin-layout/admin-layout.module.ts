@@ -92,6 +92,7 @@ import { RegaloProductoFormComponent } from '../../shared/components/forms/regal
 import { RegalosListComponent } from '../../pages/regalos/regalos-list/regalos-list.component';
 import { CargarRegaloComponent } from '../../shared/components/forms/cargar-regalo/cargar-regalo.component';
 import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component';
+import { MetasComponent } from 'app/pages/metas/metas.component';
 
 @NgModule({
   imports: [
@@ -193,6 +194,8 @@ import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-
     TazaCotizacionComponent,
     
     ProductosVendedorComponent,
+
+    MetasComponent,
   ]
 })
 

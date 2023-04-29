@@ -66,6 +66,7 @@ import { MigrarInformacionVendedorComponent } from "app/pages/configuracion/migr
 import { ProductosVendedorComponent } from "app/pages/logistica/productos-vendedor/productos-vendedor.component";
 import { TazaCotizacionComponent } from '../../pages/configuracion/taza-cotizacion/taza-cotizacion.component';
 import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component';
+import { MetasComponent } from "app/pages/metas/metas.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR      = "vendedor";
@@ -220,6 +221,15 @@ export const AdminLayoutRoutes: Routes = [
       { path: "", component: SeccionesConfigComponent },
       { path: "migracion-vendedor", component: MigrarInformacionVendedorComponent },
       { path: "taza-cotizacion", component: TazaCotizacionComponent },
+
+    ],
+  },
+  {
+    path: "metas",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR] },
+    children: [
+      { path: "", component: MetasComponent },
 
     ],
   },

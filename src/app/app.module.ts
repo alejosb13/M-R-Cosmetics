@@ -22,7 +22,6 @@ import { BasicAuthInterceptor } from "./interceptors/basic-auth.interceptor";
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-
   ],
   imports: [
     BrowserAnimationsModule,

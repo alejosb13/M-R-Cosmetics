@@ -34,7 +34,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
             })
           : request
 
-    logger.log(clonedReq)
+    // logger.log(clonedReq)
     return next.handle(clonedReq)
   }
 

@@ -1,0 +1,425 @@
+<div class="bg-white">
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando metas
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
+      <div class="d-flex flex-row justify-content-between mt-3">
+        <div
+          class="d-flex card-title align-items-start flex-row justify-content-between"
+        >
+          <!-- <span class="fuvi-text-black mt-1 fw-bold fs-5"
+            >Total met: {{ listadoData.total }}</span
+          > -->
+          <div class="mr-2">
+            <button
+              class="btn btn-primary"
+              (click)="openFiltros(contentFiltros)"
+            >
+              Filtros <i class="fas fa-filter"></i>
+            </button>
+          </div>
+
+          <div class="mr-2">
+            <button
+              class="btn btn-primary"
+              (click)="openModalMetaDeclarada(contentMetaDeclarada)"
+            >
+              Declaración <i class="fas fa-pen"></i>
+            </button>
+          </div>
+          <div>
+            <button
+              class="btn btn-primary"
+              (click)="openFiltros(contentNewMeta)"
+            >
+              Agregar Metas <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <form
+          class="d-flex align-items-center justify-content-end col-4 buscador"
+        >
+          <div class="form-label-group w-75 input-group">
+            <input
+              type="text"
+              id="inputEmail"
+              class="form-control form-control-sm pt-1"
+              placeholder="Buscar"
+              name="buscar"
+              [(ngModel)]="listadoFilter.filter"
+            />
+            <button
+              class="btn btn-primary my-0"
+              (click)="BuscarValor()"
+              type="button"
+              id="button-addon2"
+            >
+              Buscar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Meta</th>
+            <th scope="col">Fecha Asignacion</th>
+            <th *ngIf="isAdmin" scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="MetasHistorico.length > 0">
+          <tr *ngFor="let meta of MetasHistorico">
+            <th scope="row">{{ meta.id }}</th>
+            <td>{{ meta.user.name }} {{ meta.user.apellido }}</td>
+            <td>
+              {{ meta.monto_meta | currency : "USD" }}
+            </td>
+            <td>
+              {{ meta.fecha_asignacion | date : "dd-MM-yyyy" }}
+            </td>
+            <td *ngIf="isAdmin">
+              <div class="d-flex flex-direction">
+                <div class="mr-3" ngbTooltip="Editar">
+                  <span
+                    class="text-primary pointer"
+                    role="button"
+                    (click)="
+                      editarMetaHistorial(contentMetaEditarhistorial, meta)
+                    "
+                    ><i class="fas fa-pencil-alt"></i
+                  ></span>
+                </div>
+                <div class="mr-3" ngbTooltip="Eliminar">
+                  <span
+                    class="text-primary pointer"
+                    role="button"
+                    (click)="eliminarMetaHistorial(meta)"
+                    ><i class="fas fa-trash-alt"></i
+                  ></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="MetasHistorico.length == 0">
+          <tr>
+            <td colspan="10">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
+                <h5>No existen Metas</h5>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between p-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li
+              class="page-item"
+              *ngFor="let listado of listadoData.links"
+              (click)="newPage(listado)"
+              [ngClass]="{
+                active: listado.active,
+                disabled: listado.url == null
+              }"
+            >
+              <span class="page-link pointer">
+                <span aria-hidden="true" [innerHTML]="listado.label"></span>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #contentNewMeta let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Meta</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Mes</p>
+          <!-- <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateIni" > -->
+          <input
+            type="month"
+            id="start"
+            class="form-control"
+            [(ngModel)]="mesNewMeta"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="modal.dismiss('Cross click')">
+          Cancelar
+        </button>
+      </div>
+      <div class="col text-center">
+        <button
+          class="btn btn-primary"
+          [disabled]="!mesNewMeta"
+          (click)="newMetaHistorial()"
+        >
+          Agregar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #contentFiltros let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
+        <p class="font-weight-bold">Usuarios</p>
+        <select name="" id="" class="form-control" [(ngModel)]="userId">
+          <option value="0">Todos los usuarios</option>
+          <option
+            *ngFor="let usuario of userStore"
+            [selected]="usuario.id == userId"
+            [value]="usuario.id"
+          >
+            {{ usuario.name }} {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentMetaEditarhistorial let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Editar</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Monto</p>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="montoMetaHistorialEditar"
+            appOnlyNumberAndPoint
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Fecha Asignación</p>
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateMetaAsignacionHistorialEditar"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="modal.dismiss('Cross click')">
+          Cancelar
+        </button>
+      </div>
+      <div class="col text-center">
+        <button
+          class="btn btn-primary"
+          (click)="sendModificacionMetaHistorial()"
+        >
+          Editar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentMetaDeclarada let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Meta por Defecto</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Cargo</th>
+              <th scope="col">Email</th>
+              <th scope="col">Meta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let usuario of userStore">
+              <th scope="row">{{ usuario.id }}</th>
+              <td>{{ usuario.name }} {{ usuario.apellido }}</td>
+              <td>{{ usuario.cargo }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>
+                <div
+                  class="font-weight-bold"
+                  *ngIf="usuario.meta"
+                  (click)="modificarMeta(modalMeta, usuario.meta)"
+                  role="button"
+                >
+                  {{ usuario.meta.monto | currency : "USD" }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="!usuario.meta"
+                  (click)="agregarMeta(modalMeta, usuario.id)"
+                  role="button"
+                >
+                  <i class="fas fa-dollar-sign text-danger"></i> Agregar
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalMeta let-modal>
+  <div class="modal-header">
+    <h5 class="mb-0">Meta</h5>
+    <div
+      role="button"
+      class="close btn btn-icon btn-sm btn-primary"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="container cortar-preview">
+      <app-meta-form
+        (submitForm)="FormsValuesMeta($event)"
+        [meta]="meta"
+      ></app-meta-form>
+    </div>
+  </div>
+</ng-template>

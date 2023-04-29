@@ -22,6 +22,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/devolucion',                 title: 'Devoluciones',         icon:'fas fa-undo',                   class: '' , access: 'administrador'},
   { path: '/recibos',                    title: 'Recibos',              icon:'fas fa-file-invoice-dollar',    class: '' , access: 'administrador,supervisor'},
   { path: '/abono',                      title: 'Abono',                icon:'fas fa-money-check-alt',        class: '' , access: 'administrador,vendedor,supervisor'},
+  { path: '/metas',                      title: 'Metas',                icon:'fas fa-file-alt',                    class: '' , access: 'administrador'},
   { path: '/categoria',                  title: 'Categoria',            icon:'fas fa-users',                  class: '' , access: 'administrador,supervisor'},
   { path: '/frecuencia',                 title: 'Frecuencia',           icon:'fas fa-business-time',          class: '' , access: 'administrador,supervisor'},
   { path: '/configuracion',              title: 'Configuración',        icon:'fas fa-cog',                    class: '' , access: 'administrador'},
