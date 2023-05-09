@@ -304,6 +304,7 @@ export class CheckoutComponent implements OnInit {
         },
         (errorResponse: HttpErrorResponse) => {
           console.log(errorResponse);
+          this.isLoad = false;
 
           Swal.fire({
             title: "Error",

@@ -74,19 +74,31 @@
             <td >
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="{{ cliente.categoria.descripcion }}">
-                  <span>({{ cliente.categoria.tipo }}) </span>
-                  <a [routerLink]="[ '/categoria','editar',cliente.categoria_id]" >
-                    <i class="fas fa-chart-line "></i>
-                  </a>
+                  <ng-container *ngIf="isAdmin">
+                    <span>({{ cliente.categoria.tipo }}) </span>
+                    <a [routerLink]="[ '/categoria','editar',cliente.categoria_id]" >
+                      <i class="fas fa-chart-line "></i>
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="!isAdmin">
+                    <span>({{ cliente.categoria.tipo }}) </span>
+                    <i class="fas fa-chart-line"></i>
+                  </ng-container>
                 </div>
               </div>
             </td>
             <td >
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="{{ cliente.frecuencia.descripcion }}">
-                  <a [routerLink]="[ '/frecuencia','editar', cliente.frecuencia_id ]"><i class="fas fa-stopwatch"></i></a>
-                    &nbsp;
-                  <span>({{ cliente.frecuencia.dias }} dias) </span>
+                  <ng-container *ngIf="isAdmin">
+                    <a [routerLink]="[ '/frecuencia','editar', cliente.frecuencia_id ]"><i class="fas fa-stopwatch"></i></a>
+                      &nbsp;
+                    <span>({{ cliente.frecuencia.dias }} dias) </span>
+                  </ng-container>
+                  <ng-container *ngIf="!isAdmin">
+                    <i class="fas fa-stopwatch"></i>
+                    <span>({{ cliente.frecuencia.dias }} dias) </span>
+                  </ng-container>
                 </div>
 
               </div>

@@ -1,144 +1,176 @@
 <form [formGroup]="CategoriaForm" [hidden]="loadInfo">
-    <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
-    <br>
-    <br>
-    <br>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label>Tipo <span class="text-danger">(*)</span></label>
-                <input
-                    type="text"
-                    class="form-control"
-                    name="tipo"
-                    formControlName="tipo"
-                    autocomplete="off"
-                    [ngClass]="{
-                    'is-invalid': CategoriaForm.controls['tipo'].invalid && CategoriaForm.controls['tipo'].touched,
-                    'is-valid': CategoriaForm.controls['tipo'].valid
-                    }"
-                >
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'required',
-                    message: 'el tipo es requerido',
-                    control: CategoriaForm.controls['tipo']
-                }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'maxlength',
-                    message: 'El tipo debe tener como máximo 43 letras',
-                    control: CategoriaForm.controls['tipo']
-                }"></ng-container>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label>Descripción <span class="text-danger">(*)</span></label>
-                <input
-                    type="text"
-                    class="form-control"
-                    name="descripcion"
-                    formControlName="descripcion"
-                    autocomplete="off"
-                    [ngClass]="{
-                    'is-invalid': CategoriaForm.controls['descripcion'].invalid && CategoriaForm.controls['descripcion'].touched,
-                    'is-valid': CategoriaForm.controls['descripcion'].valid
-                    }"
-                >
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'required',
-                    message: 'La descripción es requerida',
-                    control: CategoriaForm.controls['descripcion']
-                }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'maxlength',
-                    message: 'La descripción debe tener como máximo 80 letras',
-                    control: CategoriaForm.controls['descripcion']
-                }"></ng-container>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label>Número de días<span class="text-danger">(*)</span></label>
-                <input
-                    type="text"
-                    class="form-control"
-                    name="valor_dias"
-                    formControlName="valor_dias"
-                    autocomplete="off"
-                    [ngClass]="{
-                    'is-invalid': CategoriaForm.controls['valor_dias'].invalid && CategoriaForm.controls['valor_dias'].touched,
-                    'is-valid': CategoriaForm.controls['valor_dias'].valid
-                    }"
-                >
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'pattern',
-                    message: 'El número de días debe ser numérico',
-                    control: CategoriaForm.controls['valor_dias']
-                    }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'required',
-                    message: 'El número de días es requerido',
-                    control: CategoriaForm.controls['valor_dias']
-                }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'maxlength',
-                    message: 'El número de días debe tener como máximo 11 numeros',
-                    control: CategoriaForm.controls['valor_dias']
-                }"></ng-container>
-                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                    validation: 'min',
-                    message: 'El número de días debe ser mayor o igual a 1',
-                    control: CategoriaForm.controls['valor_dias']
-                }"></ng-container>
-            </div>
-        </div>
-
-
-        <div class="col-md-4" [formGroup]="EstadoForm" *ngIf="Id" >
-            <div class="form-group">
-                <label>Estado</label>
-                <select
-                  class="form-control"
-                  name="estado"
-                  formControlName="estado"
-                >
-                    <option value="1">Activo</option>
-                    <option value="0">Inactivo</option>
-                </select>
-            </div>
-        </div>
-  
+  <span class="text-info"
+    >Nota: Los campos con <span class="text-danger">(*)</span> son
+    obligatorios.</span
+  >
+  <br />
+  <br />
+  <br />
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Tipo <span class="text-danger">(*)</span></label>
+        <input
+          type="text"
+          class="form-control"
+          name="tipo"
+          formControlName="tipo"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              CategoriaForm.controls['tipo'].invalid &&
+              CategoriaForm.controls['tipo'].touched,
+            'is-valid': CategoriaForm.controls['tipo'].valid
+          }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El tipo es requerido',
+            control: CategoriaForm.controls['tipo']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El tipo debe tener como máximo 43 letras',
+            control: CategoriaForm.controls['tipo']
+          }"
+        ></ng-container>
+      </div>
     </div>
-    <div class="row">
-        <div class="update ml-auto mr-auto">
-            <button  
-            [disabled]="_CategoriaService.isLoad"
-              type="submit"
-              class="btn btn-primary btn-round"
-              (click)="EnviarFormulario()"
-            >
-              <div *ngIf="Id">Actualizar</div>
-              <div *ngIf="!Id">Agregar</div>
-            </button>
-        </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Descripción <span class="text-danger">(*)</span></label>
+        <input
+          type="text"
+          class="form-control"
+          name="descripcion"
+          formControlName="descripcion"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              CategoriaForm.controls['descripcion'].invalid &&
+              CategoriaForm.controls['descripcion'].touched,
+            'is-valid': CategoriaForm.controls['descripcion'].valid
+          }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'La descripción es requerida',
+            control: CategoriaForm.controls['descripcion']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La descripción debe tener como máximo 80 letras',
+            control: CategoriaForm.controls['descripcion']
+          }"
+        ></ng-container>
+      </div>
     </div>
-    <ng-template #formError let-control="control" let-message="message" let-validation="validation">
-      <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
-        <div class="invalid-feedback">
-          {{ message }}
-        </div>
-      </ng-container>
-    </ng-template>
-  </form>
-  
-  
-   
-  <div  [hidden]="!loadInfo" class="container-fluid p-5">
-    <div class="d-flex justify-content-center align-content-center">
-      <span>
-        Cargando categoria
-        <i class="fas fa-circle-notch fa-spin"></i>
-      </span>
-      
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Monto maximo<span class="text-danger">(*)</span></label>
+        <input
+          type="text"
+          class="form-control"
+          name="monto"
+          formControlName="monto"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              CategoriaForm.controls['monto'].invalid &&
+              CategoriaForm.controls['monto'].touched,
+            'is-valid': CategoriaForm.controls['monto'].valid
+          }"
+          appOnlyNumberAndPoint
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'pattern',
+            message: 'El monto debe ser numérico',
+            control: CategoriaForm.controls['monto']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El monto es requerido',
+            control: CategoriaForm.controls['monto']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El monto debe tener como máximo 11 numeros',
+            control: CategoriaForm.controls['monto']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'min',
+            message: 'El monto debe ser mayor o igual a 1',
+            control: CategoriaForm.controls['monto']
+          }"
+        ></ng-container>
+      </div>
+    </div>
+
+    <div class="col-md-4" [formGroup]="EstadoForm" *ngIf="Id">
+      <div class="form-group">
+        <label>Estado</label>
+        <select class="form-control" name="estado" formControlName="estado">
+          <option value="1">Activo</option>
+          <option value="0">Inactivo</option>
+        </select>
+      </div>
     </div>
   </div>
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        [disabled]="_CategoriaService.isLoad"
+        type="submit"
+        class="btn btn-primary btn-round"
+        (click)="EnviarFormulario()"
+      >
+        <div *ngIf="Id">Actualizar</div>
+        <div *ngIf="!Id">Agregar</div>
+      </button>
+    </div>
+  </div>
+  <ng-template
+    #formError
+    let-control="control"
+    let-message="message"
+    let-validation="validation"
+  >
+    <ng-container
+      *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+    >
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando categoria
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

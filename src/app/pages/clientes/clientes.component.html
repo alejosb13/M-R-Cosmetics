@@ -1,40 +1,49 @@
 <div class="bg-white">
-
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
         Cargando clientes
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
-
     </div>
   </div>
 
-  <ng-container  *ngIf="!isLoad ">
-
-    <div class=" card-header border-0 pt-4  bg-white">
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
       <a class="btn btn-primary" routerLink="/cliente/agregar">
         <i class="fas fa-plus"></i>
         Agregar
       </a>
       <div class="d-flex flex-row justify-content-between mt-3">
         <div class="card-title align-items-start flex-column">
-          <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Clientes</span>
-          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
+          <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"
+            >Clientes</span
+          >
+          <span class="fuvi-text-black mt-1 fw-bold fs-5"
+            >Total: {{ _TablasService.total }}</span
+          >
         </div>
 
         <form class="d-flex align-items-center col-4 buscador">
-            <div class="form-label-group w-100">
-                <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
-                <label for="inputEmail">Buscar</label>
-            </div>
+          <div class="form-label-group w-100">
+            <input
+              type="email"
+              id="inputEmail"
+              class="form-control form-control-sm"
+              placeholder="Buscar"
+              (keyup)="BuscarValor()"
+              (change)="BuscarValor()"
+              [(ngModel)]="_TablasService.busqueda"
+              name="buscar"
+            />
+            <label for="inputEmail">Buscar</label>
+          </div>
         </form>
       </div>
-
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
-      <table class="table table-striped " >
+      <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -59,72 +68,135 @@
               {{ cliente.nombreEmpresa }}
             </td>
             <td>
-              <div class="text-center text-primary"  ngbTooltip="{{ cliente.dias_cobro | uppercase }}">
+              <div
+                class="text-center text-primary"
+                ngbTooltip="{{ cliente.dias_cobro | uppercase }}"
+              >
                 <i class="fas fa-info-circle"></i>
               </div>
             </td>
             <td>{{ cliente.direccion_casa }}</td>
-            <td >
+            <td>
               <div class="d-flex flex-direction">
-                <div class="mr-3" ngbTooltip="{{ cliente.categoria.descripcion }}">
-                  <span>({{ cliente.categoria.tipo }}) </span>
-                  <a [routerLink]="[ '/categoria','editar',cliente.categoria_id]" >
-                    <i class="fas fa-chart-line "></i>
-                  </a>
+                <div
+                  class="mr-3"
+                  ngbTooltip="{{ cliente.categoria.descripcion }}"
+                >
+                  <ng-container *ngIf="isAdmin">
+                    <span>({{ cliente.categoria.tipo }}) </span>
+                    <a
+                      [routerLink]="[
+                        '/categoria',
+                        'editar',
+                        cliente.categoria_id
+                      ]"
+                    >
+                      <i class="fas fa-chart-line"></i>
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="!isAdmin">
+                    <span>({{ cliente.categoria.tipo }}) </span>
+                    <i class="fas fa-chart-line"></i>
+                  </ng-container>
                 </div>
               </div>
             </td>
-            <td >
+            <td>
               <div class="d-flex flex-direction">
-                <div class="mr-3" ngbTooltip="{{ cliente.frecuencia.descripcion }}">
-                  <a [routerLink]="[ '/frecuencia','editar', cliente.frecuencia_id ]"><i class="fas fa-stopwatch"></i></a>
+                <ng-container *ngIf="isAdmin">
+                  <div
+                    class="mr-3"
+                    ngbTooltip="{{ cliente.frecuencia.descripcion }}"
+                  >
+                    <a
+                      [routerLink]="[
+                        '/frecuencia',
+                        'editar',
+                        cliente.frecuencia_id
+                      ]"
+                      ><i class="fas fa-stopwatch"></i
+                    ></a>
                     &nbsp;
-                  <span>({{ cliente.frecuencia.dias }} dias) </span>
-                </div>
-
+                    <span>({{ cliente.frecuencia.dias }} dias) </span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!isAdmin">
+                  <div
+                    class="mr-3"
+                    ngbTooltip="{{ cliente.frecuencia.descripcion }}"
+                  >
+                    <i class="fas fa-stopwatch"></i>
+                    <span>({{ cliente.frecuencia.dias }} dias) </span>
+                  </div>
+                </ng-container>
               </div>
             </td>
-            <td >
-              <a [routerLink]="[ '/cliente','estado-cuenta',cliente.id ]">Ver detalle</a>
+            <td>
+              <a [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
+                >Ver detalle</a
+              >
             </td>
-            <td >
+            <td>
               <div class="d-flex flex-direction">
-                <div *ngIf="cliente.facturas.length > 0" class="mr-3" ngbTooltip="Facturas">
-                  <a [routerLink]="[ '/cliente','factura',cliente.id]"><i class="fas fa-receipt"></i></a>
+                <div
+                  *ngIf="cliente.facturas.length > 0"
+                  class="mr-3"
+                  ngbTooltip="Facturas"
+                >
+                  <a [routerLink]="['/cliente', 'factura', cliente.id]"
+                    ><i class="fas fa-receipt"></i
+                  ></a>
                 </div>
-                <div *ngIf="cliente.facturas.length == 0" class="mr-3" ngbTooltip="No posee facturas">
-                    -
+                <div
+                  *ngIf="cliente.facturas.length == 0"
+                  class="mr-3"
+                  ngbTooltip="No posee facturas"
+                >
+                  -
                 </div>
               </div>
             </td>
             <td>
               <div class="d-flex flex-direction" *ngIf="isAdmin">
                 <div class="mr-3" ngbTooltip="Editar">
-                  <a [routerLink]="[ '/cliente','editar',cliente.id]" ><i class="fas fa-pencil-alt text-warning"></i></a>
+                  <a [routerLink]="['/cliente', 'editar', cliente.id]"
+                    ><i class="fas fa-pencil-alt text-warning"></i
+                  ></a>
                 </div>
                 <div class="mr-3" ngbTooltip="Eliminar">
-                  <span class="text-danger pointer" role="button" (click)="eliminar(cliente)"><i class="fas fa-trash-alt"></i></span>
+                  <span
+                    class="text-danger pointer"
+                    role="button"
+                    (click)="eliminar(cliente)"
+                    ><i class="fas fa-trash-alt"></i
+                  ></span>
                 </div>
               </div>
             </td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
-          <tr >
+          <tr>
             <td colspan="9">
-              <div class="container d-flex align-items-center justify-content-center">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
                 <!-- <div class="alert alert-info w-100 text-center" > -->
-                  <h5>No existen Clientes</h5>
+                <h5>No existen Clientes</h5>
                 <!-- </div> -->
               </div>
             </td>
           </tr>
         </tbody>
-
       </table>
 
       <div class="d-flex justify-content-between p-2">
-        <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
+        <ngb-pagination
+          [collectionSize]="_TablasService.total"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          (pageChange)="refreshCountries()"
+        ></ngb-pagination>
       </div>
     </div>
   </ng-container>

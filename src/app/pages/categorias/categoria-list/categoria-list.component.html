@@ -40,7 +40,7 @@
               <th scope="col">#</th>
               <th scope="col">Tipo</th>
               <th scope="col">Descripcion</th>
-              <th scope="col">Numero de días</th>
+              <th scope="col">Monto máximo</th>
               <th scope="col">Estado</th>
               <th scope="col">Opercaciones</th>
             </tr>
@@ -53,7 +53,7 @@
                   {{ categoria.tipo }}
                 </td>
                 <td>{{ categoria.descripcion }}</td>
-                <td>{{ categoria.valor_dias }}</td>
+                <td>{{ categoria.monto | currency:'USD' }}</td>
                 <td>
                     <span *ngIf="categoria.estado == 0">Inactiva</span>
                     <span *ngIf="categoria.estado == 1">Activa</span>

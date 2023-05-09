@@ -24,6 +24,7 @@ export class ClienteFormComponent implements OnInit {
   editarClienteForm: FormGroup;
   ClienteEstadoForm: FormGroup;
   Categorias:Categoria[]
+  Categoria:Categoria
   Frecuencias:Frecuencia[]
   Usuarios:Usuario[]
   daysOfWeek:string[]
@@ -46,17 +47,22 @@ export class ClienteFormComponent implements OnInit {
     private _HelpersService: HelpersService,
     private _AuthService: AuthService,
 
-  ) {
-    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => this.Categorias = [...data]);
+  ) {}
+
+  ngOnInit(): void {
+    // console.log(this.Categorias);
+
+    this._CategoriaService.getCategoria().subscribe((data:Categoria[]) => {
+      this.Categorias = [...data]
+      this.Categoria = data.find(categoria => categoria.id == 3 )
+
+      this.setearData()
+    });
     this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
     this._UsuariosService.getUsuario().subscribe((usaurios:Usuario[]) => this.Usuarios = [...usaurios]);
 
     this.daysOfWeek = this._HelpersService.DaysOfTheWeek
 
-  }
-
-  ngOnInit(): void {
-    // console.log(this.Categorias);
 
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
@@ -154,33 +160,23 @@ export class ClienteFormComponent implements OnInit {
             Validators.maxLength(180),
           ]),
         ],
-
         dias_cobro: this.fb.array(
           [],
           [
             Validators.required
           ]
-        ),
-        // fecha_vencimiento: [
-        //   '',
-        //   Validators.compose([
-        //     // Validators.required,
-
-        //   ]),
-        // ],
-        // estado: [
-        //   1,
-        //   Validators.compose([
-        //     Validators.required,
-
-        //   ]),
-        // ],
+        )
       }
     );
 
+
+  }
+  
+  setearData(){
     if(!(this.isAdmin || this.isSupervisor)){
       this.editarClienteForm.patchValue({
-        user_id: this._AuthService.dataStorage.user.userId
+        user_id: this._AuthService.dataStorage.user.userId,
+        categoria_id: this.Categoria.id,
       })
     }
   }
@@ -282,7 +278,7 @@ export class ClienteFormComponent implements OnInit {
       cliente.estado            = Number(this.formularioStadoControls.estado.value)
       cliente.frecuencia_id     = Number(this.formularioControls.frecuencia_id.value)
       cliente.telefono          = Number(this.formularioControls.telefono.value)
-      // console.log("[Cliente]",cliente);
+      console.log("[Cliente]",cliente);
 
       this.FormsValues.emit(cliente)
     }else{

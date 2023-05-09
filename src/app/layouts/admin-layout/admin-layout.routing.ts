@@ -196,7 +196,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "categoria",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, SUPERVISOR] },
+    data: { role: [ADMINISTRADOR] },
     children: [
       { path: "", component: CategoriaListComponent },
       { path: "agregar", component: CategoriaInsertarComponent },
