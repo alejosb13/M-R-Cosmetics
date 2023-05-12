@@ -3,7 +3,9 @@ export interface Categoria {
     tipo: string;
     descripcion: string;
     // valor_dias: number;
-    monto: number;
+    monto_menor: number;
+    monto_maximo: number;
+    condicion: number;
     estado: number;
     created_at?: Date;
     updated_at?: Date;

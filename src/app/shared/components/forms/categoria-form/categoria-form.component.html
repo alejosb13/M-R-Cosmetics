@@ -75,7 +75,7 @@
         ></ng-container>
       </div>
     </div>
-    <div class="col-md-4">
+    <!-- <div class="col-md-4">
       <div class="form-group">
         <label>Monto maximo<span class="text-danger">(*)</span></label>
         <input
@@ -122,6 +122,144 @@
             validation: 'min',
             message: 'El monto debe ser mayor o igual a 1',
             control: CategoriaForm.controls['monto']
+          }"
+        ></ng-container>
+      </div>
+    </div> -->
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Condicion</label>
+        <select
+          class="form-control"
+          name="condicion"
+          formControlName="condicion"
+        >
+          <option hidden [ngValue]="0">Seleccione una condición</option>
+          <option [ngValue]="1">Mayor que (>)</option>
+          <option [ngValue]="2">Menor que (<)</option>
+          <option [ngValue]="3">Menor o igual que (<=)</option>
+          <option [ngValue]="4">Mayor o igual que (>=)</option>
+          <option [ngValue]="5">Entre</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="validInputs('monto_menor')">
+      <div class="form-group">
+        <label
+          *ngIf="
+            validInputs('monto_menor') && validInputs('monto_maximo');
+            else soloMonto
+          "
+          >Monto menor<span class="text-danger">(*)</span></label
+        >
+        <input
+          type="text"
+          class="form-control"
+          name="monto_menor"
+          formControlName="monto_menor"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              CategoriaForm.controls['monto_menor'].invalid &&
+              CategoriaForm.controls['monto_menor'].touched,
+            'is-valid': CategoriaForm.controls['monto_menor'].valid
+          }"
+          appOnlyNumberAndPoint
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'pattern',
+            message: 'El monto debe ser numérico',
+            control: CategoriaForm.controls['monto_menor']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El monto es requerido',
+            control: CategoriaForm.controls['monto_menor']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El monto debe tener como máximo 11 numeros',
+            control: CategoriaForm.controls['monto_menor']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'min',
+            message: 'El monto debe ser mayor o igual a 1',
+            control: CategoriaForm.controls['monto_menor']
+          }"
+        ></ng-container>
+      </div>
+    </div>
+
+    <ng-template #soloMonto
+      ><label>Monto<span class="text-danger">(*)</span></label></ng-template
+    >
+
+    <div class="col-md-4" *ngIf="validInputs('monto_maximo')">
+      <div class="form-group">
+        <label
+          *ngIf="
+            validInputs('monto_menor') && validInputs('monto_maximo');
+            else soloMonto
+          "
+          >Monto maximo<span class="text-danger">(*)</span></label
+        >
+
+        <input
+          type="text"
+          class="form-control"
+          name="monto_maximo"
+          formControlName="monto_maximo"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              CategoriaForm.controls['monto_maximo'].invalid &&
+              CategoriaForm.controls['monto_maximo'].touched,
+            'is-valid': CategoriaForm.controls['monto_maximo'].valid
+          }"
+          appOnlyNumberAndPoint
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'pattern',
+            message: 'El monto debe ser numérico',
+            control: CategoriaForm.controls['monto_maximo']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El monto es requerido',
+            control: CategoriaForm.controls['monto_maximo']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El monto debe tener como máximo 11 numeros',
+            control: CategoriaForm.controls['monto_maximo']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'min',
+            message: 'El monto debe ser mayor o igual a 1',
+            control: CategoriaForm.controls['monto_maximo']
           }"
         ></ng-container>
       </div>

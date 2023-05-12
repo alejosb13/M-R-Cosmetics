@@ -55,7 +55,7 @@
             <th scope="col">Frecuencia</th>
             <th scope="col">E.Cuenta</th>
             <th scope="col">Facturacion</th>
-            <th scope="col" *ngIf="isAdmin">Opciones</th>
+            <th scope="col" *ngIf="isAdmin|| isSupervisor">Opciones</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -82,7 +82,7 @@
                   class="mr-3"
                   ngbTooltip="{{ cliente.categoria.descripcion }}"
                 >
-                  <ng-container *ngIf="isAdmin">
+                  <ng-container *ngIf="isAdmin|| isSupervisor">
                     <span>({{ cliente.categoria.tipo }}) </span>
                     <a
                       [routerLink]="[
@@ -94,7 +94,7 @@
                       <i class="fas fa-chart-line"></i>
                     </a>
                   </ng-container>
-                  <ng-container *ngIf="!isAdmin">
+                  <ng-container *ngIf="!isAdmin && !isSupervisor">
                     <span>({{ cliente.categoria.tipo }}) </span>
                     <i class="fas fa-chart-line"></i>
                   </ng-container>
@@ -103,7 +103,7 @@
             </td>
             <td>
               <div class="d-flex flex-direction">
-                <ng-container *ngIf="isAdmin">
+                <ng-container *ngIf="isAdmin ||isSupervisor">
                   <div
                     class="mr-3"
                     ngbTooltip="{{ cliente.frecuencia.descripcion }}"
@@ -116,11 +116,10 @@
                       ]"
                       ><i class="fas fa-stopwatch"></i
                     ></a>
-                    &nbsp;
                     <span>({{ cliente.frecuencia.dias }} dias) </span>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="!isAdmin">
+                <ng-container *ngIf="!isAdmin && !isSupervisor">
                   <div
                     class="mr-3"
                     ngbTooltip="{{ cliente.frecuencia.descripcion }}"
@@ -157,13 +156,13 @@
               </div>
             </td>
             <td>
-              <div class="d-flex flex-direction" *ngIf="isAdmin">
-                <div class="mr-3" ngbTooltip="Editar">
+              <div class="d-flex flex-direction">
+                <div class="mr-3" ngbTooltip="Editar" *ngIf="isAdmin|| isSupervisor">
                   <a [routerLink]="['/cliente', 'editar', cliente.id]"
                     ><i class="fas fa-pencil-alt text-warning"></i
                   ></a>
                 </div>
-                <div class="mr-3" ngbTooltip="Eliminar">
+                <div class="mr-3" ngbTooltip="Eliminar" *ngIf="isAdmin">
                   <span
                     class="text-danger pointer"
                     role="button"

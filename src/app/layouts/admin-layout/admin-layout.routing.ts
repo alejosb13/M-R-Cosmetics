@@ -64,13 +64,13 @@ import { Recuperacion85Component } from "app/pages/logistica/recuperacion85/recu
 import { SeccionesConfigComponent } from "app/pages/configuracion/secciones-config/secciones-config.component";
 import { MigrarInformacionVendedorComponent } from "app/pages/configuracion/migrar-informacion-vendedor/migrar-informacion-vendedor.component";
 import { ProductosVendedorComponent } from "app/pages/logistica/productos-vendedor/productos-vendedor.component";
-import { TazaCotizacionComponent } from '../../pages/configuracion/taza-cotizacion/taza-cotizacion.component';
-import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component';
+import { TazaCotizacionComponent } from "../../pages/configuracion/taza-cotizacion/taza-cotizacion.component";
+import { IncentivosSupervisorComponent } from "../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component";
 import { MetasComponent } from "app/pages/metas/metas.component";
 
 const ADMINISTRADOR = "administrador";
-const VENDEDOR      = "vendedor";
-const SUPERVISOR    = "supervisor";
+const VENDEDOR = "vendedor";
+const SUPERVISOR = "supervisor";
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -105,7 +105,10 @@ export const AdminLayoutRoutes: Routes = [
       { path: "mora60-90", component: Mora60A90Component },
       { path: "clientes-nuevos", component: ClientesNuevosComponent },
       { path: "incentivos", component: IncentivosComponent },
-      { path: "incentivos-supervisor", component: IncentivosSupervisorComponent },
+      {
+        path: "incentivos-supervisor",
+        component: IncentivosSupervisorComponent,
+      },
       { path: "clientes-inactivos", component: ClienteInactivosComponent },
       { path: "clientes-reactivados", component: ClientesReactivadosComponent },
       { path: "ventas", component: VentasComponent },
@@ -139,7 +142,10 @@ export const AdminLayoutRoutes: Routes = [
     data: { role: [ADMINISTRADOR, SUPERVISOR, VENDEDOR] },
     children: [
       { path: "estado/:status_pagado", component: FacturasComponent },
-      { path: "entrega/:status_entrega", component: FacturasEntregadasComponent },
+      {
+        path: "entrega/:status_entrega",
+        component: FacturasEntregadasComponent,
+      },
       { path: "detalle/:id", component: FacturaDetalleComponent },
       { path: "editar/:id", component: FacturaEditarComponent },
       { path: "despachar", component: FacturaDespachadaComponent },
@@ -151,29 +157,34 @@ export const AdminLayoutRoutes: Routes = [
     data: { role: [ADMINISTRADOR] },
     children: [
       { path: "", component: DevolucionSeleccionarSeccionComponent },
-      { path: "listado", children:[
-        { path: "factura", component: DevolucionFacturaListComponent },
-        { path: "producto", component: DevolucionProductoListComponent },
-      ]},
-
+      {
+        path: "listado",
+        children: [
+          { path: "factura", component: DevolucionFacturaListComponent },
+          { path: "producto", component: DevolucionProductoListComponent },
+        ],
+      },
     ],
   },
   {
     path: "recibos",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR,SUPERVISOR] },
+    data: { role: [ADMINISTRADOR, SUPERVISOR] },
     children: [
       { path: "", component: ReciboSeleccionarSeccionComponent },
-      { path: "listado", children:[
-        { path: "contado", component: RecibosContadoListComponent },
-        { path: "credito", component: RecibosCreditoListComponent },
-      ]},
+      {
+        path: "listado",
+        children: [
+          { path: "contado", component: RecibosContadoListComponent },
+          { path: "credito", component: RecibosCreditoListComponent },
+        ],
+      },
     ],
   },
   {
     path: "checkout",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, VENDEDOR,SUPERVISOR] },
+    data: { role: [ADMINISTRADOR, VENDEDOR, SUPERVISOR] },
     children: [{ path: "", component: CheckoutComponent }],
   },
   {
@@ -196,7 +207,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "categoria",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR] },
+    data: { role: [ADMINISTRADOR, SUPERVISOR] },
     children: [
       { path: "", component: CategoriaListComponent },
       { path: "agregar", component: CategoriaInsertarComponent },
@@ -219,19 +230,18 @@ export const AdminLayoutRoutes: Routes = [
     data: { role: [ADMINISTRADOR] },
     children: [
       { path: "", component: SeccionesConfigComponent },
-      { path: "migracion-vendedor", component: MigrarInformacionVendedorComponent },
+      {
+        path: "migracion-vendedor",
+        component: MigrarInformacionVendedorComponent,
+      },
       { path: "taza-cotizacion", component: TazaCotizacionComponent },
-
     ],
   },
   {
     path: "metas",
     canActivate: [AuthGuard],
     data: { role: [ADMINISTRADOR] },
-    children: [
-      { path: "", component: MetasComponent },
-
-    ],
+    children: [{ path: "", component: MetasComponent }],
   },
 
   { path: "user", component: UserComponent },
