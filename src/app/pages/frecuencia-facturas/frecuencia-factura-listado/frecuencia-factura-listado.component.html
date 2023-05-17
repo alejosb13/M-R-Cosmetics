@@ -1,0 +1,88 @@
+<div class="bg-white">
+  
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando frecuencias de factura
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+      
+    </div>
+  </div>
+  
+  <ng-container  *ngIf="!isLoad ">
+
+    <div class=" card-header border-0 pt-4  bg-white">
+      <a class="btn btn-primary" routerLink="/frecuencia-factura/agregar">
+        <i class="fas fa-plus"></i>
+        Agregar
+      </a>
+      <div class="d-flex flex-row justify-content-between mt-3">
+        <div class="card-title align-items-start flex-column">
+          <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Frecuencias de factura</span>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ _TablasService.total }}</span>
+        </div>
+  
+        <form class="d-flex align-items-center col-4 buscador">
+            <div class="form-label-group w-100">
+                <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
+                <label for="inputEmail">Buscar</label>
+            </div>
+        </form>
+      </div>
+      
+    </div>
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">  
+      <table class="table table-striped" >
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Numero de días</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Opercaciones</th>
+          </tr>
+
+        </thead>
+        <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
+          <tr *ngFor="let frecuencia of _TablasService.datosTablaStorage">
+              <th scope="row">{{ frecuencia.id }}</th>
+              <td>{{ frecuencia.descripcion }}</td>
+              <td>{{ frecuencia.dias }}</td>
+              <td>
+                  <span *ngIf="frecuencia.estado == 0">Inactiva</span>
+                  <span *ngIf="frecuencia.estado == 1">Activa</span>
+              </td>
+            <td>
+              <div class="d-flex flex-direction">
+                <div class="mr-3" ngbTooltip="Editar">
+                  <a [routerLink]="[ '/frecuencia-factura','editar',frecuencia.id]" ><i class="fas fa-pencil-alt"></i></a>
+                </div>
+                <div class="mr-3" ngbTooltip="Eliminar">
+                  <span class="text-primary pointer" role="button" (click)="eliminar(frecuencia)"><i class="fas fa-trash-alt"></i></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        
+        <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
+          <tr >
+            <td colspan="9">
+              <div class="container d-flex align-items-center justify-content-center">
+                <!-- <div class="alert alert-info w-100 text-center" > -->
+                  <h5>No existen frecuencias de factura</h5>
+                <!-- </div> -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+        
+      <div class="d-flex justify-content-between p-2">
+        <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
+      </div>
+    </div>
+  </ng-container>
+</div>

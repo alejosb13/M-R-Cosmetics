@@ -25,6 +25,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/metas',                      title: 'Metas',                icon:'fas fa-file-alt',               class: '' , access: 'administrador'},
   { path: '/categoria',                  title: 'Categoria',            icon:'fas fa-users',                  class: '' , access: 'administrador,supervisor'},
   { path: '/frecuencia',                 title: 'Frecuencia',           icon:'fas fa-business-time',          class: '' , access: 'administrador,supervisor'},
+  { path: '/frecuencia-factura',         title: 'Frecuencia Factura',   icon:'fas fa-business-time',          class: '' , access: 'administrador,supervisor'},
   { path: '/configuracion',              title: 'Configuración',        icon:'fas fa-cog',                    class: '' , access: 'administrador'},
   // { path: '/icons',         title: 'Icons',             icon:'nc-diamond',    class: '' },<i class="fas fa-undo"></i>
   // { path: '/maps',          title: 'Maps',              icon:'nc-pin-3',      class: '' },

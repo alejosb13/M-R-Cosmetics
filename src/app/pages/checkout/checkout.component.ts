@@ -8,9 +8,11 @@ import { AuthService } from "app/auth/login/service/auth.service";
 import { Cliente } from "app/shared/models/Cliente.model";
 import { FacturaCheckout } from "app/shared/models/FacturaCheckout.model";
 import { FacturaDetalle } from "app/shared/models/FacturaDetalle.model";
+import { FrecuenciaFactura } from "app/shared/models/FrecuenciaFactura.model";
 import { Recibo } from "app/shared/models/Recibo.model";
 import { CheckoutService } from "app/shared/services/checkout.service";
 import { ClientesService } from "app/shared/services/clientes.service";
+import { FrecuenciaFacturaService } from "app/shared/services/frecuenciaFactura.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
@@ -35,7 +37,10 @@ export class CheckoutComponent implements OnInit {
 
   clienteSelected: boolean = false;
   clienteData: Cliente;
-  date: string;
+  
+  date: string ="";
+  frecuenciaSelected: number;
+  frecuenciaFacturas: FrecuenciaFactura[];
 
   ClientesNames: string[] = [];
 
@@ -48,8 +53,8 @@ export class CheckoutComponent implements OnInit {
   numeroRecibo: number = 0;
   isAdmin: boolean;
   isLoad: boolean = false;
-  isSupervisor:boolean
-  
+  isSupervisor: boolean;
+
   @ViewChild("instance", { static: true }) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -62,11 +67,12 @@ export class CheckoutComponent implements OnInit {
     private _ReciboService: ReciboService,
     private _UsuariosService: UsuariosService,
     private _AuthService: AuthService,
+    private _FrecuenciaFacturaService: FrecuenciaFacturaService,
     private router: Router
   ) {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
-    this.isSupervisor = this._AuthService.isSupervisor()
+    this.isSupervisor = this._AuthService.isSupervisor();
   }
 
   ngOnInit(): void {
@@ -76,6 +82,7 @@ export class CheckoutComponent implements OnInit {
     this.getcheckout();
     this.getClientes();
     this.getDataUser();
+    this.getFrecuenciafactura();
     // console.log("Factura",this.factura);
     // console.log("Factura",(this.factura.tipo_venta == 1 && this.factura.tipo_venta));
   }
@@ -86,7 +93,7 @@ export class CheckoutComponent implements OnInit {
       .pipe(
         map((clientes) => {
           if (this.isAdmin || this.isSupervisor) return clientes;
-          
+
           return clientes.filter((cliente) => cliente.user_id == this.userId);
         })
       )
@@ -96,8 +103,19 @@ export class CheckoutComponent implements OnInit {
           (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
         );
         console.log(clientes);
-        
-        this.ValidClienteSelected();
+
+        // this.ValidClienteSelected();
+      });
+  }
+  
+  getFrecuenciafactura() {
+    this._FrecuenciaFacturaService
+      .getFrecuencia()
+      .subscribe((frecuencias) => {
+        this.frecuenciaFacturas = [...frecuencias];
+        console.log(this.frecuenciaFacturas);
+
+        // this.ValidClienteSelected();
       });
   }
 
@@ -158,22 +176,23 @@ export class CheckoutComponent implements OnInit {
 
   ValidClienteSelected() {
     if (this.factura.cliente_id) {
-      this.clienteSelected = true;
-
       this.clienteData = this.clientes.find(
         (cliente) => cliente.id == this.factura.cliente_id
       );
-      // console.log(this.clienteData);
 
-      this.date = this._HelpersService.addDaytoDate(
-        Number(this.clienteData.frecuencia.dias),
-        "YYYY-MM-DD"
-      );
+      // this.date = this._HelpersService.addDaytoDate(
+      //   Number(this.clienteData.frecuencia.dias),
+      //   "YYYY-MM-DD"
+      // );
     }
   }
 
   getProducts() {
     this.productos = this._CheckoutService.getProductCheckout();
+  }
+
+  isValidForm() {
+    return this.clienteSelected && this.date
   }
 
   getcheckout() {
@@ -190,20 +209,25 @@ export class CheckoutComponent implements OnInit {
 
   cambiarValores(element: any) {
     let FacturaCheckout: FacturaCheckout = { ...this.factura };
+    FacturaCheckout.tipo_venta = 1; // 2 = contado , 1 = credito 
 
+    console.log(element);
+    
     if (element.name == "cliente") {
+      this.clienteSelected = false;
       if (element.value.includes("-")) {
         // console.log(element.value.split("-"));
         let split: string[] = element.value.split("-");
         let id = Number(split[0].trim());
-
+        
         console.log("IdCliente", id);
         // console.log(this.cliente);
-
+        
         FacturaCheckout.cliente_id = id;
         // FacturaCheckout.cliente_id = Number(element.value)
         this._CheckoutService.CheckoutToStorage(FacturaCheckout);
-
+        
+        this.clienteSelected = true;
         this.getcheckout();
         this.ValidClienteSelected();
       }
@@ -215,6 +239,46 @@ export class CheckoutComponent implements OnInit {
 
       this.getcheckout();
     }
+  }
+
+  cambiarFrecuencia(element: HTMLSelectElement) {
+    console.log(element);
+    console.log(element.value);
+    
+    this.date = this._HelpersService.addDaytoDate(
+      Number(element.value),
+      "YYYY-MM-DD"
+      );
+      
+      console.log(this.date);
+    // let FacturaCheckout: FacturaCheckout = { ...this.factura };
+
+    // if (element.name == "cliente") {
+    //   this.clienteSelected = false;
+    //   if (element.value.includes("-")) {
+    //     // console.log(element.value.split("-"));
+    //     let split: string[] = element.value.split("-");
+    //     let id = Number(split[0].trim());
+        
+    //     console.log("IdCliente", id);
+    //     // console.log(this.cliente);
+        
+    //     FacturaCheckout.cliente_id = id;
+    //     // FacturaCheckout.cliente_id = Number(element.value)
+    //     this._CheckoutService.CheckoutToStorage(FacturaCheckout);
+        
+    //     this.clienteSelected = true;
+    //     this.getcheckout();
+    //     this.ValidClienteSelected();
+    //   }
+    // }
+
+    // if (element.name == "tipo_venta") {
+    //   FacturaCheckout.tipo_venta = Number(element.value);
+    //   this._CheckoutService.CheckoutToStorage(FacturaCheckout);
+
+    //   this.getcheckout();
+    // }
   }
 
   deleteProduct(productoCheckout: FacturaDetalle) {

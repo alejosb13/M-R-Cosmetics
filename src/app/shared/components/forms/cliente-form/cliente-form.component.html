@@ -8,7 +8,7 @@
   <br />
   <div class="row">
     <div class="col-md-6">
-      <ng-container *ngIf="isAdmin">
+      <ng-container *ngIf="isAdmin || isSupervisor">
         <div class="form-group">
           <label>Categoria <span class="text-danger">(*)</span></label>
           <select
@@ -30,7 +30,7 @@
           </select>
         </div>
       </ng-container>
-      <ng-container *ngIf="!isAdmin && Categoria">
+      <ng-container *ngIf="!isAdmin && !isSupervisor">
         <div class="form-group">
           <label>Categoria<span class="text-danger"></span></label>
           <input

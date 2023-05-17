@@ -67,6 +67,9 @@ import { ProductosVendedorComponent } from "app/pages/logistica/productos-vended
 import { TazaCotizacionComponent } from "../../pages/configuracion/taza-cotizacion/taza-cotizacion.component";
 import { IncentivosSupervisorComponent } from "../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component";
 import { MetasComponent } from "app/pages/metas/metas.component";
+import { FrecuenciaFacturaListadoComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-listado/frecuencia-factura-listado.component";
+import { FrecuenciaFacturaInsertarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component";
+import { FrecuenciaFacturaEditarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-editar/frecuencia-factura-editar.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -222,6 +225,16 @@ export const AdminLayoutRoutes: Routes = [
       { path: "", component: FrecuenciaListadoComponent },
       { path: "agregar", component: FrecuenciaInsertarComponent },
       { path: "editar/:id", component: FrecuenciaEditarComponent },
+    ],
+  },
+  {
+    path: "frecuencia-factura",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR, SUPERVISOR] },
+    children: [
+      { path: "", component: FrecuenciaFacturaListadoComponent },
+      { path: "agregar", component: FrecuenciaFacturaInsertarComponent },
+      { path: "editar/:id", component: FrecuenciaFacturaEditarComponent },
     ],
   },
   {

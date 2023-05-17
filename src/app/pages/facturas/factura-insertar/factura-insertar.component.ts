@@ -146,7 +146,7 @@ export class FacturaInsertarComponent implements OnInit {
   }
 
   FormsValues(producto:Producto){
-    // console.log(producto);
+    console.log(producto);
 
     this._CheckoutService.addProductCheckout(producto)
     this.actualizarProducto(producto)

@@ -93,6 +93,10 @@ import { RegalosListComponent } from '../../pages/regalos/regalos-list/regalos-l
 import { CargarRegaloComponent } from '../../shared/components/forms/cargar-regalo/cargar-regalo.component';
 import { IncentivosSupervisorComponent } from '../../pages/logistica/incentivos-supervisor/incentivos-supervisor.component';
 import { MetasComponent } from 'app/pages/metas/metas.component';
+import { FrecuenciaFacturaListadoComponent } from 'app/pages/frecuencia-facturas/frecuencia-factura-listado/frecuencia-factura-listado.component';
+import { FrecuenciaFacturaInsertarComponent } from 'app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component';
+import { FrecuenciaFacturaEditarComponent } from 'app/pages/frecuencia-facturas/frecuencia-factura-editar/frecuencia-factura-editar.component';
+import { FrecuenciaFacturaFormComponent } from 'app/shared/components/forms/frecuencia-factura-form/frecuencia-factura-form.component';
 
 @NgModule({
   imports: [
@@ -196,6 +200,11 @@ import { MetasComponent } from 'app/pages/metas/metas.component';
     ProductosVendedorComponent,
 
     MetasComponent,
+
+    FrecuenciaFacturaListadoComponent,
+    FrecuenciaFacturaInsertarComponent,
+    FrecuenciaFacturaEditarComponent,
+    FrecuenciaFacturaFormComponent
   ]
 })
 
