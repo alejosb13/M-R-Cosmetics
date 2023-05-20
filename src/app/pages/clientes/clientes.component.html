@@ -55,7 +55,7 @@
             <th scope="col">Frecuencia</th>
             <th scope="col">E.Cuenta</th>
             <th scope="col">Facturacion</th>
-            <th scope="col" *ngIf="isAdmin|| isSupervisor">Opciones</th>
+            <th scope="col" *ngIf="isAdmin || isSupervisor">Opciones</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -82,7 +82,7 @@
                   class="mr-3"
                   ngbTooltip="{{ cliente.categoria.descripcion }}"
                 >
-                  <ng-container *ngIf="isAdmin|| isSupervisor">
+                  <ng-container *ngIf="isAdmin || isSupervisor">
                     <span>({{ cliente.categoria.tipo }}) </span>
                     <a
                       [routerLink]="[
@@ -103,29 +103,24 @@
             </td>
             <td>
               <div class="d-flex flex-direction">
-                <ng-container *ngIf="isAdmin ||isSupervisor">
+                <ng-container>
                   <div
                     class="mr-3"
-                    ngbTooltip="{{ cliente.frecuencia.descripcion }}"
-                  >
-                    <a
-                      [routerLink]="[
-                        '/frecuencia',
-                        'editar',
-                        cliente.frecuencia_id
-                      ]"
-                      ><i class="fas fa-stopwatch"></i
-                    ></a>
-                    <span>({{ cliente.frecuencia.dias }} dias) </span>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="!isAdmin && !isSupervisor">
-                  <div
-                    class="mr-3"
-                    ngbTooltip="{{ cliente.frecuencia.descripcion }}"
+                    *ngIf="cliente.frecuencia"
                   >
                     <i class="fas fa-stopwatch"></i>
-                    <span>({{ cliente.frecuencia.dias }} dias) </span>
+                    <span
+                      >({{
+                        cliente.frecuencia.dias
+                      }}
+                      dias)
+                    </span>
+                  </div>
+                  <div
+                    class="mr-3"
+                    *ngIf="!cliente.frecuencia"
+                  >
+                    <span> - </span>
                   </div>
                 </ng-container>
               </div>
@@ -157,7 +152,11 @@
             </td>
             <td>
               <div class="d-flex flex-direction">
-                <div class="mr-3" ngbTooltip="Editar" *ngIf="isAdmin|| isSupervisor">
+                <div
+                  class="mr-3"
+                  ngbTooltip="Editar"
+                  *ngIf="isAdmin || isSupervisor"
+                >
                   <a [routerLink]="['/cliente', 'editar', cliente.id]"
                     ><i class="fas fa-pencil-alt text-warning"></i
                   ></a>

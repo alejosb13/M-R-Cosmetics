@@ -1,45 +1,61 @@
 <div class="bg-white">
-
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
         Cargando clientes inactivos
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
-
     </div>
   </div>
 
-  <ng-container  *ngIf="!isLoad ">
-
-    <div class=" card-header border-0 pt-4  bg-white">
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
       <!-- <a class="btn btn-primary" routerLink="/devolucion/agregar/producto">
         <i class="fas fa-plus"></i>
         Agregar
       </a> -->
-        <div class="col-md-12">
-          <div class="d-flex flex-row justify-content-between mt-3">
-            <div class="card-title align-items-start flex-column">
-              <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
-              <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de clientes: {{ _TablasService.total }}</span>
-            </div>
-
-            <form class="d-flex align-items-center col-4 buscador pr-0">
-                <div class="form-label-group w-100">
-                    <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
-                    <label for="inputEmail">Buscar</label>
-                </div>
-            </form>
+      <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-between mt-3">
+          <div class="card-title align-items-start flex-column">
+            <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
+            <span class="fuvi-text-black mt-1 fw-bold fs-5"
+              >Total de clientes: {{ _TablasService.total }}</span
+            >
           </div>
-        </div>
 
-      <div class="col-md-12 d-flex justify-content-between flex-wrap" *ngIf="isAdmin || isSupervisor">
-        <button class="btn btn-primary align-self-center" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+          <form class="d-flex align-items-center col-4 buscador pr-0">
+            <div class="form-label-group w-100">
+              <input
+                type="email"
+                id="inputEmail"
+                class="form-control form-control-sm"
+                placeholder="Buscar"
+                (keyup)="BuscarValor()"
+                (change)="BuscarValor()"
+                [(ngModel)]="_TablasService.busqueda"
+                name="buscar"
+              />
+              <label for="inputEmail">Buscar</label>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div
+        class="col-md-12 d-flex justify-content-between flex-wrap"
+        *ngIf="isAdmin || isSupervisor"
+      >
+        <button
+          class="btn btn-primary align-self-center"
+          (click)="openFiltros(contentEditar)"
+        >
+          Filtros <i class="fas fa-filter"></i>
+        </button>
       </div>
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
-      <table class="table table-striped " >
+      <table class="table table-striped">
         <thead>
           <tr>
             <!-- <th scope="col">#</th> -->
@@ -59,71 +75,91 @@
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
           <tr *ngFor="let Cliente of _TablasService.datosTablaStorage">
             <!-- <th scope="row">{{ Recibo.id }}</th> -->
-            <th>
-              #{{ Cliente.id }}
-            </th>
+            <th>#{{ Cliente.id }}</th>
             <td>
-              {{  Cliente.nombreCompleto }}
+              {{ Cliente.nombreCompleto }}
             </td>
             <td>
-              {{  Cliente.nombreEmpresa }}
+              {{ Cliente.nombreEmpresa }}
             </td>
             <td>
               <div *ngIf="Cliente.user_id">
-                {{  Cliente.user.name }} {{  Cliente.user.apellido }}
+                {{ Cliente.user.name }} {{ Cliente.user.apellido }}
               </div>
-              <div *ngIf="!Cliente.user_id">
-                No tiene usuario asignado
-              </div>
+              <div *ngIf="!Cliente.user_id">No tiene usuario asignado</div>
             </td>
             <td>
-              {{  Cliente.cedula }}
+              {{ Cliente.cedula }}
             </td>
             <td>
-              <div class="text-center text-primary"  ngbTooltip="{{ Cliente.dias_cobro | uppercase }}">
+              <div
+                class="text-center text-primary"
+                ngbTooltip="{{ Cliente.dias_cobro | uppercase }}"
+              >
                 <i class="fas fa-info-circle"></i>
               </div>
             </td>
             <td>
-              {{  Cliente.direccion_casa }}
+              {{ Cliente.direccion_casa }}
             </td>
             <td>
-              {{  Cliente.direccion_negocio }}
+              {{ Cliente.direccion_negocio }}
             </td>
             <td>
               <div class="d-flex flex-direction">
-                <div *ngIf="Cliente.cantidad_factura > 0" class="mr-3" ngbTooltip="Facturas">
-                  <a [routerLink]="[ '/cliente','factura',Cliente.id]"><i class="fas fa-receipt"></i></a>
+                <div
+                  *ngIf="Cliente.cantidad_factura > 0"
+                  class="mr-3"
+                  ngbTooltip="Facturas"
+                >
+                  <a [routerLink]="['/cliente', 'factura', Cliente.id]"
+                    ><i class="fas fa-receipt"></i
+                  ></a>
                 </div>
-                <div *ngIf="Cliente.cantidad_factura == 0" class="mr-3" ngbTooltip="No posee facturas">
-                    -
+                <div
+                  *ngIf="Cliente.cantidad_factura == 0"
+                  class="mr-3"
+                  ngbTooltip="No posee facturas"
+                >
+                  -
                 </div>
               </div>
             </td>
             <td>
-              {{  Cliente.categoria.descripcion }}
+              {{ Cliente.categoria.descripcion }}
             </td>
             <td>
-              {{  Cliente.frecuencia.descripcion}}
+              <div class="mr-3" *ngIf="Cliente.frecuencia">
+                <span> {{ Cliente.frecuencia.descripcion }} </span>
+              </div>
+              <div class="mr-3" *ngIf="!Cliente.frecuencia">
+                <span> - </span>
+              </div>
             </td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
-          <tr >
+          <tr>
             <td colspan="11">
-              <div class="container d-flex align-items-center justify-content-center">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
                 <!-- <div class="alert alert-info w-100 text-center" > -->
-                  <h5>No existen clientes inactivos</h5>
+                <h5>No existen clientes inactivos</h5>
                 <!-- </div> -->
               </div>
             </td>
           </tr>
         </tbody>
-
       </table>
 
       <div class="d-flex justify-content-between p-2">
-        <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
+        <ngb-pagination
+          [collectionSize]="_TablasService.total"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          (pageChange)="refreshCountries()"
+        ></ngb-pagination>
       </div>
     </div>
   </ng-container>
@@ -132,9 +168,7 @@
 <ng-template #contentEditar let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">
-        Filtros
-      </h4>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
     </div>
     <button
       type="button"
@@ -192,8 +226,8 @@
         </div>
       </div> -->
       <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
-        <div class="form-group tipehead" >
-          <p class=" font-weight-bold">Usuario</p>
+        <div class="form-group tipehead">
+          <p class="font-weight-bold">Usuario</p>
           <!-- <input
             id="typeahead-focus"
             type="text"
@@ -208,8 +242,16 @@
             #instance="ngbTypeahead"
           /> -->
           <select name="" id="" class="form-control" [(ngModel)]="userId">
-            <option [selected]="userId == 0" value="0">Todos los usuarios</option>
-            <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
+            <option [selected]="userId == 0" value="0">
+              Todos los usuarios
+            </option>
+            <option
+              *ngFor="let usuario of userStore"
+              [selected]="usuario.id == userId"
+              [value]="usuario.id"
+            >
+              {{ usuario.name }} {{ usuario.apellido }}
+            </option>
           </select>
         </div>
       </div>
@@ -218,10 +260,14 @@
   <div class="modal-footer justify-content-center w-100">
     <div class="row w-100">
       <div class="col text-center">
-        <button class="btn btn-danger " (click)="limpiarFiltros()">Limpiar <i class="fas fa-eraser"></i></button>
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="aplicarFiltros(true)">Aplicar <i class="fas fa-search"></i></button>
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
       </div>
     </div>
   </div>

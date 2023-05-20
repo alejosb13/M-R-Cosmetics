@@ -5,6 +5,7 @@ import { environment } from "environments/environment";
 import { Factura } from "../models/Factura.model";
 import { FacturaCheckout } from "../models/FacturaCheckout.model";
 import { FiltrosList, ListadoModel } from "../models/Listados.model";
+import { ReciboHistorial } from "../models/ReciboHistorial.model";
 
 const ListadoURL = `${environment.urlAPI}list`;
 
@@ -84,6 +85,32 @@ export class Listado {
     // console.log(URL);
 
     return this.http.get<ListadoModel<Factura>>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  recibosList(options: FiltrosList): Observable<ListadoModel<ReciboHistorial>> {
+    // console.log("FiltrosList", options);
+    let URL: string;
+
+    if (options.link) {
+      URL = this.urlParams(options.link, options);
+    } else {
+      URL = `${ListadoURL}/recibos`;
+
+      if (Object.keys(options).length > 0) {
+        // let URLOptions = `${ListadoURL}/facturas?`
+
+        URL = this.urlParams(URL, options);
+
+        // URL = URLOptions
+      }
+    }
+
+    // console.log(URL);
+
+    return this.http.get<ListadoModel<ReciboHistorial>>(URL, {
       headers: this.headerJson_Token(),
       responseType: "json",
     });

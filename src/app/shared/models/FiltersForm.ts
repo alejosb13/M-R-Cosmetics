@@ -19,7 +19,9 @@ enum TypesForm {
   productosVendidosFilter = "productosVendidosFilter",
   recuperacionMensualFilter = "recuperacionMensualFilter",
   metasHistorialFilter = "metasHistorialFilter",
+  recibosHistorialFilter = "recibosHistorialFilter",
 }
+
 export type TypesFiltersForm =  keyof typeof TypesForm
 
 export type CreateFiltersForm = Partial<FiltersForm>

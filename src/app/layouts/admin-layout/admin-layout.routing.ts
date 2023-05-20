@@ -217,16 +217,16 @@ export const AdminLayoutRoutes: Routes = [
       { path: "editar/:id", component: CategoriaEditarComponent },
     ],
   },
-  {
-    path: "frecuencia",
-    canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, SUPERVISOR] },
-    children: [
-      { path: "", component: FrecuenciaListadoComponent },
-      { path: "agregar", component: FrecuenciaInsertarComponent },
-      { path: "editar/:id", component: FrecuenciaEditarComponent },
-    ],
-  },
+  // {
+  //   path: "frecuencia",
+  //   canActivate: [AuthGuard],
+  //   data: { role: [ADMINISTRADOR, SUPERVISOR] },
+  //   children: [
+  //     { path: "", component: FrecuenciaListadoComponent },
+  //     { path: "agregar", component: FrecuenciaInsertarComponent },
+  //     { path: "editar/:id", component: FrecuenciaEditarComponent },
+  //   ],
+  // },
   {
     path: "frecuencia-factura",
     canActivate: [AuthGuard],

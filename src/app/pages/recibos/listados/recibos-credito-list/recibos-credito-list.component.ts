@@ -1,129 +1,125 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService } from 'app/auth/login/service/auth.service';
-import { ReciboHistorial } from 'app/shared/models/ReciboHistorial.model';
-import { Usuario } from 'app/shared/models/Usuario.model';
-import { HelpersService } from 'app/shared/services/helpers.service';
-import { ReciboService } from 'app/shared/services/recibo.service';
-import { TablasService } from 'app/shared/services/tablas.service';
-import { UsuariosService } from 'app/shared/services/usuarios.service';
-import { environment } from 'environments/environment';
-import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import Swal from 'sweetalert2';
-
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { AuthService } from "app/auth/login/service/auth.service";
+import { Factura } from "app/shared/models/Factura.model";
+import { Subscription } from "rxjs";
+import Swal from "sweetalert2";
+import { Listado } from "app/shared/services/listados.service";
+import {
+  FiltrosList,
+  Link,
+  ListadoModel,
+} from "app/shared/models/Listados.model";
+import { ReciboHistorial } from "app/shared/models/ReciboHistorial.model";
+import { Usuario } from "app/shared/models/Usuario.model";
+import { TypesFiltersForm } from "app/shared/models/FiltersForm";
+import { UsuariosService } from "app/shared/services/usuarios.service";
+import { RememberFiltersService } from "app/shared/services/remember-filters.service";
+import { HelpersService } from "app/shared/services/helpers.service";
+import { ReciboService } from "app/shared/services/recibo.service";
 @Component({
-  selector: 'app-recibos-credito-list',
-  templateUrl: './recibos-credito-list.component.html',
-  styleUrls: ['./recibos-credito-list.component.css']
+  selector: "app-recibos-credito-list",
+  templateUrl: "./recibos-credito-list.component.html",
+  styleUrls: ["./recibos-credito-list.component.css"],
 })
 export class RecibosCreditoListComponent implements OnInit {
-
-  page = 1;
-  pageSize = environment.PageSize;
-  collectionSize = 0;
   Recibos: ReciboHistorial[];
-  isLoad:boolean
-  isAdmin:boolean
-  isSupervisor:boolean
 
-  filtros: any = {};
-  dateIni: string;
-  dateFin: string;
+  numeroRecibo: string = "";
 
-  allDates:boolean = true
+  isLoad: boolean;
+  isAdmin: boolean;
+  isSupervisor: boolean;
+  status_pagado: number;
+  Factura: Factura;
+  userId: number = 0;
 
-  @ViewChild('instance', {static: true}) instance: NgbTypeahead;
-  focus$ = new Subject<string>();
-  click$ = new Subject<string>();
-  USersNames:string[] = []
-  userId: number;
+  // meta: Meta;
+  idUsuario: number;
+
   userIdString: string;
   userStore: Usuario[];
+  USersNames: string[] = [];
 
-  @ViewChild('instanceRecibo', {static: true}) instanceRecibo: NgbTypeahead;
-  focusRecibo$ = new Subject<string>();
-  clickRecibo$ = new Subject<string>();
-  ReciboNames:string[] = []
-  ReciboId: number;
-  ReciboString: string;
+  dateIni: string;
+  dateFin: string;
+  allDates: boolean = false;
 
+  mesNewMeta: string;
+
+  roleName: string;
+  listadoData: ListadoModel<ReciboHistorial>;
+  listadoFilter: FiltrosList = { link: null };
+
+  FilterSection: TypesFiltersForm = "recibosHistorialFilter";
+
+  private Subscription = new Subscription();
+
+  dateMetaAsignacionHistorialEditar: string;
+  montoMetaHistorialEditar: number;
+  IdMetaHistorialEditar: number;
 
   constructor(
-    private _ReciboService:ReciboService,
-    private _TablasService:TablasService,
-    private _AuthService:AuthService,
+    private _Listado: Listado,
+    private _AuthService: AuthService,
     private NgbModal: NgbModal,
     private _UsuariosService: UsuariosService,
+    private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
+    private _ReciboService: ReciboService
   ) {}
 
   ngOnInit(): void {
-    this.isAdmin = this._AuthService.isAdmin()
-    this.isSupervisor = this._AuthService.isSupervisor()
-
-    this.getUsers()
-    this.asignarValores()
-    this.setCurrentDate()
+    this.isAdmin = this._AuthService.isAdmin();
+    this.isSupervisor = this._AuthService.isSupervisor();
+    // this.userId = 0;
+    // this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.roleName = String(this._AuthService.dataStorage.user.roleName);
+    this.setCurrentDate();
+    this.getUsers();
+    this.aplicarFiltros();
   }
 
+  getUsers() {
+    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
+      this.userStore = usuarios;
+      this.USersNames = usuarios.map(
+        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+      );
+    });
+  }
 
-  asignarValores(filtros:any= {estado:1}){
-    this.isLoad = true
-    console.log(filtros);
+  asignarValores() {
+    this.isLoad = true;
 
-    this._ReciboService.getReciboHistorialCredito(filtros)
-    .pipe(
-      map((recibos)=>{
-        // console.log(this.userId);
-        
-        if (this.isAdmin || this.isSupervisor) return recibos;
+    this.listadoFilter = {
+      ...this.listadoFilter,
+      roleName: this.roleName,
+    };
 
-        return recibos.filter((recibo) => recibo.recibo.user_id == this.userId);
-        
-      })
-    )
-    .subscribe((recibos:ReciboHistorial[])=> {
-
-      if(!filtros.hasOwnProperty('filtrarRecivosList')){
-        this.ReciboNames = recibos.map(recibos => `${ recibos.numero } - ${ recibos.recibo.user.name } ${ recibos.recibo.user.apellido }`)
+    let Subscription = this._Listado.recibosList(this.listadoFilter).subscribe(
+      (Paginacion) => {
+        this.listadoData = { ...Paginacion };
+        this.Recibos = [...Paginacion.data];
+        this.isLoad = false;
+      },
+      (error) => {
+        this.isLoad = false;
       }
-
-      // console.log(recibos);
-      this.Recibos = [...recibos]
-      this._TablasService.datosTablaStorage = [...recibos]
-      this._TablasService.total = recibos.length
-      this._TablasService.busqueda = ""
-
-      this.refreshCountries()
-      this.isLoad =false
-    },(error)=>{
-      this.isLoad =false
-    })
+    );
+    this.Subscription.add(Subscription);
   }
 
-  refreshCountries() {
-    this._TablasService.datosTablaStorage = [...this.Recibos]
-    .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-  }
-
-  BuscarValor(){
-    let camposPorFiltrar:any[] = [
-      ['numero'],
-      ['factura_historial_id'],
-      ['factura_historial','precio'],
-      ['factura_historial','cliente','nombreCompleto'],
-      ['recibo','user','name'],
-      ['recibo','user','apellido'],
-    ];
-
-    this._TablasService.buscarEnCampos(this.Recibos,camposPorFiltrar)
-
-    if(this._TablasService.busqueda ==""){this.refreshCountries()}
-
+  BuscarValor() {
+    this.listadoFilter.link = null;
+    this.asignarValores();
   }
 
   openFiltros(content: any) {
+    // console.log(this.mesNewMeta);
+    this.listadoFilter.link = null;
+
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
     }).result.then(
@@ -132,136 +128,130 @@ export class RecibosCreditoListComponent implements OnInit {
     );
   }
 
-  getUsers(){
-    this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[]) => {
-      this.userStore = usuarios
-      this.USersNames = usuarios.map(usuario => `${ usuario.id } - ${ usuario.name } ${ usuario.apellido }`)
+  newPage(link: Link) {
+    if (link.url == null) return;
+    // console.log(link);
 
-      // this.resetUser()
-    })
-  }
+    this.listadoFilter.link = link.url;
 
-  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-    // const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
-    const inputFocus$ = this.focus$;
-
-    return merge(debouncedText$, inputFocus$).pipe(
-      map(term => (term === '' ? [...this.USersNames]
-        : [...this.USersNames].filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-    );
-  }
-
-  searchRecibo: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-    // const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
-    const inputFocus$ = this.focusRecibo$;
-
-    return merge(debouncedText$, inputFocus$).pipe(
-      map(term => (term === '' ? [...this.ReciboNames]
-        : [...this.ReciboNames].filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-    );
-  }
-
-  dataChangedList(element:string,name:string) {
-    // console.log(element);
-    if(element.includes("-")){
-      let split:string[] = element.split("-")
-      let id = Number(split[0].trim())
-
-      console.log("IdUsuario",id);
-      if(name == "user"){
-        this.userId = id
-      }
-
-      if(name == "recibo"){
-        this.ReciboId = id
-      }
-      // this.userIdString = element
-      // console.log(this.cliente);
-
-
-    }
+    this.asignarValores();
   }
 
   setCurrentDate() {
-    let current    = this._HelpersService.changeformatDate(this._HelpersService.currentDay(),'MM/DD/YYYY',"YYYY-MM-DD")
-    let month      = this._HelpersService.changeformatDate(this._HelpersService.currentDay(),'MM/DD/YYYY',"MM")
-    let year       = this._HelpersService.changeformatDate(this._HelpersService.currentDay(),'MM/DD/YYYY',"YYYY")
-    let rangoMonth = this._HelpersService.InicioYFinDeMes(current)
+    let current = this._HelpersService.changeformatDate(
+      this._HelpersService.currentDay(),
+      "MM/DD/YYYY",
+      "YYYY-MM-DD"
+    );
+    let month = this._HelpersService.changeformatDate(
+      this._HelpersService.currentDay(),
+      "MM/DD/YYYY",
+      "MM"
+    );
+    let year = this._HelpersService.changeformatDate(
+      this._HelpersService.currentDay(),
+      "MM/DD/YYYY",
+      "YYYY"
+    );
+    let rangoMonth = this._HelpersService.InicioYFinDeMes(current);
 
     this.dateIni = `${year}-${month}-01`;
     this.dateFin = `${year}-${month}-${rangoMonth.ultimoDiaDelMes}`;
 
-    this.filtros = {
+    this.listadoFilter = {
+      ...this.listadoFilter,
       dateIni: this.dateIni,
       dateFin: this.dateFin,
-      estado:1
     };
   }
-
 
   limpiarFiltros() {
-    // this.setCurrentDate();
-    // this.tipoVenta = 1
-    // this.status_pagado = 0 // por pagar
+    this.setCurrentDate();
 
-    // if(this.isAdmin) this.resetUser();
+    this.allDates = false;
+    this.numeroRecibo = "";
+
+    this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
+    this.aplicarFiltros();
 
     // console.log(this.filtros);
-
-    this.filtros = {
-      estado:1 ,
-    };
-
-    this.asignarValores(this.filtros)
   }
 
-  aplicarFiltros() {
+  aplicarFiltros(submit: boolean = false) {
+    // console.log(this.allDates);
+    let filtrosStorage = this._RememberFiltersService.getFilterStorage();
 
-    if(!this.dateIni || !this.dateFin) this.setCurrentDate() // si las fechas estan vacias, se setean las fechas men actual
+    if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
+      // solo al iniciar con datos en storage
+      this.listadoFilter = { ...filtrosStorage[this.FilterSection] };
+      this.userId = Number(this.listadoFilter.userId);
+      this.dateIni = this.listadoFilter.dateIni;
+      this.dateFin = this.listadoFilter.dateFin;
+      this.allDates = this.listadoFilter.allDates;
+      this.numeroRecibo = this.listadoFilter.numeroRecibo;
+    } else {
+      if (!submit) {
+        console.log(this.userId);
 
-    if(this._HelpersService.siUnaFechaEsIgualOAnterior(this.dateIni,this.dateFin)) this.setCurrentDate() // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+        // this.userId = Number(this._AuthService.dataStorage.user.userId);
+        this.userId = 0;
+      }
 
-    this.filtros = {
-      dateIni: this.dateIni,
-      dateFin: this.dateFin,
-      // userId : this.userId,
-      numeroRecibo : this.ReciboString ? this.ReciboId : '' ,
-      estado:1 ,
-      filtrarRecivosList:true,
-      allDates:this.allDates
-    };
+      if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
 
-    this.asignarValores(this.filtros)
+      if (
+        this._HelpersService.siUnaFechaEsIgualOAnterior(
+          this.dateIni,
+          this.dateFin
+        )
+      )
+        this.setCurrentDate(); // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+      this.listadoFilter = {
+        ...this.listadoFilter,
+        dateIni: this.dateIni,
+        dateFin: this.dateFin,
+        userId: this.userId,
+        allDates: this.allDates,
+        numeroRecibo: this.numeroRecibo,
+      };
+    }
+
+    this._RememberFiltersService.setFilterStorage(this.FilterSection, {
+      ...this.listadoFilter,
+    });
+    this.asignarValores();
   }
 
-
-  eliminar(reciboEliminar:ReciboHistorial){
+  eliminar(reciboEliminar: ReciboHistorial) {
     // console.log(devolucion);
     Swal.fire({
-      title: '¿Estás seguro?',
+      title: "¿Estás seguro?",
       text: "Al eliminar este recibo se eliminará también el abono asociado a él y no podrás recuperarlo.",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#51cbce',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        this._ReciboService
+          .deleteReciboHistorialCredito(reciboEliminar.id)
+          .subscribe((data) => {
+            this.Recibos = this.Recibos.filter(
+              (recibo) => recibo.id != reciboEliminar.id
+            );
 
-        this._ReciboService.deleteReciboHistorialCredito(reciboEliminar.id).subscribe((data)=>{
-          this.Recibos = this.Recibos.filter(recibo => recibo.id != reciboEliminar.id)
-          this.refreshCountries()
-
-          Swal.fire({
-            text: data[0],
-            icon: 'success',
-          })
-        })
+            Swal.fire({
+              text: data[0],
+              icon: "success",
+            });
+          });
       }
-    })
+    });
   }
 
+  ngOnDestroy() {
+    this.Subscription.unsubscribe();
+  }
 }

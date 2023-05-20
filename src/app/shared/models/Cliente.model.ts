@@ -6,7 +6,7 @@ import { FacturaHistorial } from "./FacturaHistorial.model";
 export interface Cliente {
     id?: number;
     categoria_id: number;
-    frecuencia_id: number;
+    frecuencia_id: number|null;
     user_id: number;
     nombreCompleto: string;
     nombreEmpresa: string;

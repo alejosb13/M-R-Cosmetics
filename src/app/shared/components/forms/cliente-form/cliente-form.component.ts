@@ -58,7 +58,7 @@ export class ClienteFormComponent implements OnInit {
 
       this.setearData()
     });
-    this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
+    // this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
     this._UsuariosService.getUsuario().subscribe((usaurios:Usuario[]) => this.Usuarios = [...usaurios]);
 
     this.daysOfWeek = this._HelpersService.DaysOfTheWeek
@@ -84,15 +84,15 @@ export class ClienteFormComponent implements OnInit {
 
           ]),
         ],
-        frecuencia_id: [
-          '',
-          Validators.compose([
-            Validators.required,
-            // Validators.min(2000),
-            // Validators.max(this.anioActual),
+        // frecuencia_id: [
+        //   '',
+        //   Validators.compose([
+        //     Validators.required,
+        //     // Validators.min(2000),
+        //     // Validators.max(this.anioActual),
 
-          ]),
-        ],
+        //   ]),
+        // ],
         user_id: [
           '',
           Validators.compose([
@@ -207,7 +207,7 @@ export class ClienteFormComponent implements OnInit {
     this._ClientesService.getClienteById(this.clienteId).subscribe((cliente:Cliente)=>{
       this.editarClienteForm.patchValue({
         "categoria_id" : cliente.categoria_id,
-        "frecuencia_id" : cliente.frecuencia_id,
+        // "frecuencia_id" : cliente.frecuencia_id,
         "user_id" : cliente.user_id,
         "nombreCompleto" : cliente.nombreCompleto,
         "nombreEmpresa" : cliente.nombreEmpresa,
@@ -276,7 +276,7 @@ export class ClienteFormComponent implements OnInit {
       cliente.direccion_casa    = this.formularioControls.direccion_casa.value
       cliente.direccion_negocio = this.formularioControls.direccion_negocio.value
       cliente.estado            = Number(this.formularioStadoControls.estado.value)
-      cliente.frecuencia_id     = Number(this.formularioControls.frecuencia_id.value)
+      // cliente.frecuencia_id     = Number(this.formularioControls.frecuencia_id.value)
       cliente.telefono          = Number(this.formularioControls.telefono.value)
       console.log("[Cliente]",cliente);
 

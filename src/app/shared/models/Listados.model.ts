@@ -31,4 +31,6 @@ export interface FiltrosList {
   dateIni?: string;
   dateFin?: string;
   allDates?: boolean;
+  numeroRecibo?: string;
+  
 }
