@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, ParamMap } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Factura } from "app/shared/models/Factura.model";
@@ -31,11 +30,8 @@ export class RecibosCreditoListComponent implements OnInit {
   isLoad: boolean;
   isAdmin: boolean;
   isSupervisor: boolean;
-  status_pagado: number;
-  Factura: Factura;
   userId: number = 0;
 
-  // meta: Meta;
   idUsuario: number;
 
   userIdString: string;
@@ -46,8 +42,6 @@ export class RecibosCreditoListComponent implements OnInit {
   dateFin: string;
   allDates: boolean = false;
 
-  mesNewMeta: string;
-
   roleName: string;
   listadoData: ListadoModel<ReciboHistorial>;
   listadoFilter: FiltrosList = { link: null };
@@ -55,10 +49,6 @@ export class RecibosCreditoListComponent implements OnInit {
   FilterSection: TypesFiltersForm = "recibosHistorialFilter";
 
   private Subscription = new Subscription();
-
-  dateMetaAsignacionHistorialEditar: string;
-  montoMetaHistorialEditar: number;
-  IdMetaHistorialEditar: number;
 
   constructor(
     private _Listado: Listado,

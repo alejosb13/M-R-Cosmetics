@@ -6,6 +6,8 @@ import { Factura } from "../models/Factura.model";
 import { FacturaCheckout } from "../models/FacturaCheckout.model";
 import { FiltrosList, ListadoModel } from "../models/Listados.model";
 import { ReciboHistorial } from "../models/ReciboHistorial.model";
+import { Abono } from "../models/Abono.model";
+import { Cliente } from "../models/Cliente.model";
 
 const ListadoURL = `${environment.urlAPI}list`;
 
@@ -111,6 +113,58 @@ export class Listado {
     // console.log(URL);
 
     return this.http.get<ListadoModel<ReciboHistorial>>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  abonoList(options: FiltrosList): Observable<ListadoModel<Abono>> {
+    // console.log("FiltrosList", options);
+    let URL: string;
+
+    if (options.link) {
+      URL = this.urlParams(options.link, options);
+    } else {
+      URL = `${ListadoURL}/abonos`;
+
+      if (Object.keys(options).length > 0) {
+        // let URLOptions = `${ListadoURL}/facturas?`
+
+        URL = this.urlParams(URL, options);
+
+        // URL = URLOptions
+      }
+    }
+
+    // console.log(URL);
+
+    return this.http.get<ListadoModel<Abono>>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  clienteList(options: FiltrosList): Observable<ListadoModel<Cliente>> {
+    // console.log("FiltrosList", options);
+    let URL: string;
+
+    if (options.link) {
+      URL = this.urlParams(options.link, options);
+    } else {
+      URL = `${ListadoURL}/clientes`;
+
+      if (Object.keys(options).length > 0) {
+        // let URLOptions = `${ListadoURL}/facturas?`
+
+        URL = this.urlParams(URL, options);
+
+        // URL = URLOptions
+      }
+    }
+
+    // console.log(URL);
+
+    return this.http.get<ListadoModel<Cliente>>(URL, {
       headers: this.headerJson_Token(),
       responseType: "json",
     });
