@@ -10,10 +10,15 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <!-- <a class="btn btn-primary" routerLink="/devolucion/agregar/producto">
-        <i class="fas fa-plus"></i>
-        Agregar
-      </a> -->
+      <div class="d-flex justify-content-start">
+        <button class="btn btn-primary mr-2" (click)="openFiltros(contentEditar)">
+          Filtros <i class="fas fa-filter"></i>
+        </button>
+        <a class="btn btn-primary" routerLink="/cliente/agregar">
+          <i class="fas fa-plus"></i>
+          Agregar
+        </a>
+      </div>
       <div class="col-12">
         <div class="d-flex flex-row justify-content-between mt-3">
           <div class="card-title align-items-start flex-column">
@@ -49,11 +54,7 @@
           </form>
         </div>
       </div>
-      <div class="col-md-12 d-flex justify-content-between flex-wrap">
-        <button class="btn btn-primary" (click)="openFiltros(contentEditar)">
-          Filtros <i class="fas fa-filter"></i>
-        </button>
-      </div>
+
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
