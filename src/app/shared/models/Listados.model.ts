@@ -21,11 +21,11 @@ export interface Link {
 }
 
 export interface FiltrosList {
+  link: null | string;
   page?: string | number;
   roleName?: string;
   userId?: number;
   filter?: string;
-  link: null | string;
   estado?: string | number;
   status_pagado?: string | number;
   dateIni?: string;
@@ -33,5 +33,6 @@ export interface FiltrosList {
   allDates?: boolean;
   numeroRecibo?: string;
   categoriaId?: number;
-  
+  disablePaginate?: number;
+  diasCobros?: any;
 }

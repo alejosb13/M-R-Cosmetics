@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Subscription } from "rxjs";
@@ -28,8 +28,6 @@ import { CategoriaService } from "app/shared/services/categoria.service";
 export class ClientesComponent implements OnInit {
   Clientes: Cliente[];
 
-  numeroRecibo: string = "";
-
   isLoad: boolean;
   isAdmin: boolean;
   isSupervisor: boolean;
@@ -44,6 +42,8 @@ export class ClientesComponent implements OnInit {
   userStore: Usuario[];
   USersNames: string[] = [];
 
+  diasCobros: string[] = [];
+
   dateIni: string;
   dateFin: string;
   allDates: boolean = true;
@@ -56,6 +56,8 @@ export class ClientesComponent implements OnInit {
 
   private Subscription = new Subscription();
 
+  daysOfWeek: string[];
+
   constructor(
     private _Listado: Listado,
     private _AuthService: AuthService,
@@ -64,13 +66,15 @@ export class ClientesComponent implements OnInit {
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
     private _ClientesService: ClientesService,
-    private _CategoriaService: CategoriaService,
+    private _CategoriaService: CategoriaService
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
+
+    this.daysOfWeek = this._HelpersService.DaysOfTheWeek;
 
     this.setCurrentDate();
     this.getUsers();
@@ -87,10 +91,80 @@ export class ClientesComponent implements OnInit {
     });
   }
 
-  getCategoria() {
-    this._CategoriaService.getCategoria().subscribe((categorias: Categoria[]) => {
-      this.categorias = categorias;
+  cortarLetrasYMayuscula(
+    palabra: string,
+    posicionIni: number,
+    posicionfin: number
+  ) {
+    let texto = palabra.slice(posicionIni, posicionfin);
+
+    return `${texto.charAt(posicionIni).toUpperCase()}${texto.slice(1)}`;
+  }
+
+  descargarPDF() {
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
     });
+    this._Listado.registerClientesPDF(this.listadoFilter).subscribe((data)=>{
+      // console.log(data);
+      this._HelpersService.downloadFile(data,`Detalle_Factura_${currentDate}`)
+      Swal.fire(
+        '',
+        'Descarga Completada',
+        'success'
+      )
+    })
+  }
+
+  descargarCSV() {
+    this._Listado.registerClientesCSV(this.listadoFilter);
+  }
+
+  changeDiasCobros(event: HTMLInputElement) {
+    // console.log(this.diasCobros);
+    if (event.checked) {
+      this.diasCobros = [...this.diasCobros, event.value];
+    } else {
+      this.diasCobros = this.diasCobros.filter((dia) => dia != event.value);
+    }
+    // console.log(this.diasCobros);
+  }
+  
+  existeDiaDeCobroEnFiltro(dia:string) {
+    return this.diasCobros.some((diaCobro)=> diaCobro == dia)
+  }
+
+  clearDiasCobros() {
+    let element = document.getElementById('diasCobrosElement') as HTMLElement;
+    let lisInputs = element.getElementsByTagName('input')
+    Array.from(lisInputs).map((input:HTMLInputElement)=>{
+      input.checked = false
+    })
+  }
+
+  getCategoria() {
+    this._CategoriaService
+      .getCategoria()
+      .subscribe((categorias: Categoria[]) => {
+        this.categorias = categorias;
+      });
   }
 
   asignarValores() {
@@ -102,9 +176,20 @@ export class ClientesComponent implements OnInit {
     };
 
     let Subscription = this._Listado.clienteList(this.listadoFilter).subscribe(
-      (Paginacion) => {
+      (Paginacion: ListadoModel<Cliente>) => {
         this.listadoData = { ...Paginacion };
-        this.Clientes = [...Paginacion.data];
+        this.Clientes = Paginacion.data.map((cliente) => {
+          let formatDiaCobro = cliente.dias_cobro.split(",");
+          let htmlCobro = ``;
+          formatDiaCobro.map((dia) => {
+            htmlCobro += `- ${dia.charAt(0).toUpperCase() + dia.slice(1)} <br>`; // Agrego listado salto de linea y primera letra mayuscula
+          });
+          cliente.dias_cobro = htmlCobro;
+
+          return cliente;
+        });
+
+        // this.Clientes = [...Paginacion.data];
         this.isLoad = false;
       },
       (error) => {
@@ -170,9 +255,9 @@ export class ClientesComponent implements OnInit {
 
   limpiarFiltros() {
     this.setCurrentDate();
-
+    this.clearDiasCobros();
     // this.allDates = false;
-    this.numeroRecibo = "";
+    this.diasCobros = [];
 
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
@@ -192,7 +277,7 @@ export class ClientesComponent implements OnInit {
       this.dateIni = this.listadoFilter.dateIni;
       this.dateFin = this.listadoFilter.dateFin;
       this.allDates = this.listadoFilter.allDates;
-      this.numeroRecibo = this.listadoFilter.numeroRecibo;
+      this.diasCobros = this.listadoFilter.diasCobros;
     } else {
       if (!submit) {
         console.log(this.userId);
@@ -218,7 +303,7 @@ export class ClientesComponent implements OnInit {
         userId: this.userId,
         categoriaId: this.categoriaId,
         allDates: this.allDates,
-        numeroRecibo: this.numeroRecibo,
+        diasCobros: this.diasCobros,
       };
     }
 

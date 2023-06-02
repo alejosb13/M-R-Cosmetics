@@ -11,13 +11,22 @@
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
       <div class="d-flex justify-content-start">
-        <button class="btn btn-primary mr-2" (click)="openFiltros(contentEditar)">
+        <button
+          class="btn btn-primary mr-2"
+          (click)="openFiltros(contentEditar)"
+        >
           Filtros <i class="fas fa-filter"></i>
         </button>
-        <a class="btn btn-primary" routerLink="/cliente/agregar">
+        <a class="btn btn-primary mr-2" routerLink="/cliente/agregar">
           <i class="fas fa-plus"></i>
           Agregar
         </a>
+        <button *ngIf="isSupervisor || isAdmin" class="btn btn-primary mr-2" (click)="descargarPDF()">
+          <i class="fas fa-file-download fa-lg"></i> Reporte
+        </button>
+        <button *ngIf="isSupervisor || isAdmin" class="btn btn-primary mr-2" (click)="descargarCSV()">
+          <i class="fas fa-file-download fa-lg"></i> Reporte CSV
+        </button>
       </div>
       <div class="col-12">
         <div class="d-flex flex-row justify-content-between mt-3">
@@ -54,7 +63,6 @@
           </form>
         </div>
       </div>
-
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
@@ -67,8 +75,10 @@
             <th scope="col">Dias de cobro</th>
             <th scope="col">Direccion de casa</th>
             <th scope="col">Categoria</th>
-            <th scope="col">Frecuencia</th>
+            <!-- <th scope="col">Frecuencia</th> -->
+            <th scope="col">Saldo</th>
             <th scope="col">E.Cuenta</th>
+            <th scope="col">Usuario</th>
             <th scope="col">Facturacion</th>
             <th scope="col" *ngIf="isAdmin || isSupervisor">Opciones</th>
           </tr>
@@ -83,12 +93,7 @@
               {{ cliente.nombreEmpresa }}
             </td>
             <td>
-              <div
-                class="text-center text-primary"
-                ngbTooltip="{{ cliente.dias_cobro | uppercase }}"
-              >
-                <i class="fas fa-info-circle"></i>
-              </div>
+              <div class="" [innerHTML]="cliente.dias_cobro"></div>
             </td>
             <td>{{ cliente.direccion_casa }}</td>
             <td>
@@ -117,6 +122,20 @@
               </div>
             </td>
             <td>
+              <span>{{ cliente.saldo |currency:"USD" }}</span>
+            </td>
+            <td>
+              <a [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
+                >Ver detalle</a
+              >
+            </td>
+            <td>
+              <div *ngIf="cliente.usuario">
+                {{ cliente.usuario.name }} {{ cliente.usuario.apellido }}
+              </div>
+              <div *ngIf="!cliente.usuario">No tiene un usuario asignado</div>
+            </td>
+            <!-- <td>
               <div class="d-flex flex-direction">
                 <ng-container>
                   <div class="mr-3" *ngIf="cliente.frecuencia">
@@ -131,12 +150,7 @@
                   </div>
                 </ng-container>
               </div>
-            </td>
-            <td>
-              <a [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
-                >Ver detalle</a
-              >
-            </td>
+            </td> -->
             <td>
               <div class="d-flex flex-direction">
                 <div
@@ -296,6 +310,16 @@
             {{ usuario.name }} {{ usuario.apellido }}
           </option>
         </select>
+      </div>
+      <div class="col-md-6 mt-3">
+        <p class="font-weight-bold">Días de cobro</p>
+        <div class="d-flex flex-wrap" id="diasCobrosElement">
+          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3" >
+            <input type="checkbox" [value]="day" class="mr-1" (change)="changeDiasCobros($event.target)" [checked]="existeDiaDeCobroEnFiltro(day)">
+            <label [innerHTML]="cortarLetrasYMayuscula(day,0,3)"></label>
+          </div>
+  
+        </div>
       </div>
     </div>
   </div>

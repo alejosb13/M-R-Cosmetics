@@ -1,6 +1,6 @@
 import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
-import { Meta } from "./meta.model";
+import { Meta } from "./Meta.model";
 import { Recibo } from "./Recibo.model";
 import { ReciboHistorial } from './ReciboHistorial.model';
 

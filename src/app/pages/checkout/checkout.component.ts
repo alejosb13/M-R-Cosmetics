@@ -9,11 +9,13 @@ import { Cliente } from "app/shared/models/Cliente.model";
 import { FacturaCheckout } from "app/shared/models/FacturaCheckout.model";
 import { FacturaDetalle } from "app/shared/models/FacturaDetalle.model";
 import { FrecuenciaFactura } from "app/shared/models/FrecuenciaFactura.model";
+import { FiltrosList } from "app/shared/models/Listados.model";
 import { Recibo } from "app/shared/models/Recibo.model";
 import { CheckoutService } from "app/shared/services/checkout.service";
 import { ClientesService } from "app/shared/services/clientes.service";
 import { FrecuenciaFacturaService } from "app/shared/services/frecuenciaFactura.service";
 import { HelpersService } from "app/shared/services/helpers.service";
+import { Listado } from "app/shared/services/listados.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { Observable, Subject, merge, OperatorFunction } from "rxjs";
@@ -37,8 +39,8 @@ export class CheckoutComponent implements OnInit {
 
   clienteSelected: boolean = false;
   clienteData: Cliente;
-  
-  date: string ="";
+
+  date: string = "";
   frecuenciaSelected: number;
   frecuenciaFacturas: FrecuenciaFactura[];
 
@@ -47,6 +49,8 @@ export class CheckoutComponent implements OnInit {
   userData: UserAuth;
 
   cliente: string;
+
+  roleName: string;
 
   userId: number;
   recibo: Recibo;
@@ -68,11 +72,13 @@ export class CheckoutComponent implements OnInit {
     private _UsuariosService: UsuariosService,
     private _AuthService: AuthService,
     private _FrecuenciaFacturaService: FrecuenciaFacturaService,
-    private router: Router
+    private router: Router,
+    private _Listado: Listado
   ) {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
+    this.roleName = String(this._AuthService.dataStorage.user.roleName);
   }
 
   ngOnInit(): void {
@@ -88,35 +94,51 @@ export class CheckoutComponent implements OnInit {
   }
 
   getClientes() {
-    this._ClientesService
-      .getCliente()
-      .pipe(
-        map((clientes) => {
-          if (this.isAdmin || this.isSupervisor) return clientes;
+    // this._ClientesService
+    //   .getCliente()
+    //   .pipe(
+    //     map((clientes) => {
+    //       if (this.isAdmin || this.isSupervisor) return clientes;
 
-          return clientes.filter((cliente) => cliente.user_id == this.userId);
-        })
-      )
+    //       return clientes.filter((cliente) => cliente.user_id == this.userId);
+    //     })
+    //   )
+    //   .subscribe((clientes: Cliente[]) => {
+    //     this.clientes = [...clientes];
+    //     this.ClientesNames = clientes.map(
+    //       (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
+    //     );
+    //     console.log(clientes);
+
+    //     // this.ValidClienteSelected();
+    //   });
+
+    let listadoFilter: FiltrosList = {
+      userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
+      categoriaId: 0, // todas las categorias
+      allDates: true, // todos los dias
+      roleName: this.roleName,
+      link: null,
+      disablePaginate: 1,
+    };
+
+    this._Listado
+      .clienteList(listadoFilter)
       .subscribe((clientes: Cliente[]) => {
         this.clientes = [...clientes];
         this.ClientesNames = clientes.map(
           (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
         );
-        console.log(clientes);
-
-        // this.ValidClienteSelected();
       });
   }
-  
-  getFrecuenciafactura() {
-    this._FrecuenciaFacturaService
-      .getFrecuencia()
-      .subscribe((frecuencias) => {
-        this.frecuenciaFacturas = [...frecuencias];
-        console.log(this.frecuenciaFacturas);
 
-        // this.ValidClienteSelected();
-      });
+  getFrecuenciafactura() {
+    this._FrecuenciaFacturaService.getFrecuencia().subscribe((frecuencias) => {
+      this.frecuenciaFacturas = [...frecuencias];
+      console.log(this.frecuenciaFacturas);
+
+      // this.ValidClienteSelected();
+    });
   }
 
   getNumeroRecibo() {
@@ -192,7 +214,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   isValidForm() {
-    return this.clienteSelected && this.date
+    return this.clienteSelected && this.date;
   }
 
   getcheckout() {
@@ -209,24 +231,24 @@ export class CheckoutComponent implements OnInit {
 
   cambiarValores(element: any) {
     let FacturaCheckout: FacturaCheckout = { ...this.factura };
-    FacturaCheckout.tipo_venta = 1; // 2 = contado , 1 = credito 
+    FacturaCheckout.tipo_venta = 1; // 2 = contado , 1 = credito
 
     console.log(element);
-    
+
     if (element.name == "cliente") {
       this.clienteSelected = false;
       if (element.value.includes("-")) {
         // console.log(element.value.split("-"));
         let split: string[] = element.value.split("-");
         let id = Number(split[0].trim());
-        
+
         console.log("IdCliente", id);
         // console.log(this.cliente);
-        
+
         FacturaCheckout.cliente_id = id;
         // FacturaCheckout.cliente_id = Number(element.value)
         this._CheckoutService.CheckoutToStorage(FacturaCheckout);
-        
+
         this.clienteSelected = true;
         this.getcheckout();
         this.ValidClienteSelected();
@@ -244,13 +266,13 @@ export class CheckoutComponent implements OnInit {
   cambiarFrecuencia(element: HTMLSelectElement) {
     console.log(element);
     console.log(element.value);
-    
+
     this.date = this._HelpersService.addDaytoDate(
       Number(element.value),
       "YYYY-MM-DD"
-      );
-      
-      console.log(this.date);
+    );
+
+    console.log(this.date);
     // let FacturaCheckout: FacturaCheckout = { ...this.factura };
 
     // if (element.name == "cliente") {
@@ -259,14 +281,14 @@ export class CheckoutComponent implements OnInit {
     //     // console.log(element.value.split("-"));
     //     let split: string[] = element.value.split("-");
     //     let id = Number(split[0].trim());
-        
+
     //     console.log("IdCliente", id);
     //     // console.log(this.cliente);
-        
+
     //     FacturaCheckout.cliente_id = id;
     //     // FacturaCheckout.cliente_id = Number(element.value)
     //     this._CheckoutService.CheckoutToStorage(FacturaCheckout);
-        
+
     //     this.clienteSelected = true;
     //     this.getcheckout();
     //     this.ValidClienteSelected();

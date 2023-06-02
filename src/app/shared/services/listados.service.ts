@@ -144,7 +144,9 @@ export class Listado {
     });
   }
 
-  clienteList(options: FiltrosList): Observable<ListadoModel<Cliente>> {
+  clienteList(
+    options: FiltrosList
+  ): Observable<ListadoModel<Cliente> | Cliente[]> {
     // console.log("FiltrosList", options);
     let URL: string;
 
@@ -168,5 +170,40 @@ export class Listado {
       headers: this.headerJson_Token(),
       responseType: "json",
     });
+  }
+
+  registerClientesPDF(
+    options: any
+  ) {
+    // console.log("FiltrosList", options);
+    let URL = `${environment.urlAPI}pdf/registroclientes`;
+
+    if (Object.keys(options).length > 0) {
+      // let URLOptions = `${ListadoURL}/facturas?`
+      // options.alldate = options.allDates 
+      // delete options.allDates;
+      URL = this.urlParams(URL, options);
+
+      // URL = URLOptions
+    }
+
+    // console.log(URL);
+
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+
+    return this.http.get(`${URL}`, { headers: headers, responseType: 'blob' });
+  }
+
+  registerClientesCSV(
+    options: any
+  ) {
+    let URL = `${environment.urlAPI}csv/registroclientes`;
+
+    if (Object.keys(options).length > 0) {
+      URL = this.urlParams(URL, options);
+    }
+
+    window.open(`${URL}`, '_blank');
   }
 }
