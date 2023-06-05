@@ -3,9 +3,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
-import {
-  CarteraDateBodyForm,
-} from "app/shared/models/Logistica.model";
+import { CarteraDateBodyForm } from "app/shared/models/Logistica.model";
 import { Usuario } from "app/shared/models/Usuario.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { LogisticaService } from "app/shared/services/logistica.service";
@@ -14,6 +12,7 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import { environment } from "environments/environment";
 import { merge, Observable, OperatorFunction, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-productos-vendedor",
@@ -45,7 +44,7 @@ export class ProductosVendedorComponent implements OnInit {
   userIdString: string;
   userStore: Usuario[];
 
-  FilterSection:TypesFiltersForm = "productosVendidosFilter"
+  FilterSection: TypesFiltersForm = "productosVendidosFilter";
 
   constructor(
     private _AuthService: AuthService,
@@ -53,7 +52,7 @@ export class ProductosVendedorComponent implements OnInit {
     private NgbModal: NgbModal,
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
-    private _RememberFiltersService: RememberFiltersService,
+    private _RememberFiltersService: RememberFiltersService
   ) {}
 
   ngOnInit(): void {
@@ -153,27 +152,26 @@ export class ProductosVendedorComponent implements OnInit {
   limpiarFiltros() {
     this.setCurrentDate();
 
-    this.allDates = false
+    this.allDates = false;
 
     if (this.isAdmin || this.isSupervisor) this.resetUser();
 
-    this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
+    this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
   }
 
-  aplicarFiltros(submit:boolean = false) {
-    let filtrosStorage = this._RememberFiltersService.getFilterStorage()
+  aplicarFiltros(submit: boolean = false) {
+    let filtrosStorage = this._RememberFiltersService.getFilterStorage();
 
-    if(filtrosStorage.hasOwnProperty(this.FilterSection) && !submit){
-      this.filtros = {...filtrosStorage[this.FilterSection]} 
-    
-      this.dateIni = this.filtros.dateIni
-      this.dateFin = this.filtros.dateFin
-      this.userId = Number(this.filtros.userId)
-      this.allDates = this.filtros.allDates
+    if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
+      this.filtros = { ...filtrosStorage[this.FilterSection] };
 
-    }else{
-      if(!submit){
+      this.dateIni = this.filtros.dateIni;
+      this.dateFin = this.filtros.dateFin;
+      this.userId = Number(this.filtros.userId);
+      this.allDates = this.filtros.allDates;
+    } else {
+      if (!submit) {
         this.userId = Number(this._AuthService.dataStorage.user.userId);
       }
       if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
@@ -185,17 +183,18 @@ export class ProductosVendedorComponent implements OnInit {
         )
       )
         this.setCurrentDate(); // si las fecha inicial es mayor a la final, se setean las fechas mes actual
-  
+
       this.filtros = {
         dateIni: this.dateIni,
         dateFin: this.dateFin,
         userId: Number(this.userId),
         allDates: this.allDates,
       };
-  
     }
 
-    this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
+    this._RememberFiltersService.setFilterStorage(this.FilterSection, {
+      ...this.filtros,
+    });
     this.asignarValores();
   }
 
@@ -219,4 +218,41 @@ export class ProductosVendedorComponent implements OnInit {
       )
     );
   };
+
+  descargarPDF() {
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this._LogisticaService
+      .getProductosVendidosPDF({
+        dateIni:this.dateIni,
+        dateFin:this.dateFin,
+        allDates:this.allDates,
+      })
+      .subscribe((data) => {
+        // console.log(data);
+        this._HelpersService.downloadFile(
+          data,
+          `productos_vendidos_${currentDate}`
+        );
+        Swal.fire("", "Descarga Completada", "success");
+      });
+  }
 }

@@ -13,10 +13,18 @@
       <div
         class="col-md-12 d-flex justify-content-between flex-wrap align-items-center"
       >
-        <div>
-          <span class="fuvi-text-black mt-1 fw-bold fs-5"
-            >Total de productos: {{ total }}</span
-          >
+        <div class="d-flex flex-column">
+          <div>
+            <button class="btn btn-primary" (click)="descargarPDF()">
+              Descargar
+            </button>
+          </div>
+          <div>
+            <span class="fuvi-text-black mt-1 fw-bold fs-5"
+              >Total de productos: {{ total }}</span
+            >
+          </div>
+
         </div>
         <div>
           <button class="btn btn-primary" (click)="openFiltros(contentEditar)">

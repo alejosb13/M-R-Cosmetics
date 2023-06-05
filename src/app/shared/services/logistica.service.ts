@@ -5,6 +5,7 @@ import { Recibo } from '../models/Recibo.model';
 import { environment } from 'environments/environment';
 import { CarteraDate, CarteraDateBodyForm } from '../models/Logistica.model';
 import { Cliente } from '../models/Cliente.model';
+import { FiltrosList } from '../models/Listados.model';
 
 const Logistica = `${environment.urlAPI}logistica`
 
@@ -16,6 +17,19 @@ export class LogisticaService {
     private http: HttpClient
   ) { }
 
+  
+  private urlParams(URLOptions: string, options: FiltrosList): string {
+    URLOptions += !options.link ? "?" : "&";
+
+    for (const key in options) {
+      if (key != "link") {
+        URLOptions += `${key}=${options[key]}&`;
+      }
+    }
+
+    return URLOptions;
+  }
+  
   headerJson_Token():HttpHeaders{
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
 
@@ -129,6 +143,22 @@ export class LogisticaService {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
     return this.http.get(`${environment.urlAPI}pdf/estado_cuenta/${clienteId}`, { headers: headers, responseType: 'blob' });
+  }
+
+  getProductosVendidosPDF(options:any): Observable<any> {
+    let URL = `${environment.urlAPI}pdf/productos_vendidos`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    
+    
+    if (Object.keys(options).length > 0) {
+      URL = this.urlParams(URL, options);
+    }
+
+    console.log(options);
+    console.log(URL);
+
+    return this.http.get(`${URL}`, { headers: headers, responseType: 'blob' });
   }
 
   carteraPDF(data:CarteraDateBodyForm): Observable<any> {

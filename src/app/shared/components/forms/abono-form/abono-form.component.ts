@@ -335,7 +335,7 @@ export class AbonoFormComponent implements OnInit {
 
   getClientes() {
     let listadoFilter: FiltrosList = {
-      userId: this.userId,
+      userId: this.isAdmin || this.isSupervisor ? 0: this.userId,
       categoriaId: 0, // todas las categorias
       allDates: true, // todos los dias
       roleName: this.roleName,
