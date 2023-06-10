@@ -1,11 +1,8 @@
 import {
   Component,
   EventEmitter,
-  Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -194,7 +191,7 @@ export class AbonoFormComponent implements OnInit {
     this.AbonoForm.valueChanges.subscribe((values) => {
       // this.AbonoForm.get("cliente_id").valueChanges.subscribe((value)=>{
       // console.log(this.AbonoForm.get("precio"));
-      if (this.restante > 0) {
+      if (this.restante >= 0) {
         this.diferencia = this.restante - values.precio;
 
         let maximo: number = this.restante;
@@ -202,6 +199,7 @@ export class AbonoFormComponent implements OnInit {
           Validators.required,
           Validators.maxLength(43),
           Validators.max(maximo),
+          // Validators.min(1),
           // Validators.min(1),
           Validators.pattern(ValidFunctionsValidator.DecimaValidCerolRegEx),
         ]);
@@ -335,12 +333,12 @@ export class AbonoFormComponent implements OnInit {
 
   getClientes() {
     let listadoFilter: FiltrosList = {
-      userId: this.isAdmin || this.isSupervisor ? 0: this.userId,
+      userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
       categoriaId: 0, // todas las categorias
       allDates: true, // todos los dias
       roleName: this.roleName,
       link: null,
-      disablePaginate:1
+      disablePaginate: 1,
     };
 
     this._Listado

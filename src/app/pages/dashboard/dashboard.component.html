@@ -2,9 +2,13 @@
   <!-- <div class="col-md-12">
     <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
   </div> -->
-  <div class="col-md-6">
-    <div class="card card-stats" [routerLink]="[ '/logistica','recuperacion-mensual']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6" *ngIf="isSupervisor || isAdmin">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'recuperacion-mensual']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -16,7 +20,8 @@
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers text-left">
               <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Recuperación Mensual<p>
+              <p class="card-title">Recuperación Mensual</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -30,8 +35,12 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card card-stats" [routerLink]="[ '/logistica','cartera']" role="button">
-      <div class="card-body ">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'cartera']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -43,7 +52,8 @@
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
               <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Cartera<p>
+              <p class="card-title">Cartera</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -56,9 +66,13 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','recuperacion']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'recuperacion']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -70,7 +84,8 @@
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
               <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Recuperación<p>
+              <p class="card-title">Recuperación</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -83,9 +98,13 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','mora30-60']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'mora30-60']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -97,7 +116,8 @@
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
               <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Mora 30-60<p>
+              <p class="card-title">Mora 30-60</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -110,9 +130,13 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','mora60-90']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'mora60-90']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -124,7 +148,8 @@
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
               <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Mora 60-90<p>
+              <p class="card-title">Mora 60-90</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -137,22 +162,27 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','clientes-nuevos']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'clientes-nuevos']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
               <!-- <i class="fas fa-user"></i> -->
               <div class="imagen">
-                <img src="assets/img/clientes.png" style="width: 70px;">
+                <img src="assets/img/clientes.png" style="width: 70px" />
               </div>
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers text-left">
               <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Clientes nuevos<p>
+              <p class="card-title">Clientes nuevos</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -165,9 +195,13 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','incentivos']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'incentivos']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -176,7 +210,8 @@
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
-              <p class="card-title">Incentivos<p>
+              <p class="card-title">Incentivos</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -190,8 +225,12 @@
     </div>
   </div>
   <div class="col-md-6" *ngIf="isSupervisor || isAdmin">
-    <div class="card card-stats" [routerLink]="[ '/logistica','incentivos-supervisor']" role="button">
-      <div class="card-body ">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'incentivos-supervisor']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -200,16 +239,21 @@
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers text-left">
-              <p class="card-title">Incentivos Supervisor<p>
+              <p class="card-title">Incentivos Supervisor</p>
+              <p></p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','clientes-inactivos']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'clientes-inactivos']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -218,7 +262,8 @@
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers text-left">
-              <p class="card-title">Cliente Inactivos<p>
+              <p class="card-title">Cliente Inactivos</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -231,21 +276,26 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','clientes-reactivados']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'clientes-reactivados']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
               <!-- <i class="fas fa-user"></i> -->
               <div class="imagen">
-                <img src="assets/img/subir-usuario.png" style="width: 65px;">
+                <img src="assets/img/subir-usuario.png" style="width: 65px" />
               </div>
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers text-left">
-              <p class="card-title">Cliente Reactivados<p>
+              <p class="card-title">Cliente Reactivados</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -258,21 +308,26 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" >
-    <div class="card card-stats" [routerLink]="[ '/logistica','ventas']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'ventas']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
               <!-- <i class="fas fa-user"></i> -->
               <div class="imagen">
-                <img src="assets/img/user-dollar.png" style="width: 54px;">
+                <img src="assets/img/user-dollar.png" style="width: 54px" />
               </div>
             </div>
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers">
-              <p class="card-title">Ventas<p>
+              <p class="card-title">Ventas</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -285,9 +340,13 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6" *ngIf="isAdmin">
-    <div class="card card-stats" [routerLink]="[ '/logistica','productos-vendedores']" role="button">
-      <div class="card-body ">
+  <div class="col-md-6" *ngIf="isSupervisor || isAdmin">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'productos-vendedores']"
+      role="button"
+    >
+      <div class="card-body">
         <div class="row">
           <div class="col-5 col-md-4">
             <div class="icon-big text-center icon-warning">
@@ -296,7 +355,8 @@
           </div>
           <div class="col-7 col-md-8 d-flex align-items-center">
             <div class="numbers text-left">
-              <p class="card-title">Productos Vendidos<p>
+              <p class="card-title">Productos Vendidos</p>
+              <p></p>
             </div>
           </div>
         </div>
@@ -388,7 +448,7 @@
     </div>
   </div>
 </div> -->
-<!-- <div class="row">
+  <!-- <div class="row">
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header ">
@@ -407,7 +467,7 @@
     </div>
   </div>
 </div> -->
-<!-- <div class="row">
+  <!-- <div class="row">
   <div class="col-md-4">
     <div class="card ">
       <div class="card-header ">
@@ -454,47 +514,49 @@
   </div>
 </div> -->
 
-
-<ng-template #contentEditar let-modal>
-  <div class="modal-header">
-    <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">
-        Filtros
-      </h4>
+  <ng-template #contentEditar let-modal>
+    <div class="modal-header">
+      <div>
+        <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col">
-        <div class="form-group">
-          <p class=" font-weight-bold">Desde</p>
-          <input type="date"  class="form-control" [(ngModel)]="dateIni" >
+    <div class="modal-body">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <p class="font-weight-bold">Desde</p>
+            <input type="date" class="form-control" [(ngModel)]="dateIni" />
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <p class="font-weight-bold">Hasta</p>
+            <input type="date" class="form-control" [(ngModel)]="dateFin" />
+          </div>
         </div>
       </div>
-      <div class="col">
-        <div class="form-group" >
-          <p class=" font-weight-bold">Hasta</p>
-          <input type="date"  class="form-control" [(ngModel)]="dateFin" >
+    </div>
+    <div class="modal-footer justify-content-center w-100">
+      <div class="row w-100">
+        <div class="col text-center">
+          <button class="btn btn-danger" (click)="limpiarFiltros()">
+            Limpiar <i class="fas fa-eraser"></i>
+          </button>
+        </div>
+        <div class="col text-center">
+          <button class="btn btn-primary" (click)="aplicarFiltros()">
+            Aplicar <i class="fas fa-search"></i>
+          </button>
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer justify-content-center w-100">
-    <div class="row w-100">
-      <div class="col text-center">
-        <button class="btn btn-danger " (click)="limpiarFiltros()">Limpiar <i class="fas fa-eraser"></i></button>
-      </div>
-      <div class="col text-center">
-        <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar <i class="fas fa-search"></i></button>
-      </div>
-    </div>
-  </div>
-</ng-template>
+  </ng-template>
+</div>

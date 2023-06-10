@@ -1,147 +1,174 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService } from 'app/auth/login/service/auth.service';
-import { DevolucionFacturaService } from 'app/pages/devoluciones/services/devolucion-factura.service';
-import { Factura } from 'app/shared/models/Factura.model';
-import { FacturasService } from 'app/shared/services/facturas.service';
-import { TablasService } from 'app/shared/services/tablas.service';
-import { environment } from 'environments/environment';
-import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
-import { map } from 'rxjs/operators';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { AuthService } from "app/auth/login/service/auth.service";
+import { DevolucionFacturaService } from "app/pages/devoluciones/services/devolucion-factura.service";
+import { Factura } from "app/shared/models/Factura.model";
+import { FacturasService } from "app/shared/services/facturas.service";
+import { TablasService } from "app/shared/services/tablas.service";
+import { environment } from "environments/environment";
+import { Subscription } from "rxjs";
+import Swal from "sweetalert2";
+import { map } from "rxjs/operators";
+import {
+  FiltrosList,
+  Link,
+  ListadoModel,
+} from "app/shared/models/Listados.model";
+import { Listado } from "app/shared/services/listados.service";
 
 @Component({
-  selector: 'app-facturas-entregadas',
-  templateUrl: './facturas-entregadas.component.html',
-  styleUrls: ['./facturas-entregadas.component.css']
+  selector: "app-facturas-entregadas",
+  templateUrl: "./facturas-entregadas.component.html",
+  styleUrls: ["./facturas-entregadas.component.css"],
 })
 export class FacturasEntregadasComponent implements OnInit {
-
-  page = 1;
-  pageSize = environment.PageSize;
-  collectionSize = 0;
   Facturas: Factura[];
-  isLoad:boolean
-  isAdmin:boolean
-  status_entrega:number
+  isLoad: boolean;
+  isAdmin: boolean;
+  isSupervisor: boolean;
+  status_pagado: number;
   Factura: Factura;
-  
-  isSupervisor:boolean
-  userId:number
+  userId: number;
+  despachado: number;
+  roleName: string;
+  listadoData: ListadoModel<Factura>;
+  listadoFilter: FiltrosList = { link: null };
+  status_entrega: number;
+
   private Subscription = new Subscription();
 
   constructor(
-    private _FacturasService:FacturasService,
-    private _TablasService:TablasService,
-    private _DevolucionFacturaService:DevolucionFacturaService,
-    private _AuthService:AuthService,
-    private route: ActivatedRoute,
+    private _Listado: Listado,
+    private _DevolucionFacturaService: DevolucionFacturaService,
+    private _AuthService: AuthService,
     private NgbModal: NgbModal,
+    private _FacturasService: FacturasService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.isAdmin = this._AuthService.isAdmin()
+    this.isAdmin = this._AuthService.isAdmin();
+    this.isSupervisor = this._AuthService.isSupervisor();
     this.userId = Number(this._AuthService.dataStorage.user.userId);
-    this.isSupervisor = this._AuthService.isSupervisor()
-
+    this.roleName = String(this._AuthService.dataStorage.user.roleName);
+    this.despachado = 0;
 
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.status_entrega = Number(params.get('status_entrega')) == 1 ? 1 : 0
-      console.log("this.status_entrega",this.status_entrega);
+      this.status_entrega = Number(params.get("status_entrega")) == 1 ? 1 : 0;
+      console.log("this.status_entrega", this.status_entrega);
 
-      this.asignarValores()
-    })
+      this.asignarValores();
+    });
+
+    // this.asignarValores();
   }
 
+  asignarValores() {
+    this.isLoad = true;
 
+    this.listadoFilter = {
+      ...this.listadoFilter,
+      estado: 1,
+      roleName: this.roleName,
+      userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
+      status_entrega: this.status_entrega,
+      created_at: "2022-07-01 00:00:00",
+      despachado: 1,
+    };
 
-  asignarValores(){
-    this.isLoad = true
-
-    let Subscription = this._FacturasService.getFacturas({
-      estado:1,
-      status_entrega:this.status_entrega,
-      created_at:"2022-07-01 00:00:00",
-      despachado:1
-    })
-    .pipe(
-      map((facturas)=>{
-        // console.log(this.userId);
-        if (this.isAdmin || this.isSupervisor) return facturas;
-
-        return facturas.filter((factura) => factura.user_id == this.userId);
-      })
-    )
-    .subscribe((factura:Factura[])=> {
-      // console.log(factura);
-
-      this.Facturas = [...factura]
-      this._TablasService.datosTablaStorage = [...factura]
-      this._TablasService.total = factura.length
-      this._TablasService.busqueda = ""
-
-      this.refreshCountries()
-      this.isLoad =false
-    },(error)=>{
-      this.isLoad =false
-    })
-    this.Subscription.add(Subscription)
+    let Subscription = this._Listado.getFacturas(this.listadoFilter).subscribe(
+      (Paginacion) => {
+        this.listadoData = { ...Paginacion };
+        this.Facturas = [...Paginacion.data];
+        this.isLoad = false;
+      },
+      (error) => {
+        this.isLoad = false;
+      }
+    );
+    this.Subscription.add(Subscription);
   }
 
-  refreshCountries() {
-    this._TablasService.datosTablaStorage = [...this.Facturas]
-    .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  BuscarValor() {
+    this.listadoFilter.link = null;
+    this.asignarValores();
   }
 
-  BuscarValor(){
-    let camposPorFiltrar:any[] = [
-      ['cliente','nombreCompleto'],
-      ['id',],
-    ];
-
-    this._TablasService.buscarEnCampos(this.Facturas,camposPorFiltrar)
-
-    if(this._TablasService.busqueda ==""){this.refreshCountries()}
-
+  openDevolverFactura(content: any, Factura: Factura) {
+    this.Factura = Factura;
+    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+      .result.then((result) => {})
+      .catch((err) => {});
   }
 
-  // eliminar({id}:Factura){
-  //   // console.log(id);
-  //   Swal.fire({
-  //     title: '¿Estás seguro?',
-  //     text: "Este factura se eliminará y no podrás recuperarlo.",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#51cbce',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Eliminar',
-  //     cancelButtonText: 'Cancelar'
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
+  FormsValuesDevolucion(DevolucionProducto: any) {
+    // console.log("[DevolucionFacturaForm]", DevolucionProducto);
 
-  //       let Subscription = this._FacturasService.deleteFactura(id).subscribe((data)=>{
-  //         this.Facturas = this.Facturas.filter(factura => factura.id != id)
-  //         this.refreshCountries()
+    Swal.fire({
+      title: "Cargando la devolución",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
-  //         Swal.fire({
-  //           text: data[0],
-  //           icon: 'success',
-  //         })
-  //       },(HttpErrorResponse :HttpErrorResponse)=>{
-  //         // console.log(HttpErrorResponse );
+    this._DevolucionFacturaService
+      .insertDevolucion(DevolucionProducto)
+      .subscribe((data) => {
+        console.log("[response]", data);
 
-  //         Swal.fire({
-  //           title: "Error",
-  //           html: HttpErrorResponse.error[0] ,
-  //           icon: 'error',
-  //         })
-  //       })
+        Swal.fire({
+          text: "La devolución fue realizada con exito",
+          icon: "success",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        });
+      });
+  }
 
-  //       this.Subscription.add(Subscription)
-  //     }
-  //   })
-  // }
+  newPage(link: Link) {
+    if (link.url == null) return;
+    // console.log(link);
+
+    this.listadoFilter.link = link.url;
+
+    this.asignarValores();
+  }
+
+  despachar(id: number) {
+    // console.log(id);
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Este factura será despachada.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Despachar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._FacturasService
+          .despacharFactura(id, { despachado: 1 })
+          .subscribe((data) => {
+            this.Facturas = this.Facturas.filter((factura) => factura.id != id);
+            // this.refreshCountries()
+
+            Swal.fire({
+              text: data[0],
+              icon: "success",
+            });
+          });
+      }
+    });
+  }
 
   openAgregarFactura(Factura:Factura){
     Swal.fire({
@@ -158,7 +185,7 @@ export class FacturasEntregadasComponent implements OnInit {
 
         this._FacturasService.entregarFactura(Factura.id).subscribe((data)=>{
           this.Facturas = this.Facturas.filter(factura => factura.id != Factura.id)
-          this.refreshCountries()
+          // this.refreshCountries()
 
           Swal.fire({
             text: data[0],
@@ -169,25 +196,8 @@ export class FacturasEntregadasComponent implements OnInit {
     })
   }
 
-  FormsValuesDevolucion(DevolucionProducto:any){
-    console.log("[DevolucionFacturaForm]",DevolucionProducto);
-
-    this._DevolucionFacturaService.insertDevolucion(DevolucionProducto).subscribe((data)=>{
-      console.log("[response]",data);
-
-      Swal.fire({
-        text: "La devolución fue realizada con exito",
-        icon: 'success',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          location.reload()
-        }
-      })
-    })
-  }
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
   }
-
 }

@@ -31,7 +31,7 @@ export class ClientesComponent implements OnInit {
   isLoad: boolean;
   isAdmin: boolean;
   isSupervisor: boolean;
-  userId: number = 0;
+  userId: number;
 
   idUsuario: number;
 
@@ -282,8 +282,8 @@ export class ClientesComponent implements OnInit {
       if (!submit) {
         console.log(this.userId);
 
-        // this.userId = Number(this._AuthService.dataStorage.user.userId);
-        this.userId = 0;
+        this.userId = Number(this._AuthService.dataStorage.user.userId);
+        // this.userId = 0;
         this.categoriaId = 0;
       }
 

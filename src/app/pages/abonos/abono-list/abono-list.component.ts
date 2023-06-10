@@ -19,16 +19,22 @@ import { HelpersService } from "app/shared/services/helpers.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { Abono } from "app/shared/models/Abono.model";
 import { AbonoService } from "app/shared/services/abono.service";
+import logger from "app/utils/logger";
+import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 
 @Component({
-  selector: 'app-abono-list',
-  templateUrl: './abono-list.component.html',
-  styleUrls: ['./abono-list.component.css']
+  selector: "app-abono-list",
+  templateUrl: "./abono-list.component.html",
+  styleUrls: ["./abono-list.component.css"],
 })
 export class AbonoListComponent implements OnInit {
   Abonos: Abono[];
-
+  TiposMetodos = TiposMetodos;
   numeroRecibo: string = "";
+
+  metodoPagoEditar: number ;
+  detallePagoEditar: string = "";
+  editarAbonoId: number;
 
   isLoad: boolean;
   isAdmin: boolean;
@@ -68,7 +74,7 @@ export class AbonoListComponent implements OnInit {
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
-    
+
     this.setCurrentDate();
     this.getUsers();
     this.aplicarFiltros();
@@ -215,30 +221,75 @@ export class AbonoListComponent implements OnInit {
     this.asignarValores();
   }
 
-  eliminar({id}:Abono){
+  eliminar({ id }: Abono) {
     // console.log(id);
     Swal.fire({
-      title: '¿Estás seguro?',
+      title: "¿Estás seguro?",
       text: "Este abono se eliminará y no podrás recuperarlo.",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#51cbce',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-
-        this._AbonoService.deleteAbono(id).subscribe((data)=>{
-          this.Abonos = this.Abonos.filter(abono => abono.id != id)
+        this._AbonoService.deleteAbono(id).subscribe((data) => {
+          this.Abonos = this.Abonos.filter((abono) => abono.id != id);
 
           Swal.fire({
             text: data[0],
-            icon: 'success',
-          })
-        })
+            icon: "success",
+          });
+        });
       }
-    })
+    });
+  }
+
+  editarAbono(content: any, abono: Abono) {
+    this.metodoPagoEditar = abono.metodo_pago.tipo;
+    this.detallePagoEditar = abono.metodo_pago.detalle;
+    this.editarAbonoId = abono.id;
+
+    logger.log(abono);
+
+    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+      .result.then((result) => {})
+      .catch((err) => {});
+  }
+
+  editarAbonoEnviar() {
+    logger.log({
+      metodoPagoEditar: this.metodoPagoEditar ,
+      detallePagoEditar:this.detallePagoEditar
+    });
+    if(this.metodoPagoEditar && this.detallePagoEditar){
+      this._AbonoService
+      .updateAbono(this.editarAbonoId, {
+        metodoPagoEditar: this.metodoPagoEditar,
+        detallePagoEditar: this.detallePagoEditar,
+      })
+      .subscribe(
+        (data) => {
+          Swal.fire({
+            text: "Abono modificado con exito",
+            icon: 'success',
+          }).then((result) => {
+            window.location.reload()
+          })
+
+        },
+        (error) => {
+          this.isLoad = false;
+        }
+      );
+    }else{
+      Swal.fire({
+        text: "Complete todos los campos",
+        icon: 'warning',
+      })
+    }
+ 
   }
 
   ngOnDestroy() {

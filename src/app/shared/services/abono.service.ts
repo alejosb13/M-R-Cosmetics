@@ -55,7 +55,7 @@ export class AbonoService {
     );
   }
 
-  updateAbono(Id:number,data:Abono): Observable<any> {
+  updateAbono(Id:number,data:any): Observable<any> {
     const URL = `${AbonoURL}/${Id}`
 
     return this.http.put<Abono>(

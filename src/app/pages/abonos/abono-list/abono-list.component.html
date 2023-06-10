@@ -1,193 +1,213 @@
 <div class="bg-white">
-
-    <div *ngIf="isLoad" class="container-fluid p-5">
-      <div class="d-flex justify-content-center align-content-center">
-        <span>
-          Cargando abonos
-          <i class="fas fa-circle-notch fa-spin"></i>
-        </span>
-
-      </div>
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando abonos
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
     </div>
-
-    <ng-container  *ngIf="!isLoad ">
-
-      <div class="card-header border-0 pt-4  bg-white ">
-        <div>
-          <div class="d-flex justify-content-start flex-wrap ">
-            <button class="btn btn-primary mr-2" (click)="openFiltros(contentEditar)">
-              Filtros <i class="fas fa-filter"></i>
-            </button>
-            <a class="btn btn-primary" routerLink="/abono/agregar">
-                <i class="fas fa-plus"></i>
-                Agregar
-            </a>
-          </div>
-        </div>
-        <div class="d-flex flex-row justify-content-between mt-3">
-          <div class="card-title align-items-start flex-column">
-            <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Abonos</span>
-            <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ listadoData.total }}</span>
-          </div>
-
-          <form
-            class="d-flex align-items-center justify-content-end col-4 buscador"
-          >
-            <div class="form-label-group w-75 input-group">
-              <input
-                type="text"
-                id="inputEmail"
-                class="form-control form-control-sm pt-1"
-                placeholder="Buscar"
-                name="buscar"
-                [(ngModel)]="listadoFilter.filter"
-              />
-              <button
-                class="btn btn-primary my-0"
-                (click)="BuscarValor()"
-                type="button"
-                id="button-addon2"
-              >
-                Buscar
-              </button>
-            </div>
-          </form>
-        </div>
-
-      </div>
-
-      <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
-        <table class="table table-striped" >
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Recibo</th>
-              <th scope="col">Monto</th>
-              <th scope="col">Metodo Pago</th>
-              <th scope="col">Detalle Pago</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Cliente</th>
-              <th scope="col">Usuario</th>
-              <!-- <th scope="col">Opciones</th> -->
-            </tr>
-
-          </thead>
-          <tbody *ngIf="Abonos.length > 0">
-            <tr *ngFor="let abono of Abonos; let i = index">
-              <th scope="row">{{ abono.id }}</th>
-              <td>
-                  <div class="mr-3" ngbTooltip="Factura">
-                      <!-- <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a> -->
-                    #{{ abono.recibo_historial.numero }}
-                  </div>
-              </td>
-              <td>
-                {{ abono.precio | currency:"USD"}}
-              </td>
-              <td > {{ abono.metodo_pago? abono.metodo_pago.tipoPago : '--' }}</td>
-              <td > {{ abono.metodo_pago? abono.metodo_pago.detalle : '--' }}</td>
-              <td >{{ abono.created_at | date:"dd-MM-yyyy" }}</td>
-              <td ><a class="text-dark" [routerLink]="[ '/cliente','editar',abono.cliente_id]" >{{ abono.cliente.nombreCompleto }}</a></td>
-              <td ><a class="text-dark" [routerLink]="[ '/usuario','editar',abono.cliente_id]" >{{ abono.usuario.name }} {{ abono.usuario.apellido }}"</a></td>
-              <!-- <td>
-                <div class="d-flex flex-direction">
-                  <div class="mr-3" ngbTooltip="Eliminar">
-                    <span class="text-primary pointer" role="button" (click)="eliminar(abono)"><i class="fas fa-trash-alt text-danger"></i></span>
-                  </div>
-                </div>
-              </td> -->
-            </tr>
-          </tbody>
-          <tbody *ngIf="Abonos.length == 0">
-            <tr >
-              <td colspan="8">
-                <div class="container d-flex align-items-center justify-content-center">
-                  <!-- <div class="alert alert-info w-100 text-center" > -->
-                    <h5>No existen Abonos</h5>
-                  <!-- </div> -->
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="d-flex justify-content-between p-2">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li
-                class="page-item"
-                *ngFor="let listado of listadoData.links"
-                (click)="newPage(listado)"
-                [ngClass]="{
-                  active: listado.active,
-                  disabled: listado.url == null
-                }"
-              >
-                <span class="page-link pointer">
-                  <span aria-hidden="true" [innerHTML]="listado.label"></span>
-                </span>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </ng-container>
   </div>
 
-  <ng-template #contentEditar let-modal>
-    <div class="modal-header">
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
       <div>
-        <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+        <div class="d-flex justify-content-start flex-wrap">
+          <button
+            class="btn btn-primary mr-2"
+            (click)="openFiltros(contentEditar)"
+          >
+            Filtros <i class="fas fa-filter"></i>
+          </button>
+          <a class="btn btn-primary" routerLink="/abono/agregar">
+            <i class="fas fa-plus"></i>
+            Agregar
+          </a>
+        </div>
       </div>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <i class="fas fa-times"></i>
-      </button>
+      <div class="d-flex flex-row justify-content-between mt-3">
+        <div class="card-title align-items-start flex-column">
+          <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"
+            >Abonos</span
+          >
+          <span class="fuvi-text-black mt-1 fw-bold fs-5"
+            >Total: {{ listadoData.total }}</span
+          >
+        </div>
+
+        <form
+          class="d-flex align-items-center justify-content-end col-4 buscador"
+        >
+          <div class="form-label-group w-75 input-group">
+            <input
+              type="text"
+              id="inputEmail"
+              class="form-control form-control-sm pt-1"
+              placeholder="Buscar"
+              name="buscar"
+              [(ngModel)]="listadoFilter.filter"
+            />
+            <button
+              class="btn btn-primary my-0"
+              (click)="BuscarValor()"
+              type="button"
+              id="button-addon2"
+            >
+              Buscar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-              value="true"
-              [(ngModel)]="allDates"
-            />
-            <label class="form-check-label" for="flexCheckDefault"> Todos </label>
-          </div>
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Recibo</th>
+            <th scope="col">Monto</th>
+            <th scope="col">Metodo Pago</th>
+            <th scope="col">Detalle Pago</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="Abonos.length > 0">
+          <tr *ngFor="let abono of Abonos; let i = index">
+            <th scope="row">{{ abono.id }}</th>
+            <td>
+              <div class="mr-3" ngbTooltip="Factura">
+                <!-- <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a> -->
+                #{{ abono.recibo_historial.numero }}
+              </div>
+            </td>
+            <td>
+              {{ abono.precio | currency : "USD" }}
+            </td>
+            <td>{{ abono.metodo_pago ? abono.metodo_pago.tipoPago : "--" }}</td>
+            <td>{{ abono.metodo_pago ? abono.metodo_pago.detalle : "--" }}</td>
+            <td>{{ abono.created_at | date : "dd-MM-yyyy" }}</td>
+            <td>
+              <a
+                class="text-dark"
+                [routerLink]="['/cliente', 'editar', abono.cliente_id]"
+                >{{ abono.cliente.nombreCompleto }}</a
+              >
+            </td>
+            <td>
+              <a
+                class="text-dark"
+                [routerLink]="['/usuario', 'editar', abono.cliente_id]"
+                >{{ abono.usuario.name }} {{ abono.usuario.apellido }}"</a
+              >
+            </td>
+            <td>
+              <div class="d-flex flex-direction">
+                <div
+                  class="mr-3 text-warning"
+                  ngbTooltip="Editar"
+                  (click)="editarAbono(contentAbonoEditar, abono)"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="Abonos.length == 0">
+          <tr>
+            <td colspan="8">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
+                <!-- <div class="alert alert-info w-100 text-center" > -->
+                <h5>No existen Abonos</h5>
+                <!-- </div> -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between p-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li
+              class="page-item"
+              *ngFor="let listado of listadoData.links"
+              (click)="newPage(listado)"
+              [ngClass]="{
+                active: listado.active,
+                disabled: listado.url == null
+              }"
+            >
+              <span class="page-link pointer">
+                <span aria-hidden="true" [innerHTML]="listado.label"></span>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #contentEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <p class="font-weight-bold">Desde</p>
-            <input
-              [disabled]="allDates"
-              type="date"
-              class="form-control"
-              [(ngModel)]="dateIni"
-            />
-          </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
         </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <p class="font-weight-bold">Hasta</p>
-            <input
-              [disabled]="allDates"
-              type="date"
-              class="form-control"
-              [(ngModel)]="dateFin"
-            />
-          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
         </div>
-        <!-- <div class="col-md-6" *ngIf="isAdmin">
+      </div>
+      <!-- <div class="col-md-6" *ngIf="isAdmin">
           <div class="form-group tipehead">
             <p class="font-weight-bold">Número de recibo</p>
             <input
@@ -199,33 +219,100 @@
             />
           </div>
         </div> -->
-        <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
-          <p class="font-weight-bold">Usuarios</p>
-          <select name="" id="" class="form-control" [(ngModel)]="userId">
-            <option value="0">Todos los usuarios</option>
+      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
+        <p class="font-weight-bold">Usuarios</p>
+        <select name="" id="" class="form-control" [(ngModel)]="userId">
+          <option value="0">Todos los usuarios</option>
+          <option
+            *ngFor="let usuario of userStore"
+            [selected]="usuario.id == userId"
+            [value]="usuario.id"
+          >
+            {{ usuario.name }} {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentAbonoEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Editar</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Metodos de pago</p>
+          <select
+            id="my-select"
+            class="form-control"
+            [(ngModel)]="metodoPagoEditar"
+          >
+            <option selected value="" hidden>
+              Seleccione el metodo de pago
+            </option>
             <option
-              *ngFor="let usuario of userStore"
-              [selected]="usuario.id == userId"
-              [value]="usuario.id"
+              *ngFor="let TipoMetodo of TiposMetodos"
+              [value]="TipoMetodo.id"
             >
-              {{ usuario.name }} {{ usuario.apellido }}
+              {{ TipoMetodo.nombre }}
             </option>
           </select>
         </div>
       </div>
-    </div>
-    <div class="modal-footer justify-content-center w-100">
-      <div class="row w-100">
-        <div class="col text-center">
-          <button class="btn btn-danger" (click)="limpiarFiltros()">
-            Limpiar <i class="fas fa-eraser"></i>
-          </button>
-        </div>
-        <div class="col text-center">
-          <button class="btn btn-primary" (click)="aplicarFiltros(true)">
-            Aplicar <i class="fas fa-search"></i>
-          </button>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Detalle de pago</p>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="detallePagoEditar"
+          />
         </div>
       </div>
     </div>
-  </ng-template>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="modal.dismiss('Cross click')">
+          Cancelar
+        </button>
+      </div>
+      <div class="col text-center">
+        <button
+          class="btn btn-primary"
+          (click)="editarAbonoEnviar()"
+        >
+          Editar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

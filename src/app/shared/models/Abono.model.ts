@@ -1,5 +1,6 @@
 import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
+import { MetodoPago } from "./MetodoPago.model";
 import { ReciboHistorial } from "./ReciboHistorial.model";
 import { Usuario } from "./Usuario.model";
 
@@ -15,4 +16,5 @@ export interface Abono{
     // factura?: Factura;
     recibo_historial?: ReciboHistorial;
     usuario?: Usuario;
+    metodo_pago?:MetodoPago
 }

@@ -7,6 +7,7 @@ export interface MetodoPago{
     estado: number;
     created_at: Date;
     updated_at: Date;
+    tipoPago?: string;
 
 }
 export const TiposMetodos:any[] = [

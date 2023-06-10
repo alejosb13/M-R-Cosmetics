@@ -35,4 +35,7 @@ export interface FiltrosList {
   categoriaId?: number;
   disablePaginate?: number;
   diasCobros?: any;
+  despachado?: number;
+  status_entrega?: number;
+  created_at?: string;
 }
