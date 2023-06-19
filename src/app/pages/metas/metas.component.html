@@ -10,9 +10,9 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <div class="d-flex flex-row justify-content-between mt-3">
+      <div class="d-flex flex-row justify-content-between mt-3 flex-wrap justify-content-sm-start">
         <div
-          class="d-flex card-title align-items-start flex-row justify-content-between"
+          class="d-flex card-title align-items-start flex-row justify-content-between flex-wrap justify-content-sm-around"
         >
           <!-- <span class="fuvi-text-black mt-1 fw-bold fs-5"
             >Total met: {{ listadoData.total }}</span
@@ -45,9 +45,9 @@
         </div>
 
         <form
-          class="d-flex align-items-center justify-content-end col-4 buscador"
+          class="d-flex align-items-center justify-content-end buscador"
         >
-          <div class="form-label-group w-75 input-group">
+          <div class="form-label-group input-group">
             <input
               type="text"
               id="inputEmail"

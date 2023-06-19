@@ -10,7 +10,7 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <div class="d-flex justify-content-start">
+      <div class="d-flex justify-content-start flex-wrap">
         <button
           class="btn btn-primary mr-2"
           (click)="openFiltros(contentEditar)"
@@ -28,7 +28,7 @@
           <i class="fas fa-file-download fa-lg"></i> Reporte CSV
         </button>
       </div>
-      <div class="col-12">
+      <div class="col-12 p-0">
         <div class="d-flex flex-row justify-content-between mt-3">
           <div class="card-title align-items-start flex-column">
             <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"
@@ -40,9 +40,9 @@
           </div>
 
           <form
-            class="d-flex align-items-center justify-content-end col-4 buscador"
+            class="d-flex align-items-center justify-content-end buscador"
           >
-            <div class="form-label-group w-75 input-group">
+            <div class="form-label-group input-group">
               <input
                 type="text"
                 id="inputEmail"
