@@ -97,6 +97,7 @@ import { FrecuenciaFacturaListadoComponent } from 'app/pages/frecuencia-facturas
 import { FrecuenciaFacturaInsertarComponent } from 'app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component';
 import { FrecuenciaFacturaEditarComponent } from 'app/pages/frecuencia-facturas/frecuencia-factura-editar/frecuencia-factura-editar.component';
 import { FrecuenciaFacturaFormComponent } from 'app/shared/components/forms/frecuencia-factura-form/frecuencia-factura-form.component';
+import { CierreConfigComponent } from 'app/pages/configuracion/cierre-config/cierre-config.component';
 
 @NgModule({
   imports: [
@@ -196,6 +197,7 @@ import { FrecuenciaFacturaFormComponent } from 'app/shared/components/forms/frec
     MigrarInformacionVendedorComponent,
     ListClientMigrationComponent,
     TazaCotizacionComponent,
+    CierreConfigComponent,
     
     ProductosVendedorComponent,
 
@@ -204,7 +206,7 @@ import { FrecuenciaFacturaFormComponent } from 'app/shared/components/forms/frec
     FrecuenciaFacturaListadoComponent,
     FrecuenciaFacturaInsertarComponent,
     FrecuenciaFacturaEditarComponent,
-    FrecuenciaFacturaFormComponent
+    FrecuenciaFacturaFormComponent,
   ]
 })
 

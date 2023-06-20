@@ -70,6 +70,7 @@ import { MetasComponent } from "app/pages/metas/metas.component";
 import { FrecuenciaFacturaListadoComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-listado/frecuencia-factura-listado.component";
 import { FrecuenciaFacturaInsertarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component";
 import { FrecuenciaFacturaEditarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-editar/frecuencia-factura-editar.component";
+import { CierreConfigComponent } from "app/pages/configuracion/cierre-config/cierre-config.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -248,6 +249,7 @@ export const AdminLayoutRoutes: Routes = [
         component: MigrarInformacionVendedorComponent,
       },
       { path: "taza-cotizacion", component: TazaCotizacionComponent },
+      { path: "cierre", component: CierreConfigComponent },
     ],
   },
   {

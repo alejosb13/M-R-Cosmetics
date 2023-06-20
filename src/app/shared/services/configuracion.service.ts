@@ -84,4 +84,18 @@ export class ConfiguracionService {
       { headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getCierraConfig(): Observable<any> {
+    return this.http.get(
+      `${ConfiguracionURL}/cierre`,
+      { headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  updateCierraConfig(): Observable<any> {
+    return this.http.patch(
+      `${ConfiguracionURL}/cierre`,
+      { headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }

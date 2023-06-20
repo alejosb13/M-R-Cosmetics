@@ -76,11 +76,11 @@ export class LoginComponent implements OnInit {
         this._AuthService.dataStorage = {...Auth}
         this._RememberFiltersService.deleteAllFilterStorage()
         this.router.navigateByUrl("/inicio");
-      },error=> {
-        logger.log(error);
+      },(responseError:any)=> {
+        logger.log(responseError);
         
         Swal.fire({
-          text: "Usuario o contraseña incorrectos",
+          text: responseError.error.mensaje,
           icon: 'warning',
         })
       })

@@ -1,0 +1,21 @@
+<div class="bg-white container-fluid">
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-md-3">
+        <ng-container *ngIf="statusCierre == 1">
+          <button (click)="actualizarCierre()" class="btn btn-success">
+            Cierre Activo <i class="fas fa-lock"></i>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="statusCierre == 0">
+          <button (click)="actualizarCierre()" class="btn btn-danger">
+            Cierre Inactivo <i class="fas fa-lock-open"></i>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+    <hr />
+    <br />
+    
+  </div>
+</div>
