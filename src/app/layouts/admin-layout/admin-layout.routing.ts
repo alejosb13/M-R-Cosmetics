@@ -37,9 +37,6 @@ import { CategoriaListComponent } from "app/pages/categorias/categoria-list/cate
 import { CategoriaInsertarComponent } from "app/pages/categorias/categoria-insertar/categoria-insertar.component";
 import { CategoriaEditarComponent } from "app/pages/categorias/categoria-editar/categoria-editar.component";
 
-import { FrecuenciaListadoComponent } from "app/pages/frecuencias/frecuencia-listado/frecuencia-listado.component";
-import { FrecuenciaEditarComponent } from "app/pages/frecuencias/frecuencia-editar/frecuencia-editar.component";
-import { FrecuenciaInsertarComponent } from "app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component";
 import { FacturaDespachadaComponent } from "app/pages/facturas/factura-despachada/factura-despachada.component";
 
 import { DevolucionFacturaListComponent } from "app/pages/devoluciones/listado/devolucion-factura-list/devolucion-factura-list.component";

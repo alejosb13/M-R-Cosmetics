@@ -198,7 +198,8 @@ export class Listado {
   registerClientesCSV(
     options: any
   ) {
-    let URL = `${environment.urlAPI}csv/registroclientes`;
+    let URL = `${environment.urlAPI}xlsx/registroclientes`;
+    // let URL = `${environment.urlAPI}csv/registroclientes`;
 
     if (Object.keys(options).length > 0) {
       URL = this.urlParams(URL, options);

@@ -240,12 +240,19 @@ export class ClienteFormComponent implements OnInit {
   }
 
   changeValueFormArray({ name, value, checked }) {
+    // console.log({ name, value, checked });
+    
     const formArray: FormArray = this.editarClienteForm.get(name) as FormArray;
 
     if (checked) {
       formArray.push(new FormControl(value));
     } else {
-      const index = formArray.controls.findIndex(x => x.value === value);
+      // console.log(formArray.controls);
+      
+      const index = formArray.controls.findIndex(x => x.value == value);
+      // console.log(index);
+      
+      // console.log(formArray.controls);
       formArray.removeAt(index);
     }
   }
@@ -263,7 +270,7 @@ export class ClienteFormComponent implements OnInit {
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
     // console.log(this.editarClienteForm.getRawValue());
-
+    // return false
     if(this.editarClienteForm.valid){
       let cliente = {} as Cliente
       cliente.nombreCompleto    = this.formularioControls.nombreCompleto.value
