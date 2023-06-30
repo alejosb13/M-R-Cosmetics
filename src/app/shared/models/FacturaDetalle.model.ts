@@ -1,3 +1,4 @@
+import { Factura } from "./Factura.model";
 import { Producto } from "./Producto.model";
 import { RegaloFacturado } from './Regalo';
 
@@ -17,4 +18,5 @@ export interface FacturaDetalle {
     updated_at?: Date;
     producto?: Producto;
     regalo_facturado?: RegaloFacturado[];
+    factura?: Factura;
 }

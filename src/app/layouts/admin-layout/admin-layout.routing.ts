@@ -68,6 +68,7 @@ import { FrecuenciaFacturaListadoComponent } from "app/pages/frecuencia-facturas
 import { FrecuenciaFacturaInsertarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component";
 import { FrecuenciaFacturaEditarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-editar/frecuencia-factura-editar.component";
 import { CierreConfigComponent } from "app/pages/configuracion/cierre-config/cierre-config.component";
+import { ClienteProductosCompradosComponent } from "app/pages/clientes/cliente-productos-comprados/cliente-productos-comprados.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -90,6 +91,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "editar/:id", component: ClienteEditarComponent },
       { path: "factura/:id", component: ClientesFacturasComponent },
       { path: "estado-cuenta/:id", component: ClienteDetalleComponent },
+      { path: "productos/:id", component: ClienteProductosCompradosComponent },
     ],
   },
 

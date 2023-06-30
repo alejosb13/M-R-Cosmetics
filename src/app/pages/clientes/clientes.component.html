@@ -77,6 +77,7 @@
             <th scope="col">Categoria</th>
             <!-- <th scope="col">Frecuencia</th> -->
             <th scope="col">Saldo</th>
+            <th scope="col">Productos</th>
             <th scope="col">E.Cuenta</th>
             <th scope="col">Usuario</th>
             <th scope="col">Facturacion</th>
@@ -125,7 +126,12 @@
               <span>{{ cliente.saldo |currency:"USD" }}</span>
             </td>
             <td>
-              <a [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
+              <a target="_blank" [routerLink]="['/cliente', 'productos', cliente.id]"
+                >Ver</a
+              >
+            </td>
+            <td>
+              <a target="_blank" [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
                 >Ver detalle</a
               >
             </td>

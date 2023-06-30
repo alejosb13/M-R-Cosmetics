@@ -38,4 +38,5 @@ export interface FiltrosList {
   despachado?: number;
   status_entrega?: number;
   created_at?: string;
+  clienteId?:string | number
 }

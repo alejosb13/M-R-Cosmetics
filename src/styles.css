@@ -10,3 +10,14 @@ ngb-pagination .pagination {
 .pointer {
   cursor: pointer !important;
 }
+
+.form-check input.form-check-input {
+  opacity: 1;
+  position: static;
+  visibility: visible;
+  margin-left: 0px;
+}
+
+.form-check .form-check-label {
+  padding-left: 10px;
+}
