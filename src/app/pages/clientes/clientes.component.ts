@@ -80,6 +80,8 @@ export class ClientesComponent implements OnInit {
     this.getUsers();
     this.getCategoria();
     this.aplicarFiltros();
+    // this.limpiarFiltros();
+    
   }
 
   getUsers() {
@@ -269,16 +271,16 @@ export class ClientesComponent implements OnInit {
     // console.log(this.allDates);
     let filtrosStorage = this._RememberFiltersService.getFilterStorage();
 
-    if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
-      // solo al iniciar con datos en storage
-      this.listadoFilter = { ...filtrosStorage[this.FilterSection] };
-      this.userId = Number(this.listadoFilter.userId);
-      this.categoriaId = Number(this.listadoFilter.categoriaId);
-      this.dateIni = this.listadoFilter.dateIni;
-      this.dateFin = this.listadoFilter.dateFin;
-      this.allDates = this.listadoFilter.allDates;
-      this.diasCobros = this.listadoFilter.diasCobros;
-    } else {
+    // if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
+    //   // solo al iniciar con datos en storage
+    //   this.listadoFilter = { ...filtrosStorage[this.FilterSection] };
+    //   this.userId = Number(this.listadoFilter.userId);
+    //   this.categoriaId = Number(this.listadoFilter.categoriaId);
+    //   this.dateIni = this.listadoFilter.dateIni;
+    //   this.dateFin = this.listadoFilter.dateFin;
+    //   this.allDates = this.listadoFilter.allDates;
+    //   this.diasCobros = this.listadoFilter.diasCobros;
+    // } else {
       if (!submit) {
         console.log(this.userId);
 
@@ -305,7 +307,7 @@ export class ClientesComponent implements OnInit {
         allDates: this.allDates,
         diasCobros: this.diasCobros,
       };
-    }
+    // }
 
     this._RememberFiltersService.setFilterStorage(this.FilterSection, {
       ...this.listadoFilter,

@@ -18,14 +18,18 @@ import { HelpersService } from "app/shared/services/helpers.service";
 import { Listado } from "app/shared/services/listados.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
-import { Observable, Subject, merge, OperatorFunction } from "rxjs";
+import { Observable, Subject, merge, OperatorFunction, of } from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
   filter,
   map,
+  tap,
+  switchMap,
 } from "rxjs/operators";
+
 import Swal from "sweetalert2";
+import { catchError } from "rxjs/operators";
 
 @Component({
   selector: "app-checkout",
@@ -33,6 +37,11 @@ import Swal from "sweetalert2";
   styleUrls: ["./checkout.component.css"],
 })
 export class CheckoutComponent implements OnInit {
+  model: any;
+  searching = false;
+  searchFailed = false;
+  showDelete = false
+
   productos: FacturaDetalle[] = [];
   factura: FacturaCheckout;
   clientes: Cliente[];
@@ -86,7 +95,7 @@ export class CheckoutComponent implements OnInit {
     this.getReciboUSer();
     this.getProducts();
     this.getcheckout();
-    this.getClientes();
+    // this.getClientes();
     this.getDataUser();
     this.getFrecuenciafactura();
     // console.log("Factura",this.factura);
@@ -123,7 +132,7 @@ export class CheckoutComponent implements OnInit {
     };
 
     this._Listado
-      .clienteList(listadoFilter)
+      .clienteListCarrito(listadoFilter)
       .subscribe((clientes: Cliente[]) => {
         this.clientes = [...clientes];
         this.ClientesNames = clientes.map(
@@ -140,6 +149,58 @@ export class CheckoutComponent implements OnInit {
       // this.ValidClienteSelected();
     });
   }
+  
+  eventInputTypeHead(event:{item:string}){
+    // console.log("test ~ event:", event)
+    this.showDelete= true
+  }
+  
+  eliminarCliente(){
+    this.model = ""
+    this.showDelete = false
+
+    this.clienteSelected = false 
+    this.clienteData = null
+  }
+
+  search2: OperatorFunction<string, readonly string[]> = (
+    text$: Observable<string>
+  ) => {
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) => {
+        let listadoFilter: FiltrosList = {
+          userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
+          categoriaId: 0, // todas las categorias
+          allDates: true, // todos los dias
+          roleName: this.roleName,
+          link: null,
+          filter: term,
+        };
+
+        return this._Listado.clienteListCarrito(listadoFilter).pipe(
+          tap(() => (this.searchFailed = false)),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+      }),
+      map((value)=>{
+        // console.log(value);
+
+        this.clientes = [...value];
+        let ClientesNames = value.map(
+          (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
+        );
+
+        return ClientesNames
+      }),
+      tap(() => (this.searching = false))
+    );
+  };
 
   getNumeroRecibo() {
     // this._ReciboService.getNumeroRecibo(25).subscribe((data:any) => {

@@ -11,6 +11,7 @@ import { Cliente } from "../models/Cliente.model";
 import { FacturaDetalle } from "../models/FacturaDetalle.model";
 
 const ListadoURL = `${environment.urlAPI}list`;
+const ClienteURL = `${environment.urlAPI}cliente`
 
 @Injectable({
   providedIn: "root",
@@ -194,6 +195,34 @@ export class Listado {
     // console.log(URL);
 
     return this.http.get<ListadoModel<Cliente>>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  clienteListCarrito(
+    options: FiltrosList
+  ): Observable<any> {
+    // console.log("FiltrosList", options);
+    let URL: string;
+
+    if (options.link) {
+      URL = this.urlParams(options.link, options);
+    } else {
+      URL = `${ClienteURL}/usuario/${options.userId}`;
+
+      if (Object.keys(options).length > 0) {
+        // let URLOptions = `${ListadoURL}/facturas?`
+
+        URL = this.urlParams(URL, options);
+
+        // URL = URLOptions
+      }
+    }
+
+    // console.log(URL);
+
+    return this.http.get<any>(URL, {
       headers: this.headerJson_Token(),
       responseType: "json",
     });

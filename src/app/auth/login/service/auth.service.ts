@@ -17,6 +17,7 @@ enum Roles {
 export class AuthService {
 
   private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY_STORAGE}`;
+  private authLocalStorageCheckout= `${environment.appVersion}-Checkout`;
 
   constructor(
     private http: HttpClient
@@ -63,8 +64,10 @@ export class AuthService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
   deleteSession(){
     localStorage.removeItem(this.authLocalStorageToken)
+    localStorage.removeItem(this.authLocalStorageCheckout)
   }
 
   validarRol(roleName:string):boolean{

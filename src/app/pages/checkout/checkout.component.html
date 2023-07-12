@@ -54,23 +54,44 @@
         <h5><b>Factura</b></h5>
       </div>
       <hr />
-      <div class="form-group">
+      <div class="form-group mb-3">
         <p class="font-weight-bold">
           Cliente <span class="text-danger">(*)</span>
         </p>
-        <input
+        <!-- <input
           id="typeahead-focus"
           type="text"
           class="form-control"
           name="cliente"
           [(ngModel)]="cliente"
           (ngModelChange)="dataChangedCliente($event)"
-          [ngbTypeahead]="search"
+          [ngbTypeahead]="search2"
           [placement]="['top-left']"
           (focus)="focus$.next($any($event).target.value)"
           (click)="click$.next($any($event).target.value)"
           #instance="ngbTypeahead"
-        />
+        /> -->
+        <div class="d-flex align-items-center">
+          <input
+            id="typeahead-http"
+            type="text"
+            class="form-control mr-3 mb-0"
+            (ngModelChange)="dataChangedCliente($event)"
+            [class.is-invalid]="searchFailed"
+            [(ngModel)]="model"
+            [ngbTypeahead]="search2"
+            (selectItem)="eventInputTypeHead($event)"
+          />
+          <small *ngIf="searching" class="form-text text-muted">
+            <i class="fas fa-circle-notch fa-spin fa-lg"></i
+          ></small>
+
+          <small *ngIf="showDelete && model" (click)="eliminarCliente()" class="form-text text-muted">
+            <i class="fas fa-backspace fa-lg"></i></small>
+        </div>
+        <!-- <div class="invalid-feedback" *ngIf="searchFailed">
+          Sorry, suggestions could not be loaded.
+        </div> -->
       </div>
       <div class="form-group" *ngIf="clienteSelected">
         <p class="font-weight-bold">
@@ -78,7 +99,7 @@
         </p>
 
         <p class="font-weight-bold">
-          Frecuencia de pago <span class="text-danger">(*)</span> 
+          Frecuencia de pago <span class="text-danger">(*)</span>
         </p>
         <select
           class="form-control"
@@ -111,7 +132,7 @@
       <div
         class="form-group"
         style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
-        *ngIf="factura.monto"
+        *ngIf="factura.monto || isAdmin"
       >
         <p class="font-weight-bold">Operación de pago: Credito</p>
 

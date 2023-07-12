@@ -58,9 +58,9 @@ a {
 } */
 
 .close {
-    cursor: pointer;
-    margin-left: auto;
-    font-size: 0.9rem;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 0.9rem;
 }
 
 img {
@@ -151,21 +151,28 @@ a:hover {
   background-position-y: center;
 }
 
-::ng-deep .summary .dropdown-menu { width: 100%; z-index: 99999; }
+::ng-deep .summary .dropdown-menu {
+  width: 100%;
+  z-index: 99999;
+  min-height: 41px;
+  max-height: 330px;
+  z-index: 99999;
+  overflow-x: hidden;
+}
 
 @media (max-width: 767px) {
-    .card {
-      margin: 3vh auto;
-    }
+  .card {
+    margin: 3vh auto;
+  }
 
-    .cart {
-        padding: 4vh;
-        border-bottom-left-radius: unset;
-        border-top-right-radius: 1rem;
-    }
+  .cart {
+    padding: 4vh;
+    border-bottom-left-radius: unset;
+    border-top-right-radius: 1rem;
+  }
 
-    .summary {
-        border-top-right-radius: unset;
-        border-bottom-left-radius: 1rem;
-    }
+  .summary {
+    border-top-right-radius: unset;
+    border-bottom-left-radius: 1rem;
+  }
 }
