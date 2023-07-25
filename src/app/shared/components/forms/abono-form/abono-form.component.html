@@ -1,35 +1,43 @@
 <form [formGroup]="AbonoForm" [hidden]="loadInfo">
-    <span class="text-info">Nota: Los campos con <span class="text-danger">(*)</span> son obligatorios.</span>
-    <br>
-    <br>
-    <br>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group " >
-          <label>Numero de Recibo <span class="text-danger">(*)</span></label>
-          <input
-            type="number"
-            class="form-control"
-            name="recibo"
-            formControlName="recibo"
-            autocomplete="off"
-            [ngClass]="{
-            'is-invalid': AbonoForm.controls['recibo'].invalid && AbonoForm.controls['recibo'].touched,
+  <span class="text-info"
+    >Nota: Los campos con <span class="text-danger">(*)</span> son
+    obligatorios.</span
+  >
+  <br />
+  <br />
+  <br />
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Numero de Recibo <span class="text-danger">(*)</span></label>
+        <input
+          type="number"
+          class="form-control"
+          name="recibo"
+          formControlName="recibo"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              AbonoForm.controls['recibo'].invalid &&
+              AbonoForm.controls['recibo'].touched,
             'is-valid': AbonoForm.controls['recibo'].valid
-            }"
-          >
+          }"
+        />
 
-          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
             validation: 'required',
             message: 'Pide que asignen un talonario de recibos.',
             control: AbonoForm.controls['recibo']
-        }"></ng-container>
-        </div>
+          }"
+        ></ng-container>
       </div>
-      <div class="col-md-6">
-        <div class="form-group tipehead" >
-            <label>Cliente <span class="text-danger">(*)</span></label>
-            <input
+    </div>
+    <div class="col-md-6">
+      <div class="form-group tipehead">
+        <label>Cliente <span class="text-danger">(*)</span></label>
+        <!-- <input
               id="typeahead-focus"
               type="text"
               class="form-control"
@@ -41,44 +49,82 @@
               (focus)="focus$.next($any($event).target.value)"
               (click)="click$.next($any($event).target.value)"
               #instance="ngbTypeahead"
-            />
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Monto <span class="text-danger">(*)</span></label>
+            /> -->
+
+        <div class="d-flex align-items-center">
           <input
-              type="number"
-              class="form-control"
-              name="precio"
-              formControlName="precio"
-              autocomplete="off"
-              [ngClass]="{
-              'is-invalid': AbonoForm.controls['precio'].invalid && AbonoForm.controls['precio'].touched,
-              'is-valid': AbonoForm.controls['precio'].valid
-              }"
+            name="cliente_id"
+            formControlName="cliente_id"
+            type="text"
+            class="form-control mr-3 mb-0"
+
+            [ngbTypeahead]="search2"
+            [placement]="['top-left']"
+            (focus)="focus$.next($any($event).target.value)"
+            (click)="click$.next($any($event).target.value)"
+            #instance="ngbTypeahead"
+            (selectItem)="eventInputTypeHead($event)"
+          />
+          <small *ngIf="searching" class="form-text text-muted">
+            <i class="fas fa-circle-notch fa-spin fa-lg"></i
+          ></small>
+
+          <small
+            *ngIf="showDelete && AbonoForm.controls['cliente_id'].valid"
+            (click)="eliminarCliente()"
+            class="form-text text-muted"
           >
-          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'required',
-              message: 'El monto es requerido',
-              control: AbonoForm.controls['precio']
-          }"></ng-container>
-          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'maxlength',
-              message: 'El monto debe tener como máximo 30 letras',
-              control: AbonoForm.controls['precio']
-          }"></ng-container>
-          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-              validation: 'max',
-              message: 'El monto no debe ser mayor a el abono',
-              control: AbonoForm.controls['precio']
-          }"></ng-container>
+            <i class="fas fa-backspace fa-lg"></i
+          ></small>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Metodo de pago<span class="text-danger">(*)</span></label>
-          <!-- <input
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Monto <span class="text-danger">(*)</span></label>
+        <input
+          type="number"
+          class="form-control"
+          name="precio"
+          formControlName="precio"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              AbonoForm.controls['precio'].invalid &&
+              AbonoForm.controls['precio'].touched,
+            'is-valid': AbonoForm.controls['precio'].valid
+          }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El monto es requerido',
+            control: AbonoForm.controls['precio']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'El monto debe tener como máximo 30 letras',
+            control: AbonoForm.controls['precio']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'max',
+            message: 'El monto no debe ser mayor a el abono',
+            control: AbonoForm.controls['precio']
+          }"
+        ></ng-container>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Metodo de pago<span class="text-danger">(*)</span></label>
+        <!-- <input
               type="number"
               class="form-control"
               name="metodo_pago"
@@ -90,94 +136,113 @@
               }"
           > -->
 
-          <select
-            id="my-select"
-            class="form-control"
-            name="metodo_pago"
-            formControlName="metodo_pago"
-            [ngClass]="{
-              'is-invalid': AbonoForm.controls['metodo_pago'].invalid && AbonoForm.controls['metodo_pago'].touched,
-              'is-valid': AbonoForm.controls['metodo_pago'].valid
-            }"
+        <select
+          id="my-select"
+          class="form-control"
+          name="metodo_pago"
+          formControlName="metodo_pago"
+          [ngClass]="{
+            'is-invalid':
+              AbonoForm.controls['metodo_pago'].invalid &&
+              AbonoForm.controls['metodo_pago'].touched,
+            'is-valid': AbonoForm.controls['metodo_pago'].valid
+          }"
+        >
+          <option selected value="" hidden>Seleccione el metodo de pago</option>
+          <option
+            *ngFor="let TipoMetodo of TiposMetodos"
+            [value]="TipoMetodo.id"
           >
-            <option selected value="" hidden>Seleccione el metodo de pago</option>
-            <option *ngFor="let TipoMetodo of TiposMetodos" [value]="TipoMetodo.id">{{ TipoMetodo.nombre }}</option>
-          </select>
-          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+            {{ TipoMetodo.nombre }}
+          </option>
+        </select>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
             validation: 'required',
             message: 'El metodo de pago es requerido',
             control: AbonoForm.controls['metodo_pago']
-          }"></ng-container>
-        </div>
+          }"
+        ></ng-container>
       </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Detalle de pago (Opcional)</label>
-          <input
-              type="text"
-              class="form-control"
-              name="detalle_pago"
-              formControlName="detalle_pago"
-              autocomplete="off"
-              [ngClass]="{
-              'is-invalid': AbonoForm.controls['detalle_pago'].invalid && AbonoForm.controls['detalle_pago'].touched,
-              'is-valid': AbonoForm.controls['detalle_pago'].valid
-              }"
-          >
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Detalle de pago (Opcional)</label>
+        <input
+          type="text"
+          class="form-control"
+          name="detalle_pago"
+          formControlName="detalle_pago"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              AbonoForm.controls['detalle_pago'].invalid &&
+              AbonoForm.controls['detalle_pago'].touched,
+            'is-valid': AbonoForm.controls['detalle_pago'].valid
+          }"
+        />
 
-          <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
             validation: 'maxlength',
             message: 'El detalle de pago tiene un limite de 120 caracteres.',
             control: AbonoForm.controls['detalle_pago']
-          }"></ng-container>
-
-
-        </div>
+          }"
+        ></ng-container>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <!-- <p>Cálculo: <b>{{ diferencia | currency: 'USD' }}</b> </p> -->
-        <p>Por Abonar: <b>{{ diferencia | currency: 'USD' }}</b> </p>
-        <p>Total Factura: <b>{{ montoTotal | currency: 'USD' }}</b> </p>
-      </div>
-    </div>
-    <div class="row">
-        <div class="update ml-auto mr-auto">
-            <button
-              type="submit"
-              class="btn btn-primary btn-round"
-              (click)="EnviarFormulario()"
-              [disabled]="bloqueo || disableBoton || _AbonoService.isLoad"
-            >
-              <!-- <div *ngIf="Id">Actualizar</div> -->
-              <div *ngIf="disableBoton">
-                Agregando
-                <i class="fas fa-spinner fa-pulse"></i>
-              </div>
-              <div *ngIf="!disableBoton">
-                Agregar
-              </div>
-            </button>
-        </div>
-    </div>
-    <ng-template #formError let-control="control" let-message="message" let-validation="validation">
-      <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
-        <div class="invalid-feedback">
-          {{ message }}
-        </div>
-      </ng-container>
-    </ng-template>
-  </form>
-
-
-
-  <div  [hidden]="!loadInfo" class="container-fluid p-5">
-    <div class="d-flex justify-content-center align-content-center">
-      <span>
-        Cargando Abono
-        <i class="fas fa-circle-notch fa-spin"></i>
-      </span>
-
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- <p>Cálculo: <b>{{ diferencia | currency: 'USD' }}</b> </p> -->
+      <p>
+        Por Abonar: <b>{{ diferencia | currency : "USD" }}</b>
+      </p>
+      <p>
+        Total Factura: <b>{{ montoTotal | currency : "USD" }}</b>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        (click)="EnviarFormulario()"
+        [disabled]="bloqueo || disableBoton || _AbonoService.isLoad"
+      >
+        <!-- <div *ngIf="Id">Actualizar</div> -->
+        <div *ngIf="disableBoton">
+          Agregando
+          <i class="fas fa-spinner fa-pulse"></i>
+        </div>
+        <div *ngIf="!disableBoton">Agregar</div>
+      </button>
+    </div>
+  </div>
+  <ng-template
+    #formError
+    let-control="control"
+    let-message="message"
+    let-validation="validation"
+  >
+    <ng-container
+      *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+    >
+      <div class="invalid-feedback">
+        {{ message }}
+      </div>
+    </ng-container>
+  </ng-template>
+</form>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando Abono
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

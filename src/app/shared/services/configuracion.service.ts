@@ -93,7 +93,7 @@ export class ConfiguracionService {
   }
 
   updateCierraConfig(): Observable<any> {
-    return this.http.patch(
+    return this.http.put(
       `${ConfiguracionURL}/cierre`,
       { headers: this.headerJson_Token(), responseType: "json" }
     );

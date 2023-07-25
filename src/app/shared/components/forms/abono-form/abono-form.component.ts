@@ -22,7 +22,8 @@ import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { ValidFunctionsValidator } from "app/shared/validations/valid-functions.validator";
 import logger from "app/utils/logger";
-import { merge, Observable, OperatorFunction, Subject } from "rxjs";
+import { merge, Observable, of, OperatorFunction, Subject } from "rxjs";
+import { switchMap} from "rxjs/operators";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -33,6 +34,7 @@ import Swal from "sweetalert2";
 import { AbonoService } from "../../../services/abono.service";
 import { Listado } from "app/shared/services/listados.service";
 import { FiltrosList } from "app/shared/models/Listados.model";
+import { catchError, tap } from 'rxjs/operators';
 
 type FacturaReciboHistorial = Abono & ReciboHistorial;
 
@@ -46,6 +48,11 @@ export class AbonoFormComponent implements OnInit {
   // @Input() resetForm:boolean = false;
   // @Output() resetFormChange:EventEmitter<boolean> = new EventEmitter(false);
   TiposMetodos = TiposMetodos;
+
+  model: any;
+  searching = false;
+  searchFailed = false;
+  showDelete = false
 
   loadInfo: boolean = false;
   AbonoForm: FormGroup;
@@ -95,7 +102,7 @@ export class AbonoFormComponent implements OnInit {
     this.ValidacionBotonAgregar();
     this.getNumeroRecibo();
     this.definirValidaciones();
-    this.getClientes();
+    // this.getClientes();
     this.getReciboUSer();
     this.changeValues();
     this.changeValueResetForm();
@@ -399,4 +406,56 @@ export class AbonoFormComponent implements OnInit {
       )
     );
   };
+
+
+  search2: OperatorFunction<string, readonly string[]> = (
+    text$: Observable<string>
+  ) => {
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) => {
+        let listadoFilter: FiltrosList = {
+          userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
+          categoriaId: 0, // todas las categorias
+          allDates: true, // todos los dias
+          roleName: this.roleName,
+          link: null,
+          filter: term,
+        };
+
+        return this._Listado.clienteListCarrito(listadoFilter).pipe(
+          tap(() => (this.searchFailed = false)),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+      }),
+      map((value)=>{
+        // console.log(value);
+
+        // this.clientes = [...value];
+        let ClientesNames = value.map(
+          (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
+        );
+
+        return ClientesNames
+      }),
+      tap(() => (this.searching = false))
+    );
+  };
+
+  eventInputTypeHead(event:{item:string}){
+    // console.log("test ~ event:", event)
+    this.showDelete= true
+  }
+
+  eliminarCliente(){
+    // this.model = ""
+    this.AbonoForm.get("cliente_id").setValue("")
+    this.showDelete = false
+
+  }
 }
