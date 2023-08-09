@@ -39,4 +39,6 @@ export interface FiltrosList {
   status_entrega?: number;
   created_at?: string;
   clienteId?:string | number
+  allUsers?:boolean
+  allNumber?:boolean
 }

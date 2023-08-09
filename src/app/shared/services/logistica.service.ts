@@ -193,4 +193,13 @@ export class LogisticaService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getDashboard(bodyform:FiltrosList): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/resumen-dashboard`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }

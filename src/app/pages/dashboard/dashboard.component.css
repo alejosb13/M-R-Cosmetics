@@ -1,3 +1,33 @@
-::ng-deep .wrapper .main-panel[data-active-color="danger"] dashboard-cmp .fas{
+/* ::ng-deep .wrapper .main-panel[data-active-color="danger"] dashboard-cmp .fas {
   color: #ef8157 !important;
+} */
+
+.data-1 {
+  font-size: 1.625rem;
+  text-align: center;
+  display: block;
+  font-weight: bold;
+}
+
+.data-2 {
+  font-size: 0.9375rem;
+  text-align: center;
+  display: block;
+}
+
+.loading-spiner {
+  font-size: 1.9375rem;
+  text-align: center;
+  min-height: 110px;
+  display: flex;
+  padding-bottom: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.ajustar-altura {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

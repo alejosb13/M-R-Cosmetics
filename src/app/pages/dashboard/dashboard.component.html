@@ -2,300 +2,294 @@
   <!-- <div class="col-md-12">
     <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
   </div> -->
-  <div class="col-md-6" >
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'recuperacion-mensual']"
       role="button"
+      style="background-color: #eb5836"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
-              <!-- <i class="fas fa-receipt"></i> -->
-              <i class="fas fa-file-alt"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 ajustar-altura px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.recuperacionMensual.recuperacionPorcentaje }}%
+              </span>
+              <span class="data-2 text-white">
+                {{
+                  response.recuperacionMensual.abonosTotalLastMount
+                    | currency : "USD"
+                }}
+                |
+                {{
+                  response.recuperacionMensual.recuperacionTotal
+                    | currency : "USD"
+                }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers text-left">
-              <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Recuperación Mensual</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #d44e35"
+            >
+              Recuperación Mensual
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'cartera']"
       role="button"
+      style="background-color: #fc9c0aa3"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
-              <!-- <i class="fas fa-receipt"></i> -->
-              <i class="fas fa-file-invoice-dollar"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.cartera.total | currency : "USD" }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
-              <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Cartera</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #fc9c0a"
+            >
+              Cartera
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'recuperacion']"
       role="button"
+      style="background-color: #eb5836"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
-              <!-- <i class="fas fa-receipt"></i> -->
-              <i class="fas fa-file-alt"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.recuperacion.total | currency : "USD" }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
-              <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Recuperación</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #d44e35"
+            >
+              Recuperación
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'mora30-60']"
       role="button"
+      style="background-color: #fd32c2"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
-              <!-- <i class="fas fa-receipt"></i> -->
-              <i class="fas fa-user-clock"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.mora30_60.factura.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
-              <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Mora 30-60</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #e72daa"
+            >
+              Mora 30-60
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'mora60-90']"
       role="button"
+      style="background-color: #fd32c2"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="nc-icon nc-globe text-warning"></i> -->
-              <!-- <i class="fas fa-receipt"></i> -->
-              <i class="fas fa-user-clock"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.mora60_90.factura.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
-              <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Mora 60-90</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #e72daa"
+            >
+              Mora 60-90
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'clientes-nuevos']"
       role="button"
+      style="background-color: #00b0f4"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="fas fa-user"></i> -->
-              <div class="imagen">
-                <img src="assets/img/clientes.png" style="width: 70px" />
-              </div>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.clientesNuevos.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers text-left">
-              <!-- <p class="card-category">Cartera</p> -->
-              <p class="card-title">Clientes nuevos</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #009edd"
+            >
+              Clientes nuevos
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'incentivos']"
       role="button"
+      style="background-color: #00915a"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="fas fa-percent"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 ajustar-altura px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.incentivos.porcentaje20 }}%
+              </span>
+              <span class="data-2 text-white">
+                {{ response.incentivos.total | currency : "USD" }}
+                |
+                {{ response.incentivos.recibo.recibo_historial.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
-              <p class="card-title">Incentivos</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #01804d"
+            >
+              Incentivos
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6" *ngIf="isSupervisor || isAdmin">
+  <div class="col-md-4" *ngIf="isSupervisor || isAdmin">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'incentivos-supervisor']"
       role="button"
+      style="background-color: #00915a"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="fas fa-percent"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 ajustar-altura px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white">
+                {{
+                  response.incentivosSupervisor
+                    .totalFacturaVendedores2Porciento +
+                    response.incentivosSupervisor.totalRecuperacionVendedores
+                    | currency : "USD"
+                }}
+              </span>
+              <span class="data-2 text-white">
+                {{
+                  response.incentivosSupervisor.totalFacturaVendedores2Porciento
+                    | currency : "USD"
+                }}
+                |
+                {{
+                  response.incentivosSupervisor.totalRecuperacionVendedores
+                    | currency : "USD"
+                }}
+                |
+                {{ response.incentivosSupervisor.dataVendedores.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers text-left">
-              <p class="card-title">Incentivos Supervisor</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #008351"
+            >
+              Incentivos Supervisor
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'clientes-inactivos']"
       role="button"
+      style="background-color: #00b0f4"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="fas fa-user-alt-slash"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.clientesInactivos.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers text-left">
-              <p class="card-title">Cliente Inactivos</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #009edd"
+            >
+              Clientes Inactivos
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'clientes-reactivados']"
       role="button"
+      style="background-color: #00b0f4"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="fas fa-user"></i> -->
-              <div class="imagen">
-                <img src="assets/img/subir-usuario.png" style="width: 65px" />
-              </div>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.clientesReactivados.length }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers text-left">
-              <p class="card-title">Cliente Reactivados</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #009edd"
+            >
+              Clientes Reactivados
             </div>
           </div>
         </div>
@@ -308,255 +302,113 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'ventas']"
       role="button"
+      style="background-color: #eb3160"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <!-- <i class="fas fa-user"></i> -->
-              <div class="imagen">
-                <img src="assets/img/user-dollar.png" style="width: 54px" />
-              </div>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 ajustar-altura px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.ventasMeta.meta }}%
+              </span>
+              <span class="data-2 text-white">
+                {{ response.ventasMeta.total | currency : "USD" }}
+                |
+                {{ response.ventasMeta.meta_monto | currency : "USD" }}
+              </span>
             </div>
-          </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers">
-              <p class="card-title">Ventas</p>
-              <p></p>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #d42858"
+            >
+              Ventas
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-6" *ngIf="isSupervisor || isAdmin">
+  <div class="col-md-4" *ngIf="isSupervisor || isAdmin">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'productos-vendedores']"
       role="button"
+      style="background-color: #dbdc42"
     >
       <div class="card-body">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="fas fa-chart-bar"></i>
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.productosVendidos.totalProductos }}
+              </span>
+            </div>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #dcce2d"
+            >
+              Productos Vendidos
             </div>
           </div>
-          <div class="col-7 col-md-8 d-flex align-items-center">
-            <div class="numbers text-left">
-              <p class="card-title">Productos Vendidos</p>
-              <p></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
-    </div>
-  </div>
-  <!-- <div class="col-lg-3 col-md-6 col-sm-6">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-money-coins text-success"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Revenue</p>
-              <p class="card-title">$ 1,345
-                <p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-calendar-o"></i> Last day
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- <div class="col-lg-3 col-md-6 col-sm-6">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-vector text-danger"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Errors</p>
-              <p class="card-title">23
-                <p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-clock-o"></i> In the last hour
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- <div class="col-lg-3 col-md-6 col-sm-6">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <div class="icon-big text-center icon-warning">
-              <i class="nc-icon nc-favourite-28 text-primary"></i>
-            </div>
-          </div>
-          <div class="col-7 col-md-8">
-            <div class="numbers">
-              <p class="card-category">Followers</p>
-              <p class="card-title">+45K
-                <p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update now
         </div>
       </div>
     </div>
   </div>
-</div> -->
-  <!-- <div class="row">
-  <div class="col-md-12">
-    <div class="card ">
-      <div class="card-header ">
-        <h5 class="card-title">Users Behavior</h5>
-        <p class="card-category">24 Hours performance</p>
-      </div>
-      <div class="card-body ">
-        <canvas id=chartHours width="400" height="100"></canvas>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-history"></i> Updated 3 minutes ago
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-  <!-- <div class="row">
-  <div class="col-md-4">
-    <div class="card ">
-      <div class="card-header ">
-        <h5 class="card-title">Email Statistics</h5>
-        <p class="card-category">Last Campaign Performance</p>
-      </div>
-      <div class="card-body ">
-        <canvas id="chartEmail"></canvas>
-      </div>
-      <div class="card-footer ">
-        <div class="legend">
-          <i class="fa fa-circle text-primary"></i> Opened
-          <i class="fa fa-circle text-warning"></i> Read
-          <i class="fa fa-circle text-danger"></i> Deleted
-          <i class="fa fa-circle text-gray"></i> Unopened
-        </div>
-        <hr>
-        <div class="stats">
-          <i class="fa fa-calendar"></i> Number of emails sent
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-8">
-    <div class="card card-chart">
-      <div class="card-header">
-        <h5 class="card-title">NASDAQ: AAPL</h5>
-        <p class="card-category">Line Chart with Points</p>
-      </div>
-      <div class="card-body">
-        <canvas id="speedChart" width="400" height="100"></canvas>
-      </div>
-      <div class="card-footer">
-        <div class="chart-legend">
-          <i class="fa fa-circle text-info"></i> Tesla Model S
-          <i class="fa fa-circle text-warning"></i> BMW 5 Series
-        </div>
-        <hr/>
-        <div class="card-stats">
-          <i class="fa fa-check"></i> Data information certified
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-  <ng-template #contentEditar let-modal>
-    <div class="modal-header">
-      <div>
-        <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
-      </div>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col">
-          <div class="form-group">
-            <p class="font-weight-bold">Desde</p>
-            <input type="date" class="form-control" [(ngModel)]="dateIni" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="form-group">
-            <p class="font-weight-bold">Hasta</p>
-            <input type="date" class="form-control" [(ngModel)]="dateFin" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer justify-content-center w-100">
-      <div class="row w-100">
-        <div class="col text-center">
-          <button class="btn btn-danger" (click)="limpiarFiltros()">
-            Limpiar <i class="fas fa-eraser"></i>
-          </button>
-        </div>
-        <div class="col text-center">
-          <button class="btn btn-primary" (click)="aplicarFiltros()">
-            Aplicar <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </ng-template>
 </div>
+
+<ng-template #contentEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input type="date" class="form-control" [(ngModel)]="dateIni" />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input type="date" class="form-control" [(ngModel)]="dateFin" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros()">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #spinnerTemplate>
+  <div class="loading-spiner text-white">
+    <i class="fas fa-circle-notch fa-spin text-white"></i>
+  </div>
+</ng-template>
