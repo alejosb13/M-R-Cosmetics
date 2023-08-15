@@ -255,4 +255,44 @@ export class ProductosVendedorComponent implements OnInit {
         Swal.fire("", "Descarga Completada", "success");
       });
   }
+
+  descargarPDFUser(user:Usuario) {
+    console.log(user);
+    
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this._LogisticaService
+      .getProductosVendidosPDFUsuario({
+        dateIni:this.dateIni,
+        dateFin:this.dateFin,
+        allDates:this.allDates,
+        userId:user.id
+      })
+      .subscribe((data) => {
+        // console.log(data);
+        this._HelpersService.downloadFile(
+          data,
+          `productos_vendidos_${currentDate}`
+        );
+        Swal.fire("", "Descarga Completada", "success");
+      });
+  }
 }

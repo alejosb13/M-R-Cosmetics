@@ -1,11 +1,20 @@
-.login-center{    
-    height: 100vh;
-    max-width: 100%;
-
+.login-center {
+  height: 100vh;
+  max-width: 100%;
 }
 
 .card-body {
-    /* padding:20px; */
-    min-height:auto;
-    
+  /* padding:20px; */
+  min-height: auto;
+}
+
+.logo-image-small {
+  margin-top: 40px;
+}
+
+.logo-image-small img {
+  margin: 0px auto;
+  display: block;
+  max-width: 170px;
+  width: 100%;
 }

@@ -161,6 +161,22 @@ export class LogisticaService {
     return this.http.get(`${URL}`, { headers: headers, responseType: 'blob' });
   }
 
+  getProductosVendidosPDFUsuario(options:any): Observable<any> {
+    let URL = `${environment.urlAPI}pdf/productos_vendidos_usuario`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    
+    
+    // if (Object.keys(options).length > 0) {
+    //   URL = this.urlParams(URL, options);
+    // }
+
+    // console.log(options);
+    // console.log(URL);
+
+    return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
+  }
+
   carteraPDF(data:CarteraDateBodyForm): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');

@@ -17,6 +17,7 @@ export interface Factura {
     status: number;
     despachado: number;
     user?: Usuario;
+    saldo_restante?: number;
     cliente?: Cliente;
     regalos?: Regalo[];
     // factura_historial?: FacturaHistorial[];

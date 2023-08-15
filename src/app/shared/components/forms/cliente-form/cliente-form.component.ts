@@ -150,7 +150,6 @@ export class ClienteFormComponent implements OnInit {
           Validators.compose([
             Validators.required,
             Validators.maxLength(180),
-
           ]),
         ],
         direccion_negocio: [

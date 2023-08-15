@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
+import { Factura } from "app/shared/models/Factura.model";
 import { FiltrosList } from "app/shared/models/Listados.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { LogisticaService } from "app/shared/services/logistica.service";
 import logger from "app/utils/logger";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "dashboard-cmp",
@@ -83,15 +85,43 @@ export class DashboardComponent implements OnInit {
   getResumen() {
     this.isLoad = true;
 
-    this._LogisticaService.getDashboard(this.listadoFilter).subscribe(
-      (response) => {
-        logger.log("🚀 ~ respoanse:", response);
-        this.response = response;
-      },
-      () => {},
-      () => {
-        this.isLoad = false;
-      }
-    );
+    this._LogisticaService
+      .getDashboard(this.listadoFilter)
+      .pipe(
+        map((response) => {
+          response.mora30_60 = this.calcularTotalSaldo(response.mora30_60.factura);
+          response.mora60_90 = this.calcularTotalSaldo(response.mora60_90.factura);
+          return response;
+        })
+      )
+      .subscribe(
+        (response) => {
+          logger.log("🚀 ~ respoanse:", response);
+          this.response = response;
+        },
+        () => {},
+        () => {
+          this.isLoad = false;
+        }
+      );
+  }
+
+  calcularTotalSaldo(facturas: Factura[]) {
+    let total = 0;
+
+    console.log("🚀 ~ file: dashboard.component.ts:124 ~ DashboardComponent ~ total:", facturas)
+    if (facturas.length > 0) {
+      let totalIncentivo = facturas.map(
+        (factura: Factura) => factura.saldo_restante
+      );
+
+      total = totalIncentivo.reduce(
+        (accumulator: number, currentValue: number) =>
+          accumulator + currentValue,
+        total
+      );
+    }
+
+    return total
   }
 }

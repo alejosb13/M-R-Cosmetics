@@ -103,7 +103,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.mora30_60.factura.length }}
+                >{{ response.mora30_60 | currency : "USD" }}
               </span>
             </div>
             <div
@@ -129,7 +129,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.mora60_90.factura.length }}
+                >{{ response.mora60_90 | currency : "USD"  }}
               </span>
             </div>
             <div
@@ -181,13 +181,13 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.incentivos.porcentaje20 }}%
+                >{{ response.incentivos.porcentaje20 | currency : "USD"}}
               </span>
-              <span class="data-2 text-white">
+              <!-- <span class="data-2 text-white">
                 {{ response.incentivos.total | currency : "USD" }}
                 |
                 {{ response.incentivos.recibo.recibo_historial.length }}
-              </span>
+              </span> -->
             </div>
             <div
               class="text-center rounded-bottom py-1 text-white font-weight-bold"
@@ -219,7 +219,7 @@
                     | currency : "USD"
                 }}
               </span>
-              <span class="data-2 text-white">
+              <!-- <span class="data-2 text-white">
                 {{
                   response.incentivosSupervisor.totalFacturaVendedores2Porciento
                     | currency : "USD"
@@ -231,7 +231,7 @@
                 }}
                 |
                 {{ response.incentivosSupervisor.dataVendedores.length }}
-              </span>
+              </span> -->
             </div>
             <div
               class="text-center rounded-bottom py-1 text-white font-weight-bold"

@@ -1,105 +1,146 @@
+
 <div class="row justify-content-center align-items-center login-center">
-    <div class="col-md-4 ">
-        <div class="card card-user">
-            <div class="card-header text-center">
-                <h5 class="card-title font-weight-bold">Login</h5>
-            </div>
-            <div class="card-body px-5 pb-4">
-                <form [formGroup]="editarUsuarioForm" (submit)="EnviarFormulario()">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-label-group">
-                                <input 
-                                    type="email" 
-                                    id="inputEmail" 
-                                    class="form-control" 
-                                    placeholder="Email" 
-                                    required 
-                                    autofocus
-                                    name="email"
-                                    formControlName="email"
-                                    autocomplete="off"
-                                    [ngClass]="{
-                                      'is-invalid': editarUsuarioForm.controls['email'].invalid && editarUsuarioForm.controls['email'].touched,
-                                      'is-valid': editarUsuarioForm.controls['email'].valid
-                                    }"
-                                >
-                                <label for="inputEmail">Email</label>
-                                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                    validation: 'required',
-                                    message: 'El email es requerido',
-                                    control: editarUsuarioForm.controls['email']
-                                  }"></ng-container>
-                                  <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                    validation: 'minlength',
-                                    message: 'El email debe poseer al menos 3 letras',
-                                    control: editarUsuarioForm.controls['email']
-                                  }"></ng-container>
-                                  <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                    validation: 'maxlength',
-                                    message: 'El email debe tener como máximo 150 letras',
-                                    control: editarUsuarioForm.controls['email']
-                                  }"></ng-container>
-                                  <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                    validation: 'pattern',
-                                    message: 'El email no es valido',
-                                    control: editarUsuarioForm.controls['email']
-                                  }"></ng-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-12 ">
-                            <div class="form-label-group">
-                                <input 
-                                    type="password" 
-                                    id="inputpass" 
-                                    class="form-control" 
-                                    placeholder="Contraseña" 
-                                    required 
-                                    autofocus
-                                    formControlName="password"
-                                    autocomplete="off"
-                                    [ngClass]="{
-                                      'is-invalid': editarUsuarioForm.controls['password'].invalid && editarUsuarioForm.controls['password'].touched,
-                                      'is-valid': editarUsuarioForm.controls['password'].valid
-                                    }"
-                                >
-                                <label for="inputpass">Contraseña</label>
-                                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                    validation: 'minlength',
-                                    message: 'La contraseña debe poseer al menos 8 letras',
-                                    control: editarUsuarioForm.controls['password']
-                                  }"></ng-container>
-                                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                  validation: 'required',
-                                  message: 'La contraseña es requerida',
-                                  control: editarUsuarioForm.controls['password']
-                                }"></ng-container>
-                                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
-                                  validation: 'maxlength',
-                                  message: 'La contraseña debe tener como máximo 12 caracteres',
-                                  control: editarUsuarioForm.controls['password']
-                                }"></ng-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button class="btn btn-primary btn-block" type="submit">Acceder</button>
-                        </div>
-                    </div>
-                    <ng-template #formError let-control="control" let-message="message" let-validation="validation">
-                        <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
-                          <div class="invalid-feedback">
-                            {{ message }}
-                          </div>
-                        </ng-container>
-                      </ng-template>
-                </form>
-            </div>
-        </div>
+  <div class="col-md-4">
+    <div class="logo-image-small">
+      <img src="assets/img/logos/logo-t.png" />
     </div>
+    <div class="card card-user">
+      
+      <div class="card-header text-center">
+        <h5 class="card-title font-weight-bold">Login</h5>
+      </div>
+      <div class="card-body px-5 pb-4">
+        <form [formGroup]="editarUsuarioForm" (submit)="EnviarFormulario()">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-label-group">
+                <input
+                  type="email"
+                  id="inputEmail"
+                  class="form-control"
+                  placeholder="Email"
+                  required
+                  autofocus
+                  name="email"
+                  formControlName="email"
+                  autocomplete="off"
+                  [ngClass]="{
+                    'is-invalid':
+                      editarUsuarioForm.controls['email'].invalid &&
+                      editarUsuarioForm.controls['email'].touched,
+                    'is-valid': editarUsuarioForm.controls['email'].valid
+                  }"
+                />
+                <label for="inputEmail">Email</label>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'El email es requerido',
+                    control: editarUsuarioForm.controls['email']
+                  }"
+                ></ng-container>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'minlength',
+                    message: 'El email debe poseer al menos 3 letras',
+                    control: editarUsuarioForm.controls['email']
+                  }"
+                ></ng-container>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message: 'El email debe tener como máximo 150 letras',
+                    control: editarUsuarioForm.controls['email']
+                  }"
+                ></ng-container>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'pattern',
+                    message: 'El email no es valido',
+                    control: editarUsuarioForm.controls['email']
+                  }"
+                ></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-label-group">
+                <input
+                  type="password"
+                  id="inputpass"
+                  class="form-control"
+                  placeholder="Contraseña"
+                  required
+                  autofocus
+                  formControlName="password"
+                  autocomplete="off"
+                  [ngClass]="{
+                    'is-invalid':
+                      editarUsuarioForm.controls['password'].invalid &&
+                      editarUsuarioForm.controls['password'].touched,
+                    'is-valid': editarUsuarioForm.controls['password'].valid
+                  }"
+                />
+                <label for="inputpass">Contraseña</label>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'minlength',
+                    message: 'La contraseña debe poseer al menos 8 letras',
+                    control: editarUsuarioForm.controls['password']
+                  }"
+                ></ng-container>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'La contraseña es requerida',
+                    control: editarUsuarioForm.controls['password']
+                  }"
+                ></ng-container>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'maxlength',
+                    message:
+                      'La contraseña debe tener como máximo 12 caracteres',
+                    control: editarUsuarioForm.controls['password']
+                  }"
+                ></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button class="btn btn-primary btn-block" type="submit">
+                Acceder
+              </button>
+            </div>
+          </div>
+          <ng-template
+            #formError
+            let-control="control"
+            let-message="message"
+            let-validation="validation"
+          >
+            <ng-container
+              *ngIf="
+                control.hasError(validation) &&
+                (control.dirty || control.touched)
+              "
+            >
+              <div class="invalid-feedback">
+                {{ message }}
+              </div>
+            </ng-container>
+          </ng-template>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
-

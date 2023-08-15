@@ -210,4 +210,4 @@ Google+: <https://plus.google.com/+CreativetimPage>
 
 Instagram: <https://instagram.com/creativetimofficial>
 
-ng build --configuration production
+ng build --configuration production --output-hashing all

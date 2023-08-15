@@ -44,7 +44,7 @@ export class UsuariosEditarComponent implements OnInit {
       (data) => {
         this._UsuariosService.isLoad = false;
 
-        // console.log(data);
+        console.log(usuario);
         Swal.fire({
           text: "Usuario modificado con exito",
           icon: "success",

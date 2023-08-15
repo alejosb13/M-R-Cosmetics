@@ -12,6 +12,11 @@ export interface Usuario {
   email: string;
   email_verified_at?: Date;
   estado: number;
+  cedula:string
+  celular:string
+  domicilio:string
+  fecha_nacimiento:string
+  fecha_ingreso:string
   factura: Factura[];
   recibo?: Recibo;
   meta?: Meta;
@@ -31,5 +36,10 @@ export interface UsuarioServ { // se usa para insertar o modificar
   cargo: string;
   estado: number;
   role: number;
+  cedula:string
+  celular:string
+  domicilio:string
+  fecha_nacimiento:string
+  fecha_ingreso:string
 }
 
