@@ -2,7 +2,67 @@
   <!-- <div class="col-md-12">
     <button class="btn btn-primary" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
   </div> -->
+
   <div class="col-md-4">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'cartera']"
+      role="button"
+      style="background-color: #fc9c0aa3"
+    >
+      <div class="card-body">
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.cartera.total | currency : "USD" }}
+              </span>
+            </div>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #fc9c0a"
+            >
+              Cartera
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div
+      class="card card-stats"
+      [routerLink]="['/logistica', 'ventas']"
+      role="button"
+      style="background-color: #eb3160"
+    >
+      <div class="card-body">
+        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
+          <div class="col-md-12 ajustar-altura px-0">
+            <div class="ajustar-altura">
+              <span class="data-1 w-100 d-block text-white"
+                >{{ response.ventasMeta.meta }}%
+              </span>
+              <span class="data-2 text-white">
+                {{ response.ventasMeta.total | currency : "USD" }}
+                |
+                {{ response.ventasMeta.meta_monto | currency : "USD" }}
+              </span>
+            </div>
+            <div
+              class="text-center rounded-bottom py-1 text-white font-weight-bold"
+              style="background-color: #d42858"
+            >
+              Ventas
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4" *ngIf="!isSupervisor">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'recuperacion-mensual']"
@@ -39,33 +99,8 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <div
-      class="card card-stats"
-      [routerLink]="['/logistica', 'cartera']"
-      role="button"
-      style="background-color: #fc9c0aa3"
-    >
-      <div class="card-body">
-        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
-          <div class="col-md-12 px-0">
-            <div class="ajustar-altura">
-              <span class="data-1 w-100 d-block text-white"
-                >{{ response.cartera.total | currency : "USD" }}
-              </span>
-            </div>
-            <div
-              class="text-center rounded-bottom py-1 text-white font-weight-bold"
-              style="background-color: #fc9c0a"
-            >
-              Cartera
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
+
+  <div class="col-md-4" *ngIf="!isSupervisor">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'recuperacion']"
@@ -129,7 +164,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.mora60_90 | currency : "USD"  }}
+                >{{ response.mora60_90 | currency : "USD" }}
               </span>
             </div>
             <div
@@ -169,7 +204,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4" *ngIf="!isSupervisor">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'incentivos']"
@@ -181,7 +216,7 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.incentivos.porcentaje20 | currency : "USD"}}
+                >{{ response.incentivos.porcentaje20 | currency : "USD" }}
               </span>
               <!-- <span class="data-2 text-white">
                 {{ response.incentivos.total | currency : "USD" }}
@@ -302,37 +337,7 @@
       </div> -->
     </div>
   </div>
-  <div class="col-md-4">
-    <div
-      class="card card-stats"
-      [routerLink]="['/logistica', 'ventas']"
-      role="button"
-      style="background-color: #eb3160"
-    >
-      <div class="card-body">
-        <div class="row" *ngIf="!isLoad; else spinnerTemplate">
-          <div class="col-md-12 ajustar-altura px-0">
-            <div class="ajustar-altura">
-              <span class="data-1 w-100 d-block text-white"
-                >{{ response.ventasMeta.meta }}%
-              </span>
-              <span class="data-2 text-white">
-                {{ response.ventasMeta.total | currency : "USD" }}
-                |
-                {{ response.ventasMeta.meta_monto | currency : "USD" }}
-              </span>
-            </div>
-            <div
-              class="text-center rounded-bottom py-1 text-white font-weight-bold"
-              style="background-color: #d42858"
-            >
-              Ventas
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
   <div class="col-md-4" *ngIf="isSupervisor || isAdmin">
     <div
       class="card card-stats"

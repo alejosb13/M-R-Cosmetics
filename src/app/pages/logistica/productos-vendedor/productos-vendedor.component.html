@@ -48,7 +48,7 @@
                   data.totalProductos
                 }}</span>
               </button>
-              <div class="">
+              <div *ngIf="data.user.role_id != 4">
                 <button
                   class="btn btn-primary"
                   style="
@@ -59,7 +59,23 @@
                   (click)="descargarPDFUser(data.user)"
                   type="button"
                 >
-                <i class="fas fa-file-download fa-lg"></i>
+                  <i class="fas fa-file-download fa-lg"></i>
+                </button>
+              </div>
+              <div 
+              *ngIf="data.user.role_id == 4"
+              >
+                <button
+                  class="btn btn-primary"
+                  style="
+                    background-color: #34b5b8 !important;
+                    padding: 11px 22px;
+                    border-radius: 3px;
+                  "
+                  (click)="descargarPDFSupervisor(data.user)"
+                  type="button"
+                >
+                  <i class="fas fa-file-download fa-lg"></i>
                 </button>
               </div>
             </div>

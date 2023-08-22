@@ -177,6 +177,21 @@ export class LogisticaService {
     return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
   }
 
+  getProductosVendidosPDFSupervisor(options:any): Observable<any> {
+    let URL = `${environment.urlAPI}pdf/productos_vendidos_supervisor`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    
+    // if (Object.keys(options).length > 0) {
+    //   URL = this.urlParams(URL, options);
+    // }
+
+    // console.log(options);
+    // console.log(URL);
+
+    return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
+  }
+
   carteraPDF(data:CarteraDateBodyForm): Observable<any> {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
@@ -214,6 +229,15 @@ export class LogisticaService {
 
     return this.http.post<any>(
       `${Logistica}/resumen-dashboard`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
+  getDashboardAdmin(bodyform:FiltrosList): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/resumen-dashboard-admin`,
       bodyform,
       {headers: this.headerJson_Token(), responseType: "json" }
     );

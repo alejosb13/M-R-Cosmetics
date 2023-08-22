@@ -51,7 +51,12 @@ export class DashboardComponent implements OnInit {
       this._AuthService.dataStorage.user.userId
     );
     this.setCurrentDate();
-    this.getResumen();
+
+    if (this.isAdmin) {
+      this.getResumenAdmin();
+    } else {
+      this.getResumen();
+    }
   }
 
   setCurrentDate() {
@@ -89,14 +94,47 @@ export class DashboardComponent implements OnInit {
       .getDashboard(this.listadoFilter)
       .pipe(
         map((response) => {
-          response.mora30_60 = this.calcularTotalSaldo(response.mora30_60.factura);
-          response.mora60_90 = this.calcularTotalSaldo(response.mora60_90.factura);
+          response.mora30_60 = this.calcularTotalSaldo(
+            response.mora30_60.factura
+          );
+          response.mora60_90 = this.calcularTotalSaldo(
+            response.mora60_90.factura
+          );
           return response;
         })
       )
       .subscribe(
         (response) => {
-          logger.log("🚀 ~ respoanse:", response);
+          // logger.log("🚀 ~ respoanse:", response);
+          this.response = response;
+        },
+        () => {},
+        () => {
+          this.isLoad = false;
+        }
+      );
+  }
+
+  getResumenAdmin() {
+    this.isLoad = true;
+    console.log("admin");
+
+    this._LogisticaService
+      .getDashboardAdmin(this.listadoFilter)
+      .pipe(
+        map((response) => {
+          response.mora30_60 = this.calcularTotalSaldo(
+            response.mora30_60.factura
+          );
+          response.mora60_90 = this.calcularTotalSaldo(
+            response.mora60_90.factura
+          );
+          return response;
+        })
+      )
+      .subscribe(
+        (response) => {
+          // logger.log("🚀 ~ respoanse:", response);
           this.response = response;
         },
         () => {},
@@ -109,7 +147,7 @@ export class DashboardComponent implements OnInit {
   calcularTotalSaldo(facturas: Factura[]) {
     let total = 0;
 
-    console.log("🚀 ~ file: dashboard.component.ts:124 ~ DashboardComponent ~ total:", facturas)
+    // console.log("🚀 ~ file: dashboard.component.ts:124 ~ DashboardComponent ~ total:", facturas)
     if (facturas.length > 0) {
       let totalIncentivo = facturas.map(
         (factura: Factura) => factura.saldo_restante
@@ -122,6 +160,6 @@ export class DashboardComponent implements OnInit {
       );
     }
 
-    return total
+    return total;
   }
 }
