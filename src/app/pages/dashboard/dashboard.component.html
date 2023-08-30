@@ -15,7 +15,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.cartera.total | currency : "USD" }}
+                >{{ response.cartera_total | currency : "USD" }}
               </span>
             </div>
             <div
@@ -42,12 +42,12 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.ventasMeta.meta }}%
+                >{{ response.ventas_meta_porcentaje }}%
               </span>
               <span class="data-2 text-white">
-                {{ response.ventasMeta.total | currency : "USD" }}
+                {{ response.ventas_meta_total | currency : "USD" }}
                 |
-                {{ response.ventasMeta.meta_monto | currency : "USD" }}
+                {{ response.ventas_meta_monto | currency : "USD" }}
               </span>
             </div>
             <div
@@ -62,7 +62,7 @@
     </div>
   </div>
 
-  <div class="col-md-4" *ngIf="!isSupervisor">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'recuperacion-mensual']"
@@ -74,18 +74,12 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.recuperacionMensual.recuperacionPorcentaje }}%
+                >{{ response.recuperacionmensual_porcentaje }}%
               </span>
               <span class="data-2 text-white">
-                {{
-                  response.recuperacionMensual.abonosTotalLastMount
-                    | currency : "USD"
-                }}
+                {{ response.recuperacionmensual_abonos | currency : "USD" }}
                 |
-                {{
-                  response.recuperacionMensual.recuperacionTotal
-                    | currency : "USD"
-                }}
+                {{ response.recuperacionmensual_total | currency : "USD" }}
               </span>
             </div>
             <div
@@ -100,7 +94,7 @@
     </div>
   </div>
 
-  <div class="col-md-4" *ngIf="!isSupervisor">
+  <div class="col-md-4">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'recuperacion']"
@@ -112,7 +106,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.recuperacion.total | currency : "USD" }}
+                >{{ response.recuperacion_total | currency : "USD" }}
               </span>
             </div>
             <div
@@ -190,7 +184,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.clientesNuevos.length }}
+                >{{ response.clientes_nuevos }}
               </span>
             </div>
             <div
@@ -216,7 +210,7 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.incentivos.porcentaje20 | currency : "USD" }}
+                >{{ response.incentivos | currency : "USD" }}
               </span>
               <!-- <span class="data-2 text-white">
                 {{ response.incentivos.total | currency : "USD" }}
@@ -247,12 +241,7 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white">
-                {{
-                  response.incentivosSupervisor
-                    .totalFacturaVendedores2Porciento +
-                    response.incentivosSupervisor.totalRecuperacionVendedores
-                    | currency : "USD"
-                }}
+                {{ response.incentivos_supervisor | currency : "USD" }}
               </span>
               <!-- <span class="data-2 text-white">
                 {{
@@ -291,7 +280,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.clientesInactivos.length }}
+                >{{ response.clientes_inactivos }}
               </span>
             </div>
             <div
@@ -317,7 +306,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.clientesReactivados.length }}
+                >{{ response.clientes_reactivados }}
               </span>
             </div>
             <div
@@ -338,7 +327,7 @@
     </div>
   </div>
 
-  <div class="col-md-4" *ngIf="isSupervisor || isAdmin">
+  <div class="col-md-4" *ngIf="isAdmin">
     <div
       class="card card-stats"
       [routerLink]="['/logistica', 'productos-vendedores']"
@@ -350,7 +339,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.productosVendidos.totalProductos }}
+                >{{ response.productos_vendidos }}
               </span>
             </div>
             <div

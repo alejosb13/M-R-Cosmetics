@@ -225,11 +225,11 @@ export class LogisticaService {
     );
   }
 
-  getDashboard(bodyform:FiltrosList): Observable<any> {
-
-    return this.http.post<any>(
-      `${Logistica}/resumen-dashboard`,
-      bodyform,
+  getDashboard(user_id:number): Observable<any> {
+    
+    // `${Logistica}/resumen-dashboard`,
+    return this.http.get<any>(
+      `${environment.urlAPI}resumen/dashboard/user/${user_id}`,
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }

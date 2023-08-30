@@ -51,12 +51,12 @@ export class DashboardComponent implements OnInit {
       this._AuthService.dataStorage.user.userId
     );
     this.setCurrentDate();
-
-    if (this.isAdmin) {
-      this.getResumenAdmin();
-    } else {
-      this.getResumen();
-    }
+    
+    this.getResumen();
+    // if (this.isAdmin || this.isSupervisor) {
+    //   this.getResumenAdmin();
+    // } else {
+    // }
   }
 
   setCurrentDate() {
@@ -91,18 +91,18 @@ export class DashboardComponent implements OnInit {
     this.isLoad = true;
 
     this._LogisticaService
-      .getDashboard(this.listadoFilter)
-      .pipe(
-        map((response) => {
-          response.mora30_60 = this.calcularTotalSaldo(
-            response.mora30_60.factura
-          );
-          response.mora60_90 = this.calcularTotalSaldo(
-            response.mora60_90.factura
-          );
-          return response;
-        })
-      )
+      .getDashboard(this.listadoFilter.userId)
+      // .pipe(
+      //   map((response) => {
+      //     response.mora30_60 = this.calcularTotalSaldo(
+      //       response.mora30_60.factura
+      //     );
+      //     response.mora60_90 = this.calcularTotalSaldo(
+      //       response.mora60_90.factura
+      //     );
+      //     return response;
+      //   })
+      // )
       .subscribe(
         (response) => {
           // logger.log("🚀 ~ respoanse:", response);
