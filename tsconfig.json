@@ -9,7 +9,8 @@
     "declaration": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "es2020",
+    "target": "ES2022",
+    "skipLibCheck":true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -18,6 +19,7 @@
       "es2017",
       "dom"
     ],
-    "module": "esnext"
+    "module": "esnext",
+    "useDefineForClassFields": false
   }
 }
