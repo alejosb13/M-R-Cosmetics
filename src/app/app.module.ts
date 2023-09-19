@@ -25,7 +25,7 @@ import { BasicAuthInterceptor } from "./interceptors/basic-auth.interceptor";
   ],
   imports: [
     BrowserAnimationsModule,
-    RouterModule.forRoot(AppRoutes),
+    RouterModule.forRoot(AppRoutes, { relativeLinkResolution: 'legacy' }),
     SidebarModule,
     NavbarModule,
     ToastrModule.forRoot(),
