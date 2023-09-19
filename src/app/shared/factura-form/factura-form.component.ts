@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import logger from 'app/utils/logger';
 // import { AuthService } from 'app/auth/login/service/auth.service';
 import Swal from 'sweetalert2';
@@ -16,7 +16,7 @@ type ProductoDetalle = Producto & FacturaDetalle
   styleUrls: ['./factura-form.component.css']
 })
 export class FacturaEditarFormComponent implements OnInit {
-  ProductForm: FormGroup;
+  ProductForm: UntypedFormGroup;
   // Categorias:Categoria[]
   // Frecuencias:Frecuencia[]
   daysOfWeek:string[]
@@ -31,7 +31,7 @@ export class FacturaEditarFormComponent implements OnInit {
   // @Output() FormsValues = new EventEmitter<Producto>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _ProductosService: ProductosService,
     // private _AuthService: AuthService,
   ) {}

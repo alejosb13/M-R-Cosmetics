@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
 import { ValidFunctionsValidator } from "app/shared/validations/valid-functions.validator";
@@ -11,8 +11,8 @@ import Swal from "sweetalert2";
   styleUrls: ["./categoria-form.component.css"],
 })
 export class CategoriaFormComponent implements OnInit {
-  CategoriaForm: FormGroup;
-  EstadoForm: FormGroup;
+  CategoriaForm: UntypedFormGroup;
+  EstadoForm: UntypedFormGroup;
 
   daysOfWeek: string[];
   loadInfo: boolean = false;
@@ -21,7 +21,7 @@ export class CategoriaFormComponent implements OnInit {
   @Output() FormsValues = new EventEmitter<Categoria>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public _CategoriaService: CategoriaService
   ) {}
 

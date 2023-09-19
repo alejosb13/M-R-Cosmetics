@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Producto } from 'app/shared/models/Producto.model';
 // import { HelpersService } from 'app/shared/services/helpers.service';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class FacturarProductoComponent implements OnInit {
 
-  ProductForm: FormGroup;
+  ProductForm: UntypedFormGroup;
   // Categorias:Categoria[]
   // Frecuencias:Frecuencia[]
   daysOfWeek:string[]
@@ -28,7 +28,7 @@ export class FacturarProductoComponent implements OnInit {
   @Output() FormsValues = new EventEmitter<Producto>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
   ) {
 

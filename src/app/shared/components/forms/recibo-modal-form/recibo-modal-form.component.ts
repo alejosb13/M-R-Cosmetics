@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Recibo } from 'app/shared/models/Recibo.model';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
 import Swal from 'sweetalert2';
@@ -13,11 +13,11 @@ export class ReciboModalFormComponent implements OnInit {
   @Input() recibo:Recibo
   @Output() FormsValues = new EventEmitter<Recibo>();
 
-  ReciboForm: FormGroup;
+  ReciboForm: UntypedFormGroup;
   loadInfo:boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) { }
 
   ngOnInit(): void {

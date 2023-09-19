@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Meta } from "app/shared/models/meta.model";
 import { Recibo } from "app/shared/models/Recibo.model";
 import { ValidFunctionsValidator } from "app/shared/validations/valid-functions.validator";
@@ -14,10 +14,10 @@ export class MetaFormComponent implements OnInit {
   @Input() meta: Meta;
   @Output() submitForm = new EventEmitter<Meta>();
 
-  MetaForm: FormGroup;
+  MetaForm: UntypedFormGroup;
   loadInfo: boolean = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: UntypedFormBuilder) {}
 
   ngOnInit(): void {
     this.definirValidaciones();

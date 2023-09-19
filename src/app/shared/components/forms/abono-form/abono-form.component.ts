@@ -5,7 +5,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Abono } from "app/shared/models/Abono.model";
@@ -55,7 +55,7 @@ export class AbonoFormComponent implements OnInit {
   showDelete = false
 
   loadInfo: boolean = false;
-  AbonoForm: FormGroup;
+  AbonoForm: UntypedFormGroup;
   Abono: FacturaHistorial;
 
   diferencia: number = 0;
@@ -82,7 +82,7 @@ export class AbonoFormComponent implements OnInit {
   click$ = new Subject<string>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
     private _ClientesService: ClientesService,
     private _ReciboService: ReciboService,

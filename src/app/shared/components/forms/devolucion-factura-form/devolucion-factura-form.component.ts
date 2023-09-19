@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
 import { Factura } from 'app/shared/models/Factura.model';
@@ -14,12 +14,12 @@ import Swal from 'sweetalert2';
 })
 export class DevolucionFacturaFormComponent implements OnInit {
 
-  DevolucionFacturaForm: FormGroup;
+  DevolucionFacturaForm: UntypedFormGroup;
   @Input() factura:Factura
   @Output() FormsValues = new EventEmitter<any>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
   ) {}
 

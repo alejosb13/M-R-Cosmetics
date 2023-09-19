@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RememberFiltersService } from 'app/shared/services/remember-filters.service';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
@@ -14,14 +14,14 @@ import { AuthService } from './service/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  editarUsuarioForm: FormGroup;
+  editarUsuarioForm: UntypedFormGroup;
   loadInfo:boolean = false;
   
   @Input() Id?:number
   @Output() FormsValues:EventEmitter<any> = new EventEmitter();
   
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
     private router: Router,
     private _RememberFiltersService: RememberFiltersService,

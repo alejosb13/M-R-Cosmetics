@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
@@ -16,7 +16,7 @@ type ProductoDetalle = Producto & FacturaDetalle
 })
 export class DevolucionProductoFormComponent implements OnInit {
 
-  DevolucionProductoForm: FormGroup;
+  DevolucionProductoForm: UntypedFormGroup;
   // Categorias:Categoria[]
   // Frecuencias:Frecuencia[]
 
@@ -27,7 +27,7 @@ export class DevolucionProductoFormComponent implements OnInit {
   @Output() FormsValues = new EventEmitter<DevolucionProducto>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
   ) {}
 

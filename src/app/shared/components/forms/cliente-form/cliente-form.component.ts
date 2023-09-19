@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Cliente } from 'app/shared/models/Cliente.model';
 import { Categoria } from 'app/shared/models/Categoria.model';
 import { Frecuencia } from 'app/shared/models/Frecuencia.model';
@@ -21,8 +21,8 @@ import { AuthService } from '../../../../auth/login/service/auth.service';
 })
 export class ClienteFormComponent implements OnInit {
 
-  editarClienteForm: FormGroup;
-  ClienteEstadoForm: FormGroup;
+  editarClienteForm: UntypedFormGroup;
+  ClienteEstadoForm: UntypedFormGroup;
   Categorias:Categoria[]
   Categoria:Categoria
   Frecuencias:Frecuencia[]
@@ -39,7 +39,7 @@ export class ClienteFormComponent implements OnInit {
   @Output() FormsValues = new EventEmitter<Cliente>();
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _CategoriaService: CategoriaService,
     public _ClientesService: ClientesService,
     private _FrecuenciaService: FrecuenciaService,
@@ -224,8 +224,8 @@ export class ClienteFormComponent implements OnInit {
       let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
       // console.log(dias_cobro);
 
-      const formArray: FormArray = this.editarClienteForm.get("dias_cobro") as FormArray; // obtengo el campo del formulario angular
-      dias_cobro.map((numberDay:number) => formArray.push(new FormControl(numberDay)) )// ingreso el valor de los dias en el formulario angular
+      const formArray: UntypedFormArray = this.editarClienteForm.get("dias_cobro") as UntypedFormArray; // obtengo el campo del formulario angular
+      dias_cobro.map((numberDay:number) => formArray.push(new UntypedFormControl(numberDay)) )// ingreso el valor de los dias en el formulario angular
 
       let arrayInput = Array.from(this.diasCobroInput.nativeElement.querySelectorAll('input[type="checkbox"]'))
       arrayInput.map((input: any, i: number) => {
@@ -241,10 +241,10 @@ export class ClienteFormComponent implements OnInit {
   changeValueFormArray({ name, value, checked }) {
     // console.log({ name, value, checked });
     
-    const formArray: FormArray = this.editarClienteForm.get(name) as FormArray;
+    const formArray: UntypedFormArray = this.editarClienteForm.get(name) as UntypedFormArray;
 
     if (checked) {
-      formArray.push(new FormControl(value));
+      formArray.push(new UntypedFormControl(value));
     } else {
       // console.log(formArray.controls);
       

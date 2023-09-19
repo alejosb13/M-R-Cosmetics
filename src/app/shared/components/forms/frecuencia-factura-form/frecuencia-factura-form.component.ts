@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Frecuencia } from 'app/shared/models/Frecuencia.model';
 import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
 import Swal from 'sweetalert2';
@@ -11,8 +11,8 @@ import { FrecuenciaFacturaService } from 'app/shared/services/frecuenciaFactura.
   styleUrls: ['./frecuencia-factura-form.component.css']
 })
 export class FrecuenciaFacturaFormComponent implements OnInit {
-  FrecuenciaForm: FormGroup;
-  EstadoForm: FormGroup;
+  FrecuenciaForm: UntypedFormGroup;
+  EstadoForm: UntypedFormGroup;
 
   daysOfWeek:string[]
   loadInfo:boolean = false;
@@ -21,7 +21,7 @@ export class FrecuenciaFacturaFormComponent implements OnInit {
   @Output() FormsValues = new EventEmitter<Frecuencia>();
   
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public _FrecuenciaFacturaService: FrecuenciaFacturaService,
   ) {}
 
