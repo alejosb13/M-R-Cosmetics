@@ -52,7 +52,7 @@
             <th scope="col">Email</th>
             <th scope="col">Recibo</th>
             <th scope="col">U.Recibo</th>
-            <th scope="col">Meta</th>
+            <!-- <th scope="col">Meta</th> -->
             <th scope="col">Estado</th>
             <th *ngIf="isAdmin " scope="col">Opciones</th>
           </tr>
@@ -96,7 +96,7 @@
                 ---
               </div>
             </td>
-            <td>
+            <!-- <td>
               <div
                 class="font-weight-bold"
                 *ngIf="usuario.meta"
@@ -113,7 +113,7 @@
               >
                 <i class="fas fa-dollar-sign text-danger"></i> Agregar
               </div>
-            </td>
+            </td> -->
             <td>
               <span *ngIf="usuario.estado">Activo</span>
               <span *ngIf="!usuario.estado">Inactivo</span>

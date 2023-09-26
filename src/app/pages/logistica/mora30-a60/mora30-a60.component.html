@@ -62,7 +62,7 @@
           <tr *ngFor="let factura of _TablasService.datosTablaStorage">
             <th scope="row">{{ factura.id }}</th>
             <td>
-              {{ factura.cliente.nombreCompleto }}
+              <a [routerLink]="[ '/cliente','estado-cuenta',factura.cliente.id ]" target="_blank" class="text-dark">{{ factura.cliente.nombreCompleto }}</a>
             </td>
             <td>
               {{ factura.cliente.nombreEmpresa }}
