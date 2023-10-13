@@ -69,6 +69,7 @@ import { FrecuenciaFacturaInsertarComponent } from "app/pages/frecuencia-factura
 import { FrecuenciaFacturaEditarComponent } from "app/pages/frecuencia-facturas/frecuencia-factura-editar/frecuencia-factura-editar.component";
 import { CierreConfigComponent } from "app/pages/configuracion/cierre-config/cierre-config.component";
 import { ClienteProductosCompradosComponent } from "app/pages/clientes/cliente-productos-comprados/cliente-productos-comprados.component";
+import { VentasMensualComponent } from "app/pages/ventas-mensual/ventas-mensual.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -116,6 +117,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "clientes-reactivados", component: ClientesReactivadosComponent },
       { path: "ventas", component: VentasComponent },
       { path: "productos-vendedores", component: ProductosVendedorComponent },
+      { path: "ventas-mensual", component: VentasMensualComponent },
     ],
   },
 
@@ -193,7 +195,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "pedido",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR, SUPERVISOR, VENDEDOR] },
+    data: { role: [ADMINISTRADOR, VENDEDOR] },
     children: [{ path: "", component: FacturaInsertarComponent }],
   },
   {

@@ -1,7 +1,7 @@
 import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
 import { Meta } from "./Meta.model";
-import { Recibo } from "./Recibo.model";
+import { Recibo, RecibosRangosSinTerminar } from "./Recibo.model";
 import { ReciboHistorial } from './ReciboHistorial.model';
 
 export interface Usuario {
@@ -25,6 +25,7 @@ export interface Usuario {
   role_id?: number;
   created_at?: Date;
   updated_at?: Date;
+  recibosRangosSinTerminar?:RecibosRangosSinTerminar[]
 }
 
 export interface UsuarioServ { // se usa para insertar o modificar

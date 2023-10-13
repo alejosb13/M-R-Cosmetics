@@ -225,6 +225,15 @@ export class LogisticaService {
     );
   }
 
+  getVentasMes(bodyform:CarteraDateBodyForm): Observable<any> {
+
+    return this.http.post<any>(
+      `${Logistica}/ventas-mensual`,
+      bodyform,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   getDashboard(user_id:number): Observable<any> {
     
     // `${Logistica}/resumen-dashboard`,

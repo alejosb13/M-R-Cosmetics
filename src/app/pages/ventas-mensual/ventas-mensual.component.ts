@@ -23,11 +23,11 @@ type Recuperacion = {
 };
 
 @Component({
-  selector: "app-recuperacion85",
-  templateUrl: "./recuperacion85.component.html",
-  styleUrls: ["./recuperacion85.component.css"],
+  selector: "app-ventas-mensual",
+  templateUrl: "./ventas-mensual.component.html",
+  styleUrls: ["./ventas-mensual.component.scss"],
 })
-export class Recuperacion85Component implements OnInit {
+export class VentasMensualComponent {
   page = 1;
   pageSize = environment.PageSize;
   collectionSize = 0;
@@ -171,60 +171,34 @@ export class Recuperacion85Component implements OnInit {
     };
 
     this._LogisticaService
-      .getRecuperacion(bodyForm)
-      .pipe(
-        map((recuperaciones) => {
-          let response = recuperaciones.filter(
-            (recuperacion: any) => recuperacion.user_id == this.userId
-          );
+      .getVentasMes(bodyForm)
+      // .pipe(
+      //   map((recuperaciones) => {
+      //     let response = recuperaciones.filter(
+      //       (recuperacion: any) => recuperacion.user_id == this.userId
+      //     );
 
-          // logger.log(response);
-          return this.isAdmin || this.isSupervisor ? recuperaciones : response;
-        })
-      )
+      //     // logger.log(response);
+      //     return this.isAdmin || this.isSupervisor ? recuperaciones : response;
+      //   })
+      // )
       .subscribe(
         (recuperacion) => {
           logger.log(recuperacion);
           // this.recuperacionPorcentaje = recuperacion.recuperacionPorcentaje;
           // this.total = data.length
 
-          this.Data = recuperacion;
-          this._TablasService.datosTablaStorage = recuperacion;
+          this.Data = recuperacion.listadoVentas;
+          this._TablasService.datosTablaStorage = recuperacion.listadoVentas;
           this._TablasService.total = 0;
           this._TablasService.busqueda = "";
 
           this.refreshCountries();
           this.isLoad = false;
 
-          this.totalAbonos = recuperacion
-            .reduce(
-              (accumulator, currentValue) =>
-                accumulator + currentValue.abonosTotalLastMount,
-              0
-            )
-            .toFixed(2);
-          this.totalMetas = recuperacion
-            .reduce(
-              (accumulator, currentValue) =>
-                accumulator + currentValue.recuperacionTotal,
-              0
-            )
-            .toFixed(2);
-          this.recuperacionPorcentaje = Number(
-            (this.totalAbonos / this.totalMetas) * 100
-          ).toFixed(2);
-
-          //   if ($responserNewrecuperacionQuery["recuperacionTotal"] > 0) {
-          //     $totalMetas += $responserNewrecuperacionQuery["recuperacionTotal"];
-          //     $totalAbonos += $responserNewrecuperacionQuery["abonosTotalLastMount"];
-          //     $contadorUsers++;
-          // }
-          //   $response["recuperacionMensual"] = [
-          //     "abonosTotalLastMount" => $totalAbonos,
-          //     "recuperacionTotal" => $totalMetas,
-          //     "contadorUsers" => $contadorUsers,
-          //     "recuperacionPorcentaje" => decimal(($totalAbonos / $totalMetas) * 100),
-          // ];
+          this.totalAbonos = recuperacion.totalVentas
+          this.totalMetas = recuperacion.totalMetas
+          this.recuperacionPorcentaje = recuperacion.porcentaje
         },
         (error) => {
           this.isLoad = false;

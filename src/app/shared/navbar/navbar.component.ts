@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ROUTES } from '../../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { Location} from '@angular/common';
@@ -24,6 +24,9 @@ export class NavbarComponent implements OnInit{
     private toggleButton;
     private sidebarVisible: boolean;
 
+
+    isAdmin:boolean
+    isSupervisor:boolean
     UserInfo:UserAuth
 
 
@@ -32,7 +35,6 @@ export class NavbarComponent implements OnInit{
 
     constructor(
       location:Location,
-      private renderer : Renderer2,
       private element : ElementRef,
       private router: Router,
       public _CheckoutService: CheckoutService,
@@ -50,6 +52,8 @@ export class NavbarComponent implements OnInit{
 
     ngOnInit(){
       this.UserInfo = this._AuthService.dataStorage.user
+      this.isAdmin = this._AuthService.isAdmin();
+      this.isSupervisor = this._AuthService.isSupervisor();
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       var navbar : HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];

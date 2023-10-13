@@ -11,3 +11,14 @@ export interface Recibo {
   updated_at?: Date;
   user?: Usuario;
 }
+
+export interface RecibosRangosSinTerminar {
+  id?: number
+  user_id: number
+  rango: string
+  recibos_faltantes: string
+  habilitado: number
+  estado: number
+  created_at?: string
+  updated_at?: string
+}

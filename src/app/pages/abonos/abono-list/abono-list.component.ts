@@ -67,7 +67,8 @@ export class AbonoListComponent implements OnInit {
     private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
-    private _AbonoService: AbonoService
+    private _AbonoService: AbonoService,
+    private _ReciboService: ReciboService
   ) {}
 
   ngOnInit(): void {
@@ -290,6 +291,34 @@ export class AbonoListComponent implements OnInit {
       })
     }
  
+  }
+
+  eliminarRecibo(reciboEliminar: Abono) {
+    console.log(reciboEliminar);
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Al eliminar este abono se eliminará también el recibo asociado a él y no podrás recuperarlo.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._ReciboService
+          .deleteReciboHistorialCredito(reciboEliminar.recibo_historial.id)
+          .subscribe((data) => {
+            this.Abonos = this.Abonos.filter(
+              (abono) => abono.recibo_historial.id != reciboEliminar.recibo_historial.id
+            );
+            Swal.fire({
+              text: data[0],
+              icon: "success",
+            });
+          });
+      }
+    });
   }
 
   ngOnDestroy() {

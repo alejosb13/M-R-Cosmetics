@@ -18,7 +18,7 @@
           >
             Filtros <i class="fas fa-filter"></i>
           </button>
-          <a class="btn btn-primary" routerLink="/abono/agregar">
+          <a class="btn btn-primary" routerLink="/abono/agregar" *ngIf="!isSupervisor">
             <i class="fas fa-plus"></i>
             Agregar
           </a>
@@ -34,9 +34,7 @@
           >
         </div>
 
-        <form
-          class="d-flex align-items-center justify-content-end buscador"
-        >
+        <form class="d-flex align-items-center justify-content-end buscador">
           <div class="form-label-group input-group">
             <input
               type="text"
@@ -111,6 +109,14 @@
                   (click)="editarAbono(contentAbonoEditar, abono)"
                 >
                   <i class="fas fa-pencil-alt"></i>
+                </div>
+                <div
+                  class="mr-3 text-warning pointer"
+                  ngbTooltip="Eliminar"
+                  (click)="eliminarRecibo(abono)"
+                  *ngIf="isAdmin || isSupervisor"
+                >
+                  <i class="text-danger far fa-trash-alt"></i>
                 </div>
               </div>
             </td>
@@ -207,18 +213,18 @@
           />
         </div>
       </div>
-      <!-- <div class="col-md-6" *ngIf="isAdmin">
-          <div class="form-group tipehead">
-            <p class="font-weight-bold">Número de recibo</p>
-            <input
-              id="typeahead-focus"
-              type="text"
-              class="form-control"
-              name="recibo"
-              [(ngModel)]="numeroRecibo"
-            />
-          </div>
-        </div> -->
+      <div class="col-md-6" *ngIf="isAdmin">
+        <div class="form-group tipehead">
+          <p class="font-weight-bold">Número de recibo</p>
+          <input
+            id="typeahead-focus"
+            type="text"
+            class="form-control"
+            name="recibo"
+            [(ngModel)]="numeroRecibo"
+          />
+        </div>
+      </div>
       <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
         <p class="font-weight-bold">Usuarios</p>
         <select name="" id="" class="form-control" [(ngModel)]="userId">
@@ -306,10 +312,7 @@
         </button>
       </div>
       <div class="col text-center">
-        <button
-          class="btn btn-primary"
-          (click)="editarAbonoEnviar()"
-        >
+        <button class="btn btn-primary" (click)="editarAbonoEnviar()">
           Editar
         </button>
       </div>

@@ -19,23 +19,22 @@
       </a> -->
         <div class="col-md-12">
           <div class="d-flex flex-row justify-content-between mt-3">
-            <div class="card-title align-items-start flex-column">
-              <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
-              <!-- <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de clientes: {{ _TablasService.total }}</span> -->
-            </div>
 
-            <form class="d-flex align-items-center col-4 buscador pr-0">
+            <button class="btn btn-primary align-self-center mt-0" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+            <!-- <form class="d-flex align-items-center col-4 buscador pr-0">
                 <div class="form-label-group w-100">
                     <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
                     <label for="inputEmail">Buscar</label>
                 </div>
-            </form>
+            </form> -->
           </div>
         </div>
 
-      <div class="col-md-12 d-flex justify-content-between flex-wrap" *ngIf="isAdmin">
-        <button class="btn btn-primary align-self-center" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
-      </div>
+        <div class="card-title align-items-start flex-column col" *ngIf="isAdmin || isSupervisor">
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total abonos: <b>{{totalAbonos }}</b></span><br>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total metas: <b>{{ totalMetas }}</b></span><br>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Porcentaje recuperación: <b>{{ recuperacionPorcentaje }}%</b></span>
+        </div>
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
