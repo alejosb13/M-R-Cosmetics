@@ -10,7 +10,7 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <a class="btn btn-primary" routerLink="/categoria/agregar">
+      <a class="btn btn-primary" routerLink="/categoria/agregar" *ngIf="isAdmin">
         <i class="fas fa-plus"></i>
         Agregar
       </a>
@@ -53,7 +53,7 @@
             <th scope="col">Monto minimo</th>
             <th scope="col">Monto máximo</th>
             <th scope="col">Estado</th>
-            <th scope="col">Opercaciones</th>
+            <th scope="col" *ngIf="isAdmin">Opercaciones</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -74,7 +74,7 @@
               <span *ngIf="categoria.estado == 0">Inactiva</span>
               <span *ngIf="categoria.estado == 1">Activa</span>
             </td>
-            <td>
+            <td *ngIf="isAdmin">
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="Editar">
                   <a [routerLink]="['/categoria', 'editar', categoria.id]"

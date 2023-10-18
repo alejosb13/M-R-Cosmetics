@@ -30,38 +30,37 @@
     </div>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-4" *ngIf="isSupervisor || isAdmin">
     <div
       class="card card-stats"
-      [routerLink]="['/logistica', 'ventas']"
+      [routerLink]="['/logistica', 'ventas-mensual']"
       role="button"
-      style="background-color: #eb3160"
+      style="background-color: #eb5836"
     >
       <div class="card-body">
         <div class="row" *ngIf="!isLoad; else spinnerTemplate">
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.ventas_meta_porcentaje }}%
+                >{{ response.ventas_mes_porcentaje }}%
               </span>
               <span class="data-2 text-white">
-                {{ response.ventas_meta_total | currency : "USD" }}
+                {{ response.ventas_mes_total | currency : "USD" }}
                 |
-                {{ response.ventas_meta_monto | currency : "USD" }}
+                {{ response.ventas_mes_meta | currency : "USD" }}
               </span>
             </div>
             <div
               class="text-center rounded-bottom py-1 text-white font-weight-bold"
-              style="background-color: #d42858"
+              style="background-color: #d44e35"
             >
-              Ventas
+              Ventas Mensual
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   <div class="col-md-4">
     <div
       class="card card-stats"
@@ -94,37 +93,48 @@
     </div>
   </div>
 
-  <div class="col-md-4"  *ngIf="isSupervisor || isAdmin">
+  <div class="col-md-4">
     <div
       class="card card-stats"
-      [routerLink]="['/logistica', 'ventas-mensual']"
+      [routerLink]="['/logistica', 'ventas']"
       role="button"
-      style="background-color: #eb5836"
+      style="background-color: #eb3160"
     >
       <div class="card-body">
         <div class="row" *ngIf="!isLoad; else spinnerTemplate">
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
-              <span class="data-1 w-100 d-block text-white"
-                >{{ response.ventas_mes_porcentaje }}%
-              </span>
-              <span class="data-2 text-white">
-                {{ response.ventas_mes_total | currency : "USD" }}
-                |
-                {{ response.ventas_mes_meta | currency : "USD" }}
-              </span>
+              <ng-container
+                *ngIf="!isAdmin && !isSupervisor; else elseVentaIndice"
+              >
+                <span class="data-1 w-100 d-block text-white"
+                  >{{ response.ventas_meta_porcentaje }}%
+                </span>
+                <span class="data-2 text-white">
+                  {{ response.ventas_meta_total | currency : "USD" }}
+                  |
+                  {{ response.ventas_meta_monto | currency : "USD" }}
+                </span>
+              </ng-container>
             </div>
             <div
               class="text-center rounded-bottom py-1 text-white font-weight-bold"
-              style="background-color: #d44e35"
+              style="background-color: #d42858"
             >
-              Ventas Mensual
+              Ventas
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <ng-template #elseVentaIndice>
+    <span class="data-1 w-100 d-block text-white">
+      {{ response.ventas_meta_total | currency : "USD" }}
+      |
+      {{ response.ventas_meta_monto | currency : "USD" }}
+    </span>
+  </ng-template>
 
   <div class="col-md-4">
     <div

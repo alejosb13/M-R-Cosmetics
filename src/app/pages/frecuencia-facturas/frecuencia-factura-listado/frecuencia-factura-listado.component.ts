@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'app/auth/login/service/auth.service';
 import { Frecuencia } from 'app/shared/models/Frecuencia.model';
 import { FrecuenciaFactura } from 'app/shared/models/FrecuenciaFactura.model';
 import { FrecuenciaService } from 'app/shared/services/frecuencia.service';
@@ -18,13 +19,19 @@ export class FrecuenciaFacturaListadoComponent implements OnInit {
   collectionSize = 0;
   FrecuenciasFacturas: FrecuenciaFactura[];
   isLoad:boolean
-
+  isAdmin: boolean;
+  isSupervisor: boolean;
+  
   constructor(
     private _FrecuenciaFacturaService:FrecuenciaFacturaService,
     private _TablasService:TablasService,
+    private _AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin();
+    this.isSupervisor = this._AuthService.isSupervisor();
+
     this.asignarValores()
   }
 

@@ -32,7 +32,7 @@ export class AbonoListComponent implements OnInit {
   TiposMetodos = TiposMetodos;
   numeroRecibo: string = "";
 
-  metodoPagoEditar: number ;
+  metodoPagoEditar: number;
   detallePagoEditar: string = "";
   editarAbonoId: number;
 
@@ -193,8 +193,11 @@ export class AbonoListComponent implements OnInit {
       if (!submit) {
         console.log(this.userId);
 
-        // this.userId = Number(this._AuthService.dataStorage.user.userId);
-        this.userId = 0;
+        if (this.isAdmin || this.isSupervisor) {
+          this.userId = 0;
+        } else {
+          this.userId = Number(this._AuthService.dataStorage.user.userId);
+        }
       }
 
       if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
@@ -261,36 +264,34 @@ export class AbonoListComponent implements OnInit {
 
   editarAbonoEnviar() {
     logger.log({
-      metodoPagoEditar: this.metodoPagoEditar ,
-      detallePagoEditar:this.detallePagoEditar
+      metodoPagoEditar: this.metodoPagoEditar,
+      detallePagoEditar: this.detallePagoEditar,
     });
-    if(this.metodoPagoEditar && this.detallePagoEditar){
+    if (this.metodoPagoEditar && this.detallePagoEditar) {
       this._AbonoService
-      .updateAbono(this.editarAbonoId, {
-        metodoPagoEditar: this.metodoPagoEditar,
-        detallePagoEditar: this.detallePagoEditar,
-      })
-      .subscribe(
-        (data) => {
-          Swal.fire({
-            text: "Abono modificado con exito",
-            icon: 'success',
-          }).then((result) => {
-            window.location.reload()
-          })
-
-        },
-        (error) => {
-          this.isLoad = false;
-        }
-      );
-    }else{
+        .updateAbono(this.editarAbonoId, {
+          metodoPagoEditar: this.metodoPagoEditar,
+          detallePagoEditar: this.detallePagoEditar,
+        })
+        .subscribe(
+          (data) => {
+            Swal.fire({
+              text: "Abono modificado con exito",
+              icon: "success",
+            }).then((result) => {
+              window.location.reload();
+            });
+          },
+          (error) => {
+            this.isLoad = false;
+          }
+        );
+    } else {
       Swal.fire({
         text: "Complete todos los campos",
-        icon: 'warning',
-      })
+        icon: "warning",
+      });
     }
- 
   }
 
   eliminarRecibo(reciboEliminar: Abono) {
@@ -310,7 +311,8 @@ export class AbonoListComponent implements OnInit {
           .deleteReciboHistorialCredito(reciboEliminar.recibo_historial.id)
           .subscribe((data) => {
             this.Abonos = this.Abonos.filter(
-              (abono) => abono.recibo_historial.id != reciboEliminar.recibo_historial.id
+              (abono) =>
+                abono.recibo_historial.id != reciboEliminar.recibo_historial.id
             );
             Swal.fire({
               text: data[0],

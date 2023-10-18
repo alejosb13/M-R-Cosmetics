@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { AuthService } from "app/auth/login/service/auth.service";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
 import { TablasService } from "app/shared/services/tablas.service";
@@ -16,13 +17,19 @@ export class CategoriaListComponent implements OnInit {
   collectionSize = 0;
   Categorias: Categoria[];
   isLoad: boolean;
+  isAdmin: boolean;
+  isSupervisor: boolean;
 
   constructor(
     private _CategoriaService: CategoriaService,
+    private _AuthService: AuthService,
     private _TablasService: TablasService
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this._AuthService.isAdmin();
+    this.isSupervisor = this._AuthService.isSupervisor();
+
     this.asignarValores();
   }
 

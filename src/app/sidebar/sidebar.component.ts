@@ -13,7 +13,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/inicio',                     title: 'Inicio',               icon:'nc-icon nc-shop',               class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/cliente',                    title: 'Cliente',              icon:'nc-icon nc-single-02',          class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/producto',                   title: 'Producto',             icon:'fas fa-truck-loading',          class: '' , access: 'administrador'},
-  { path: '/usuario',                    title: 'Usuario',              icon:'fas fa-user-tie',               class: '' , access: 'administrador,supervisor'},
+  { path: '/usuario',                    title: 'Usuario',              icon:'fas fa-user-tie',               class: '' , access: 'administrador'},
   { path: '/factura/estado/no-pagadas',  title: 'Factura sin pagar',    icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/factura/estado/pagadas',     title: 'Factura Pagadas',      icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},
   { path: '/factura/despachar',          title: 'F. Por Despachar',     icon:'fas fa-receipt',                class: '' , access: 'administrador,vendedor,supervisor'},

@@ -18,7 +18,8 @@
             "polyfills": "src/polyfills.ts",
             "allowedCommonJsDependencies": [
               "chart.js",
-              "sweetalert2"
+              "sweetalert2",
+              "moment"
             ],
             "assets": [
               "src/assets",

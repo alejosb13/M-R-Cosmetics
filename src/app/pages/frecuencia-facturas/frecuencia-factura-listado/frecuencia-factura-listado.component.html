@@ -13,7 +13,7 @@
   <ng-container  *ngIf="!isLoad ">
 
     <div class=" card-header border-0 pt-4  bg-white">
-      <a class="btn btn-primary" routerLink="/frecuencia-factura/agregar">
+      <a class="btn btn-primary" routerLink="/frecuencia-factura/agregar" *ngIf="isAdmin">
         <i class="fas fa-plus"></i>
         Agregar
       </a>
@@ -41,7 +41,7 @@
             <th scope="col">Descripcion</th>
             <th scope="col">Numero de días</th>
             <th scope="col">Estado</th>
-            <th scope="col">Opercaciones</th>
+            <th scope="col" *ngIf="isAdmin">Opercaciones</th>
           </tr>
 
         </thead>
@@ -54,7 +54,7 @@
                   <span *ngIf="frecuencia.estado == 0">Inactiva</span>
                   <span *ngIf="frecuencia.estado == 1">Activa</span>
               </td>
-            <td>
+            <td *ngIf="isAdmin">
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="Editar">
                   <a [routerLink]="[ '/frecuencia-factura','editar',frecuencia.id]" ><i class="fas fa-pencil-alt"></i></a>
