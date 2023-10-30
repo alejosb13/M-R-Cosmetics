@@ -10,10 +10,9 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <!-- <a class="btn btn-primary" routerLink="/factura/agregar">
-        <i class="fas fa-plus"></i>
-        Agregar
-      </a> -->
+      <button class="btn btn-primary mr-2" (click)="openFiltros(filtroModal)" *ngIf="isAdmin || isSupervisor">
+        Filtros <i class="fas fa-filter"></i>
+      </button>
       <div class="d-flex flex-row justify-content-between mt-3">
         <div class="card-title align-items-start flex-column">
           <!-- <a href="" class="btn-primary btn" routerLink="/factura/despachar">Por despachar</a> -->
@@ -23,9 +22,7 @@
           >
         </div>
 
-        <form
-          class="d-flex align-items-center justify-content-end buscador"
-        >
+        <form class="d-flex align-items-center justify-content-end buscador">
           <div class="form-label-group input-group">
             <input
               type="email"
@@ -154,3 +151,88 @@
     </div>
   </ng-container>
 </div>
+
+
+<ng-template #filtroModal let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
+        </div>
+      </div>
+    </div> -->
+    <div class="row">
+      <!-- <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
+        </div>
+      </div> -->
+      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
+        <p class="font-weight-bold">Usuarios</p>
+        <select name="" id="" class="form-control" [(ngModel)]="userId">
+          <!-- <option value="0">Todos los usuarios</option> -->
+          <option
+            *ngFor="let usuario of userStore"
+            [selected]="usuario.id == userId"
+            [value]="usuario.id"
+          >
+            {{ usuario.name }} {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -15,7 +15,7 @@
         Agregar
       </a> -->
       <div class="col-md-12">
-        <div class="d-flex flex-row justify-content-between mt-3">
+        <div class="d-flex flex-row justify-content-between mt-3 flex-wrap">
           <div class="card-title align-items-start flex-column">
             <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
             <span class="fuvi-text-black mt-1 fw-bold fs-5"
@@ -42,9 +42,12 @@
       </div>
 
       <div
-        class="col-md-12 d-flex justify-content-between flex-wrap"
+        class="col-md-12 d-flex  flex-wrap"
         *ngIf="isAdmin || isSupervisor"
       >
+        <button class="btn btn-primary mr-3" (click)="descargarPDF()">
+          <i class="fas fa-file-download fa-lg"></i> Descargar
+        </button>
         <!-- <span class="font-weight-bold">Monto total facturas: {{ total | currency:"USD"}}</span> -->
         <button class="btn btn-primary" (click)="openFiltros(contentEditar)">
           Filtros <i class="fas fa-filter"></i>

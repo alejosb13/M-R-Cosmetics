@@ -14,6 +14,7 @@ import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
 import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cliente-inactivos',
@@ -280,5 +281,40 @@ export class ClienteInactivosComponent implements OnInit {
 
 
     }
+  }
+
+  descargarPDF(){
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    let bodyForm: CarteraDateBodyForm = {
+      dateIni: this.filtros.dateIni,
+      dateFin: this.filtros.dateFin,
+      userId: Number(this.filtros.userId),
+      tipo_venta: this.filtros.tipo_venta,
+      status_pagado: this.filtros.status_pagado,
+      allDates: this.filtros.allDates,
+      allNumber: this.filtros.allNumber,
+      // numDesde:this.filtros.numDesde,
+      // numHasta:this.filtros.numHasta
+      numRecibo: Number(this.filtros.numRecibo)
+    };
+    this._LogisticaService.getClientesInactivosPDF(bodyForm).subscribe((data)=>{
+      // console.log(data);
+      this._HelpersService.downloadFile(data,`Clientes_inactivos_${this.userId}_${ this._HelpersService.changeformatDate(this._HelpersService.currentFullDay(),'MM/DD/YYYY HH:mm:ss',"DD-MM-YYYY_HH:mm:ss") }`)
+      Swal.fire(
+        '',
+        'Descarga Completada',
+        'success'
+      )
+    })
   }
 }

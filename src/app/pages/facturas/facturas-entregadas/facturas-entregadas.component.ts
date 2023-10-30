@@ -16,6 +16,8 @@ import {
   ListadoModel,
 } from "app/shared/models/Listados.model";
 import { Listado } from "app/shared/services/listados.service";
+import { Usuario } from "app/shared/models/Usuario.model";
+import { UsuariosService } from "app/shared/services/usuarios.service";
 
 @Component({
   selector: "app-facturas-entregadas",
@@ -35,7 +37,10 @@ export class FacturasEntregadasComponent implements OnInit {
   listadoData: ListadoModel<Factura>;
   listadoFilter: FiltrosList = { link: null };
   status_entrega: number;
-
+  
+  userStore: Usuario[];
+  USersNames: string[] = [];
+  
   private Subscription = new Subscription();
 
   constructor(
@@ -44,7 +49,8 @@ export class FacturasEntregadasComponent implements OnInit {
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
     private _FacturasService: FacturasService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _UsuariosService: UsuariosService
   ) {}
 
   ngOnInit(): void {
@@ -54,10 +60,13 @@ export class FacturasEntregadasComponent implements OnInit {
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
     this.despachado = 0;
 
+    this.getUsers();
+    
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.status_entrega = Number(params.get("status_entrega")) == 1 ? 1 : 0;
       console.log("this.status_entrega", this.status_entrega);
 
+      this.listadoFilter.userId = Number(this._AuthService.dataStorage.user.userId);
       this.asignarValores();
     });
 
@@ -70,8 +79,8 @@ export class FacturasEntregadasComponent implements OnInit {
     this.listadoFilter = {
       ...this.listadoFilter,
       estado: 1,
-      roleName: this.roleName,
-      userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
+      // roleName: this.roleName,
+      // userId: this.isAdmin || this.isSupervisor ? 0 : this.userId,
       status_entrega: this.status_entrega,
       created_at: "2022-07-01 00:00:00",
       despachado: 1,
@@ -195,9 +204,56 @@ export class FacturasEntregadasComponent implements OnInit {
       }
     })
   }
+  
+  getUsers() {
+    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
+      this.userStore = usuarios;
+      this.USersNames = usuarios.map(
+        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+      );
+    });
+  }
 
+
+  limpiarFiltros() {
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.roleName = String(this._AuthService.dataStorage.user.roleName);
+    this.listadoFilter.userId = this.userId
+    this.listadoFilter.roleName = this.roleName
+
+    // this.setCurrentDate();
+
+    this.aplicarFiltros();
+    // this.asignarValores();
+
+    // console.log(this.filtros);
+  }
+
+  aplicarFiltros(submit: boolean = false) {
+    this.listadoFilter.userId = Number(this.userId);
+    // Administrador = 2,
+    // Vendedor      = 3,
+    // Supervisor    = 4,
+    let user = this.userStore.find((user)=>user.id == this.listadoFilter.userId);
+    let role =  user.role_id == 3 ? "vendedor": "administrador"; 
+    this.listadoFilter.roleName = role;
+
+    this.asignarValores();
+  }
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+  }
+
+  openFiltros(content: any) {
+    // console.log(this.mesNewMeta);
+    this.listadoFilter.link = null;
+
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+    }).result.then(
+      (result) => {},
+      (reason) => {}
+    );
   }
 }

@@ -251,4 +251,20 @@ export class LogisticaService {
       {headers: this.headerJson_Token(), responseType: "json" }
     );
   }
+
+  getmora60a90PDF(options:any): Observable<any> {
+    let URL = `${environment.urlAPI}pdf/mora60a90`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+
+    return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
+  }
+
+  getClientesInactivosPDF(options:any): Observable<any> {
+    let URL = `${environment.urlAPI}pdf/clientes-inactivos`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+
+    return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
+  }
 }
