@@ -126,6 +126,8 @@ export class Recuperacion85Component implements OnInit {
       ...this.filtros,
     });
     this.asignarValores();
+    this.NgbModal.dismissAll()
+
   }
 
   setCurrentDate() {

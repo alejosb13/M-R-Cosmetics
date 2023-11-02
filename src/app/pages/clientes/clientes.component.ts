@@ -313,6 +313,7 @@ export class ClientesComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
+    this.NgbModal.dismissAll()
   }
 
   eliminar({ id }: Cliente) {

@@ -210,6 +210,8 @@ export class RecibosCreditoListComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
+    this.NgbModal.dismissAll()
+
   }
 
   eliminar(reciboEliminar: ReciboHistorial) {

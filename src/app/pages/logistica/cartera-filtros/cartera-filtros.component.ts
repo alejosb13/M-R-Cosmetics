@@ -181,6 +181,7 @@ export class CarteraFiltrosComponent implements OnInit {
     };
 
     this.asignarValores()
+    this.NgbModal.dismissAll()
   }
 
 

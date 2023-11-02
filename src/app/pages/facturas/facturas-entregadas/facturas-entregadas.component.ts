@@ -239,6 +239,7 @@ export class FacturasEntregadasComponent implements OnInit {
     this.listadoFilter.roleName = role;
 
     this.asignarValores();
+    this.NgbModal.dismissAll()
   }
 
   ngOnDestroy() {

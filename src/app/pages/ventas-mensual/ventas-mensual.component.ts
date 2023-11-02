@@ -126,6 +126,8 @@ export class VentasMensualComponent {
       ...this.filtros,
     });
     this.asignarValores();
+    this.NgbModal.dismissAll()
+
   }
 
   setCurrentDate() {

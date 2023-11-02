@@ -223,6 +223,8 @@ export class AbonoListComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
+
+    this.NgbModal.dismissAll()
   }
 
   eliminar({ id }: Abono) {

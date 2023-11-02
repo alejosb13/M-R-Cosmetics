@@ -246,6 +246,8 @@ export class VentasComponent implements OnInit {
     this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
 
     this.asignarValores();
+    this.NgbModal.dismissAll()
+
   }
 
   search: OperatorFunction<string, readonly string[]> = (

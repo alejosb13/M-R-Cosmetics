@@ -31,8 +31,8 @@
         </div>
 
         <div class="card-title align-items-start flex-column col" *ngIf="isAdmin || isSupervisor">
-          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total abonos: <b>{{totalAbonos }}</b></span><br>
-          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total metas: <b>{{ totalMetas }}</b></span><br>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total abonos: <b>{{totalAbonos|currency:"USD" }}</b></span><br>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total metas: <b>{{ totalMetas|currency:"USD" }}</b></span><br>
           <span class="fuvi-text-black mt-1 fw-bold fs-5">Porcentaje recuperación: <b>{{ recuperacionPorcentaje }}%</b></span>
         </div>
     </div>

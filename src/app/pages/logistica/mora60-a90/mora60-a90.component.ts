@@ -211,6 +211,8 @@ export class Mora60A90Component implements OnInit {
 
     this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
     this.asignarValores()
+    this.NgbModal.dismissAll()
+
   }
 
 

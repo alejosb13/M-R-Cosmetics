@@ -196,6 +196,8 @@ export class ProductosVendedorComponent implements OnInit {
       ...this.filtros,
     });
     this.asignarValores();
+    this.NgbModal.dismissAll()
+
   }
 
   search: OperatorFunction<string, readonly string[]> = (

@@ -266,6 +266,8 @@ export class MetasComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
+    this.NgbModal.dismissAll()
+
   }
 
   modificarMeta(content: any, meta: Meta) {
