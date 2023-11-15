@@ -16,11 +16,19 @@
       </a> -->
       <div class="col-md-12">
         <div class="d-flex flex-row justify-content-between mt-3 flex-wrap">
-          <div class="card-title align-items-start flex-column">
-            <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
-            <span class="fuvi-text-black mt-1 fw-bold fs-5"
-              >Total de facturas en mora: {{ _TablasService.total }}</span
-            >
+          <div class="">
+            <div class="card-title align-items-start flex-column">
+              <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
+              <span class="fuvi-text-black mt-1 fw-bold fs-5"
+                >Total de facturas en mora: {{ _TablasService.total }}</span
+              >
+            </div>
+            <div class="card-title align-items-start flex-column">
+              <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
+              <span class="fuvi-text-black mt-1 fw-bold fs-5"
+                >Total de saldo: {{ totalSaldo | currency : "USD" }}</span
+              >
+            </div>
           </div>
 
           <form class="d-flex align-items-center col-4 buscador pr-0">
@@ -41,10 +49,7 @@
         </div>
       </div>
 
-      <div
-        class="col-md-12 d-flex  flex-wrap"
-        *ngIf="isAdmin || isSupervisor"
-      >
+      <div class="col-md-12 d-flex flex-wrap" *ngIf="isAdmin || isSupervisor">
         <button class="btn btn-primary mr-3" (click)="descargarPDF()">
           <i class="fas fa-file-download fa-lg"></i> Descargar
         </button>

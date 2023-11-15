@@ -4,6 +4,7 @@ export interface CarteraDate{
   factura: Factura[];
   total:number;
   recuperacion?:number;
+  total_saldo?:number;
 }
 
 export interface CarteraDateBodyForm{

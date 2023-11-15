@@ -29,6 +29,7 @@ export class Mora60A90Component implements OnInit {
   isLoad:boolean
   isAdmin:boolean
   isSupervisor:boolean
+  totalSaldo:number
 
   Data: any[];
   filtros: any = {};
@@ -88,6 +89,7 @@ export class Mora60A90Component implements OnInit {
 
     this._LogisticaService.getMora60A90(bodyForm).subscribe((data:CarteraDate)=> {
       // console.log(data);
+      this.totalSaldo = data.total_saldo
       this.Data = [...data.factura]
       this._TablasService.datosTablaStorage = [...data.factura]
       this._TablasService.total = data.factura.length

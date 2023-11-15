@@ -1,11 +1,9 @@
-
 <div class="row justify-content-center align-items-center login-center">
   <div class="col-md-4">
     <div class="logo-image-small">
       <img src="assets/img/logos/logo-t.png" />
     </div>
     <div class="card card-user">
-      
       <div class="card-header text-center">
         <h5 class="card-title font-weight-bold">Login</h5>
       </div>
@@ -117,7 +115,11 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <button class="btn btn-primary btn-block" type="submit">
+              <button
+                class="btn btn-primary btn-block"
+                type="submit"
+                [disabled]="isValidForm()"
+              >
                 Acceder
               </button>
             </div>

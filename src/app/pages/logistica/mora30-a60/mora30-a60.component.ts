@@ -27,6 +27,7 @@ export class Mora30A60Component implements OnInit {
   isLoad:boolean
   isAdmin:boolean
   isSupervisor:boolean
+  totalSaldo: number =0;
 
   Data: any[];
   filtros: any = {};
@@ -90,7 +91,8 @@ export class Mora30A60Component implements OnInit {
       this._TablasService.datosTablaStorage = [...data.factura]
       this._TablasService.total = data.factura.length
       this._TablasService.busqueda = ""
-
+      this.totalSaldo = data.total_saldo
+      
       this.refreshCountries()
       this.isLoad =false
     },(error)=>{

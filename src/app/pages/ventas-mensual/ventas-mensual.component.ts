@@ -11,7 +11,7 @@ import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/utils/logger";
 import { environment } from "environments/environment";
-import { map } from "rxjs/operators";
+
 type Recuperacion = {
   facturasTotal: number;
   abonosTotal: number;
