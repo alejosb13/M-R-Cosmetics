@@ -6,8 +6,8 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { RememberFiltersService } from "app/shared/services/remember-filters.service";
-import { ValidFunctionsValidator } from "app/shared/validations/valid-functions.validator";
-import logger from "app/utils/logger";
+import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
+import logger from "app/shared/utils/logger";
 import Swal from "sweetalert2";
 import { Auth } from "./models/auth.model";
 import { AuthService } from "./service/auth.service";

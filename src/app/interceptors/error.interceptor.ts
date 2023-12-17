@@ -7,7 +7,7 @@ import {
   HttpErrorResponse,
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import Swal from "sweetalert2";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { catchError, map, tap } from "rxjs/operators";

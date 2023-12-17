@@ -17,7 +17,7 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import { RememberFiltersService } from "app/shared/services/remember-filters.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { MetaService } from "app/shared/services/meta.service";
 import { HttpErrorResponse } from "@angular/common/http";
 

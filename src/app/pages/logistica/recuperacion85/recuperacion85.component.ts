@@ -9,7 +9,7 @@ import { LogisticaService } from "app/shared/services/logistica.service";
 import { RememberFiltersService } from "app/shared/services/remember-filters.service";
 import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
 import { map } from "rxjs/operators";
 type Recuperacion = {

@@ -5,7 +5,7 @@ import { Factura } from "app/shared/models/Factura.model";
 import { FiltrosList } from "app/shared/models/Listados.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { LogisticaService } from "app/shared/services/logistica.service";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { map } from "rxjs/operators";
 
 @Component({

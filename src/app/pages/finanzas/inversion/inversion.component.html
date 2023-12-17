@@ -1,0 +1,39 @@
+<div class="bg-white container-fluid">
+  <div class="card-header border-0 pt-4 bg-white">
+    <div>
+      <div class="d-flex justify-content-start flex-wrap">
+        <button
+          class="btn btn-primary"
+          (click)="openModal(modalInversion, { windowClass: 'xlModal' })"
+        >
+          Agregar <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body py-3 px-6"></div>
+</div>
+
+<ng-template #modalInversion let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Nueva inversión</h4>
+    </div>
+    <button
+      type="button"
+      class="close btn-icon btn-sm pointer"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <app-inversion-form
+        (FormsValues)="FormsValues($event)"
+      ></app-inversion-form>
+    </div>
+  </div>
+</ng-template>

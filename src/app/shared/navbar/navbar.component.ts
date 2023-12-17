@@ -7,7 +7,7 @@ import { FacturaDetalle } from '../models/FacturaDetalle.model';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { UserAuth } from 'app/auth/login/models/auth.model';
 import { RememberFiltersService } from '../services/remember-filters.service';
-import logger from 'app/utils/logger';
+import logger from 'app/shared/utils/logger';
 
 @Component({
     moduleId: module.id,
@@ -83,6 +83,7 @@ export class NavbarComponent implements OnInit{
       if(titlee.includes("logistica/ventas") )                return "Ventas";
       if(titlee.includes("logistica/clientes-inactivos") )    return "Clientes Inactivos";
       if(titlee.includes("logistica/productos-vendedores") )  return "Productos Vendidos";
+      if(titlee.includes("finanzas/inversion") )              return "Inversión";
       if(titlee.includes("factura/entrega/0") )               return "Factura Por Entregar";
 
       for(var item = 0; item < this.listTitles.length; item++){

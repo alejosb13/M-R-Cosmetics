@@ -13,7 +13,7 @@ import { MetaService } from "app/shared/services/meta.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
 import Swal from "sweetalert2";
 import { AuthService } from "../../auth/login/service/auth.service";

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import logger from 'app/utils/logger';
+import logger from 'app/shared/utils/logger';
 import * as moment from 'moment';
 
 @Injectable({

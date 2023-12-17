@@ -70,6 +70,8 @@ import { FrecuenciaFacturaEditarComponent } from "app/pages/frecuencia-facturas/
 import { CierreConfigComponent } from "app/pages/configuracion/cierre-config/cierre-config.component";
 import { ClienteProductosCompradosComponent } from "app/pages/clientes/cliente-productos-comprados/cliente-productos-comprados.component";
 import { VentasMensualComponent } from "app/pages/ventas-mensual/ventas-mensual.component";
+import { FinanzasSeccionesComponent } from "app/pages/finanzas/finanzas-secciones/finanzas-secciones.component";
+import { InversionComponent } from "app/pages/finanzas/inversion/inversion.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -251,6 +253,20 @@ export const AdminLayoutRoutes: Routes = [
       },
       { path: "taza-cotizacion", component: TazaCotizacionComponent },
       { path: "cierre", component: CierreConfigComponent },
+    ],
+  },
+  {
+    path: "finanzas",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR] },
+    children: [
+      { path: "", component: FinanzasSeccionesComponent },
+      {
+        path: "inversion",
+        component: InversionComponent,
+      },
+      // { path: "taza-cotizacion", component: TazaCotizacionComponent },
+      // { path: "cierre", component: CierreConfigComponent },
     ],
   },
   {

@@ -6,7 +6,7 @@ import { Factura } from "../models/Factura.model";
 import { FacturaCheckout } from "../models/FacturaCheckout.model";
 import { FacturaDetalle } from "../models/FacturaDetalle.model";
 import { Producto } from "../models/Producto.model";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 
 const FacturaURL = `${environment.urlAPI}facturas`;
 @Injectable({

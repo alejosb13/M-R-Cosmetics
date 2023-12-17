@@ -7,7 +7,7 @@ import { CategoriaService } from 'app/shared/services/categoria.service';
 import { ClientesService } from 'app/shared/services/clientes.service';
 import { FrecuenciaService } from 'app/shared/services/frecuencia.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
-import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
 import Swal from 'sweetalert2';
 import { Usuario } from 'app/shared/models/Usuario.model';
 import { UsuariosService } from 'app/shared/services/usuarios.service';

@@ -1,0 +1,7 @@
+<ng-container *ngIf="errors && messages">
+  <div
+    class="invalid-feedback"
+    *ngFor="let error of errors | keyvalue"
+    [innerHtml]="messages[error.key]"
+  ></div>
+</ng-container>

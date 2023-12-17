@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Producto } from 'app/shared/models/Producto.model';
-import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
 import Swal from 'sweetalert2';
 import { Regalo } from '../../../models/Regalo';
 

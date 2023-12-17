@@ -19,7 +19,7 @@ import { HelpersService } from "app/shared/services/helpers.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { Abono } from "app/shared/models/Abono.model";
 import { AbonoService } from "app/shared/services/abono.service";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 
 @Component({

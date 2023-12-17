@@ -16,7 +16,7 @@ import { RememberFiltersService } from "app/shared/services/remember-filters.ser
 import { HelpersService } from "app/shared/services/helpers.service";
 import { Abono } from "app/shared/models/Abono.model";
 import { AbonoService } from "app/shared/services/abono.service";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 import { ActivatedRoute } from "@angular/router";
 import { FacturaDetalle } from "app/shared/models/FacturaDetalle.model";

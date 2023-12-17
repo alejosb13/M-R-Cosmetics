@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
 import Swal from 'sweetalert2';
 
 

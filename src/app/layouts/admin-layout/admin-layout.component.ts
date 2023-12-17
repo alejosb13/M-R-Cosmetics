@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { CronService } from "app/shared/services/cron.service";
-import logger from "app/utils/logger";
+import logger from "app/shared/utils/logger";
 import { interval, Subject } from "rxjs";
 import { catchError, exhaustMap, takeUntil } from "rxjs/operators";
 

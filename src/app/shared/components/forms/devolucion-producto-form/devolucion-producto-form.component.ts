@@ -4,7 +4,7 @@ import { AuthService } from 'app/auth/login/service/auth.service';
 import { DevolucionProducto } from 'app/shared/models/DevolucionProducto.model';
 import { FacturaDetalle } from 'app/shared/models/FacturaDetalle.model';
 import { Producto } from 'app/shared/models/Producto.model';
-import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
 import Swal from 'sweetalert2';
 
 type ProductoDetalle = Producto & FacturaDetalle

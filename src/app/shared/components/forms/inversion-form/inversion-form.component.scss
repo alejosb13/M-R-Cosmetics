@@ -1,0 +1,21 @@
+form {
+  .form-group .input-group-prepend .input-group-text,
+  .form-group .input-group-append .input-group-text,
+  .input-group .input-group-prepend .input-group-text,
+  .input-group .input-group-append .input-group-text {
+    padding: 10px 10px 10px 10px;
+  }
+  .input-group-text {
+    background-color: #e7e7e7;
+  }
+
+  .col-input {
+    align-self: end;
+  }
+  .form-group label {
+    font-size: 0.870rem;
+  }
+  .text-disabled {
+    color: #66615B
+  }
+}

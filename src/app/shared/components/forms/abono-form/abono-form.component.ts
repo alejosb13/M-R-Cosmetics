@@ -20,8 +20,8 @@ import { CommunicationService } from "app/shared/services/communication.service"
 import { HelpersService } from "app/shared/services/helpers.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
-import { ValidFunctionsValidator } from "app/shared/validations/valid-functions.validator";
-import logger from "app/utils/logger";
+import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
+import logger from "app/shared/utils/logger";
 import { merge, Observable, of, OperatorFunction, Subject } from "rxjs";
 import { switchMap} from "rxjs/operators";
 import {

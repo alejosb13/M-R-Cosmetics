@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Producto } from 'app/shared/models/Producto.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import { ProductosService } from 'app/shared/services/productos.service';
-import { ValidFunctionsValidator } from 'app/shared/validations/valid-functions.validator';
+import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
 import Swal from 'sweetalert2';
 
 @Component({

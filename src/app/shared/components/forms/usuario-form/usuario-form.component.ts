@@ -5,7 +5,7 @@ import { Usuario, UsuarioServ } from "app/shared/models/Usuario.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { RolesService } from "app/shared/services/roles.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
-import { ValidFunctionsValidator } from "app/shared/validations/valid-functions.validator";
+import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
 import Swal from "sweetalert2";
 
 @Component({
