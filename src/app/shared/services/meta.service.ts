@@ -19,7 +19,7 @@ export class MetaService {
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
 
     let config = {
-      ContentType: "application/json",
+      'Content-Type': "application/json",
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
 

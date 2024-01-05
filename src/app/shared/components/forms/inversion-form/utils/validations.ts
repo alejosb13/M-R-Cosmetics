@@ -1,8 +1,5 @@
-import { ValidatorFn, Validators } from "@angular/forms";
-
-export interface FormGroupValidators {
-  [key: string]: ValidatorFn[];
-}
+import { Validators } from "@angular/forms";
+import { FormGroupValidators } from "app/shared/utils/interfaces";
 
 export const InversionValidators: FormGroupValidators = {
   codigo: [Validators.required, Validators.maxLength(80)],

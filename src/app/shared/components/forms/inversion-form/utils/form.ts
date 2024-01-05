@@ -57,6 +57,18 @@ export const inversionFormStructure = () => ({
   ]),
 });
 
+export const inversionTotalValues = () => ({
+  cantidad: 0,
+  costo: 0,
+  peso_porcentual: 0,
+  costo_total: 0,
+  precio_venta: 0,
+  venta_total: 0,
+  costo_real: 0,
+  ganancia_bruta: 0,
+  comision_vendedor: 0,
+});
+
 export const InversionFormBuilder = () =>
   // new FormArray([new FormGroup<InversionForm>(inversionFormStructure)]);
   new FormGroup({
@@ -64,3 +76,6 @@ export const InversionFormBuilder = () =>
       new FormGroup<InversionForm>(inversionFormStructure()),
     ]),
   });
+
+export const FormatInDecimalToFixed = (valor: number, decimales: number = 2):number =>
+Number(Number(valor).toFixed(decimales));

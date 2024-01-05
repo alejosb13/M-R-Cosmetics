@@ -102,8 +102,16 @@ import { ClienteProductosCompradosComponent } from "app/pages/clientes/cliente-p
 import { VentasMensualComponent } from "app/pages/ventas-mensual/ventas-mensual.component";
 import { FinanzasSeccionesComponent } from "app/pages/finanzas/finanzas-secciones/finanzas-secciones.component";
 import { InversionFormComponent } from "app/shared/components/forms/inversion-form/inversion-form.component";
-import { InversionComponent } from "app/pages/finanzas/inversion/inversion.component";
+import { InversionListComponent } from "app/pages/finanzas/inversion/inversion-list/inversion-list.component";
 import { ValidErrorMessagesFormComponent } from "app/shared/components/valid-error-messages-form/valid-error-messages-form.component";
+import { InversionInsertarComponent } from "app/pages/finanzas/inversion/inversion-insertar/inversion-insertar.component";
+import { GastosListComponent } from "app/pages/finanzas/gastos/gastos-list/gastos-list.component";
+import { CostosListComponent } from "app/pages/finanzas/costos/costos-list/costos-list.component";
+import { GastosInsertarComponent } from "app/pages/finanzas/gastos/gastos-insertar/gastos-insertar.component";
+import { CostosInsertarComponent } from "app/pages/finanzas/costos/costos-insertar/costos-insertar.component";
+import { ImportacionListComponent } from "app/pages/finanzas/importacion/importacion-list/importacion-list.component";
+import { ImportacionFormComponent } from "app/shared/components/forms/importacion-form/importacion-form.component";
+import { ImportacionInsertarComponent } from "app/pages/finanzas/importacion/importacion-insertar/importacion-insertar.component";
 
 @NgModule({
   imports: [
@@ -217,9 +225,18 @@ import { ValidErrorMessagesFormComponent } from "app/shared/components/valid-err
 
     VentasMensualComponent,
     FinanzasSeccionesComponent,
-    InversionComponent,
+    InversionListComponent,
     InversionFormComponent,
-    ValidErrorMessagesFormComponent
+    ValidErrorMessagesFormComponent,
+
+    InversionInsertarComponent,
+    GastosListComponent,
+    CostosListComponent,
+    GastosInsertarComponent,
+    CostosInsertarComponent,
+    ImportacionListComponent,
+    ImportacionInsertarComponent,
+    ImportacionFormComponent,
   ],
 })
 export class AdminLayoutModule {}

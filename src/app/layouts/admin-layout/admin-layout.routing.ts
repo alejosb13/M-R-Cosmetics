@@ -71,7 +71,10 @@ import { CierreConfigComponent } from "app/pages/configuracion/cierre-config/cie
 import { ClienteProductosCompradosComponent } from "app/pages/clientes/cliente-productos-comprados/cliente-productos-comprados.component";
 import { VentasMensualComponent } from "app/pages/ventas-mensual/ventas-mensual.component";
 import { FinanzasSeccionesComponent } from "app/pages/finanzas/finanzas-secciones/finanzas-secciones.component";
-import { InversionComponent } from "app/pages/finanzas/inversion/inversion.component";
+import { InversionListComponent } from "app/pages/finanzas/inversion/inversion-list/inversion-list.component";
+import { InversionInsertarComponent } from "app/pages/finanzas/inversion/inversion-insertar/inversion-insertar.component";
+import { ImportacionListComponent } from "app/pages/finanzas/importacion/importacion-list/importacion-list.component";
+import { ImportacionInsertarComponent } from "app/pages/finanzas/importacion/importacion-insertar/importacion-insertar.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -263,7 +266,19 @@ export const AdminLayoutRoutes: Routes = [
       { path: "", component: FinanzasSeccionesComponent },
       {
         path: "inversion",
-        component: InversionComponent,
+        children: [
+          { path: "", component: InversionListComponent },
+          { path: "agregar", component: InversionInsertarComponent },
+          // { path: "editar/:id", component: FrecuenciaFacturaEditarComponent },
+        ],
+      },
+      {
+        path: "importacion",
+        children: [
+          { path: "", component: ImportacionListComponent },
+          { path: "agregar", component: ImportacionInsertarComponent },
+          // { path: "editar/:id", component: FrecuenciaFacturaEditarComponent },
+        ],
       },
       // { path: "taza-cotizacion", component: TazaCotizacionComponent },
       // { path: "cierre", component: CierreConfigComponent },

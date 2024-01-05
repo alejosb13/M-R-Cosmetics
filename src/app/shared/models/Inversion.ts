@@ -18,3 +18,15 @@ export interface Inversion {
   ganancia_bruta: number;
   comision_vendedor: number;
 }
+
+export interface InversionesTotales {
+  cantidad: number,
+  costo: number,
+  peso_porcentual: number,
+  costo_total: number,
+  precio_venta: number,
+  venta_total: number,
+  costo_real: number,
+  ganancia_bruta: number,
+  comision_vendedor: number,
+}

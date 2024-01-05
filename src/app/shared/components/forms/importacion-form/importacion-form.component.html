@@ -1,0 +1,475 @@
+
+<br />
+<div>
+  <div
+  >
+    <form [formGroup]="FormImportacion" class="row">
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Codigo </label>
+          <input
+            type="text"
+            class="form-control"
+            name="codigo"
+            formControlName="codigo"
+            autocomplete="off"
+          />
+          <!-- <div *ngIf="getControlErrorsArray('codigo', i) as error">
+            <app-valid-error-messages-form
+              [errors]="error"
+              [messages]="InversionErrorMessages.codigo"
+            ></app-valid-error-messages-form>
+          </div> -->
+        </div>
+      </div>
+      <div class="col-md-3 col-input">
+        <div class="form-group">
+          <label>Producto </label>
+          <input
+            type="text"
+            class="form-control"
+            name="producto"
+            formControlName="producto"
+            autocomplete="off"
+
+          />
+          <!-- <div *ngIf="getControlErrorsArray('producto', i) as error">
+            <app-valid-error-messages-form
+              [errors]="error"
+              [messages]="InversionErrorMessages.producto"
+            ></app-valid-error-messages-form>
+          </div> -->
+        </div>
+      </div>
+      <div class="col-md-3 col-input">
+        <div class="form-group">
+          <label>Marca </label>
+          <input
+            type="text"
+            class="form-control"
+            name="marca"
+            formControlName="marca"
+            autocomplete="off"
+          />
+          <!-- <div *ngIf="getControlErrorsArray('marca', i) as error">
+            <app-valid-error-messages-form
+              [errors]="error"
+              [messages]="InversionErrorMessages.marca"
+            ></app-valid-error-messages-form>
+          </div> -->
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Cantidad </label>
+          <input
+            type="text"
+            class="form-control"
+            name="cantidad"
+            formControlName="cantidad"
+            autocomplete="off"
+            appOnlyNumberAndPoint
+
+          />
+          <!-- <div *ngIf="getControlErrorsArray('cantidad', i) as error">
+            <app-valid-error-messages-form
+              [errors]="error"
+              [messages]="InversionErrorMessages.cantidad"
+            ></app-valid-error-messages-form>
+          </div> -->
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Precio Unitario</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="precio_unitario"
+              formControlName="precio_unitario"
+              autocomplete="off"
+              appOnlyNumberAndPoint
+    
+            />
+            <!-- <div *ngIf="getControlErrorsArray('precio_unitario', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.precio_unitario"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Costo</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="costo"
+              formControlName="costo"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('costo', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.costo"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Peso Porcentual</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">%</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="peso_porcentual"
+              formControlName="peso_porcentual"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('peso_porcentual', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.peso_porcentual"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Peso Aboluto</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="peso_absoluto"
+              formControlName="peso_absoluto"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('peso_absoluto', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.peso_absoluto"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>C/U Distribuido </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="c_u_distribuido"
+              formControlName="c_u_distribuido"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('c_u_distribuido', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.c_u_distribuido"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Costo Total </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="costo_total"
+              formControlName="costo_total"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('costo_total', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.costo_total"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Subida de ganancia </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="subida_ganancia"
+              formControlName="subida_ganancia"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('subida_ganancia', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.subida_ganancia"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Precio de venta </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="precio_venta"
+              formControlName="precio_venta"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('precio_venta', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.precio_venta"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Margen de ganancia </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">%</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="margen_ganancia"
+              formControlName="margen_ganancia"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('margen_ganancia', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.margen_ganancia"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Venta </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="venta"
+              formControlName="venta"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('venta', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.venta"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Venta total </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="venta_total"
+              formControlName="venta_total"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('venta_total', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.venta_total"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Costo real </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="costo_real"
+              formControlName="costo_real"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('costo_real', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.costo_real"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Ganancia Bruta </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="ganancia_bruta"
+              formControlName="ganancia_bruta"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('ganancia_bruta', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.ganancia_bruta"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <label>Comision vendedor </label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="comision_vendedor"
+              formControlName="comision_vendedor"
+              autocomplete="off"
+              [readonly]="readOnlyInputsForCalculation"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('comision_vendedor', i) as error">
+              <app-valid-error-messages-form
+                [errors]="error"
+                [messages]="InversionErrorMessages.comision_vendedor"
+              ></app-valid-error-messages-form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div class="form-group">
+          <button
+            type="button"
+            class="btn btn-danger my-0"
+            [ngClass]="{
+              disabled: FormImportacion.controls['inversion'].length == 1
+            }"
+          >
+            <i class="far fa-trash-alt" style="font-size: 1rem"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<hr class="mt-4 mb-4" />
+<div class="row">
+  <div class="col-md-12">
+    <h6
+      class="h6 pointer text-primary"
+      [ngClass]="{
+        'text-disabled': !isValidForm
+      }"
+    >
+      <i class="fas fa-plus"></i> Agregar Producto
+    </h6>
+  </div>
+</div>
+<hr class="mt-4 mb-4" />
+<h6>Totales</h6>
+<!-- <hr class="mt-4 mb-4" /> -->
+
+<hr class="mt-4 mb-4" />
+<div class="row">
+  <div class="update ml-auto mr-auto">
+    <button
+      type="submit"
+      class="btn btn-primary btn-round"
+      [disabled]="!isValidForm"
+      (click)="EnviarFormulario()"
+    >
+      <div *ngIf="Id">Actualizar</div>
+      <div *ngIf="!Id">Agregar</div>
+    </button>
+  </div>
+</div>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando categoria
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

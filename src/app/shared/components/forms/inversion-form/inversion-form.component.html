@@ -98,7 +98,7 @@
             formControlName="cantidad"
             autocomplete="off"
             (keyup)="validateProductInversion($event, i)"
-            appOnlyNumbers
+            appOnlyNumberAndPoint
             [ngClass]="{
               'is-invalid':
                 getControlArray('cantidad', i).invalid &&
@@ -128,7 +128,7 @@
               formControlName="precio_unitario"
               autocomplete="off"
               (keyup)="validateProductInversion($event, i)"
-              appOnlyNumbers
+              appOnlyNumberAndPoint
               [ngClass]="{
                 'is-invalid':
                   getControlArray('precio_unitario', i).invalid &&
@@ -459,7 +459,14 @@
       </div>
       <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
         <div class="form-group">
-          <button class="btn btn-danger">
+          <button
+            type="button"
+            class="btn btn-danger my-0"
+            [ngClass]="{
+              disabled: FormInversion.controls['inversion'].length == 1
+            }"
+            (click)="eliminarItem(i)"
+          >
             <i class="far fa-trash-alt" style="font-size: 1rem"></i>
           </button>
         </div>
@@ -467,20 +474,60 @@
     </form>
   </div>
 </div>
+
 <hr class="mt-4 mb-4" />
 <div class="row">
   <div class="col-md-12">
-    <h6 class="h6 pointer text-disabled" (click)="addRowItem()">
+    <h6
+      class="h6 pointer text-primary"
+      [ngClass]="{
+        'text-disabled': !isValidForm
+      }"
+      (click)="addRowItem()"
+    >
       <i class="fas fa-plus"></i> Agregar Producto
     </h6>
   </div>
 </div>
+<hr class="mt-4 mb-4" />
+<h6>Totales</h6>
+<!-- <hr class="mt-4 mb-4" /> -->
+<ul class="list-group list-group-horizontal justify-content-around flex-wrap">
+  <li class="list-group-item border-0">
+    <b>Cantidad</b>: {{ totales.cantidad | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Costo</b> {{ totales.costo | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Peso Porcentual</b>{{ totales.peso_porcentual | currency : "USD" }} %
+  </li>
+  <li class="list-group-item border-0">
+    <b>Costo Total</b> {{ totales.costo_total | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Precio de Venta</b>{{ totales.precio_venta | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Venta total</b> {{ totales.venta_total | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Costo real</b> {{ totales.costo_real | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Ganancia Bruta </b>{{ totales.ganancia_bruta | currency : "USD" }}
+  </li>
+  <li class="list-group-item border-0">
+    <b>Comision vendedor </b>{{ totales.comision_vendedor | currency : "USD" }}
+  </li>
+</ul>
+<hr class="mt-4 mb-4" />
 <div class="row">
   <div class="update ml-auto mr-auto">
     <button
       type="submit"
       class="btn btn-primary btn-round"
-      [disabled]="true"
+      [disabled]="!isValidForm"
       (click)="EnviarFormulario()"
     >
       <div *ngIf="Id">Actualizar</div>
@@ -488,20 +535,6 @@
     </button>
   </div>
 </div>
-<ng-template
-  #formError
-  let-control="control"
-  let-message="message"
-  let-validation="validation"
->
-  <ng-container
-    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
-  >
-    <div class="invalid-feedback">
-      {{ message }}
-    </div>
-  </ng-container>
-</ng-template>
 
 <div [hidden]="!loadInfo" class="container-fluid p-5">
   <div class="d-flex justify-content-center align-content-center">

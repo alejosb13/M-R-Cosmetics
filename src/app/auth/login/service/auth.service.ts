@@ -27,7 +27,7 @@ export class AuthService {
     const DataUSerStorage = this.dataStorage
 
     let config = {
-      ContentType: 'application/json',
+      'Content-Type': 'application/json',
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
 

@@ -23,7 +23,7 @@ export class Listado {
 
   headerJson_Token(): HttpHeaders {
     let config = {
-      ContentType: "application/json",
+      'Content-Type': "application/json",
     };
 
     return new HttpHeaders(config);
