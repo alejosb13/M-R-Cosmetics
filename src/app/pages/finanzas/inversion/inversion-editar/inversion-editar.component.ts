@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 import { AuthService } from "app/auth/login/service/auth.service";
 import {
   InversionesTotales,
@@ -10,21 +10,27 @@ import { FinanzasService } from "app/shared/services/finanzas.service";
 import Swal from "sweetalert2";
 
 @Component({
-  selector: "app-inversion-insertar",
-  templateUrl: "./inversion-insertar.component.html",
-  styleUrls: ["./inversion-insertar.component.scss"],
+  selector: "app-inversion-editar",
+  templateUrl: "./inversion-editar.component.html",
+  styleUrls: ["./inversion-editar.component.scss"],
 })
-export class InversionInsertarComponent {
+export class InversionEditarComponent {
   userId: number;
-
+  Id: number;
   constructor(
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
-    private _router: Router
-  ) {}
+    private route: ActivatedRoute
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      // console.log(params.get("id"));
+      this.Id = Number(params.get("id"));
+    });
   }
 
   FormsValues(productoDetalle: {
@@ -32,7 +38,7 @@ export class InversionInsertarComponent {
     Totales: InversionesTotales;
   }) {
     Swal.fire({
-      title: "Modificando inversión",
+      title: "Creando inversión",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -44,14 +50,12 @@ export class InversionInsertarComponent {
     });
     // console.log("retorno: ", productoDetalle);
     this._FinanzasService
-      .insertInversion({ ...productoDetalle, userId: this.userId })
+      .updateInversion({ ...productoDetalle, userId: this.userId }, this.Id)
       .subscribe(
         (data) => {
           Swal.fire({
-            text: "Inversión creada con exito!",
+            text: "Inversión modificada con exito!",
             icon: "success",
-          }).then((result) => {
-            return this._router.navigateByUrl("/finanzas/inversion");
           });
         },
         (HttpErrorResponse: HttpErrorResponse) => {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "environments/environment";
 import { Factura } from "../models/Factura.model";
@@ -223,6 +223,21 @@ export class Listado {
     // console.log(URL);
 
     return this.http.get<any>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  ProductoList(
+    options: any
+  ): Observable<any> {
+    let params = new HttpParams();
+    for (const key in options) {
+      params = params.append(key, options[key]);
+    }
+
+    return this.http.get<any>(`${ListadoURL}/productos`, {
+      params,
       headers: this.headerJson_Token(),
       responseType: "json",
     });

@@ -16,6 +16,9 @@ export const InversionErrorMessages: FormErrorMessages = {
   precio_unitario: {
     required: "Ingresa el precio unitario para avanzar",
   },
+  porcentaje_ganancia: {
+    required: "Ingresa el porcentaje de ganancia para avanzar",
+  },
   costo: {
     required: "Ingresa el costo para avanzar",
   },

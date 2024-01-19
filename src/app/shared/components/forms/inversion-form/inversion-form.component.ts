@@ -10,12 +10,28 @@ import {
   InversionForm,
   InversionFormBuilder,
   inversionFormStructure,
+  InversionGeneralForm,
   inversionTotalValues,
 } from "app/shared/components/forms/inversion-form/utils/form";
 import { InversionErrorMessages } from "app/shared/components/forms/inversion-form/utils/valid-messages";
-import { Inversion, InversionesTotales } from "app/shared/models/Inversion";
+import {
+  InversionesTotales,
+  InversionGeneral,
+  InversionResponse,
+} from "app/shared/models/Inversion";
 import Swal from "sweetalert2";
-import { map } from "rxjs/operators";
+import {
+  map,
+  debounceTime,
+  distinctUntilChanged,
+  tap,
+  switchMap,
+} from "rxjs/operators";
+import { FinanzasService } from "app/shared/services/finanzas.service";
+import { Observable, of, OperatorFunction } from "rxjs";
+import { Listado } from "app/shared/services/listados.service";
+import { catchError } from "rxjs/operators";
+import { Producto } from "app/shared/models/Producto.model";
 
 @Component({
   selector: "app-inversion-form",
@@ -23,31 +39,45 @@ import { map } from "rxjs/operators";
   styleUrls: ["./inversion-form.component.scss"],
 })
 export class InversionFormComponent {
-  loadInfo: boolean = false;
+  loadInfo: boolean = true;
   readonly InversionErrorMessages = InversionErrorMessages;
 
   @Input() Id?: number;
-  @Output() FormsValues = new EventEmitter<InversionForm>();
+  @Output() FormsValues = new EventEmitter<{
+    InversionGeneral: InversionGeneral;
+    Totales: InversionesTotales;
+  }>();
 
-  // inversion: FormArray;
-  FormInversion: FormGroup;
+  // inversionResponse:InversionResponse;
+  FormInversion: FormGroup<InversionGeneralForm>;
   readOnlyInputsForCalculation: boolean = true;
-  readOnlyInputsEditable: boolean = false;
+  readOnlyInputsCierre: boolean = false;
   totales: InversionesTotales = { ...inversionTotalValues() };
 
   isValidForm: boolean = false;
+  searching: boolean = false;
+  searchFailed: boolean = false;
+  productos: Producto[] = [];
 
-  constructor() {}
+  constructor(
+    public _FinanzasService: FinanzasService,
+    public _Listado: Listado
+  ) {}
+
+  formatterValue = (x: { descripcion: string } | string) => typeof x === "string" ? x : x.descripcion;
+  
 
   ngOnInit(): void {
     this.FormInversion = InversionFormBuilder();
-    // this.FormInversion = new FormGroup({
-    //   inversion: new FormArray([]),
-    // });
 
+    if (this.Id) {
+      // console.log("22");
+
+      this.setFormValues();
+    } else {
+      this.loadInfo = false;
+    }
     this.validStatusFromChange();
-    this.validTotalChange();
-    // if (this.Id) this.setFormValues();
   }
 
   validStatusFromChange() {
@@ -64,130 +94,180 @@ export class InversionFormComponent {
   }
 
   validTotalChange() {
-    this.FormInversion.get("inversion").valueChanges.subscribe(
-      (datos: Inversion[]) => {
-        // console.log(datos);
-        let totales: InversionesTotales = { ...inversionTotalValues() };
-        this.totales = datos.reduce(
-          (accumulator: InversionesTotales, currentValue: Inversion) => {
-            // console.log(accumulator);
-            // console.log(currentValue);
+    const { inversion } = this.FormInversion.value;
+    let totales: InversionesTotales = { ...inversionTotalValues() };
+    // console.log(totales)que ;
 
-            return {
-              cantidad: accumulator.cantidad + Number(currentValue.cantidad),
-              costo: accumulator.costo + Number(currentValue.costo),
-              peso_porcentual:
-                accumulator.peso_porcentual +
-                Number(currentValue.peso_porcentual),
-              costo_total:
-                accumulator.costo_total + Number(currentValue.costo_total),
-              precio_venta:
-                accumulator.precio_venta + Number(currentValue.precio_venta),
-              venta_total:
-                accumulator.venta_total + Number(currentValue.venta_total),
-              costo_real:
-                accumulator.costo_real + Number(currentValue.costo_real),
-              ganancia_bruta:
-                accumulator.ganancia_bruta +
-                Number(currentValue.ganancia_bruta),
-              comision_vendedor:
-                accumulator.comision_vendedor +
-                Number(currentValue.comision_vendedor),
-            };
-          },
-          totales
-        );
+    this.totales = inversion.reduce((accumulator, currentValue) => {
+      return {
+        ...accumulator,
+        cantidad: FormatInDecimalToFixed(
+          Number(accumulator.cantidad) + Number(currentValue.cantidad)
+        ),
+        costo: FormatInDecimalToFixed(accumulator.costo + currentValue.costo),
+        peso_porcentual: FormatInDecimalToFixed(
+          accumulator.peso_porcentual + currentValue.peso_porcentual
+        ),
+        costo_total: FormatInDecimalToFixed(
+          accumulator.costo_total + currentValue.costo_total
+        ),
+        precio_venta: FormatInDecimalToFixed(
+          accumulator.precio_venta + currentValue.precio_venta
+        ),
+        venta_total: FormatInDecimalToFixed(
+          accumulator.venta_total + currentValue.venta_total
+        ),
+        costo_real: FormatInDecimalToFixed(
+          accumulator.costo_real + currentValue.costo_real
+        ),
+        ganancia_bruta: FormatInDecimalToFixed(
+          accumulator.ganancia_bruta + currentValue.ganancia_bruta
+        ),
+        comision_vendedor: FormatInDecimalToFixed(
+          accumulator.comision_vendedor + currentValue.comision_vendedor
+        ),
+      };
+    }, totales);
+    this.totales.ganancia_total = FormatInDecimalToFixed(
+      this.totales.ganancia_bruta - this.totales.comision_vendedor
+    );
+    // console.log(this.totales);
+  }
+
+  validateProductInversion() {
+    const { envio, porcentaje_comision_vendedor, inversion } =
+      this.FormInversion.value;
+    console.log({ envio, porcentaje_comision_vendedor, inversion });
+
+    this.validTotalChange();
+
+    inversion.map((producto, index) => {
+      const precio_unitario = Number(producto.precio_unitario || 0);
+      const cantidad = Number(producto.cantidad || 0);
+      const porcentaje_ganancia = Number(producto.porcentaje_ganancia || 0);
+
+      const costo = FormatInDecimalToFixed(precio_unitario * cantidad);
+      console.log("costo", costo);
+
+      let peso_porcentual =
+        this.totales.costo > 0 ? costo / this.totales.costo : 0;
+      peso_porcentual = FormatInDecimalToFixed(peso_porcentual);
+
+      let peso_absoluto = peso_porcentual * envio; // reemplazar por 0 por precio de tabla peque;a
+      peso_absoluto = FormatInDecimalToFixed(peso_absoluto);
+
+      let c_u_distribuido = cantidad > 0 ? peso_absoluto / cantidad : 0;
+      c_u_distribuido = FormatInDecimalToFixed(c_u_distribuido);
+
+      let costo_total = precio_unitario + c_u_distribuido;
+      costo_total = FormatInDecimalToFixed(costo_total);
+
+      let subida_ganancia = precio_unitario * porcentaje_ganancia; // porcentaje_ganancia
+      subida_ganancia = FormatInDecimalToFixed(subida_ganancia);
+
+      let precio_venta = c_u_distribuido + subida_ganancia + precio_unitario;
+      precio_venta = FormatInDecimalToFixed(precio_venta);
+
+      let margen_ganancia_calculo =
+        precio_unitario > 0
+          ? (precio_venta - c_u_distribuido) / precio_unitario
+          : 0;
+      let margen_ganancia = (margen_ganancia_calculo - 1) * 100;
+      margen_ganancia = FormatInDecimalToFixed(margen_ganancia);
+
+      let venta = precio_venta - c_u_distribuido;
+      venta = FormatInDecimalToFixed(venta);
+
+      let venta_total = venta * cantidad;
+      venta_total = FormatInDecimalToFixed(venta_total);
+
+      let costo_real = precio_unitario * cantidad;
+      costo_real = FormatInDecimalToFixed(costo_real);
+
+      let ganancia_bruta = venta_total - costo_real;
+      ganancia_bruta = FormatInDecimalToFixed(ganancia_bruta);
+
+      let comision_vendedor =
+        precio_venta * cantidad * porcentaje_comision_vendedor; // porcentaje 20% = 0.20
+      comision_vendedor = FormatInDecimalToFixed(comision_vendedor);
+
+      const patchValue = {
+        costo,
+        peso_porcentual: FormatInDecimalToFixed(peso_porcentual * 100),
+        peso_absoluto,
+        c_u_distribuido,
+        costo_total,
+        subida_ganancia,
+        precio_venta,
+        margen_ganancia,
+        venta,
+        venta_total,
+        costo_real,
+        ganancia_bruta,
+        comision_vendedor,
+      };
+
+      const controlInversion = this.getControlFormArray();
+      controlInversion[index].patchValue(patchValue);
+      this.validTotalChange();
+    });
+  }
+
+  setFormValues() {
+    this._FinanzasService.getInversionById(this.Id).subscribe(
+      (data: InversionResponse) => {
+        // console.log("respuesta", data);
+        this.readOnlyInputsCierre = data.estatus_cierre == 1 ? true : false;
+        const controlInversion = this.getControlFormArray();
+
+        this.FormInversion.patchValue({
+          envio: data.envio,
+          porcentaje_comision_vendedor: data.porcentaje_comision_vendedor,
+        });
+
+        data.inversion_detalle.forEach((row, index) => {
+          if (!controlInversion[index]) {
+            let newInversion: FormArray = this.FormInversion.get(
+              "inversion"
+            ) as FormArray;
+            newInversion.push(
+              new FormGroup<InversionForm>(inversionFormStructure())
+            );
+          }
+
+          const patchValue = {
+            codigo: row.codigo,
+            producto: row.producto,
+            marca: row.marca,
+            costo: row.costo,
+            cantidad: row.cantidad,
+            precio_unitario: row.precio_unitario,
+            porcentaje_ganancia: row.porcentaje_ganancia,
+            peso_porcentual: row.peso_porcentual,
+            peso_absoluto: row.peso_absoluto,
+            c_u_distribuido: row.c_u_distribuido,
+            costo_total: row.costo_total,
+            subida_ganancia: row.subida_ganancia,
+            precio_venta: row.precio_venta,
+            margen_ganancia: row.margen_ganancia,
+            venta: row.venta,
+            venta_total: row.venta_total,
+            costo_real: row.costo_real,
+            ganancia_bruta: row.ganancia_bruta,
+            comision_vendedor: row.comision_vendedor,
+          };
+          controlInversion[index].patchValue(patchValue);
+        });
+
+        this.validTotalChange();
+
+        this.loadInfo = false;
+      },
+      () => {
+        this.loadInfo = false;
       }
     );
   }
-
-  validateProductInversion(event: KeyboardEvent, position: number) {
-    const { value, name } = event.target as HTMLInputElement;
-    if (!value) return false;
-    const controlInversion = this.getControlFormArray();
-
-    const FormValue: Partial<Inversion> = controlInversion[position].value; // obtengo los valores del formulario que fue modificado
-    const precio_unitario = Number(FormValue.precio_unitario || 0);
-    const cantidad = Number(FormValue.cantidad || 0);
-
-    const costo = precio_unitario * cantidad;
-
-    let peso_porcentual =
-      this.totales.costo > 0 ? costo / this.totales.costo : 0;
-    peso_porcentual = FormatInDecimalToFixed(peso_porcentual);
-
-    let peso_absoluto = peso_porcentual * 165.00; // reemplazar por 0 por precio de tabla peque;a
-    peso_absoluto = FormatInDecimalToFixed(peso_absoluto);
-
-    let c_u_distribuido = cantidad > 0 ? peso_absoluto / cantidad : 0;
-    c_u_distribuido = FormatInDecimalToFixed(c_u_distribuido);
-
-    let costo_total = precio_unitario + c_u_distribuido;
-    costo_total = FormatInDecimalToFixed(costo_total);
-
-
-    let subida_ganancia = precio_unitario * 1.9;
-    subida_ganancia = FormatInDecimalToFixed(subida_ganancia);
-
-    let precio_venta = precio_unitario + c_u_distribuido + subida_ganancia;
-    precio_venta = FormatInDecimalToFixed(precio_venta);
-
-
-    let margen_ganancia_calculo =
-      precio_unitario > 0
-        ? (precio_venta - c_u_distribuido) / precio_unitario
-        : 0;
-    let margen_ganancia = margen_ganancia_calculo - 1;
-    margen_ganancia = FormatInDecimalToFixed(margen_ganancia);
-
-    let venta = precio_venta - c_u_distribuido;
-    venta = FormatInDecimalToFixed(venta);
-
-    let venta_total = venta * cantidad;
-    venta_total = FormatInDecimalToFixed(venta_total);
-
-    let costo_real = precio_unitario * cantidad;
-    costo_real = FormatInDecimalToFixed(costo_real);
-
-    let ganancia_bruta = venta_total - costo_real;
-    ganancia_bruta = FormatInDecimalToFixed(ganancia_bruta);
-
-    let comision_vendedor = precio_venta * cantidad * 0.2; // porcentaje 20% = 0.20
-    comision_vendedor = FormatInDecimalToFixed(comision_vendedor);
-
-    controlInversion[position].patchValue({
-      costo,
-      peso_porcentual,
-      peso_absoluto,
-      c_u_distribuido,
-      costo_total,
-      subida_ganancia,
-      precio_venta,
-      margen_ganancia,
-      venta,
-      venta_total,
-      costo_real,
-      ganancia_bruta,
-      comision_vendedor,
-    });
-    console.log({
-      costo,
-      peso_porcentual,
-      peso_absoluto,
-      c_u_distribuido,
-      costo_total,
-      subida_ganancia,
-      precio_venta,
-      margen_ganancia,
-      venta,
-      venta_total,
-      costo_real,
-      ganancia_bruta,
-      comision_vendedor,
-    });
-  }
-
-  setFormValues() {}
 
   getControlErrorsArray(name: string, index: number): ValidationErrors | null {
     const control = this.FormInversion.controls[index]
@@ -236,21 +316,80 @@ export class InversionFormComponent {
   }
 
   EnviarFormulario() {
-    // console.log(this.editarClienteForm);
-    // console.log(this.formularioControls);
-    // console.log(this.ProductForm.getRawValue());
-
     if (this.FormInversion.valid) {
-      // let frecuencia = {} as InversionForm;
-      // frecuencia.descripcion = this.formularioControls.descripcion.value;
-      // frecuencia.dias = Number(this.formularioControls.dias.value);
-      // this.FormsValues.emit(frecuencia);
+      // console.log(this.FormInversion.getRawValue());
+      let InversionFrom = this.FormInversion.getRawValue();
+      let newInversionFrom = InversionFrom.inversion.map(
+        (productoInversion: any) => ({
+          ...productoInversion,
+          producto: productoInversion.producto.descripcion,
+        })
+      );
+
+      this.FormsValues.emit({
+        Totales: this.totales,
+        InversionGeneral: { ...InversionFrom, inversion: newInversionFrom },
+      });
     } else {
       Swal.fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  getControlError(name: string): ValidationErrors | null {
+    const control = this.FormInversion.controls
+      ? this.FormInversion.get(name)
+      : null;
+
+    return control && control.touched && control.invalid
+      ? control.errors
+      : null;
+  }
+
+  getControl(name: string): FormControl {
+    return this.FormInversion.get(name) as FormControl;
+  }
+
+  search: OperatorFunction<string, readonly string[]> = (
+    text$: Observable<string>
+  ) => {
+    return text$.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) => {
+        let listadoFilter = {
+          estado: 1,
+          disablePaginate: 1,
+          filter: term,
+        };
+
+        return this._Listado.ProductoList(listadoFilter).pipe(
+          tap(() => (this.searchFailed = false)),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+      }),
+      tap(() => (this.searching = false))
+    );
+  };
+
+  eventInputTypeHead({ item }: { item: Producto }, i: string) {
+    setTimeout(() => {
+      const controlInversion = this.getControlFormArray();
+      const patchValue = {
+        codigo: item.id,
+        // producto: productoCompleto.descripcion,
+        marca: item.marca,
+      };
+      console.log(patchValue);
+
+      controlInversion[i].patchValue(patchValue);
+    }, 10);
   }
 
   eliminarItem(position: number) {

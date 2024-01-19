@@ -20,3 +20,12 @@ form {
 .text-disabled {
   color: #66615B !important
 }
+
+::ng-deep .form-group .dropdown-menu {
+  // width: 100%;
+  z-index: 99999;
+  min-height: 41px;
+  max-height: 330px;
+  z-index: 99999;
+  overflow-x: hidden;
+}

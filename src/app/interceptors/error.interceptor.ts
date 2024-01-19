@@ -35,7 +35,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         console.log();
         
         // if (error.status == 401 && MensajesAuth.includes(error.statusText) ) {
-          console.log("error",error);
+          // console.log("error",error);
           
         if (error.status == 401 && error.error.message === "Unauthorized" || error.status == 401 && error.error.message === "Unauthenticated.") {
           Swal.fire({

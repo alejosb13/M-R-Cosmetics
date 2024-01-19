@@ -17,6 +17,7 @@ import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ErrorInterceptor } from "./interceptors/error.interceptor";
 import { BasicAuthInterceptor } from "./interceptors/basic-auth.interceptor";
+import { InversionEditarComponent } from './pages/finanzas/inversion/inversion-editar/inversion-editar.component';
 
 @NgModule({
   declarations: [

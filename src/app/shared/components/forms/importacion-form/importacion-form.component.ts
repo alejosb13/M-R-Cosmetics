@@ -1,6 +1,10 @@
-import { Component, Input, Output } from "@angular/core";
-import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
-import { EventEmitter } from "protractor";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+} from "@angular/forms";
 import { ImportacionForm, ImportacionFormBuilder } from "./utils/form";
 import { ImportacionErrorMessages } from "./utils/valid-messages";
 import { map } from "rxjs/operators";
@@ -19,16 +23,14 @@ export class ImportacionFormComponent {
   @Input() Id?: number;
   @Output() FormsValues = new EventEmitter();
 
-  FormImportacion: FormGroup<ImportacionForm> = ImportacionFormBuilder();
+  FormImportacion: FormGroup<ImportacionForm>;
   readOnlyInputsForCalculation: boolean = true;
   isValidForm: boolean = false;
 
   constructor() {}
 
   ngOnInit(): void {
-    // this.FormInversion = new FormGroup({
-    //   inversion: new FormArray([]),
-    // });
+    this.FormImportacion = ImportacionFormBuilder();
 
     this.validStatusFromChange();
     // if (this.Id) this.setFormValues();
@@ -43,13 +45,15 @@ export class ImportacionFormComponent {
       )
       .subscribe((status: boolean) => {
         // console.log("statusForm", status);
+            // console.log(this.getControl("fecha_inversion"));
+
         this.isValidForm = status;
       });
   }
 
   setFormValues() {}
 
-  getControlError(name: string, index: number): ValidationErrors | null {
+  getControlError(name: string): ValidationErrors | null {
     const control = this.FormImportacion.controls
       ? this.FormImportacion.get(name)
       : null;
@@ -59,14 +63,9 @@ export class ImportacionFormComponent {
       : null;
   }
 
-  getControl(name: string): any {
-    // console.log((this.FormInversion.get("inversion") as FormArray).controls);
-    let control = this.FormImportacion.get(name) as AbstractControl<Partial<Importacion>>
-    console.log('control ',control);
-    
-    return control;
+  getControl(name: string): FormControl {
+    return this.FormImportacion.get(name) as FormControl;
   }
-
 
   EnviarFormulario() {
     // console.log(this.editarClienteForm);
@@ -85,5 +84,4 @@ export class ImportacionFormComponent {
       });
     }
   }
-
 }
