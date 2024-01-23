@@ -1,5 +1,9 @@
 <br />
-
+<span class="text-info"
+  >Nota: El campo Número de inversión autocompleta varios campos</span
+>
+<br />
+<br />
 <form [formGroup]="FormImportacion" class="row">
   <div class="col-md-3">
     <div class="form-group">
@@ -46,6 +50,8 @@
         name="numero_inversion"
         formControlName="numero_inversion"
         autocomplete="off"
+        [ngbTypeahead]="search"
+        [resultTemplate]="InversionTypeaHead"
       />
       <div *ngIf="getControlError('numero_inversion') as error">
         <app-valid-error-messages-form
@@ -53,6 +59,21 @@
           [messages]="InversionErrorMessages.numero_inversion"
         ></app-valid-error-messages-form>
       </div>
+      <ng-template
+        #InversionTypeaHead
+        let-resultado="result"
+        let-resaltado="term"
+      >
+        <ngb-highlight
+          [result]="resultado.id"
+          [term]="resaltado.id"
+        ></ngb-highlight>
+        -
+        <ngb-highlight
+          [result]="resultado.descripcion"
+          [term]="resaltado.descripcion"
+        ></ngb-highlight>
+      </ng-template>
     </div>
   </div>
   <div class="col-md-3">

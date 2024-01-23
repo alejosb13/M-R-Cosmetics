@@ -82,7 +82,7 @@
           </thead>
           <tbody *ngIf="Inversiones.length > 0">
             <tr *ngFor="let Inversion of Inversiones">
-              <th scope="row"># {{ Inversion.number_item }}</th>
+              <th scope="row"># {{ Inversion.numero_seguimiento }}</th>
               <td scope="row">
                 {{ Inversion.updated_at | date : "dd-MM-yyyy h:mm a" }}
               </td>

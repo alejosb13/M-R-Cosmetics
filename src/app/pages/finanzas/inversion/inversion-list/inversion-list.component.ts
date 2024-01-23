@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { InversionResponse } from "app/shared/models/Inversion";
-import { FiltrosList, ListadoModel } from "app/shared/models/Listados.model";
+import { FiltrosList, Link, ListadoModel } from "app/shared/models/Listados.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import logger from "app/shared/utils/logger";
@@ -48,12 +48,12 @@ export class InversionListComponent {
       .getInversiones(this.listadoFilter)
       .pipe(
         map((pagination: ListadoModel<InversionResponse>) => {
-          pagination.data = pagination.data.map((producto) => {
-            return {
-              ...producto,
-              number_item: String(producto.id).padStart(4, "0"),
-            };
-          });
+          // pagination.data = pagination.data.map((producto) => {
+          //   return {
+          //     ...producto,
+          //     number_item: String(producto.id).padStart(4, "0"),
+          //   };
+          // });
           return pagination;
         })
       )
@@ -178,4 +178,14 @@ export class InversionListComponent {
     this.asignarValores();
     this.NgbModal.dismissAll();
   }
+
+  newPage(link: Link) {
+    if (link.url == null) return;
+    // console.log(link);
+
+    this.listadoFilter.link = link.url;
+
+    this.asignarValores();
+  }
+
 }

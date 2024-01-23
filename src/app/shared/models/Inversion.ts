@@ -1,6 +1,7 @@
 import { Usuario } from "./Usuario.model";
 
 export interface InversionDetail {
+  id?: string;
   codigo: string;
   producto: string;
   marca: string;
@@ -20,6 +21,7 @@ export interface InversionDetail {
   costo_real: number;
   ganancia_bruta: number;
   comision_vendedor: number;
+  producto_insertado?: number
 }
 
 export interface InversionesTotales {
@@ -37,12 +39,14 @@ export interface InversionesTotales {
 
 export interface InversionGeneral {
   envio: number;
+  numero_seguimiento?: number;
   porcentaje_comision_vendedor: number;
   inversion: InversionDetail[];
 }
 
 export interface InversionResponse {
   id: number
+  numero_seguimiento: number
   user_id: number
   cantidad_total: number
   costo: number

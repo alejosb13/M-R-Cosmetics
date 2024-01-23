@@ -94,6 +94,21 @@ export class FinanzasService {
     });
   }
 
+  insertProducto(param: any): Observable<any> {
+    // api/finanzas/inversion/{inversion}/edit
+
+    let params = new HttpParams();
+    for (const key in param) {
+      params = params.append(key, param[key]);
+    }
+
+    return this.http.get(`${FinanzasURL}/inversion-producto/save`, {
+      params: params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   // entregarFactura(id: number): Observable<any> {
   //   const URL = `${FacturaURL}/entregada/${id}`;
   //   return this.http.put(URL, { headers: this.headerJson_Token() });

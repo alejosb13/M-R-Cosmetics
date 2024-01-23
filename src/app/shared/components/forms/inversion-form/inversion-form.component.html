@@ -117,16 +117,25 @@
               }"
               [readonly]="readOnlyInputsCierre"
               [ngbTypeahead]="search"
-              (selectItem)="eventInputTypeHead($event,i)"
+              (selectItem)="eventInputTypeHead($event, i)"
               [resultTemplate]="ProductTypeaHead"
               [inputFormatter]="formatterValue"
-              />
-              <ng-template #ProductTypeaHead let-resultado="result" let-resaltado="term">
-                
-                <ngb-highlight [result]="resultado.id" [term]="resaltado.id"></ngb-highlight>
-                -
-                <ngb-highlight [result]="resultado.descripcion" [term]="resaltado.descripcion"></ngb-highlight>
-              </ng-template>
+            />
+            <ng-template
+              #ProductTypeaHead
+              let-resultado="result"
+              let-resaltado="term"
+            >
+              <ngb-highlight
+                [result]="resultado.id"
+                [term]="resaltado.id"
+              ></ngb-highlight>
+              -
+              <ngb-highlight
+                [result]="resultado.descripcion"
+                [term]="resaltado.descripcion"
+              ></ngb-highlight>
+            </ng-template>
             <!-- <div *ngIf="getControlErrorsArray('producto', i) as error">
               <app-valid-error-messages-form
                 [errors]="error"
@@ -576,6 +585,20 @@
               (click)="eliminarItem(i)"
             >
               <i class="far fa-trash-alt" style="font-size: 1rem"></i>
+            </button>
+          </div>
+        </div>
+        <div
+          class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input"
+          *ngIf="readOnlyInputsCierre && InversionData.inversion_detalle[i].producto_insertado == 0 "
+        >
+          <div class="form-group">
+            <button
+              type="button"
+              class="btn btn-primary my-0"
+              (click)="agregarAlInventario(i)"
+            >
+              <i class="fas fa-cart-arrow-down" style="font-size: 1rem"></i>
             </button>
           </div>
         </div>

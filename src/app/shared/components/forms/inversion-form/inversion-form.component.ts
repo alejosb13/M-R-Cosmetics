@@ -15,6 +15,7 @@ import {
 } from "app/shared/components/forms/inversion-form/utils/form";
 import { InversionErrorMessages } from "app/shared/components/forms/inversion-form/utils/valid-messages";
 import {
+  InversionDetail,
   InversionesTotales,
   InversionGeneral,
   InversionResponse,
@@ -52,6 +53,7 @@ export class InversionFormComponent {
   FormInversion: FormGroup<InversionGeneralForm>;
   readOnlyInputsForCalculation: boolean = true;
   readOnlyInputsCierre: boolean = false;
+  producto_insertado: boolean = false;
   totales: InversionesTotales = { ...inversionTotalValues() };
 
   isValidForm: boolean = false;
@@ -59,13 +61,15 @@ export class InversionFormComponent {
   searchFailed: boolean = false;
   productos: Producto[] = [];
 
+  InversionData: InversionResponse;
+
   constructor(
     public _FinanzasService: FinanzasService,
     public _Listado: Listado
   ) {}
 
-  formatterValue = (x: { descripcion: string } | string) => typeof x === "string" ? x : x.descripcion;
-  
+  formatterValue = (x: { descripcion: string } | string) =>
+    typeof x === "string" ? x : x.descripcion;
 
   ngOnInit(): void {
     this.FormInversion = InversionFormBuilder();
@@ -137,7 +141,7 @@ export class InversionFormComponent {
   validateProductInversion() {
     const { envio, porcentaje_comision_vendedor, inversion } =
       this.FormInversion.value;
-    console.log({ envio, porcentaje_comision_vendedor, inversion });
+    // console.log({ envio, porcentaje_comision_vendedor, inversion });
 
     this.validTotalChange();
 
@@ -147,7 +151,7 @@ export class InversionFormComponent {
       const porcentaje_ganancia = Number(producto.porcentaje_ganancia || 0);
 
       const costo = FormatInDecimalToFixed(precio_unitario * cantidad);
-      console.log("costo", costo);
+      // console.log("costo", costo);
 
       let peso_porcentual =
         this.totales.costo > 0 ? costo / this.totales.costo : 0;
@@ -218,8 +222,9 @@ export class InversionFormComponent {
       (data: InversionResponse) => {
         // console.log("respuesta", data);
         this.readOnlyInputsCierre = data.estatus_cierre == 1 ? true : false;
+        // this.producto_insertado = data.producto_insertado == 1 ? true : false;
         const controlInversion = this.getControlFormArray();
-
+        this.InversionData = { ...data };
         this.FormInversion.patchValue({
           envio: data.envio,
           porcentaje_comision_vendedor: data.porcentaje_comision_vendedor,
@@ -316,20 +321,34 @@ export class InversionFormComponent {
   }
 
   EnviarFormulario() {
+    // console.log(this.FormInversion.getRawValue());
+    // return
     if (this.FormInversion.valid) {
-      // console.log(this.FormInversion.getRawValue());
       let InversionFrom = this.FormInversion.getRawValue();
       let newInversionFrom = InversionFrom.inversion.map(
         (productoInversion: any) => ({
           ...productoInversion,
-          producto: productoInversion.producto.descripcion,
+          producto:
+            typeof productoInversion.producto === "string"
+              ? productoInversion.producto
+              : productoInversion.producto.descripcion,
         })
       );
-
-      this.FormsValues.emit({
+      let response:any = {
         Totales: this.totales,
-        InversionGeneral: { ...InversionFrom, inversion: newInversionFrom },
-      });
+        InversionGeneral: {
+          ...InversionFrom,
+          inversion: newInversionFrom,
+        },
+      };
+
+      if (this.Id) {
+        response.InversionGeneral.numero_seguimiento =
+          this.InversionData.numero_seguimiento;
+      }
+      console.log(response);
+
+      this.FormsValues.emit(response);
     } else {
       Swal.fire({
         text: "Complete todos los campos obligatorios",
@@ -404,5 +423,38 @@ export class InversionFormComponent {
 
     control.removeAt(position);
     // console.log("this.FormInversion", control);
+  }
+
+  agregarAlInventario(data:number) {
+
+    // console.log(this.InversionData.inversion_detalle[data]);
+    Swal.fire({
+      title: "¿Deseas cargar este producto al inventario?",
+      text: "Una vez cargado no podras volverlo a cargar.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._FinanzasService
+          .insertProducto( {
+            producto_insertado: 1,
+            id_inversion: this.InversionData.id,
+            id_inversion_detail:this.InversionData.inversion_detalle[data].id,
+          })
+          .subscribe((data) => {
+            // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
+            Swal.fire({
+              text: data[0],
+              icon: "success",
+            }).then(() => {
+              window.location.reload();
+            })
+          });
+      }
+    });
   }
 }

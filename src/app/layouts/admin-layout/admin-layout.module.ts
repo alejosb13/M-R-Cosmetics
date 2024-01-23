@@ -100,7 +100,7 @@ import { FrecuenciaFacturaFormComponent } from "app/shared/components/forms/frec
 import { CierreConfigComponent } from "app/pages/configuracion/cierre-config/cierre-config.component";
 import { ClienteProductosCompradosComponent } from "app/pages/clientes/cliente-productos-comprados/cliente-productos-comprados.component";
 import { VentasMensualComponent } from "app/pages/ventas-mensual/ventas-mensual.component";
-import { FinanzasSeccionesComponent } from "app/pages/finanzas/finanzas-secciones/finanzas-secciones.component";
+import { FinanzasSeccionesComponent } from "app/pages/finanzas/finanzas.component";
 import { InversionFormComponent } from "app/shared/components/forms/inversion-form/inversion-form.component";
 import { InversionListComponent } from "app/pages/finanzas/inversion/inversion-list/inversion-list.component";
 import { ValidErrorMessagesFormComponent } from "app/shared/components/valid-error-messages-form/valid-error-messages-form.component";

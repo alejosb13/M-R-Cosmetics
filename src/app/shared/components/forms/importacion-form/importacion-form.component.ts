@@ -7,9 +7,20 @@ import {
 } from "@angular/forms";
 import { ImportacionForm, ImportacionFormBuilder } from "./utils/form";
 import { ImportacionErrorMessages } from "./utils/valid-messages";
-import { map } from "rxjs/operators";
-import { Importacion } from "app/shared/models/Importacion.model";
+import {
+  map,
+  debounceTime,
+  distinctUntilChanged,
+  tap,
+  switchMap,
+  catchError,
+} from "rxjs/operators";
 import Swal from "sweetalert2";
+import { Observable, of, OperatorFunction } from "rxjs";
+import { Producto } from "app/shared/models/Producto.model";
+import { Listado } from "app/shared/services/listados.service";
+import { FinanzasService } from "app/shared/services/finanzas.service";
+import { FiltrosList } from "app/shared/models/Listados.model";
 
 @Component({
   selector: "app-importacion-form",
@@ -27,7 +38,13 @@ export class ImportacionFormComponent {
   readOnlyInputsForCalculation: boolean = true;
   isValidForm: boolean = false;
 
-  constructor() {}
+  searching: boolean = false;
+  searchFailed: boolean = false;
+
+  constructor(
+    public _Listado: Listado,
+    public _FinanzasService: FinanzasService
+  ) {}
 
   ngOnInit(): void {
     this.FormImportacion = ImportacionFormBuilder();
@@ -45,7 +62,7 @@ export class ImportacionFormComponent {
       )
       .subscribe((status: boolean) => {
         // console.log("statusForm", status);
-            // console.log(this.getControl("fecha_inversion"));
+        // console.log(this.getControl("fecha_inversion"));
 
         this.isValidForm = status;
       });
@@ -83,5 +100,45 @@ export class ImportacionFormComponent {
         icon: "warning",
       });
     }
+  }
+
+  search: OperatorFunction<string, readonly string[]> = (
+    text$: Observable<string>
+  ) => {
+    return text$.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) => {
+        let listadoFilter: FiltrosList = {
+          link: null,
+          estado: 1,
+          disablePaginate: 1,
+          filter: term,
+        };
+
+        return this._FinanzasService.getInversiones(listadoFilter).pipe(
+          tap(() => (this.searchFailed = false)),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+      }),
+      tap(() => (this.searching = false))
+    );
+  };
+
+  eventInputTypeHead({ item }: { item: Producto }, i: string) {
+    // setTimeout(() => {
+    //   const controlInversion = this.getControlFormArray();
+    //   const patchValue = {
+    //     codigo: item.id,
+    //     // producto: productoCompleto.descripcion,
+    //     marca: item.marca,
+    //   };
+    //   console.log(patchValue);
+    //   controlInversion[i].patchValue(patchValue);
+    // }, 10);
   }
 }
