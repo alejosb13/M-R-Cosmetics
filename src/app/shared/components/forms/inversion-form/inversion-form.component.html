@@ -607,7 +607,7 @@
   </div>
 
   <hr class="mt-4 mb-4" />
-  <div class="row">
+  <div class="row" *ngIf="!readOnlyInputsCierre">
     <div class="col-md-12">
       <h6
         class="h6 pointer text-primary"
@@ -620,7 +620,7 @@
       </h6>
     </div>
   </div>
-  <hr class="mt-4 mb-4" />
+  <hr class="mt-4 mb-4" *ngIf="!readOnlyInputsCierre"/>
   <h6>Totales</h6>
   <!-- <hr class="mt-4 mb-4" /> -->
   <ul class="list-group list-group-horizontal justify-content-around flex-wrap">

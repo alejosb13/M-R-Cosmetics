@@ -1,158 +1,205 @@
-<br />
-<span class="text-info"
-  >Nota: El campo Número de inversión autocompleta varios campos</span
->
-<br />
-<br />
-<form [formGroup]="FormImportacion" class="row">
-  <div class="col-md-3">
-    <div class="form-group">
-      <label>Fecha de inversión</label>
-      <input
-        type="date"
-        class="form-control"
-        name="fecha_inversion"
-        formControlName="fecha_inversion"
-        autocomplete="off"
-      />
-      <div *ngIf="getControlError('fecha_inversion') as error">
-        <app-valid-error-messages-form
-          [errors]="error"
-          [messages]="InversionErrorMessages.fecha_inversion"
-        ></app-valid-error-messages-form>
+<div [hidden]="loadInfo">
+  <br />
+  <span class="text-info"
+    >Nota: El campo Número de inversión autocompleta varios campos</span
+  >
+  <br />
+  <br />
+  <form [formGroup]="FormImportacion" class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Fecha de inversión</label>
+        <input
+          type="date"
+          class="form-control"
+          name="fecha_inversion"
+          formControlName="fecha_inversion"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('fecha_inversion').invalid &&
+              getControl('fecha_inversion').touched,
+            'is-valid': getControl('fecha_inversion').valid
+          }"
+        />
+        <div *ngIf="getControlError('fecha_inversion') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="InversionErrorMessages.fecha_inversion"
+          ></app-valid-error-messages-form>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label>Número de recibo</label>
-      <input
-        type="text"
-        class="form-control"
-        name="fecha_inversion"
-        formControlName="numero_recibo"
-        autocomplete="off"
-      />
-      <div *ngIf="getControlError('numero_recibo') as error">
-        <app-valid-error-messages-form
-          [errors]="error"
-          [messages]="InversionErrorMessages.numero_recibo"
-        ></app-valid-error-messages-form>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Número de recibo</label>
+        <input
+          type="text"
+          class="form-control"
+          name="fecha_inversion"
+          formControlName="numero_recibo"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('numero_recibo').invalid &&
+              getControl('numero_recibo').touched,
+            'is-valid': getControl('numero_recibo').valid
+          }"
+        />
+        <div *ngIf="getControlError('numero_recibo') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="InversionErrorMessages.numero_recibo"
+          ></app-valid-error-messages-form>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label>Número de inversión</label>
-      <input
-        type="text"
-        class="form-control"
-        name="numero_inversion"
-        formControlName="numero_inversion"
-        autocomplete="off"
-        [ngbTypeahead]="search"
-        [resultTemplate]="InversionTypeaHead"
-      />
-      <div *ngIf="getControlError('numero_inversion') as error">
-        <app-valid-error-messages-form
-          [errors]="error"
-          [messages]="InversionErrorMessages.numero_inversion"
-        ></app-valid-error-messages-form>
-      </div>
-      <ng-template
-        #InversionTypeaHead
-        let-resultado="result"
-        let-resaltado="term"
-      >
-        <ngb-highlight
-          [result]="resultado.id"
-          [term]="resaltado.id"
-        ></ngb-highlight>
-        -
-        <ngb-highlight
-          [result]="resultado.descripcion"
-          [term]="resaltado.descripcion"
-        ></ngb-highlight>
-      </ng-template>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label>Monto de compra</label>
-      <input
-        type="text"
-        class="form-control"
-        name="monto_compra"
-        formControlName="monto_compra"
-        autocomplete="off"
-        appOnlyNumberAndPoint
-      />
-      <div *ngIf="getControlError('monto_compra') as error">
-        <app-valid-error-messages-form
-          [errors]="error"
-          [messages]="InversionErrorMessages.monto_compra"
-        ></app-valid-error-messages-form>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label class="d-flex"
+          >Número de inversión
+          <small *ngIf="searching" class="form-text text-muted ml-2">
+            <i class="fas fa-circle-notch fa-spin fa-lg"></i></small
+        ></label>
+        <input
+          type="text"
+          class="form-control"
+          name="numero_inversion"
+          formControlName="numero_inversion"
+          autocomplete="off"
+          [ngbTypeahead]="search"
+          [resultTemplate]="InversionTypeaHead"
+          (selectItem)="eventInputTypeHead($event)"
+          [inputFormatter]="formatterValue"
+          appOnlyNumberAndPoint
+          [ngClass]="{
+            'is-invalid':
+              getControl('numero_inversion').invalid &&
+              getControl('numero_inversion').touched,
+            'is-valid': getControl('numero_inversion').valid
+          }"
+        />
+        <div *ngIf="getControlError('numero_inversion') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="InversionErrorMessages.numero_inversion"
+          ></app-valid-error-messages-form>
+        </div>
+        <ng-template
+          #InversionTypeaHead
+          let-resultado="result"
+          let-resaltado="term"
+        >
+          <ngb-highlight
+            [result]="resultado.numero_seguimiento"
+            [term]="resaltado.numero_seguimiento"
+          ></ngb-highlight>
+          -
+          <ngb-highlight
+            [result]="resultado.updated_at | date : 'dd-MM-yyyy h:mm a'"
+            [term]="resaltado.updated_at"
+          ></ngb-highlight>
+        </ng-template>
       </div>
     </div>
-  </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label>Conceptualización</label>
-      <input
-        type="text"
-        class="form-control"
-        name="conceptualizacion"
-        formControlName="conceptualizacion"
-        autocomplete="off"
-      />
-      <div *ngIf="getControlError('conceptualizacion') as error">
-        <app-valid-error-messages-form
-          [errors]="error"
-          [messages]="InversionErrorMessages.conceptualizacion"
-        ></app-valid-error-messages-form>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Monto de compra</label>
+        <input
+          type="text"
+          class="form-control"
+          name="monto_compra"
+          formControlName="monto_compra"
+          autocomplete="off"
+          appOnlyNumberAndPoint
+          readonly
+          [ngClass]="{
+            'is-invalid':
+              getControl('monto_compra').invalid &&
+              getControl('monto_compra').touched,
+            'is-valid': getControl('monto_compra').valid
+          }"
+        />
+        <div *ngIf="getControlError('monto_compra') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="InversionErrorMessages.monto_compra"
+          ></app-valid-error-messages-form>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label>Monto de envio</label>
-      <input
-        type="text"
-        class="form-control"
-        name="monto_envio"
-        formControlName="monto_envio"
-        autocomplete="off"
-        appOnlyNumberAndPoint
-      />
-      <div *ngIf="getControlError('monto_envio') as error">
-        <app-valid-error-messages-form
-          [errors]="error"
-          [messages]="InversionErrorMessages.monto_envio"
-        ></app-valid-error-messages-form>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Conceptualización</label>
+        <input
+          type="text"
+          class="form-control"
+          name="conceptualizacion"
+          formControlName="conceptualizacion"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('conceptualizacion').invalid &&
+              getControl('conceptualizacion').touched,
+            'is-valid': getControl('conceptualizacion').valid
+          }"
+        />
+        <div *ngIf="getControlError('conceptualizacion') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="InversionErrorMessages.conceptualizacion"
+          ></app-valid-error-messages-form>
+        </div>
       </div>
     </div>
-  </div>
-</form>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Precio de envio</label>
+        <input
+          type="text"
+          class="form-control"
+          name="precio_envio"
+          formControlName="precio_envio"
+          autocomplete="off"
+          appOnlyNumberAndPoint
+          readonly
+          [ngClass]="{
+            'is-invalid':
+              getControl('precio_envio').invalid &&
+              getControl('precio_envio').touched,
+            'is-valid': getControl('precio_envio').valid
+          }"
+        />
+        <div *ngIf="getControlError('precio_envio') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="InversionErrorMessages.precio_envio"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+  </form>
 
-<hr class="mt-4 mb-4" />
-<div class="row">
-  <div class="update ml-auto mr-auto">
-    <button
-      type="submit"
-      class="btn btn-primary btn-round"
-      [disabled]="!isValidForm"
-      (click)="EnviarFormulario()"
-    >
-      <div *ngIf="Id">Actualizar</div>
-      <div *ngIf="!Id">Agregar</div>
-    </button>
+  <hr class="mt-4 mb-4" />
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        [disabled]="!isValidForm"
+        (click)="EnviarFormulario()"
+      >
+        <div *ngIf="Id">Actualizar</div>
+        <div *ngIf="!Id">Agregar</div>
+      </button>
+    </div>
   </div>
 </div>
 
 <div [hidden]="!loadInfo" class="container-fluid p-5">
   <div class="d-flex justify-content-center align-content-center">
     <span>
-      Cargando categoria
+      Cargando Importación
       <i class="fas fa-circle-notch fa-spin"></i>
     </span>
   </div>

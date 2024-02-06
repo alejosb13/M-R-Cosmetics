@@ -113,6 +113,7 @@ import { ImportacionListComponent } from "app/pages/finanzas/importacion/importa
 import { ImportacionFormComponent } from "app/shared/components/forms/importacion-form/importacion-form.component";
 import { ImportacionInsertarComponent } from "app/pages/finanzas/importacion/importacion-insertar/importacion-insertar.component";
 import { InversionEditarComponent } from "app/pages/finanzas/inversion/inversion-editar/inversion-editar.component";
+import { ImportacionEditarComponent } from "app/pages/finanzas/importacion/importacion-editar/importacion-editar.component";
 
 @NgModule({
   imports: [
@@ -238,7 +239,8 @@ import { InversionEditarComponent } from "app/pages/finanzas/inversion/inversion
     ImportacionListComponent,
     ImportacionInsertarComponent,
     ImportacionFormComponent,
-    InversionEditarComponent
+    InversionEditarComponent,
+    ImportacionEditarComponent
   ],
 })
 export class AdminLayoutModule {}

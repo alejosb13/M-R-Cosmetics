@@ -76,6 +76,7 @@ import { InversionInsertarComponent } from "app/pages/finanzas/inversion/inversi
 import { ImportacionListComponent } from "app/pages/finanzas/importacion/importacion-list/importacion-list.component";
 import { ImportacionInsertarComponent } from "app/pages/finanzas/importacion/importacion-insertar/importacion-insertar.component";
 import { InversionEditarComponent } from "app/pages/finanzas/inversion/inversion-editar/inversion-editar.component";
+import { ImportacionEditarComponent } from "app/pages/finanzas/importacion/importacion-editar/importacion-editar.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -278,6 +279,7 @@ export const AdminLayoutRoutes: Routes = [
         children: [
           { path: "", component: ImportacionListComponent },
           { path: "agregar", component: ImportacionInsertarComponent },
+          { path: "editar/:id", component: ImportacionEditarComponent },
           // { path: "editar/:id", component: FrecuenciaFacturaEditarComponent },
         ],
       },

@@ -3,11 +3,11 @@ import { ImportacionValidators } from "./validations";
 
 export interface ImportacionForm {
   fecha_inversion: FormControl<string>;
-  numero_recibo: FormControl<number>;
-  numero_inversion: FormControl<number>;
+  numero_recibo: FormControl<string>;
+  numero_inversion: FormControl<any>;
   monto_compra: FormControl<number>;
   conceptualizacion: FormControl<string>;
-  monto_envio: FormControl<number>;
+  precio_envio: FormControl<number>;
 }
 
 export const ImportacionFormBuilder = (): FormGroup<ImportacionForm> =>
@@ -28,5 +28,5 @@ export const ImportacionFormBuilder = (): FormGroup<ImportacionForm> =>
     conceptualizacion: new FormControl(null, [
       ...ImportacionValidators.conceptualizacion,
     ]),
-    monto_envio: new FormControl(null, [...ImportacionValidators.monto_envio]),
+    precio_envio: new FormControl(null, [...ImportacionValidators.precio_envio]),
   });

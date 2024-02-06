@@ -7,5 +7,5 @@ export const ImportacionValidators: FormGroupValidators = {
   numero_inversion: [Validators.required, Validators.maxLength(80)],
   monto_compra: [Validators.required, Validators.maxLength(80)],
   conceptualizacion: [Validators.required, Validators.maxLength(80)],
-  monto_envio: [Validators.required, Validators.maxLength(80)],
+  precio_envio: [Validators.required, Validators.maxLength(80)],
 };

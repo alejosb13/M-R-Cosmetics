@@ -3,8 +3,12 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "environments/environment";
 import { Factura } from "../models/Factura.model";
-import { InversionesTotales, InversionGeneral } from "../models/Inversion";
+import {
+  InversionesTotales,
+  InversionGeneral,
+} from "../models/Inversion.model";
 import { FiltrosList } from "../models/Listados.model";
+import { Importacion } from "../models/Importacion.model";
 
 const FinanzasURL = `${environment.urlAPI}finanzas`;
 
@@ -24,6 +28,21 @@ export class FinanzasService {
 
   getInversiones(param: FiltrosList): Observable<any> {
     const URL = `${FinanzasURL}/inversion`;
+    console.log(param);
+
+    let params = new HttpParams();
+    for (const key in param) {
+      params = params.append(key, param[key]);
+    }
+
+    return this.http.get<Factura>(URL, {
+      params: params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+  getInversionesToImportaciones(param: FiltrosList): Observable<any> {
+    const URL = `${FinanzasURL}/inversion-importacion`;
     console.log(param);
 
     let params = new HttpParams();
@@ -109,8 +128,60 @@ export class FinanzasService {
     });
   }
 
-  // entregarFactura(id: number): Observable<any> {
-  //   const URL = `${FacturaURL}/entregada/${id}`;
-  //   return this.http.put(URL, { headers: this.headerJson_Token() });
-  // }
+  // ************Importaciones ***********************
+  insertImportacion(data: {
+    importacion: Importacion;
+    userId: number;
+  }): Observable<any> {
+    return this.http.post(
+      `${FinanzasURL}/importacion`,
+      { ...data.importacion, userId: data.userId },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
+  }
+
+  getImportacion(param: FiltrosList): Observable<any> {
+    const URL = `${FinanzasURL}/importacion`;
+    console.log(param);
+
+    let params = new HttpParams();
+    for (const key in param) {
+      params = params.append(key, param[key]);
+    }
+
+    return this.http.get(URL, {
+      params: params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  getImportacionById(id: number): Observable<any> {
+    const URL = `${FinanzasURL}/importacion/${id}`;
+
+    return this.http.get<Factura>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  updateImportacion(
+    data: {
+      importacion: Importacion;
+      userId: number;
+    },
+    id: number
+  ): Observable<any> {
+    return this.http.put(
+      `${FinanzasURL}/importacion/${id}`,
+      { ...data.importacion, userId: data.userId  },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
+  }
 }

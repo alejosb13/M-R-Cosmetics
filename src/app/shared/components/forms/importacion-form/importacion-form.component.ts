@@ -1,10 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-} from "@angular/forms";
+import { FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { ImportacionForm, ImportacionFormBuilder } from "./utils/form";
 import { ImportacionErrorMessages } from "./utils/valid-messages";
 import {
@@ -17,10 +12,12 @@ import {
 } from "rxjs/operators";
 import Swal from "sweetalert2";
 import { Observable, of, OperatorFunction } from "rxjs";
-import { Producto } from "app/shared/models/Producto.model";
 import { Listado } from "app/shared/services/listados.service";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { FiltrosList } from "app/shared/models/Listados.model";
+import { InversionResponse } from "app/shared/models/Inversion.model";
+import { HelpersService } from "app/shared/services/helpers.service";
+import { Importacion, ImportacionResponse } from "app/shared/models/Importacion.model";
 
 @Component({
   selector: "app-importacion-form",
@@ -43,14 +40,20 @@ export class ImportacionFormComponent {
 
   constructor(
     public _Listado: Listado,
-    public _FinanzasService: FinanzasService
+    public _FinanzasService: FinanzasService,
+    public _HelpersService: HelpersService
   ) {}
+
+  formatterValue = (
+    x: { numero_seguimiento: string; updated_at: string } | string
+  ) => (typeof x === "string" ? x : `${x.numero_seguimiento}`);
+  // typeof x === "string" ? x : `${x.numero_seguimiento} - ${moment(x.updated_at).format('DD-MM-YYYY h:mm a')}`;
 
   ngOnInit(): void {
     this.FormImportacion = ImportacionFormBuilder();
+    if (this.Id) this.setFormValues();
 
     this.validStatusFromChange();
-    // if (this.Id) this.setFormValues();
   }
 
   validStatusFromChange() {
@@ -68,7 +71,30 @@ export class ImportacionFormComponent {
       });
   }
 
-  setFormValues() {}
+  setFormValues() {
+    this.loadInfo = true
+    this._FinanzasService.getImportacionById(this.Id).subscribe(
+      (data: ImportacionResponse) => {
+        const patchValue:Partial<Importacion> = {
+          conceptualizacion:data.conceptualizacion,
+          numero_recibo:data.numero_recibo,
+          numero_inversion:data.inversion.numero_seguimiento,
+          fecha_inversion:this._HelpersService.changeformatDate(
+            data.fecha_inversion,
+            "YYYY-MM-DD HH:mm:ss",
+            "YYYY-MM-DD"
+          ),
+          monto_compra:data.monto_compra,
+          precio_envio:data.precio_envio,
+        };
+        this.FormImportacion.patchValue(patchValue);
+        this.loadInfo = false;
+      },
+      () => {
+        this.loadInfo = false;
+      }
+    );
+  }
 
   getControlError(name: string): ValidationErrors | null {
     const control = this.FormImportacion.controls
@@ -85,15 +111,33 @@ export class ImportacionFormComponent {
   }
 
   EnviarFormulario() {
-    // console.log(this.editarClienteForm);
-    // console.log(this.formularioControls);
-    // console.log(this.ProductForm.getRawValue());
-
     if (this.FormImportacion.valid) {
-      // let frecuencia = {} as InversionForm;
+      console.log(this.FormImportacion.getRawValue());
+      const DATA_FORM = this.FormImportacion.getRawValue();
+
+      let importacion: Importacion = {
+        conceptualizacion: DATA_FORM.conceptualizacion,
+        fecha_inversion: this._HelpersService.changeformatDate(
+          DATA_FORM.fecha_inversion,
+          "YYYY-MM-DD",
+          "YYYY-MM-DD HH:mm:ss"
+        ), //"2024-02-09",
+        monto_compra: DATA_FORM.monto_compra,
+        numero_inversion:
+          typeof DATA_FORM.numero_inversion === "string"
+            ? DATA_FORM.numero_inversion
+            : DATA_FORM.numero_inversion.numero_seguimiento,
+        inversion_id:
+          typeof DATA_FORM.numero_inversion === "string"
+            ? DATA_FORM.numero_inversion
+            : DATA_FORM.numero_inversion.id,
+        numero_recibo: DATA_FORM.numero_recibo,
+        precio_envio: DATA_FORM.precio_envio,
+      };
+      console.log(importacion);
       // frecuencia.descripcion = this.formularioControls.descripcion.value;
       // frecuencia.dias = Number(this.formularioControls.dias.value);
-      // this.FormsValues.emit(frecuencia);
+      this.FormsValues.emit(importacion);
     } else {
       Swal.fire({
         text: "Complete todos los campos obligatorios",
@@ -115,30 +159,37 @@ export class ImportacionFormComponent {
           estado: 1,
           disablePaginate: 1,
           filter: term,
+          import: 1,
         };
 
-        return this._FinanzasService.getInversiones(listadoFilter).pipe(
-          tap(() => (this.searchFailed = false)),
-          catchError(() => {
-            this.searchFailed = true;
-            return of([]);
-          })
-        );
+        return this._FinanzasService
+          .getInversionesToImportaciones(listadoFilter)
+          .pipe(
+            tap(() => (this.searchFailed = false)),
+            catchError(() => {
+              this.searchFailed = true;
+              return of([]);
+            })
+          );
       }),
       tap(() => (this.searching = false))
     );
   };
 
-  eventInputTypeHead({ item }: { item: Producto }, i: string) {
-    // setTimeout(() => {
-    //   const controlInversion = this.getControlFormArray();
-    //   const patchValue = {
-    //     codigo: item.id,
-    //     // producto: productoCompleto.descripcion,
-    //     marca: item.marca,
-    //   };
-    //   console.log(patchValue);
-    //   controlInversion[i].patchValue(patchValue);
-    // }, 10);
+  eventInputTypeHead({ item }: { item: InversionResponse }) {
+    console.log(item);
+    this.FormImportacion.patchValue({
+      fecha_inversion: this._HelpersService.changeformatDate(
+        item.updated_at,
+        "YYYY-MM-DD HH:mm:ss",
+        "YYYY-MM-DD"
+      ),
+      // numero_recibo:0,
+      numero_inversion: item.numero_seguimiento,
+      // monto_compra:item.costo,
+      monto_compra: item.costo_total,
+      // conceptualizacion: "",
+      precio_envio: item.envio,
+    });
   }
 }

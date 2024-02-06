@@ -5,7 +5,7 @@ import { AuthService } from "app/auth/login/service/auth.service";
 import {
   InversionesTotales,
   InversionGeneral,
-} from "app/shared/models/Inversion";
+} from "app/shared/models/Inversion.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import Swal from "sweetalert2";
 

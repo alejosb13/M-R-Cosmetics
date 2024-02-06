@@ -1,5 +1,5 @@
 import { FormGroup, FormControl, FormArray } from "@angular/forms";
-import { InversionesTotales } from "app/shared/models/Inversion";
+import { InversionesTotales } from "app/shared/models/Inversion.model";
 import { InversionValidators } from "./validations";
 
 export interface InversionConstantForm {

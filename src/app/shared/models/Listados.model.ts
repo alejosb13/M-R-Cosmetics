@@ -41,4 +41,5 @@ export interface FiltrosList {
   clienteId?:string | number
   allUsers?:boolean
   allNumber?:boolean
+  import?:string | number
 }

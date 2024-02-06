@@ -21,9 +21,9 @@ export const ImportacionErrorMessages: FormErrorMessages = {
     required: "Ingresa la conceptualización para avanzar",
     maxlength: "La conceptualización tiene un limite de 80 caracteres.",
   },
-  monto_envio: {
-    required: "Ingresa el monto de envio para avanzar",
-    maxlength: "El monto de envio tiene un limite de 80 caracteres.",
+  precio_envio: {
+    required: "Ingresa el precio de envio para avanzar",
+    maxlength: "El precio de envio tiene un limite de 80 caracteres.",
   },
 
 };

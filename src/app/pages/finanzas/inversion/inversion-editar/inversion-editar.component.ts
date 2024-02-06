@@ -5,7 +5,7 @@ import { AuthService } from "app/auth/login/service/auth.service";
 import {
   InversionesTotales,
   InversionGeneral,
-} from "app/shared/models/Inversion";
+} from "app/shared/models/Inversion.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import Swal from "sweetalert2";
 
@@ -38,7 +38,7 @@ export class InversionEditarComponent {
     Totales: InversionesTotales;
   }) {
     Swal.fire({
-      title: "Creando inversión",
+      title: "Creando importación",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -54,7 +54,7 @@ export class InversionEditarComponent {
       .subscribe(
         (data) => {
           Swal.fire({
-            text: "Inversión modificada con exito!",
+            text: "Importación modificada con éxito!",
             icon: "success",
           });
         },

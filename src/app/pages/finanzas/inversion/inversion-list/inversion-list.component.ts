@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
-import { InversionResponse } from "app/shared/models/Inversion";
+import { InversionResponse } from "app/shared/models/Inversion.model";
 import { FiltrosList, Link, ListadoModel } from "app/shared/models/Listados.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";

@@ -39,14 +39,14 @@ export interface InversionesTotales {
 
 export interface InversionGeneral {
   envio: number;
-  numero_seguimiento?: number;
+  numero_seguimiento?: string;
   porcentaje_comision_vendedor: number;
   inversion: InversionDetail[];
 }
 
 export interface InversionResponse {
   id: number
-  numero_seguimiento: number
+  numero_seguimiento: string
   user_id: number
   cantidad_total: number
   costo: number

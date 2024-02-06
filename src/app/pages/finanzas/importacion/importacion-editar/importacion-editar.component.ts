@@ -1,42 +1,42 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 import { AuthService } from "app/auth/login/service/auth.service";
-import { Importacion } from "app/shared/models/Importacion.model";
 import {
   InversionesTotales,
   InversionGeneral,
 } from "app/shared/models/Inversion.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import Swal from "sweetalert2";
+import { Importacion } from "../../../../shared/models/Importacion.model";
 
 @Component({
-  selector: "app-importacion-insertar",
-  templateUrl: "./importacion-insertar.component.html",
-  styleUrls: ["./importacion-insertar.component.scss"],
+  selector: "app-importacion-editar",
+  templateUrl: "./importacion-editar.component.html",
+  styleUrls: ["./importacion-editar.component.scss"],
 })
-export class ImportacionInsertarComponent {
-  isAdmin: boolean;
-  isSupervisor: boolean;
+export class ImportacionEditarComponent {
   userId: number;
-
+  Id: number;
   constructor(
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
-    private _router: Router
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    this.isAdmin = this._AuthService.isAdmin();
-    this.isSupervisor = this._AuthService.isSupervisor();
     this.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      // console.log(params.get("id"));
+      this.Id = Number(params.get("id"));
+    });
   }
 
-  FormsValues(ImportacionValues: Importacion) {
+  FormsValues(productoDetalle: Importacion) {
+    console.log(productoDetalle);
+    // return;
     Swal.fire({
-      title: "Creando Importación",
+      title: "Creando inversión",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -48,17 +48,15 @@ export class ImportacionInsertarComponent {
     });
     // console.log("retorno: ", productoDetalle);
     this._FinanzasService
-      .insertImportacion({
-        importacion: ImportacionValues,
-        userId: this.userId,
-      })
+      .updateImportacion(
+        { importacion: {...productoDetalle}, userId: this.userId },
+        this.Id
+      )
       .subscribe(
         (data) => {
           Swal.fire({
-            text: "Importación creada con exito!",
+            text: "Inversión modificada con exito!",
             icon: "success",
-          }).then((result) => {
-            return this._router.navigateByUrl("/finanzas/inversion");
           });
         },
         (HttpErrorResponse: HttpErrorResponse) => {

@@ -15,11 +15,10 @@ import {
 } from "app/shared/components/forms/inversion-form/utils/form";
 import { InversionErrorMessages } from "app/shared/components/forms/inversion-form/utils/valid-messages";
 import {
-  InversionDetail,
   InversionesTotales,
   InversionGeneral,
   InversionResponse,
-} from "app/shared/models/Inversion";
+} from "app/shared/models/Inversion.model";
 import Swal from "sweetalert2";
 import {
   map,
@@ -430,7 +429,7 @@ export class InversionFormComponent {
     // console.log(this.InversionData.inversion_detalle[data]);
     Swal.fire({
       title: "¿Deseas cargar este producto al inventario?",
-      text: "Una vez cargado no podras volverlo a cargar.",
+      text: "Una vez cargado se actualizara el stock y el precio del producto. Esta accion no podras revertirla luego de aceptar.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#51cbce",
