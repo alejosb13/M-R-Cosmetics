@@ -177,7 +177,7 @@ export class FinanzasService {
   ): Observable<any> {
     return this.http.put(
       `${FinanzasURL}/importacion/${id}`,
-      { ...data.importacion, userId: data.userId  },
+      { ...data.importacion, userId: data.userId },
       {
         headers: this.headerJson_Token(),
         responseType: "json",
