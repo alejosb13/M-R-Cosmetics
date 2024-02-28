@@ -126,7 +126,7 @@ export class UsuariosComponent implements OnInit {
 
   cambiarEstadoRangoRecibos({ id }: RecibosRangosSinTerminar) {
     Swal.fire({
-      title: "Ignorando rango de reciibo",
+      title: "Ignorando rango de recibo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,

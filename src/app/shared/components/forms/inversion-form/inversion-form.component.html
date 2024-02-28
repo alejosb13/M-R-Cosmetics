@@ -71,7 +71,10 @@
     >
       <hr *ngIf="!isFirst" class="mt-3 mb-3" />
       <form [formGroupName]="i" class="row">
-        <div class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input">
+        <div
+          class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input"
+          *ngIf="!getControlArray('isNew', i).value"
+        >
           <div class="form-group">
             <label>Codigo </label>
             <input
@@ -86,7 +89,7 @@
                   getControlArray('codigo', i).touched,
                 'is-valid': getControlArray('codigo', i).valid
               }"
-              [readonly]="readOnlyInputsCierre"
+              readonly
             />
             <!-- <div *ngIf="getControlErrorsArray('codigo', i) as error">
               <app-valid-error-messages-form
@@ -159,7 +162,9 @@
                   getControlArray('marca', i).touched,
                 'is-valid': getControlArray('marca', i).valid
               }"
-              [readonly]="readOnlyInputsCierre"
+              [readonly]="
+                !getControlArray('isNew', i).value || readOnlyInputsCierre
+              "
             />
             <!-- <div *ngIf="getControlErrorsArray('marca', i) as error">
               <app-valid-error-messages-form
@@ -254,6 +259,64 @@
                 <app-valid-error-messages-form
                   [errors]="error"
                   [messages]="InversionErrorMessages.porcentaje_ganancia"
+                ></app-valid-error-messages-form>
+              </div> -->
+          </div>
+        </div>
+        <div
+          class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input"
+          [hidden]="!getControlArray('isNew', i).value"
+        >
+          <div class="form-group">
+            <label>Linea</label>
+            <input
+              type="text"
+              class="form-control"
+              name="linea"
+              formControlName="linea"
+              autocomplete="off"
+              (keyup)="validateProductInversion()"
+              [ngClass]="{
+                'is-invalid':
+                  getControlArray('linea', i).invalid &&
+                  getControlArray('linea', i).touched,
+                'is-valid': getControlArray('linea', i).valid
+              }"
+              [readonly]="readOnlyInputsCierre"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('linea', i) as error">
+                <app-valid-error-messages-form
+                  [errors]="error"
+                  [messages]="InversionErrorMessages.linea"
+                ></app-valid-error-messages-form>
+              </div> -->
+          </div>
+        </div>
+        <div
+          class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input"
+          [hidden]="!getControlArray('isNew', i).value"
+        >
+          <div class="form-group">
+            <label>Modelo</label>
+            <input
+              type="text"
+              class="form-control"
+              name="modelo"
+              formControlName="modelo"
+              autocomplete="off"
+              (keyup)="validateProductInversion()"
+              [ngClass]="{
+                'is-invalid':
+                  getControlArray('modelo', i).invalid &&
+                  getControlArray('modelo', i).touched,
+                'is-valid': getControlArray('modelo', i).valid
+              }"
+              [readonly]="readOnlyInputsCierre"
+            />
+            <!-- <div *ngIf="getControlErrorsArray('modelo', i) as error">
+                <app-valid-error-messages-form
+                  [errors]="error"
+                  [messages]="InversionErrorMessages.modelo"
                 ></app-valid-error-messages-form>
               </div> -->
           </div>
@@ -572,6 +635,32 @@
           </div>
         </div>
         <div
+          class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input btn-toogle"
+        >
+          <div
+            class="form-group d-flex flex-column justify-content-center align-items-center"
+          >
+            <label>¿Es nuevo?</label>
+            <label
+              class="font-weight-bold"
+              [ngClass]="{ 'd-none': !readOnlyInputsCierre }"
+              [innerText]="getControlArray('isNew', i).value ? 'Si' : 'No'"
+            ></label>
+            <label
+              class="switch"
+              [ngClass]="{ 'd-none': readOnlyInputsCierre }"
+            >
+              <input
+                type="checkbox"
+                name="isNew"
+                formControlName="isNew"
+                (change)="changeValueIsNew(i)"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        <div
           class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input"
           *ngIf="!readOnlyInputsCierre"
         >
@@ -588,9 +677,13 @@
             </button>
           </div>
         </div>
+
         <div
           class="col-xl-2 col-lg-2 xs col-md-2 col-sm-6 col-xs-6 col-input"
-          *ngIf="readOnlyInputsCierre && InversionData.inversion_detalle[i].producto_insertado == 0 "
+          *ngIf="
+            readOnlyInputsCierre &&
+            InversionData.inversion_detalle[i].producto_insertado == 0
+          "
         >
           <div class="form-group">
             <button
@@ -620,7 +713,7 @@
       </h6>
     </div>
   </div>
-  <hr class="mt-4 mb-4" *ngIf="!readOnlyInputsCierre"/>
+  <hr class="mt-4 mb-4" *ngIf="!readOnlyInputsCierre" />
   <h6>Totales</h6>
   <!-- <hr class="mt-4 mb-4" /> -->
   <ul class="list-group list-group-horizontal justify-content-around flex-wrap">

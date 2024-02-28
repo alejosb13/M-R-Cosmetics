@@ -6,32 +6,32 @@ import {
   ValidationErrors,
 } from "@angular/forms";
 import {
-  FormatInDecimalToFixed,
-  InversionForm,
-  InversionFormBuilder,
-  inversionFormStructure,
-  InversionGeneralForm,
-  inversionTotalValues,
-} from "app/shared/components/forms/inversion-form/utils/form";
-import { InversionErrorMessages } from "app/shared/components/forms/inversion-form/utils/valid-messages";
-import {
-  InversionesTotales,
-  InversionGeneral,
-  InversionResponse,
-} from "app/shared/models/Inversion.model";
-import Swal from "sweetalert2";
-import {
   map,
   debounceTime,
   distinctUntilChanged,
   tap,
   switchMap,
 } from "rxjs/operators";
-import { FinanzasService } from "app/shared/services/finanzas.service";
-import { Observable, of, OperatorFunction } from "rxjs";
-import { Listado } from "app/shared/services/listados.service";
+import Swal from "sweetalert2";
 import { catchError } from "rxjs/operators";
-import { Producto } from "app/shared/models/Producto.model";
+import {
+  FormatInDecimalToFixed,
+  InversionForm,
+  InversionFormBuilder,
+  inversionFormStructure,
+  InversionGeneralForm,
+  inversionTotalValues,
+} from "@shared/components/forms/inversion-form/utils/form";
+import { InversionErrorMessages } from "@shared/components/forms/inversion-form/utils/valid-messages";
+import {
+  InversionesTotales,
+  InversionGeneral,
+  InversionResponse,
+} from "@shared/models/Inversion.model";
+import { FinanzasService } from "@shared/services/finanzas.service";
+import { Observable, of, OperatorFunction } from "rxjs";
+import { Listado } from "@shared/services/listados.service";
+import { Producto } from "@shared/models/Producto.model";
 
 @Component({
   selector: "app-inversion-form",
@@ -169,7 +169,8 @@ export class InversionFormComponent {
       subida_ganancia = FormatInDecimalToFixed(subida_ganancia);
 
       let precio_venta = c_u_distribuido + subida_ganancia + precio_unitario;
-      precio_venta = FormatInDecimalToFixed(precio_venta);
+      // precio_venta = FormatInDecimalToFixed(precio_venta);
+      precio_venta = Math.ceil(precio_venta);
 
       let margen_ganancia_calculo =
         precio_unitario > 0
@@ -252,13 +253,16 @@ export class InversionFormComponent {
             c_u_distribuido: row.c_u_distribuido,
             costo_total: row.costo_total,
             subida_ganancia: row.subida_ganancia,
-            precio_venta: row.precio_venta,
+            precio_venta:  row.precio_venta,
             margen_ganancia: row.margen_ganancia,
             venta: row.venta,
             venta_total: row.venta_total,
             costo_real: row.costo_real,
             ganancia_bruta: row.ganancia_bruta,
             comision_vendedor: row.comision_vendedor,
+            isNew:row.isNew == 1?true:false,
+            modelo:row.marca,
+            linea:row.linea,
           };
           controlInversion[index].patchValue(patchValue);
         });
@@ -333,7 +337,7 @@ export class InversionFormComponent {
               : productoInversion.producto.descripcion,
         })
       );
-      let response:any = {
+      let response: any = {
         Totales: this.totales,
         InversionGeneral: {
           ...InversionFrom,
@@ -424,8 +428,20 @@ export class InversionFormComponent {
     // console.log("this.FormInversion", control);
   }
 
-  agregarAlInventario(data:number) {
+  changeValueIsNew(position: number) {
+    const formArray = <FormArray>this.FormInversion.controls["inversion"];
+    let currentFormControl = formArray.controls[position];
+    // .get("isNew").value
+    currentFormControl.patchValue({
+      linea: "",
+      modelo: "",
+      marca: "",
+      codigo: null,
+    });
+    console.log("this.FormInversion", currentFormControl.get("isNew").value);
+  }
 
+  agregarAlInventario(data: number) {
     // console.log(this.InversionData.inversion_detalle[data]);
     Swal.fire({
       title: "¿Deseas cargar este producto al inventario?",
@@ -439,10 +455,10 @@ export class InversionFormComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this._FinanzasService
-          .insertProducto( {
+          .insertProducto({
             producto_insertado: 1,
             id_inversion: this.InversionData.id,
-            id_inversion_detail:this.InversionData.inversion_detalle[data].id,
+            id_inversion_detail: this.InversionData.inversion_detalle[data].id,
           })
           .subscribe((data) => {
             // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
@@ -451,7 +467,7 @@ export class InversionFormComponent {
               icon: "success",
             }).then(() => {
               window.location.reload();
-            })
+            });
           });
       }
     });

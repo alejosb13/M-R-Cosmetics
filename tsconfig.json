@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "target": "ES2022",
-    "skipLibCheck":true,
+    "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -19,6 +19,26 @@
       "es2017",
       "dom"
     ],
+    "paths": {
+      "@app/*": [
+        "app/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@environment/*": [
+        "environments/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@pages/*": [
+        "app/pages/*"
+      ],
+      "@utils/*": [
+        "app/utils/*"
+      ],
+    },
     "module": "esnext",
     "useDefineForClassFields": false
   }

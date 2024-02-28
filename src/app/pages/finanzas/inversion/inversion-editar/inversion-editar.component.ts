@@ -59,11 +59,13 @@ export class InversionEditarComponent {
           });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
-          let error: string = HttpErrorResponse.error[0];
+          // console.log(HttpErrorResponse);
+          
+          let error = HttpErrorResponse.error;
 
           Swal.fire({
             title: "Error",
-            html: error,
+            html: error.mensaje,
             icon: "error",
           });
         }

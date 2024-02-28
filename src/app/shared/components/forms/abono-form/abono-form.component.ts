@@ -423,6 +423,7 @@ export class AbonoFormComponent implements OnInit {
           roleName: this.roleName,
           link: null,
           filter: term,
+          saldo: true,
         };
 
         return this._Listado.clienteListCarrito(listadoFilter).pipe(

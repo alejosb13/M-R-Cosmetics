@@ -4,7 +4,7 @@ import { FormGroupValidators } from "app/shared/utils/interfaces";
 export const InversionValidators: FormGroupValidators = {
   envio: [Validators.required, Validators.maxLength(80)],
   porcentaje_comision_vendedor: [Validators.required, Validators.maxLength(80)],
-  codigo: [Validators.required, Validators.maxLength(80)],
+  codigo: [Validators.maxLength(80)],
   producto: [Validators.required, Validators.maxLength(80)],
   marca: [Validators.required, Validators.maxLength(80)],
   cantidad: [Validators.required, Validators.maxLength(80)],
@@ -23,4 +23,7 @@ export const InversionValidators: FormGroupValidators = {
   costo_real: [],
   ganancia_bruta: [],
   comision_vendedor: [],
+  isNew: [],
+  linea: [],
+  modelo: [],
 };

@@ -1,5 +1,6 @@
-
-<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+<nav
+  class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent"
+>
   <div class="container-fluid">
     <div class="navbar-wrapper">
       <div class="navbar-toggle">
@@ -9,15 +10,27 @@
           <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a class="navbar-brand" href="javascript:void(0)">{{getTitle()}}</a>
+      <div>
+        <span class="flecha-atras mr-2 pointer text-primary" (click)="back()"> <i class="fas fa-chevron-left"></i> Atrás</span>
+        <span class="navbar-brand"> | {{ getTitle() }}</span>
+      </div>
     </div>
-    <button class="navbar-toggler" type="button" (click)="collapse()"
-      [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="collapse()"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseExample"
+    >
       <span class="navbar-toggler-bar navbar-kebab"></span>
       <span class="navbar-toggler-bar navbar-kebab"></span>
       <span class="navbar-toggler-bar navbar-kebab"></span>
     </button>
-    <div class="collapse navbar-collapse justify-content-end" id="collapseExample" [ngbCollapse]="isCollapsed">
+    <div
+      class="collapse navbar-collapse justify-content-end"
+      id="collapseExample"
+      [ngbCollapse]="isCollapsed"
+    >
       <!-- <form>
         <div class="input-group no-border">
           <input type="text" value="" class="form-control" placeholder="Search...">
@@ -30,9 +43,17 @@
       </form> -->
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link btn-magnify carrito-nav" [routerLink]="[ '/checkout']" *ngIf="!isSupervisor">
-            <i class="mr-2 mr-lg-0   fas fa-shopping-cart"></i>
-            <span *ngIf=" (_CheckoutService.numeroProductos |async) > 0 " class="badge badge-primary badge-pill">{{ _CheckoutService.numeroProductos |async }}</span>
+          <a
+            class="nav-link btn-magnify carrito-nav"
+            [routerLink]="['/checkout']"
+            *ngIf="!isSupervisor"
+          >
+            <i class="mr-2 mr-lg-0 fas fa-shopping-cart"></i>
+            <span
+              *ngIf="(_CheckoutService.numeroProductos | async) > 0"
+              class="badge badge-primary badge-pill"
+              >{{ _CheckoutService.numeroProductos | async }}</span
+            >
             <p>
               <span class="d-lg-none d-md-block">Carrito</span>
             </p>
@@ -40,17 +61,25 @@
         </li>
 
         <li class="nav-item btn-rotate" ngbDropdown placement="bottom-left">
-          <a class="nav-link" ngbDropdownToggle id="navbarDropdownMenuLink" >
+          <a class="nav-link" ngbDropdownToggle id="navbarDropdownMenuLink">
             <i class="nc-icon nc-single-02"></i>
             <p>
               <span class="d-lg-none d-md-block">Perfil</span>
             </p>
           </a>
-          <div ngbDropdownMenu aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right">
+          <div
+            ngbDropdownMenu
+            aria-labelledby="navbarDropdownMenuLink"
+            class="dropdown-menu dropdown-menu-right"
+          >
             <!-- <a ngbDropdownItem href="javascript:void(0)">Mi Perfil</a> -->
-            <a ngbDropdownItem href="javascript:void(0)">{{ UserInfo.nombre }} {{ UserInfo.apellido }}</a>
-            <hr class="my-1">
-            <a ngbDropdownItem href="javascript:void(0)" (click)="logout()">Cerrar Session</a>
+            <a ngbDropdownItem href="javascript:void(0)"
+              >{{ UserInfo.nombre }} {{ UserInfo.apellido }}</a
+            >
+            <hr class="my-1" />
+            <a ngbDropdownItem href="javascript:void(0)" (click)="logout()"
+              >Cerrar Session</a
+            >
           </div>
         </li>
         <!-- <li class="nav-item">

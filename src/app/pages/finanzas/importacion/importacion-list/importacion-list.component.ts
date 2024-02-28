@@ -6,7 +6,6 @@ import { FiltrosList, Link, ListadoModel } from 'app/shared/models/Listados.mode
 import { FinanzasService } from 'app/shared/services/finanzas.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
 import Swal from 'sweetalert2';
-import { map } from 'rxjs/operators';
 import { ImportacionResponse } from 'app/shared/models/Importacion.model';
 
 @Component({

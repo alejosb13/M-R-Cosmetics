@@ -3,10 +3,6 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Importacion } from "app/shared/models/Importacion.model";
-import {
-  InversionesTotales,
-  InversionGeneral,
-} from "app/shared/models/Inversion.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import Swal from "sweetalert2";
 
@@ -58,7 +54,7 @@ export class ImportacionInsertarComponent {
             text: "Importación creada con exito!",
             icon: "success",
           }).then((result) => {
-            return this._router.navigateByUrl("/finanzas/inversion");
+            return this._router.navigateByUrl("/finanzas/importacion");
           });
         },
         (HttpErrorResponse: HttpErrorResponse) => {

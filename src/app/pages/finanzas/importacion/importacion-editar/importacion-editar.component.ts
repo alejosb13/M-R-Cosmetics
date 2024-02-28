@@ -2,10 +2,6 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { AuthService } from "app/auth/login/service/auth.service";
-import {
-  InversionesTotales,
-  InversionGeneral,
-} from "app/shared/models/Inversion.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import Swal from "sweetalert2";
 import { Importacion } from "../../../../shared/models/Importacion.model";

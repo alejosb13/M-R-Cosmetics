@@ -8,7 +8,7 @@ export interface InversionConstantForm {
   comision_vendedor: FormControl<number>;
 }
 export interface InversionForm {
-  codigo: FormControl<string>;
+  codigo: FormControl<number>;
   producto: FormControl<string>;
   marca: FormControl<string>;
   cantidad: FormControl<number>;
@@ -27,6 +27,9 @@ export interface InversionForm {
   costo_real: FormControl<number>;
   ganancia_bruta: FormControl<number>;
   comision_vendedor: FormControl<number>;
+  isNew?: FormControl<boolean>;
+  linea?: FormControl<string>;
+  modelo?: FormControl<string>;
 }
 export interface InversionGeneralForm {
   envio: FormControl<number>;
@@ -35,11 +38,13 @@ export interface InversionGeneralForm {
 }
 
 export const inversionFormStructure = () => ({
-  codigo: new FormControl("", [...InversionValidators.codigo]),
+  codigo: new FormControl(null, [...InversionValidators.codigo]),
   producto: new FormControl("", [...InversionValidators.producto]),
   marca: new FormControl("", [...InversionValidators.marca]),
   cantidad: new FormControl(null, [...InversionValidators.cantidad]),
-  precio_unitario: new FormControl(null, [...InversionValidators.precio_unitario]),
+  precio_unitario: new FormControl(null, [
+    ...InversionValidators.precio_unitario,
+  ]),
   porcentaje_ganancia: new FormControl(null, [
     ...InversionValidators.porcentaje_ganancia,
   ]),
@@ -68,9 +73,12 @@ export const inversionFormStructure = () => ({
   comision_vendedor: new FormControl(null, [
     ...InversionValidators.comision_vendedor,
   ]),
+  isNew: new FormControl(false, [...InversionValidators.isNew]),
+  linea: new FormControl("", [...InversionValidators.linea]),
+  modelo: new FormControl("", [...InversionValidators.modelo]),
 });
 
-export const inversionTotalValues = ():InversionesTotales => ({
+export const inversionTotalValues = (): InversionesTotales => ({
   cantidad: 0,
   costo: 0,
   peso_porcentual: 0,
@@ -83,7 +91,7 @@ export const inversionTotalValues = ():InversionesTotales => ({
   ganancia_total: 0,
 });
 
-export const InversionFormBuilder = ():FormGroup<InversionGeneralForm> =>
+export const InversionFormBuilder = (): FormGroup<InversionGeneralForm> =>
   new FormGroup({
     envio: new FormControl(null, [...InversionValidators.envio]),
     // subida_ganancia: new FormControl(null, [
@@ -97,8 +105,6 @@ export const InversionFormBuilder = ():FormGroup<InversionGeneralForm> =>
     ]),
   });
 
-export const FormatInDecimalToFixed = (
-  valor: number,
-  decimales: number = 2
-  ) => Number((Math.round(valor * 100) / 100).toFixed(decimales));
-  // ): number => Number(Number(valor).toFixed(decimales));
+export const FormatInDecimalToFixed = (valor: number, decimales: number = 2) =>
+  Number((Math.round(valor * 100) / 100).toFixed(decimales));
+// ): number => Number(Number(valor).toFixed(decimales));
