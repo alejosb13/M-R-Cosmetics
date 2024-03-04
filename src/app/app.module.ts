@@ -4,10 +4,10 @@ import { RouterModule } from '@angular/router';
 import { ToastrModule } from "ngx-toastr";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { SidebarModule } from './sidebar/sidebar.module';
-import { FooterModule } from './shared/footer/footer.module';
-import { NavbarModule} from './shared/navbar/navbar.module';
-import { FixedPluginModule} from './shared/fixedplugin/fixedplugin.module';
+import { SidebarModule } from './shared/components/sidebar/sidebar.module';
+import { FooterModule } from './shared/components/footer/footer.module';
+import { NavbarModule} from './shared/components/navbar/navbar.module';
+import { FixedPluginModule} from './shared/components/fixedplugin/fixedplugin.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';

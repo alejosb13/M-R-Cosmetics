@@ -56,7 +56,7 @@ import { FrecuenciaListadoComponent } from "app/pages/frecuencias/frecuencia-lis
 import { FrecuenciaEditarComponent } from "app/pages/frecuencias/frecuencia-editar/frecuencia-editar.component";
 import { FrecuenciaInsertarComponent } from "app/pages/frecuencias/frecuencia-insertar/frecuencia-insertar.component";
 import { FrecuenciaFormComponent } from "app/shared/components/forms/frecuencia-form/frecuencia-form.component";
-import { FacturaEditarFormComponent } from "app/shared/factura-form/factura-form.component";
+import { FacturaEditarFormComponent } from "@app/shared/components/factura-form/factura-form.component";
 import { FacturaDespachadaComponent } from "app/pages/facturas/factura-despachada/factura-despachada.component";
 import { ReciboModalFormComponent } from "app/shared/components/forms/recibo-modal-form/recibo-modal-form.component";
 

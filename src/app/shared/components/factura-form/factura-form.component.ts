@@ -1,12 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FacturaDetalle } from '@app/shared/models/FacturaDetalle.model';
+import { Producto } from '@app/shared/models/Producto.model';
+import { ProductosService } from '@app/shared/services/productos.service';
+import { ValidFunctionsValidator } from '@app/shared/utils/valid-functions.validator';
 import logger from 'app/shared/utils/logger';
 // import { AuthService } from 'app/auth/login/service/auth.service';
 import Swal from 'sweetalert2';
-import { FacturaDetalle } from '../models/FacturaDetalle.model';
-import { Producto } from '../models/Producto.model';
-import { ProductosService } from '../services/productos.service';
-import { ValidFunctionsValidator } from '../utils/valid-functions.validator';
+
 
 type ProductoDetalle = Producto & FacturaDetalle
 

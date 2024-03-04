@@ -26,7 +26,7 @@ export class AdminLayoutComponent implements OnInit {
     if (this._AuthService.isLogin) {
       const { roleId, roleName, userId } = this._AuthService.dataStorage.user;
       // let refreshIndices = interval(40000).pipe(
-      let refreshIndices = interval(20000).pipe(
+      let refreshIndices = interval(40000).pipe(
         exhaustMap(() =>
           this._CronService.getRefreshIndices({ roleId, roleName, userId })
         ),

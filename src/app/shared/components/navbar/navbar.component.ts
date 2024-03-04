@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { ROUTES } from "../../sidebar/sidebar.component";
+import { ROUTES } from "../sidebar/sidebar.component";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
-import { CheckoutService } from "../services/checkout.service";
-import { FacturaDetalle } from "../models/FacturaDetalle.model";
+import { CheckoutService } from "../../services/checkout.service";
+import { FacturaDetalle } from "../../models/FacturaDetalle.model";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { UserAuth } from "app/auth/login/models/auth.model";
-import { RememberFiltersService } from "../services/remember-filters.service";
+import { RememberFiltersService } from "../../services/remember-filters.service";
 import logger from "app/shared/utils/logger";
-import { HelpersService } from "../services/helpers.service";
+import { HelpersService } from "../../services/helpers.service";
 
 @Component({
   moduleId: module.id,
@@ -95,6 +95,7 @@ export class NavbarComponent implements OnInit {
     if (titlee.includes("finanzas/importacion/agregar"))
       return "Nueva importación";
     if (titlee.includes("finanzas/importacion")) return "Importación";
+    if (titlee.includes("finanzas/costos")) return "Costos";
     if (titlee.includes("factura/entrega/0")) return "Factura Por Entregar";
 
     for (var item = 0; item < this.listTitles.length; item++) {
