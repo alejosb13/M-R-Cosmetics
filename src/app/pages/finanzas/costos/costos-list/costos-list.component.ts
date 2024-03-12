@@ -16,15 +16,15 @@ import { ImportacionResponse } from '@app/shared/models/Importacion.model';;
 export class CostosListComponent {
   dateIni: string;
   dateFin: string;
-  allDates: boolean = true;
+  allDates: boolean = false;
   listadoFilter: FiltrosList = {
     link: null,
     estado: 1,
     // disablePaginate: "true",
   };
 
-  listadoData: ListadoModel<ImportacionResponse>;
-  Importaciones: ImportacionResponse[];
+  listadoData: ListadoModel<any>;
+  Productos_Vendidos: any[];
 
   isLoad: boolean;
 
@@ -44,12 +44,12 @@ export class CostosListComponent {
     this.isLoad = true;
 
     this._FinanzasService
-      .getImportacion(this.listadoFilter)
+      .getProductosVendidos(this.listadoFilter)
       .subscribe(
-        (Paginacion: ListadoModel<ImportacionResponse>) => {
-          console.log(Paginacion);
-          this.listadoData = { ...Paginacion };
-          this.Importaciones = [...Paginacion.data];
+        (Paginacion: any) => {
+          this.listadoData = Paginacion;
+          console.log(this.listadoData);
+          this.Productos_Vendidos = [...Paginacion.data];
           this.isLoad = false;
         },
         (error) => {
@@ -161,7 +161,7 @@ export class CostosListComponent {
 
   limpiarFiltros() {
     this.setCurrentDate();
-    this.allDates = true;
+    this.allDates = false;
 
     this.asignarValores();
     this.NgbModal.dismissAll();

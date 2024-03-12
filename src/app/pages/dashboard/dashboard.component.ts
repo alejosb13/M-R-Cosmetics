@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { FormatInDecimalToFixed } from "@app/shared/utils/helpers";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Factura } from "app/shared/models/Factura.model";
@@ -21,7 +22,7 @@ export class DashboardComponent implements OnInit {
   public isSupervisor: boolean;
   public userId: number;
   public recuperacionPorcentaje: number;
-
+  public FormatInDecimalToFixed = FormatInDecimalToFixed
   //filtros
   public filtros: any = {};
   public dateIni: string;

@@ -75,41 +75,29 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">N. Importación</th>
-              <th scope="col">N. Recibo</th>
-              <th scope="col">Conceptualización</th>
-              <th scope="col">N. Inversión</th>
-              <th scope="col">Monto de compra</th>
-              <th scope="col">Precio de envió</th>
-              <!-- <th scope="col">echa Recibo</th> -->
+              <th scope="col">#</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Modelo</th>
+              <th scope="col">Linea</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Costo Unitario</th>
+              <th scope="col">Costo Total</th>
               <th scope="col">Opciones</th>
             </tr>
           </thead>
-          <tbody *ngIf="Importaciones.length > 0">
-            <tr *ngFor="let Importacion of Importaciones">
-              <th scope="row"># {{ Importacion.id }}</th>
-              <th scope="row">{{ Importacion.numero_recibo }}</th>
-              <td scope="row">{{ Importacion.conceptualizacion }}</td>
-              <td scope="row">
-                <a
-                  [routerLink]="[
-                    '/finanzas',
-                    'inversion',
-                    'editar',
-                    Importacion.inversion.id
-                  ]"
-                >
-                  #{{ Importacion.numero_inversion }}
-                </a>
-              </td>
-              <td scope="row">
-                {{ Importacion.monto_compra | currency : "USD" }}
-              </td>
-              <td scope="row">
-                {{ Importacion.precio_envio | currency : "USD" }}
-              </td>
+          <tbody *ngIf="Productos_Vendidos.length > 0">
+            <tr *ngFor="let pv of Productos_Vendidos">
+              <th >{{ pv.id }}</th>
+              <td >{{ pv.marca }}</td>
+              <td >{{ pv.modelo }}</td>
+              <td >{{ pv.linea }}</td>
+              <td >{{ pv.descripcion }}</td>
+              <td >{{ pv.cantidad }}</td>
+              <td >{{ pv.cantidad }}</td>
+              <td >{{ pv.cantidad }}</td>
               <td>
-                <div class="d-flex flex-direction">
+                <!-- <div class="d-flex flex-direction">
                   <div
                     class="mr-3"
                     ngbTooltip="Editar"
@@ -124,20 +112,11 @@
                       ><i class="fas fa-pencil-alt"></i
                     ></span>
                   </div>
-                  <!-- <div
-                    class="mr-3"
-                    ngbTooltip="Eliminar"
-                    (click)="eliminar(Importacion)"
-                  >
-                    <span class="text-primary pointer" role="button"
-                      ><i class="fas fa-trash-alt"></i
-                    ></span>
-                  </div> -->
-                </div>
+                </div> -->
               </td>
             </tr>
           </tbody>
-          <tbody *ngIf="Importaciones.length == 0">
+          <tbody *ngIf="Productos_Vendidos.length == 0">
             <tr>
               <td colspan="10">
                 <div
@@ -229,19 +208,7 @@
           </div>
         </div>
 
-        <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
-          <p class="font-weight-bold">Usuarios</p>
-          <select name="" id="" class="form-control" [(ngModel)]="userId">
-            <option value="0">Todos los usuarios</option>
-            <option
-              *ngFor="let usuario of userStore"
-              [selected]="usuario.id == userId"
-              [value]="usuario.id"
-            >
-              {{ usuario.name }} {{ usuario.apellido }}
-            </option>
-          </select>
-        </div>
+
       </div>
     </div>
     <div class="modal-footer justify-content-center w-100">

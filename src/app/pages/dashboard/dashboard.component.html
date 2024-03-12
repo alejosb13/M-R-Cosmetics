@@ -15,7 +15,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.cartera_total | currency : "USD" }}
+                >{{ FormatInDecimalToFixed(response.cartera_total) | currency : "USD" }}
               </span>
             </div>
             <div
@@ -42,12 +42,12 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.ventas_mes_porcentaje }}%
+                >{{ FormatInDecimalToFixed(response.ventas_mes_porcentaje) }}%
               </span>
               <span class="data-2 text-white">
-                {{ response.ventas_mes_total | currency : "USD" }}
+                {{ FormatInDecimalToFixed(response.ventas_mes_total) | currency : "USD" }}
                 |
-                {{ response.ventas_mes_meta | currency : "USD" }}
+                {{ FormatInDecimalToFixed(response.ventas_mes_meta) | currency : "USD" }}
               </span>
             </div>
             <div
@@ -73,12 +73,12 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.recuperacionmensual_porcentaje }}%
+                >{{ FormatInDecimalToFixed(response.recuperacionmensual_porcentaje) }}%
               </span>
               <span class="data-2 text-white">
-                {{ response.recuperacionmensual_abonos | currency : "USD" }}
+                {{ FormatInDecimalToFixed(response.recuperacionmensual_abonos) | currency : "USD" }}
                 |
-                {{ response.recuperacionmensual_total | currency : "USD" }}
+                {{ FormatInDecimalToFixed(response.recuperacionmensual_total) | currency : "USD" }}
               </span>
             </div>
             <div
@@ -108,12 +108,12 @@
                 *ngIf="!isAdmin && !isSupervisor; else elseVentaIndice"
               >
                 <span class="data-1 w-100 d-block text-white"
-                  >{{ response.ventas_meta_porcentaje }}%
+                  >{{ FormatInDecimalToFixed(response.ventas_meta_porcentaje) }}%
                 </span>
                 <span class="data-2 text-white">
-                  {{ response.ventas_meta_total | currency : "USD" }}
+                  {{ FormatInDecimalToFixed(response.ventas_meta_total) | currency : "USD" }}
                   |
-                  {{ response.ventas_meta_monto | currency : "USD" }}
+                  {{ FormatInDecimalToFixed(response.ventas_meta_monto) | currency : "USD" }}
                 </span>
               </ng-container>
             </div>
@@ -130,9 +130,9 @@
   </div>
   <ng-template #elseVentaIndice>
     <span class="data-1 w-100 d-block text-white">
-      {{ response.ventas_meta_total | currency : "USD" }}
+      {{ FormatInDecimalToFixed(response.ventas_meta_total) | currency : "USD" }}
       |
-      {{ response.ventas_meta_monto | currency : "USD" }}
+      {{ FormatInDecimalToFixed(response.ventas_meta_monto) | currency : "USD" }}
     </span>
   </ng-template>
 
@@ -148,7 +148,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.recuperacion_total | currency : "USD" }}
+                >{{ FormatInDecimalToFixed(response.recuperacion_total) | currency : "USD" }}
               </span>
             </div>
             <div
@@ -174,7 +174,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.mora30_60 | currency : "USD" }}
+                >{{ FormatInDecimalToFixed(response.mora30_60) | currency : "USD" }}
               </span>
             </div>
             <div
@@ -200,7 +200,7 @@
           <div class="col-md-12 px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.mora60_90 | currency : "USD" }}
+                >{{ FormatInDecimalToFixed(response.mora60_90) | currency : "USD" }}
               </span>
             </div>
             <div
@@ -252,7 +252,7 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white"
-                >{{ response.incentivos | currency : "USD" }}
+                >{{ FormatInDecimalToFixed(response.incentivos) | currency : "USD" }}
               </span>
               <!-- <span class="data-2 text-white">
                 {{ response.incentivos.total | currency : "USD" }}
@@ -283,7 +283,7 @@
           <div class="col-md-12 ajustar-altura px-0">
             <div class="ajustar-altura">
               <span class="data-1 w-100 d-block text-white">
-                {{ response.incentivos_supervisor | currency : "USD" }}
+                {{ FormatInDecimalToFixed(response.incentivos_supervisor) | currency : "USD" }}
               </span>
               <!-- <span class="data-2 text-white">
                 {{
