@@ -88,31 +88,71 @@
           </thead>
           <tbody *ngIf="Productos_Vendidos.length > 0">
             <tr *ngFor="let pv of Productos_Vendidos">
-              <th >{{ pv.id }}</th>
-              <td >{{ pv.marca }}</td>
-              <td >{{ pv.modelo }}</td>
-              <td >{{ pv.linea }}</td>
-              <td >{{ pv.descripcion }}</td>
-              <td >{{ pv.cantidad }}</td>
-              <td >{{ pv.cantidad }}</td>
-              <td >{{ pv.cantidad }}</td>
+              <th>{{ pv.id }}</th>
+              <td>{{ pv.marca }}</td>
+              <td>{{ pv.modelo }}</td>
+              <td>{{ pv.linea }}</td>
+              <td>{{ pv.descripcion }}</td>
+              <td>{{ pv.cantidad }}</td>
               <td>
-                <!-- <div class="d-flex flex-direction">
+                <div *ngIf="pv.inversion">
+                  {{ pv.inversion.costo | currency : "USD" }}
+                </div>
+                <div *ngIf="!pv.inversion">
+                  <div *ngIf="pv.costo_opcional">
+                    {{ pv.costo_opcional.costo | currency : "USD" }}
+                  </div>
+                  <div *ngIf="!pv.costo_opcional">--</div>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="pv.inversion">
+                  {{ pv.inversion.costo * pv.cantidad | currency : "USD" }}
+                </div>
+                <div *ngIf="!pv.inversion">
+                  <div *ngIf="pv.costo_opcional">
+                    {{
+                      pv.costo_opcional.costo * pv.cantidad | currency : "USD"
+                    }}
+                  </div>
+                  <div *ngIf="!pv.costo_opcional">--</div>
+                </div>
+              </td>
+              <td>
+                <div
+                  *ngIf="!pv.inversion && !pv.costo_opcional"
+                  class="d-flex flex-direction"
+                >
+                  <div
+                    class="mr-3"
+                    ngbTooltip="Agregar"
+                    (click)="openFiltros(contentOciosos, pv.id)"
+                  >
+                    <span class="text-primary pointer" role="button"
+                      ><i class="fas fa-plus"></i
+                    ></span>
+                  </div>
+                </div>
+                <div
+                  *ngIf="!pv.inversion && pv.costo_opcional"
+                  class="d-flex flex-direction"
+                >
                   <div
                     class="mr-3"
                     ngbTooltip="Editar"
-                    [routerLink]="[
-                      '/finanzas',
-                      'importacion',
-                      'editar',
-                      Importacion.id
-                    ]"
+                    (click)="
+                      openFiltros(
+                        contentOciososEditar,
+                        pv.id,
+                        pv.costo_opcional.id
+                      )
+                    "
                   >
                     <span class="text-primary pointer" role="button"
                       ><i class="fas fa-pencil-alt"></i
                     ></span>
                   </div>
-                </div> -->
+                </div>
               </td>
             </tr>
           </tbody>
@@ -151,79 +191,128 @@
       </div>
     </div>
   </div>
-
-  <ng-template #contentFiltros let-modal>
-    <div class="modal-header">
-      <div>
-        <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
-      </div>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-              value="true"
-              [(ngModel)]="allDates"
-            />
-            <label class="form-check-label" for="flexCheckDefault">
-              Todos
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <p class="font-weight-bold">Desde</p>
-            <input
-              [disabled]="allDates"
-              type="date"
-              class="form-control"
-              [(ngModel)]="dateIni"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <p class="font-weight-bold">Hasta</p>
-            <input
-              [disabled]="allDates"
-              type="date"
-              class="form-control"
-              [(ngModel)]="dateFin"
-            />
-          </div>
-        </div>
-
-
-      </div>
-    </div>
-    <div class="modal-footer justify-content-center w-100">
-      <div class="row w-100">
-        <div class="col text-center">
-          <button class="btn btn-danger" (click)="limpiarFiltros()">
-            Limpiar <i class="fas fa-eraser"></i>
-          </button>
-        </div>
-        <div class="col text-center">
-          <button class="btn btn-primary" (click)="asignarValores()">
-            Aplicar <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </ng-template>
 </div>
+
+<ng-template #contentFiltros let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="asignarValores()">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentOciosos let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Agregar costo</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <app-costos-ventas-form
+          producto_id="{{ producto_id }}"
+          (FormsValues)="FormsValuesDevolucion($event)"
+        ></app-costos-ventas-form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentOciososEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">editar costo</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <app-costos-ventas-form
+          producto_id="{{ producto_id }}"
+          (FormsValues)="FormsValuesDevolucionEditar($event)"
+          Id="{{ Id }}"
+        ></app-costos-ventas-form>
+      </div>
+    </div>
+  </div>
+</ng-template>

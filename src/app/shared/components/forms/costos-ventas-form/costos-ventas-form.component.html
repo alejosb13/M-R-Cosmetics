@@ -1,0 +1,81 @@
+<div [hidden]="loadInfo">
+  
+  
+  <br />
+  <form [formGroup]="FormCostoVenta" class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cod. Producto</label>
+        <input
+          type="text"
+          class="form-control"
+          name="producto_id"
+          formControlName="producto_id"
+          autocomplete="off"
+          appOnlyNumberAndPoint
+          readonly
+          [ngClass]="{
+            'is-invalid':
+              getControl('producto_id').invalid &&
+              getControl('producto_id').touched,
+            'is-valid': getControl('producto_id').valid
+          }"
+        />
+        <div *ngIf="getControlError('producto_id') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="CostoVentaErrorMessages.producto_id"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Costo</label>
+        <input
+          type="text"
+          class="form-control"
+          name="costo"
+          formControlName="costo"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('costo').invalid && getControl('costo').touched,
+            'is-valid': getControl('costo').valid
+          }"
+          appOnlyNumberAndPoint
+        />
+        <div *ngIf="getControlError('costo') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="CostoVentaErrorMessages.costo"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr class="mt-4 mb-4" />
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        [disabled]="!isValidForm"
+        (click)="EnviarFormulario()"
+      >
+        <div *ngIf="Id">Actualizar</div>
+        <div *ngIf="!Id">Agregar</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando Importación
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

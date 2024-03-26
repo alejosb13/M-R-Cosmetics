@@ -9,6 +9,7 @@ import {
 } from "../models/Inversion.model";
 import { FiltrosList } from "../models/Listados.model";
 import { Importacion } from "../models/Importacion.model";
+import { CostoVenta } from "../models/CostosVentas.model";
 
 const FinanzasURL = `${environment.urlAPI}finanzas`;
 
@@ -187,17 +188,17 @@ export class FinanzasService {
 
   getProductosVendidos(param: FiltrosList): Observable<any> {
     let URL = `${FinanzasURL}/productos-vendidos`;
-    if(param.link){
-      URL = param.link
-    } 
-  
+    if (param.link) {
+      URL = param.link;
+    }
+
     let params = new HttpParams();
     for (const key in param) {
-      let indice = key
-      let valor =  param[key]
-      
-      if(indice =="link") continue
-      
+      let indice = key;
+      let valor = param[key];
+
+      if (indice == "link") continue;
+
       params = params.append(key, valor);
     }
 
@@ -208,4 +209,25 @@ export class FinanzasService {
     });
   }
 
+  insertCostoVenta(data: CostoVenta): Observable<any> {
+    return this.http.post(
+      `${FinanzasURL}/productos-vendidos`,
+      { ...data },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
+  }
+
+  editarCostoVenta(data: CostoVenta, Id: number): Observable<any> {
+    return this.http.put(
+      `${FinanzasURL}/productos-vendidos/${Id}`,
+      { ...data },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
+  }
 }
