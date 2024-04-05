@@ -209,6 +209,29 @@ export class FinanzasService {
     });
   }
 
+  getGastos(param: FiltrosList): Observable<any> {
+    let URL = `${FinanzasURL}/gastos`;
+    if (param.link) {
+      URL = param.link;
+    }
+
+    let params = new HttpParams();
+    for (const key in param) {
+      let indice = key;
+      let valor = param[key];
+
+      if (indice == "link") continue;
+
+      params = params.append(key, valor);
+    }
+
+    return this.http.get(URL, {
+      params: params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   insertCostoVenta(data: CostoVenta): Observable<any> {
     return this.http.post(
       `${FinanzasURL}/productos-vendidos`,

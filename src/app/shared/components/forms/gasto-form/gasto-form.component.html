@@ -1,0 +1,152 @@
+<div [hidden]="loadInfo">
+  <br />
+  <form [formGroup]="FormGastos" class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Tipo</label>
+        <select
+          class="form-control"
+          name="tipo"
+          formControlName="tipo"
+          [ngClass]="{
+            'is-invalid':
+              getControl('tipo').invalid && getControl('tipo').touched,
+            'is-valid': getControl('tipo').valid
+          }"
+        >
+          <option hidden>Seleccione una condición</option>
+          <option [ngValue]="0">Empresa</option>
+          <option [ngValue]="1">MaRo</option>
+          <option [ngValue]="2">Adicional</option>
+        </select>
+        <div *ngIf="getControlError('tipo') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.tipo"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Número</label>
+        <input
+          type="text"
+          class="form-control"
+          name="numero"
+          formControlName="numero"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('numero').invalid && getControl('numero').touched,
+            'is-valid': getControl('numero').valid
+          }"
+          appOnlyNumbers
+        />
+        <div *ngIf="getControlError('numero') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.numero"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Monto</label>
+        <input
+          type="text"
+          class="form-control"
+          name="monto"
+          formControlName="monto"
+          autocomplete="off"
+          appOnlyNumberAndPoint
+          [ngClass]="{
+            'is-invalid':
+              getControl('monto').invalid && getControl('monto').touched,
+            'is-valid': getControl('monto').valid
+          }"
+        />
+        <div *ngIf="getControlError('monto') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.monto"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Conceptualización</label>
+        <input
+          type="text"
+          class="form-control"
+          name="conceptualizacion"
+          formControlName="conceptualizacion"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('conceptualizacion').invalid &&
+              getControl('conceptualizacion').touched,
+            'is-valid': getControl('conceptualizacion').valid
+          }"
+        />
+        <div *ngIf="getControlError('conceptualizacion') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.conceptualizacion"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Fecha de comprobante<span class="text-danger">(*)</span></label>
+        <input
+          type="date"
+          class="form-control"
+          name="fecha_comprobante"
+          formControlName="fecha_comprobante"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('fecha_comprobante').invalid &&
+              getControl('fecha_comprobante').touched,
+            'is-valid': getControl('fecha_comprobante').valid
+          }"
+        />
+        <div *ngIf="getControlError('fecha_comprobante') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.fecha_comprobante"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr class="mt-4 mb-4" />
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        [disabled]="!isValidForm"
+        (click)="EnviarFormulario()"
+      >
+        <div *ngIf="Gasto">Actualizar</div>
+        <div *ngIf="!Gasto">Agregar</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando Importación
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

@@ -96,6 +96,7 @@ export class NavbarComponent implements OnInit {
       return "Nueva importación";
     if (titlee.includes("finanzas/importacion")) return "Importación";
     if (titlee.includes("finanzas/costos")) return "Costos";
+    if (titlee.includes("finanzas/gastos")) return "Gastos";
     if (titlee.includes("factura/entrega/0")) return "Factura Por Entregar";
 
     for (var item = 0; item < this.listTitles.length; item++) {
