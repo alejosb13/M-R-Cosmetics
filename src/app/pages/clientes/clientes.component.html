@@ -188,13 +188,20 @@
                     ><i class="fas fa-pencil-alt text-warning"></i
                   ></a>
                 </div>
-                <div class="mr-3" ngbTooltip="Eliminar" *ngIf="isAdmin">
+                <div class="mr-3" ngbTooltip="Eliminar" *ngIf="isAdmin && cliente.estado == 1">
                   <span
                     class="text-danger pointer"
                     role="button"
                     (click)="eliminar(cliente)"
                     ><i class="fas fa-trash-alt"></i
                   ></span>
+                </div>
+                <div class="mr-3" ngbTooltip="Eliminar" *ngIf="isAdmin && cliente.estado == 0">
+                  <span
+                    class="text-danger pointer"
+                    role="button"
+                    (click)="eliminar(cliente)"
+                    ><i class="fas fa-undo-alt"></i></span>
                 </div>
               </div>
             </td>
@@ -315,6 +322,14 @@
           >
             {{ usuario.name }} {{ usuario.apellido }}
           </option>
+        </select>
+      </div>
+      <div class="col-md-6 mt-3"  *ngIf="isAdmin">
+        <p class="font-weight-bold">Estado</p>
+        <select name="" id="" class="form-control" [(ngModel)]="estado">
+          <option value="2">Todos</option>
+          <option value="0">Eliminados</option>
+          <option value="1">No eliminados</option>
         </select>
       </div>
       <div class="col-md-6 mt-3">

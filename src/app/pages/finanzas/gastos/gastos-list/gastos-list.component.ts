@@ -71,9 +71,9 @@ export class GastosListComponent {
   }
 
   openFiltros(content: any, gasto: Gasto = null) {
-    console.log(gasto);
+    // console.log(gasto);
     if (gasto) this.Gasto = gasto;
-    console.log(this.Gasto);
+    // console.log(this.Gasto);
 
     this.listadoFilter.link = null;
 
@@ -190,11 +190,11 @@ export class GastosListComponent {
     this.asignarValores();
   }
 
-  FormsValuesDevolucion(costosVenta: CostoVenta) {
-    console.log("[DevolucionFacturaForm]", costosVenta);
+  FormsValuesDevolucion(gasto: Gasto) {
+    console.log("[DevolucionFacturaForm]", gasto);
 
     Swal.fire({
-      title: "Cargando el costo",
+      title: "Cargando el gasto",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -205,35 +205,29 @@ export class GastosListComponent {
       },
     });
 
-    // this._FinanzasService.insertCostoVenta(costosVenta).subscribe((data) => {
-    //   console.log("[response]", data);
-    //   this.Gastos = this.Gastos.map((pv) => {
-    //     if (pv.id == costosVenta.producto_id) {
-    //       return {
-    //         ...pv,
-    //         costo_opcional: { costo: costosVenta.costo, id: data.id },
-    //       };
-    //     }
-    //     return pv;
-    //   });
-    //   // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
-    //   Swal.fire({
-    //     text: "El costo se agrego con éxito",
-    //     icon: "success",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.NgbModal.dismissAll();
-    //       // location.reload();
-    //     }
-    //   });
+    this._FinanzasService.insertGasto(gasto).subscribe((data) => {
+      console.log("[response]", data);
+      this.Gastos = [{ ...gasto, id: data.id }, ...this.Gastos];
+      Swal.fire({
+        text: "El gasto se agrego con éxito",
+        icon: "success",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.NgbModal.dismissAll();
+          // location.reload();
+        }
+      });
+    });
+    // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
+
     // });
   }
 
-  FormsValuesDevolucionEditar(costosVenta: CostoVenta) {
-    console.log("[DevolucionFacturaForm]", costosVenta);
+  FormsValuesDevolucionEditar(gasto: Gasto) {
+    console.log("[DevolucionFacturaForm]", gasto);
 
     Swal.fire({
-      title: "Editando el costo",
+      title: "Editando el gasto",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -244,32 +238,26 @@ export class GastosListComponent {
       },
     });
 
-    // this._FinanzasService
-    //   .editarCostoVenta(costosVenta, this.Id)
-    //   .subscribe((data) => {
-    //     console.log("[response]", data);
-    //     this.Gastos = this.Gastos.map((pv) => {
-    //       if (pv.id == costosVenta.producto_id) {
-    //         return {
-    //           ...pv,
-    //           costo_opcional: {
-    //             ...pv.costo_opcional,
-    //             costo: costosVenta.costo,
-    //           },
-    //         };
-    //       }
-    //       return pv;
-    //     });
-    //     // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
-    //     Swal.fire({
-    //       text: "El costo se agrego con éxito",
-    //       icon: "success",
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.NgbModal.dismissAll();
-    //         // location.reload();
-    //       }
-    //     });
-    //   });
+    this._FinanzasService.editarGasto(gasto, gasto.id).subscribe((data) => {
+      console.log("[response]", data);
+      this.Gastos = this.Gastos.map((pv) => {
+        if (pv.id == gasto.id) {
+          return {
+            ...gasto,
+          };
+        }
+        return pv;
+      });
+      // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
+      Swal.fire({
+        text: "El gato se agrego con éxito",
+        icon: "success",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.NgbModal.dismissAll();
+          // location.reload();
+        }
+      });
+    });
   }
 }

@@ -73,6 +73,7 @@
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Número</th>
               <th scope="col">Tipo</th>
               <th scope="col">Monto</th>
               <th scope="col">Conceptualización</th>
@@ -83,8 +84,9 @@
           <tbody *ngIf="Gastos.length > 0">
             <tr *ngFor="let GastoItem of Gastos">
               <th>{{ GastoItem.id }}</th>
+              <td>{{ GastoItem.numero }}</td>
               <td>{{ GastoItem.tipo_desc }}</td>
-              <td>{{ GastoItem.monto }}</td>
+              <td>{{ GastoItem.monto | currency : "USD" }}</td>
               <td>{{ GastoItem.conceptualizacion }}</td>
               <td>{{ GastoItem.fecha_comprobante | date : "dd-MM-yyyy" }}</td>
               <td>

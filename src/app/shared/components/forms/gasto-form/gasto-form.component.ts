@@ -25,9 +25,11 @@ export class GastoFormComponent {
   FormGastos: FormGroup<GastosForm>;
   readOnlyInputsForCalculation: boolean = true;
   isValidForm: boolean = false;
-
-  searching: boolean = false;
-  searchFailed: boolean = false;
+  selectValues: string[] = [
+    "Empresa",
+    "MaRo",
+    "Adicional"
+  ];
 
   constructor(
     public _Listado: Listado,
@@ -38,11 +40,11 @@ export class GastoFormComponent {
   ngOnInit(): void {
     this.FormGastos = GastoFormBuilder();
     console.log(this.Gasto);
-    if (this.Gasto) this.setFormValues();
     // console.log(this.producto_id);
 
     // this.FormGastos.patchValue({producto_id:this.producto_id});
     this.validStatusFromChange();
+    if (this.Gasto) this.setFormValues();
   }
 
   validStatusFromChange() {
@@ -58,11 +60,14 @@ export class GastoFormComponent {
   }
 
   setFormValues() {
-    this.FormGastos.patchValue({ ...this.Gasto,fecha_comprobante:this._HelpersService.changeformatDate(
-      this.Gasto.fecha_comprobante,
-      "YYYY-MM-DD HH:mm:ss",
-      "YYYY-MM-DD"
-    ) });
+    this.FormGastos.patchValue({
+      ...this.Gasto,
+      fecha_comprobante: this._HelpersService.changeformatDate(
+        this.Gasto.fecha_comprobante,
+        "YYYY-MM-DD HH:mm:ss",
+        "YYYY-MM-DD"
+      ),
+    });
   }
 
   getControlError(name: string): ValidationErrors | null {
@@ -83,10 +88,17 @@ export class GastoFormComponent {
 
       let importacion: Gasto = {
         ...DATA_FORM,
+        fecha_comprobante: this._HelpersService.changeformatDate(
+          DATA_FORM.fecha_comprobante,
+          "YYYY-MM-DD",
+          "YYYY-MM-DD HH:mm:ss"
+        ),
+        tipo_desc: this.selectValues[DATA_FORM.tipo]
       };
+      if (this.Gasto) importacion.id = this.Gasto.id;
       console.log(importacion);
 
-      // this.FormsValues.emit(importacion);
+      this.FormsValues.emit(importacion);
     } else {
       Swal.fire({
         text: "Complete todos los campos obligatorios",

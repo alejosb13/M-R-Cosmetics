@@ -15,9 +15,11 @@
           }"
         >
           <option hidden>Seleccione una condición</option>
-          <option [ngValue]="0">Empresa</option>
+          <option *ngFor="let valor of selectValues;let index = index" [ngValue]="index">{{valor}}</option>
+
+          <!-- <option [ngValue]="0">Empresa</option>
           <option [ngValue]="1">MaRo</option>
-          <option [ngValue]="2">Adicional</option>
+          <option [ngValue]="2">Adicional</option> -->
         </select>
         <div *ngIf="getControlError('tipo') as error">
           <app-valid-error-messages-form

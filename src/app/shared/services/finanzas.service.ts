@@ -10,6 +10,7 @@ import {
 import { FiltrosList } from "../models/Listados.model";
 import { Importacion } from "../models/Importacion.model";
 import { CostoVenta } from "../models/CostosVentas.model";
+import { Gasto } from "../models/Gasto.model";
 
 const FinanzasURL = `${environment.urlAPI}finanzas`;
 
@@ -235,6 +236,28 @@ export class FinanzasService {
   insertCostoVenta(data: CostoVenta): Observable<any> {
     return this.http.post(
       `${FinanzasURL}/productos-vendidos`,
+      { ...data },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
+  }
+
+  editarGasto(data: Gasto, Id: number): Observable<any> {
+    return this.http.put(
+      `${FinanzasURL}/gastos/${Id}`,
+      { ...data },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
+  }
+  
+  insertGasto(data: Gasto): Observable<any> {
+    return this.http.post(
+      `${FinanzasURL}/gastos`,
       { ...data },
       {
         headers: this.headerJson_Token(),
