@@ -79,6 +79,7 @@ import { InversionEditarComponent } from "@app/pages/finanzas/inversion/inversio
 import { ImportacionEditarComponent } from "@app/pages/finanzas/importacion/importacion-editar/importacion-editar.component";
 import { CostosListComponent } from "@app/pages/finanzas/costos/costos-list/costos-list.component";
 import { GastosListComponent } from "@app/pages/finanzas/gastos/gastos-list/gastos-list.component";
+import { EstadosComponent } from "@app/pages/finanzas/estados/estados.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -295,6 +296,12 @@ export const AdminLayoutRoutes: Routes = [
         path: "gastos",
         children: [
           { path: "", component: GastosListComponent },
+        ],
+      },
+      {
+        path: "estados",
+        children: [
+          { path: "", component: EstadosComponent },
         ],
       },
     ],

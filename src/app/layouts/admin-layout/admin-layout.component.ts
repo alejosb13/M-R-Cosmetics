@@ -33,7 +33,7 @@ export class AdminLayoutComponent implements OnInit {
         takeUntil(this.ngUnsubscribe),
         catchError((e, caught) => caught)
       );
-      if(environment.production)
+      // if(environment.production)
         refreshIndices.subscribe((result) => {logger.log(result)});
       // }
     }

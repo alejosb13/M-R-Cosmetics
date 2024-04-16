@@ -161,6 +161,22 @@ export class FinanzasService {
     });
   }
 
+  getEstados(param: FiltrosList): Observable<any> {
+    const URL = `${FinanzasURL}/estado-finanzas`;
+    console.log(param);
+
+    let params = new HttpParams();
+    for (const key in param) {
+      params = params.append(key, param[key]);
+    }
+
+    return this.http.get(URL, {
+      params: params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   getImportacionById(id: number): Observable<any> {
     const URL = `${FinanzasURL}/importacion/${id}`;
 

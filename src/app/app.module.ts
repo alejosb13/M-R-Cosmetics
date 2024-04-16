@@ -21,7 +21,7 @@ import { BasicAuthInterceptor } from "./interceptors/basic-auth.interceptor";
 @NgModule({
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
   ],
   imports: [
     BrowserAnimationsModule,
