@@ -120,60 +120,6 @@ export class EstadosComponent {
     };
   }
 
-  eliminar(data: InversionResponse) {
-    // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Esta inversión se eliminará y no podrás recuperarla.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
-          // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-          this.asignarValores();
-          Swal.fire({
-            text: data[0],
-            icon: "success",
-          });
-        });
-      }
-    });
-  }
-
-  bloquear(data: InversionResponse) {
-    // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Una vez cerrada solo podras visualizar los datos.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Aceptar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService
-          .changeValueInversion(data.id, {
-            estatus_cierre: 1,
-          })
-          .subscribe((data) => {
-            // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-            this.asignarValores();
-            Swal.fire({
-              text: data[0],
-              icon: "success",
-            });
-          });
-      }
-    });
-  }
-
   limpiarFiltros() {
     this.setCurrentDate();
     this.allDates = true;
@@ -189,5 +135,37 @@ export class EstadosComponent {
     this.listadoFilter.link = link.url;
 
     this.asignarValores();
+  }
+
+  
+  descargarPDF() {
+    Swal.fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    let bodyForm = {
+      ...this.listadoFilter
+    };
+    this._FinanzasService
+      .getEstadoFinanzaPDF(bodyForm)
+      .subscribe((data) => {
+        // console.log(data);
+        this._HelpersService.downloadFile(
+          data,
+          `Estado_finanza_${this._HelpersService.changeformatDate(
+            this._HelpersService.currentFullDay(),
+            "MM/DD/YYYY HH:mm:ss",
+            "DD-MM-YYYY_HH:mm:ss"
+          )}`
+        );
+        Swal.fire("", "Descarga Completada", "success");
+      });
   }
 }

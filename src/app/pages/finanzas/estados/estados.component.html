@@ -1,12 +1,15 @@
 <div class="bg-white container-fluid">
   <div class="card-header border-0 pt-4 bg-white">
-    <div class="d-flex">
+    <div class="d-flex" *ngIf="!isLoad">
       <div>
         <button
           class="btn btn-primary mt-0 mr-2"
           (click)="openFiltros(contentFiltros)"
         >
           Filtros <i class="fas fa-filter"></i>
+        </button>
+        <button class="btn btn-primary mt-0 mr-2" (click)="descargarPDF()">
+          <i class="fas fa-file-download fa-lg"></i> Reporte
         </button>
       </div>
       <!-- <div class="d-flex justify-content-start flex-wrap">
@@ -82,25 +85,53 @@
           </thead>
           <tbody>
             <tr>
-              <td scope="row">Ventas</td>
+              <th scope="row">Ventas</th>
               <td scope="row">
                 {{ dataResponse.ventas_total | currency : "USD" }}
               </td>
               <td scope="row"></td>
             </tr>
             <tr>
-              <td scope="row">Costo</td>
+              <th scope="row">Costo</th>
               <td scope="row">
                 {{ dataResponse.costo_total | currency : "USD" }}
               </td>
-              <td scope="row"></td>
+              <td scope="row">{{dataResponse.costo_total_porcentaje }}%</td>
             </tr>
             <tr>
-              <td scope="row">Utilidad bruta</td>
+              <th scope="row">Utilidad bruta</th>
               <td scope="row">
                 {{ dataResponse.utilidad_bruta_total | currency : "USD" }}
               </td>
               <td scope="row"></td>
+            </tr>
+            <tr>
+              <th scope="row">Incentivo Vendedor</th>
+              <td scope="row">
+                {{ dataResponse.incentivos_vendedor_total | currency : "USD" }}
+              </td>
+              <td scope="row"></td>
+            </tr>
+            <tr>
+              <th scope="row">Incentivo Supervisor</th>
+              <td scope="row">
+                {{ dataResponse.incentivos_supervisor_total | currency : "USD" }}
+              </td>
+              <td scope="row"></td>
+            </tr>
+            <tr>
+              <th scope="row">Gasto</th>
+              <td scope="row">
+                {{ dataResponse.gasto_total | currency : "USD" }}
+              </td>
+              <td scope="row">{{dataResponse.gasto_total_porcentaje }}%</td>
+            </tr>
+            <tr>
+              <th scope="row">Utilidad neta</th>
+              <td scope="row">
+                {{ dataResponse.utilidad_neta_total | currency : "USD" }}
+              </td>
+              <td scope="row">{{dataResponse.utilidad_neta_total_porcentaje }}%</td>
             </tr>
           </tbody>
         </table>

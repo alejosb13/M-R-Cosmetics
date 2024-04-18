@@ -292,4 +292,12 @@ export class FinanzasService {
       }
     );
   }
+  
+  getEstadoFinanzaPDF(options:any): Observable<any> {
+    let URL = `${environment.urlAPI}pdf/finanza/estado`;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+
+    return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
+  }
 }
