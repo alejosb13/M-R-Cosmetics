@@ -19,4 +19,11 @@ export const GastoErrorMessages: FormErrorMessages = {
   fecha_comprobante: {
     required: "Ingresa la fecha de comprobante para avanzar"
   },
+  tipo_pago: {
+    required: "Ingresa el método de pago para avanzar"
+  },
+  pago_desc: {
+    required: "Ingresa la descripción del pago para avanzar",
+    maxlength: "La descripción del pago tiene un limite de 160 caracteres.",
+  },
 };

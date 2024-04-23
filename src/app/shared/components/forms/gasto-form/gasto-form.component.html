@@ -79,6 +79,54 @@
     </div>
     <div class="col-md-6">
       <div class="form-group">
+        <label>Método de pago</label>
+        <select
+          class="form-control"
+          name="tipo_pago"
+          formControlName="tipo_pago"
+          [ngClass]="{
+            'is-invalid':
+              getControl('tipo_pago').invalid && getControl('tipo_pago').touched,
+            'is-valid': getControl('tipo_pago').valid
+          }"
+        >
+          <option hidden>Seleccione un método de pago</option>
+          <option *ngFor="let valor of selectValuesPago;let index = index" [ngValue]="index">{{valor}}</option>
+        </select>
+        <div *ngIf="getControlError('tipo_pago') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.tipo_pago"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Descripción del pago</label>
+        <input
+          type="text"
+          class="form-control"
+          name="pago_desc"
+          formControlName="pago_desc"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('pago_desc').invalid &&
+              getControl('pago_desc').touched,
+            'is-valid': getControl('pago_desc').valid
+          }"
+        />
+        <div *ngIf="getControlError('pago_desc') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.pago_desc"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
         <label>Conceptualización</label>
         <input
           type="text"

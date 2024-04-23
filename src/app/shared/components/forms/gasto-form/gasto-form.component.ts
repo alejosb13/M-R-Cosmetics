@@ -31,6 +31,12 @@ export class GastoFormComponent {
     "Adicional"
   ];
 
+  selectValuesPago: string[] = [
+    "Efectivo",
+    "Transferencia",
+    "Otro",
+  ];
+
   constructor(
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
@@ -93,7 +99,8 @@ export class GastoFormComponent {
           "YYYY-MM-DD",
           "YYYY-MM-DD HH:mm:ss"
         ),
-        tipo_desc: this.selectValues[DATA_FORM.tipo]
+        tipo_desc: this.selectValues[DATA_FORM.tipo],
+        tipo_pago_str:this.selectValuesPago[DATA_FORM.tipo_pago]
       };
       if (this.Gasto) importacion.id = this.Gasto.id;
       console.log(importacion);
