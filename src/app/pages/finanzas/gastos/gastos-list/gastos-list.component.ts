@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { TIPOS_GASTOS } from "@app/shared/components/forms/gasto-form/gasto-form.component";
 import { Gasto } from "@app/shared/models/Gasto.model";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
@@ -11,7 +12,6 @@ import {
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import Swal from "sweetalert2";
-import { CostoVenta } from "../../../../shared/models/CostosVentas.model";
 
 @Component({
   selector: "app-gastos-list",
@@ -22,12 +22,15 @@ export class GastosListComponent {
   Id: number;
   dateIni: string;
   dateFin: string;
+  total_monto: number;
+  tipoGasto: number = 99;
   allDates: boolean = false;
   listadoFilter: FiltrosList = {
     link: null,
     estado: 1,
     // disablePaginate: "true",
   };
+  selectValues: string[] = TIPOS_GASTOS;
 
   listadoData: ListadoModel<any>;
   Gastos: Gasto[];
@@ -54,14 +57,16 @@ export class GastosListComponent {
       dateIni: this.dateIni,
       dateFin: this.dateFin,
       allDates: this.allDates,
+      tipoGasto: this.tipoGasto,
     };
 
     this._FinanzasService.getGastos(this.listadoFilter).subscribe(
-      (Paginacion: any) => {
+      ({ response: Paginacion, total_monto }: any) => {
         this.listadoData = Paginacion;
         console.log(this.listadoData);
         this.Gastos = [...Paginacion.data];
         this.isLoad = false;
+        this.total_monto = total_monto;
       },
       (error) => {
         this.isLoad = false;
@@ -119,11 +124,11 @@ export class GastosListComponent {
     };
   }
 
-  eliminar(data: InversionResponse) {
+  eliminar(data: Gasto) {
     // console.log(data);
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "Esta inversión se eliminará y no podrás recuperarla.",
+      text: "Este gasto se eliminará y no podrás recuperarlo.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#51cbce",
@@ -132,11 +137,21 @@ export class GastosListComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
-          // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
+        Swal.fire({
+          title: "Eliminando el gasto",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+        this._FinanzasService.deleteGasto(data.id).subscribe((data) => {
           this.asignarValores();
           Swal.fire({
-            text: data[0],
+            text: data.mensaje,
             icon: "success",
           });
         });
@@ -144,39 +159,10 @@ export class GastosListComponent {
     });
   }
 
-  bloquear(data: InversionResponse) {
-    // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Una vez cerrada solo podras visualizar los datos.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Aceptar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService
-          .changeValueInversion(data.id, {
-            estatus_cierre: 1,
-          })
-          .subscribe((data) => {
-            // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-            this.asignarValores();
-            Swal.fire({
-              text: data[0],
-              icon: "success",
-            });
-          });
-      }
-    });
-  }
-
   limpiarFiltros() {
     this.setCurrentDate();
     this.allDates = false;
-
+    this.tipoGasto = 99;
     this.asignarValores();
     this.NgbModal.dismissAll();
   }

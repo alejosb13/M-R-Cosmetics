@@ -329,6 +329,17 @@ export class ClientesComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando el cliente",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._ClientesService.deleteCliente(id).subscribe((data) => {
           if (estado == 1) {
             this.Clientes = this.Clientes.filter((cliente) => cliente.id != id);

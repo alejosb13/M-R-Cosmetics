@@ -82,7 +82,17 @@ export class RecibosContadoListComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-
+        Swal.fire({
+          title: "Eliminando el recibo",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._ReciboService.deleteReciboHistorialContado(reciboEliminar.id).subscribe((data)=>{
           this.Recibos = this.Recibos.filter(recibo => recibo.id != reciboEliminar.id)
           this.refreshCountries()

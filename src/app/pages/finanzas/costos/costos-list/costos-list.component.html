@@ -31,41 +31,14 @@
     </div>
 
     <div class="card-body py-0 px-0" *ngIf="!isLoad">
-      <div class="card-header border-0 pt-0 bg-white px-0">
-        <div
-          class="d-flex card-title align-items-start flex-row flex-wrap justify-content-between w-100"
-        >
-          <!-- <span class="fuvi-text-black mt-1 fw-bold fs-5"
-        >Total met: {{ listadoData.total }}</span
-      > -->
-
-          <!-- <button
-            class="btn btn-primary mt-0"
-            (click)="openFiltros(contentFiltros)"
+      <div class="card-header border-0 bg-white">
+        <div class="">
+          <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
+            >Total productos: <b>{{ cantidadTotal  }}</b></span
+          ><br />
+          <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
+            >Total Costo total: <b>{{ costoTotal | currency : "USD" }}</b></span
           >
-            Filtros <i class="fas fa-filter"></i>
-          </button> -->
-
-          <!-- <form class="d-flex align-items-center justify-content-end buscador">
-          <div class="form-label-group input-group">
-            <input
-              type="text"
-              id="inputEmail"
-              class="form-control form-control-sm pt-1"
-              placeholder="Buscar"
-              name="buscar"
-              [(ngModel)]="listadoFilter.filter"
-            />
-            <button
-              class="btn btn-primary my-0"
-              (click)="BuscarValor()"
-              type="button"
-              id="button-addon2"
-            >
-              Buscar
-            </button>
-          </div>
-        </form> -->
         </div>
       </div>
 

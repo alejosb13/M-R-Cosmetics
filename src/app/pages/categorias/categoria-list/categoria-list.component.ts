@@ -127,6 +127,17 @@ export class CategoriaListComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando categoria",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._CategoriaService.deleteCategoria(id).subscribe((data) => {
           this.Categorias = this.Categorias.filter(
             (categoria) => categoria.id != id

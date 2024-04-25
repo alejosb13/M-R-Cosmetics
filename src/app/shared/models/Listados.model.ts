@@ -25,6 +25,7 @@ export interface FiltrosList {
   page?: string | number;
   roleName?: string;
   userId?: number;
+  tipoGasto?: number;
   filter?: string;
   estado?: string | number;
   status_pagado?: string | number;

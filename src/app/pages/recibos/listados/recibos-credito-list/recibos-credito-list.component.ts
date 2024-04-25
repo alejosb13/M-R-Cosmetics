@@ -227,6 +227,17 @@ export class RecibosCreditoListComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando el recibo",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._ReciboService
           .deleteReciboHistorialCredito(reciboEliminar.id)
           .subscribe((data) => {

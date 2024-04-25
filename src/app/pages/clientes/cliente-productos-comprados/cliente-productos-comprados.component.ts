@@ -244,6 +244,17 @@ export class ClienteProductosCompradosComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando el abono",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._AbonoService.deleteAbono(id).subscribe((data) => {
           // this.Abonos = this.Abonos.filter((abono) => abono.id != id);
 

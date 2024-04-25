@@ -109,7 +109,7 @@ export class ImportacionListComponent {
     // console.log(data);
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "Esta inversión se eliminará y no podrás recuperarla.",
+      text: "Esta importación se eliminará y no podrás recuperarla.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#51cbce",
@@ -118,6 +118,17 @@ export class ImportacionListComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando la importación",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
           // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
           this.asignarValores();

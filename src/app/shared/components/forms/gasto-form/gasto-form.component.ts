@@ -9,6 +9,7 @@ import { HelpersService } from "@app/shared/services/helpers.service";
 import { Gasto } from "@app/shared/models/Gasto.model";
 import { GastoFormBuilder, GastosForm } from "./utils/form";
 import { GastoErrorMessages } from "./utils/valid-messages";
+export const TIPOS_GASTOS: string[] = ["Empresa", "MaRo", "Adicional"];
 
 @Component({
   selector: "app-gasto-form",
@@ -25,17 +26,9 @@ export class GastoFormComponent {
   FormGastos: FormGroup<GastosForm>;
   readOnlyInputsForCalculation: boolean = true;
   isValidForm: boolean = false;
-  selectValues: string[] = [
-    "Empresa",
-    "MaRo",
-    "Adicional"
-  ];
+  selectValues: string[] = TIPOS_GASTOS;
 
-  selectValuesPago: string[] = [
-    "Efectivo",
-    "Transferencia",
-    "Otro",
-  ];
+  selectValuesPago: string[] = ["Efectivo", "Transferencia", "Otro"];
 
   constructor(
     public _Listado: Listado,
@@ -100,7 +93,7 @@ export class GastoFormComponent {
           "YYYY-MM-DD HH:mm:ss"
         ),
         tipo_desc: this.selectValues[DATA_FORM.tipo],
-        tipo_pago_str:this.selectValuesPago[DATA_FORM.tipo_pago]
+        tipo_pago_str: this.selectValuesPago[DATA_FORM.tipo_pago],
       };
       if (this.Gasto) importacion.id = this.Gasto.id;
       console.log(importacion);

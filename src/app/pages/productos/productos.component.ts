@@ -97,7 +97,17 @@ export class ProductosComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-
+        Swal.fire({
+          title: "Eliminando producto",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._ProductosService.deleteProducto(id).subscribe((data)=>{
           this.Productos = this.Productos.filter(producto => producto.id != id)
           this.refreshCountries()

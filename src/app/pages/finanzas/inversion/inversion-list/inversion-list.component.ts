@@ -130,6 +130,17 @@ export class InversionListComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando la inversión",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
           // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
           this.asignarValores();

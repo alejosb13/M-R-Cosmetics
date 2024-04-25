@@ -10,7 +10,10 @@
         </button>
       </div>
       <div class="d-flex justify-content-start flex-wrap">
-        <button (click)="openFiltros(contentGastos)" class="btn btn-primary mt-0">
+        <button
+          (click)="openFiltros(contentGastos)"
+          class="btn btn-primary mt-0"
+        >
           Agregar <i class="fas fa-plus"></i>
         </button>
       </div>
@@ -28,41 +31,13 @@
     </div>
 
     <div class="card-body py-0 px-0" *ngIf="!isLoad">
-      <div class="card-header border-0 pt-0 bg-white px-0">
+      <div class="card-header border-0  bg-white ">
         <div
           class="d-flex card-title align-items-start flex-row flex-wrap justify-content-between w-100"
         >
-          <!-- <span class="fuvi-text-black mt-1 fw-bold fs-5"
-        >Total met: {{ listadoData.total }}</span
-      > -->
-
-          <!-- <button
-            class="btn btn-primary mt-0"
-            (click)="openFiltros(contentFiltros)"
-          >
-            Filtros <i class="fas fa-filter"></i>
-          </button> -->
-
-          <!-- <form class="d-flex align-items-center justify-content-end buscador">
-          <div class="form-label-group input-group">
-            <input
-              type="text"
-              id="inputEmail"
-              class="form-control form-control-sm pt-1"
-              placeholder="Buscar"
-              name="buscar"
-              [(ngModel)]="listadoFilter.filter"
-            />
-            <button
-              class="btn btn-primary my-0"
-              (click)="BuscarValor()"
-              type="button"
-              id="button-addon2"
-            >
-              Buscar
-            </button>
-          </div>
-        </form> -->
+        <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
+          >Total gastos: <b>{{ total_monto | currency : "USD" }}</b></span
+        >
         </div>
       </div>
 
@@ -90,7 +65,8 @@
               <td>{{ GastoItem.conceptualizacion }}</td>
               <td>{{ GastoItem.fecha_comprobante | date : "dd-MM-yyyy" }}</td>
               <td>
-                <div
+                <div class="d-flex  align-content-center ">
+                  <div
                   class="mr-3"
                   ngbTooltip="Editar"
                   (click)="openFiltros(contentGastosEditar, GastoItem)"
@@ -98,6 +74,15 @@
                   <span class="text-primary pointer" role="button"
                     ><i class="fas fa-pencil-alt"></i
                   ></span>
+                </div>
+                <div class="mr-3" ngbTooltip="Eliminar">
+                  <span
+                    class="text-danger pointer"
+                    role="button"
+                    (click)="eliminar(GastoItem)"
+                    ><i class="fas fa-trash-alt"></i
+                  ></span>
+                </div>
                 </div>
               </td>
             </tr>
@@ -190,6 +175,20 @@
             class="form-control"
             [(ngModel)]="dateFin"
           />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Tipo</p>
+          <select class="form-control" name="tipo" [(ngModel)]="tipoGasto">
+            <option
+              *ngFor="let valor of selectValues; let index = index"
+              [ngValue]="index"
+            >
+              {{ valor }}
+            </option>
+            <option [ngValue]="99" selected>General</option>
+          </select>
         </div>
       </div>
     </div>

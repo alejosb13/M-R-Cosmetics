@@ -249,6 +249,13 @@ export class FinanzasService {
     });
   }
 
+  deleteGasto(id: number): Observable<any> {
+    return this.http.delete(`${FinanzasURL}/gastos/${id}`, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   insertCostoVenta(data: CostoVenta): Observable<any> {
     return this.http.post(
       `${FinanzasURL}/productos-vendidos`,

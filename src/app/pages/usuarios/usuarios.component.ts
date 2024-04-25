@@ -111,6 +111,17 @@ export class UsuariosComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminando el usuario",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         this._UsuariosService.deleteUsuario(id).subscribe((data) => {
           this.Usuarios = this.Usuarios.filter((Usuario) => Usuario.id != id);
           this.refreshCountries();

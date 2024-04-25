@@ -19,6 +19,8 @@ import { CostoVenta } from "../../../../shared/models/CostosVentas.model";
 })
 export class CostosListComponent {
   Id: number;
+  costoTotal: number;
+  cantidadTotal: number;
   producto_id: number;
   dateIni: string;
   dateFin: string;
@@ -58,7 +60,9 @@ export class CostosListComponent {
       (Paginacion: any) => {
         this.listadoData = Paginacion;
         console.log(this.listadoData);
-        this.Productos_Vendidos = [...Paginacion.data];
+        this.Productos_Vendidos = [...Paginacion.productos.data];
+        this.costoTotal = Paginacion.costoTotal;
+        this.cantidadTotal = Paginacion.totalProductos;
         this.isLoad = false;
       },
       (error) => {
@@ -219,6 +223,7 @@ export class CostosListComponent {
         return pv;
       });
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
+      this.costoTotal = Number(this.costoTotal) + Number(costosVenta.costo);
       Swal.fire({
         text: "El costo se agrego con éxito",
         icon: "success",
