@@ -225,7 +225,7 @@ export class CostosListComponent {
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
       this.costoTotal = Number(this.costoTotal) + Number(costosVenta.costo);
       Swal.fire({
-        text: "El costo se agrego con éxito",
+        text: "El costo se agregó con éxito",
         icon: "success",
       }).then((result) => {
         if (result.isConfirmed) {
@@ -269,7 +269,7 @@ export class CostosListComponent {
         });
         // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
         Swal.fire({
-          text: "El costo se agrego con éxito",
+          text: "El costo se modificó con éxito",
           icon: "success",
         }).then((result) => {
           if (result.isConfirmed) {

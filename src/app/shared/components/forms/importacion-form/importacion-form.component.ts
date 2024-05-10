@@ -187,7 +187,7 @@ export class ImportacionFormComponent {
       // numero_recibo:0,
       numero_inversion: item.numero_seguimiento,
       // monto_compra:item.costo,
-      monto_compra: item.costo_total,
+      monto_compra: item.costo_real_total,
       // conceptualizacion: "",
       precio_envio: item.envio,
     });

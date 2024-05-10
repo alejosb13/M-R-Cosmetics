@@ -195,7 +195,7 @@ export class GastosListComponent {
       console.log("[response]", data);
       this.Gastos = [{ ...gasto, id: data.id }, ...this.Gastos];
       Swal.fire({
-        text: "El gasto se agrego con éxito",
+        text: "El gasto se agregó con éxito",
         icon: "success",
       }).then((result) => {
         if (result.isConfirmed) {
@@ -236,7 +236,7 @@ export class GastosListComponent {
       });
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
       Swal.fire({
-        text: "El gato se agrego con éxito",
+        text: "El gato se modificó con éxito",
         icon: "success",
       }).then((result) => {
         if (result.isConfirmed) {
