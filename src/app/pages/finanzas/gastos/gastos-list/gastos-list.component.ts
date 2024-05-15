@@ -236,7 +236,7 @@ export class GastosListComponent {
       });
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
       Swal.fire({
-        text: "El gato se modificó con éxito",
+        text: "El gasto se modificó con éxito",
         icon: "success",
       }).then((result) => {
         if (result.isConfirmed) {

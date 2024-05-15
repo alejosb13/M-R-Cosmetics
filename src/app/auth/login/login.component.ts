@@ -63,7 +63,9 @@ export class LoginComponent implements OnInit {
 
   isValidForm(): boolean {
     let loadInfo = this.loadInfo ? true : false;
-    return loadInfo;
+    let isInValid = this.editarUsuarioForm.invalid
+
+    return loadInfo || isInValid;
   }
 
   EnviarFormulario() {
@@ -76,12 +78,12 @@ export class LoginComponent implements OnInit {
 
       this._AuthService.login(email, password).subscribe(
         (data) => {
-          this.loadInfo = false;
-
+          
           // console.log(data);
           let Auth: Auth = { ...data };
           this._AuthService.dataStorage = { ...Auth };
           this._RememberFiltersService.deleteAllFilterStorage();
+          // this.loadInfo = false;
           this.router.navigateByUrl("/inicio");
         },
         (responseError: any) => {

@@ -114,13 +114,15 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" >
               <button
                 class="btn btn-primary btn-block"
                 type="submit"
                 [disabled]="isValidForm()"
               >
-                Acceder
+                <span *ngIf="loadInfo">Ingresando <i class="fas fa-spinner fa-pulse"></i></span>
+                <span *ngIf="!loadInfo">Ingresar</span>
+                
               </button>
             </div>
           </div>

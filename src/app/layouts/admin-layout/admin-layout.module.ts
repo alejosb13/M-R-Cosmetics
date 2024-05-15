@@ -117,6 +117,8 @@ import { ImportacionEditarComponent } from "@app/pages/finanzas/importacion/impo
 import { CostosVentasFormComponent } from "@app/shared/components/forms/costos-ventas-form/costos-ventas-form.component";
 import { GastoFormComponent } from "@app/shared/components/forms/gasto-form/gasto-form.component";
 import { EstadosComponent } from "@app/pages/finanzas/estados/estados.component";
+import { TalonariosListComponent } from "@app/pages/talonarios/talonarios-list/talonarios-list.component";
+import { TalonarioFormComponent } from "@app/shared/components/forms/talonario-form/talonario-form.component";
 
 @NgModule({
   imports: [
@@ -249,8 +251,10 @@ import { EstadosComponent } from "@app/pages/finanzas/estados/estados.component"
     InversionFormComponent,
     InversionInsertarComponent,
     InversionEditarComponent,
-    EstadosComponent
+    EstadosComponent,
 
+    TalonariosListComponent,
+    TalonarioFormComponent
   ],
 })
 export class AdminLayoutModule {}
