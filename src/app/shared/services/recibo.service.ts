@@ -61,7 +61,7 @@ export class ReciboService {
     );
   }
 
-  updateRecibo(Id:number,data:Recibo): Observable<any> {
+  updateRecibo(Id:number,data:any): Observable<any> {
     const URL = `${ReciboURL}/${Id}`
 
     return this.http.put<any>(

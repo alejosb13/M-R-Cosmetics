@@ -51,10 +51,32 @@ export class TalonariosService {
     });
   }
 
+  insertTalonarioLote(data: any): Observable<any> {
+    return this.http.post(`${TalonariosURL}/lote`, data, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   updateTalonario(data: Talonario): Observable<any> {
     return this.http.put(`${TalonariosURL}/${data.id}`, data, {
       headers: this.headerJson_Token(),
       responseType: "json",
     });
   }
+
+  deleteTalonario(id: number): Observable<any> {
+    return this.http.delete(`${TalonariosURL}/${id}`, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  asignarTalonario(id: number): Observable<any> {
+    return this.http.delete(`${TalonariosURL}/${id}`, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
 }

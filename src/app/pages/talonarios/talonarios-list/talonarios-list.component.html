@@ -11,7 +11,7 @@
       </div>
       <div class="d-flex justify-content-start flex-wrap mr-2">
         <button
-          (click)="openFiltros(contentGastos)"
+          (click)="openFiltros(contentTalonario)"
           class="btn btn-primary mt-0"
         >
           Agregar talonario <i class="fas fa-plus"></i>
@@ -19,7 +19,7 @@
       </div>
       <div class="d-flex justify-content-start flex-wrap">
         <button
-          (click)="openFiltros(contentGastos)"
+          (click)="openFiltros(contentTalonarioLote)"
           class="btn btn-primary mt-0"
         >
           Agregar lote <i class="fas fa-plus"></i>
@@ -43,9 +43,9 @@
         <div
           class="d-flex card-title align-items-start flex-row flex-wrap justify-content-between w-100"
         >
-          <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
+          <!-- <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
             >Total Talonarios: <b>{{ total_monto | currency : "USD" }}</b></span
-          >
+          > -->
         </div>
       </div>
 
@@ -71,9 +71,10 @@
                   #mySelect
                   class="form-control"
                   [id]="'select-talonario-' + talonario.id"
+                  [disabled]="talonario.asignado"
                   (change)="asignarTalonario($event.target, talonario)"
                 >
-                  <option value="0" hidden>Sin asignación</option>
+                  <option value="" hidden>Sin asignación</option>
                   <option
                     *ngFor="let usuario of userStore"
                     [selected]="talonario.user_id == usuario.id"
@@ -84,28 +85,35 @@
                 </select>
               </td>
               <td>{{ talonario.created_at | date : "dd-MM-yyyy" }}</td>
-              <td>{{ talonario.created_at | date : "dd-MM-yyyy" }}</td>
-              <!-- <td>
-                <div class="d-flex  align-content-center ">
-                  <div
-                  class="mr-3"
-                  ngbTooltip="Editar"
-                  (click)="openFiltros(contentGastosEditar, GastoItem)"
-                >
-                  <span class="text-primary pointer" role="button"
-                    ><i class="fas fa-pencil-alt"></i
-                  ></span>
+              <td>
+                <div class="d-flex align-content-center">
+                  <!-- <div
+                    class="mr-3"
+                    ngbTooltip="Editar"
+                    (click)="openFiltros(contentGastosEditar, GastoItem)"
+                  >
+                    <span class="text-primary pointer" role="button"
+                      ><i class="fas fa-pencil-alt"></i
+                    ></span>
+                  </div> -->
+                  <div class="mr-3" ngbTooltip="Asignar" *ngIf="talonario.asignado == 0 && talonario.user_id">
+                    <span
+                      class="text-primary pointer"
+                      role="button"
+                      (click)="asignarReciboAlta(talonario)"
+                      ><i class="fas fa-user-check"></i></span>
+                  </div>
+                  <div class="mr-3" ngbTooltip="Eliminar"  *ngIf="talonario.asignado == 0">
+                    <span
+                      class="text-danger pointer"
+                      role="button"
+                      (click)="eliminar(talonario)"
+                      ><i class="fas fa-trash-alt"></i
+                    ></span>
+                  </div>
+
                 </div>
-                <div class="mr-3" ngbTooltip="Eliminar">
-                  <span
-                    class="text-danger pointer"
-                    role="button"
-                    (click)="eliminar(GastoItem)"
-                    ><i class="fas fa-trash-alt"></i
-                  ></span>
-                </div>
-                </div>
-              </td> -->
+              </td>
             </tr>
           </tbody>
           <tbody *ngIf="Talonarios.length == 0">
@@ -198,6 +206,14 @@
           />
         </div>
       </div>
+      <div class="col-md-6 mt-3"  >
+        <p class="font-weight-bold">Estado</p>
+        <select name="" id="" class="form-control" [(ngModel)]="asignado">
+          <option value="2">Todos</option>
+          <option value="0">Sin Asignar</option>
+          <option value="1">Asignados</option>
+        </select>
+      </div>
       <!-- <div class="col-md-6">
         <div class="form-group">
           <p class="font-weight-bold">Tipo</p>
@@ -230,10 +246,10 @@
   </div>
 </ng-template>
 
-<ng-template #contentGastos let-modal>
+<ng-template #contentTalonario let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">Agregar gasto</h4>
+      <h4 class="modal-title m-0" id="modal-basic-title">Agregar talonario</h4>
     </div>
     <button
       type="button"
@@ -248,8 +264,35 @@
     <div class="row">
       <div class="col-md-12">
         <app-talonario-form
-          (FormsValues)="FormsValuesDevolucion($event)"
+          (FormsValues)="FormsValuesTalonario($event)"
         ></app-talonario-form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentTalonarioLote let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">
+        Agregar lote de talonario
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <app-talonario-por-lote
+          (FormsValues)="FormsValuesTalonarioLote($event)"
+        ></app-talonario-por-lote>
       </div>
     </div>
   </div>

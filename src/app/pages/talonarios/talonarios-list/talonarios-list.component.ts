@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import { Gasto } from "@app/shared/models/Gasto.model";
 import { Talonario } from "@app/shared/models/Talonario.model";
 import { Usuario } from "@app/shared/models/Usuario.model";
@@ -13,6 +13,10 @@ import {
 } from "app/shared/models/Listados.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import Swal from "sweetalert2";
+import { catchError } from "rxjs/operators";
+import { HttpErrorResponse } from "@angular/common/http";
+import { throwError } from "rxjs";
+import { ReciboService } from "@app/shared/services/recibo.service";
 
 @Component({
   selector: "app-talonarios-list",
@@ -24,9 +28,11 @@ export class TalonariosListComponent {
   dateIni: string;
   dateFin: string;
   allDates: boolean = false;
+  asignado: number = 2;
   listadoFilter: FiltrosList = {
     link: null,
     estado: 1,
+    asignado: 2,
     // disablePaginate: "true",
   };
 
@@ -36,11 +42,12 @@ export class TalonariosListComponent {
 
   isLoad: boolean;
   userStore: Usuario[];
-  @ViewChild('mySelect') mySelect!: ElementRef<HTMLSelectElement>;
+  @ViewChild("mySelect") mySelect!: ElementRef<HTMLSelectElement>;
 
   constructor(
     public _TalonariosService: TalonariosService,
     public _AuthService: AuthService,
+    public _ReciboService: ReciboService,
     private NgbModal: NgbModal,
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService
@@ -59,6 +66,7 @@ export class TalonariosListComponent {
       dateIni: this.dateIni,
       dateFin: this.dateFin,
       allDates: this.allDates,
+      asignado: this.asignado,
     };
 
     this._TalonariosService.getTalonarios(this.listadoFilter).subscribe(
@@ -124,11 +132,11 @@ export class TalonariosListComponent {
     };
   }
 
-  eliminar(data: Gasto) {
+  eliminar(dataTalonario: Talonario) {
     // console.log(data);
     Swal.fire({
       title: "¿Estás seguro?",
-      text: "Este gasto se eliminará y no podrás recuperarlo.",
+      text: "Este talonario se eliminará y no podrás recuperarlo.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#51cbce",
@@ -138,7 +146,7 @@ export class TalonariosListComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "Eliminando el gasto",
+          title: "Eliminando el talonario",
           text: "Esto puede demorar un momento.",
           timerProgressBar: true,
           allowEscapeKey: false,
@@ -148,13 +156,96 @@ export class TalonariosListComponent {
             Swal.showLoading();
           },
         });
-        // this._TalonariosService.deleteGasto(data.id).subscribe((data) => {
-        //   this.asignarValores();
-        //   Swal.fire({
-        //     text: data.mensaje,
-        //     icon: "success",
-        //   });
-        // });
+        this._TalonariosService
+          .deleteTalonario(dataTalonario.id)
+          .subscribe((data) => {
+            // this.asignarValores();
+            console.log(this.Talonarios);
+            console.log(dataTalonario);
+
+            this.Talonarios = this.Talonarios.filter(
+              (talonario) => talonario.id !== dataTalonario.id
+            );
+            Swal.fire({
+              text: data.mensaje,
+              icon: "success",
+            });
+          });
+      }
+    });
+  }
+
+  asignarReciboAlta(dataTalonario: Talonario) {
+    // console.log(data);
+    Swal.fire({
+      title:
+        "¿Está seguro de que desea asignar este talonario al usuario indicado? ",
+      text: "Esta acción no puede deshacerse.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aceptar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Asignando el talonario",
+          text: "Esto puede demorar un momento.",
+          timerProgressBar: true,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          allowEnterKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+        let user = this.userStore.find(
+          (user) => user.id == dataTalonario.user_id
+        );
+        this._ReciboService
+          .updateRecibo(user.recibo.id, {
+            user_id: user.id,
+            recibo_cerrado: 0,
+            max: dataTalonario.max,
+            min: dataTalonario.min,
+            estado: 1,
+            talonario_id: dataTalonario.id,
+            talonario: 1,
+          })
+          .subscribe((data) => {
+            // this._TalonariosService.deleteTalonario(dataTalonario.id).subscribe((data) => {
+            // this.asignarValores();
+            console.log(this.Talonarios);
+            console.log(dataTalonario);
+
+            // this.Talonarios = this.Talonarios.filter(
+            //   (talonario) => talonario.id !== dataTalonario.id
+            // );
+            Swal.fire({
+              text: data.mensaje,
+              icon: "success",
+            });
+          },
+          (HttpErrorResponse: HttpErrorResponse) => {
+            let error: string = HttpErrorResponse.error[0];
+            console.log(HttpErrorResponse);
+  
+            if (Array.isArray(HttpErrorResponse.error)) {
+              Swal.fire({
+                title: "Error",
+                html: error,
+                icon: "error",
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                html: HttpErrorResponse.error.mensaje,
+                icon: "error",
+              });
+            }
+          }
+        );
       }
     });
   }
@@ -162,6 +253,7 @@ export class TalonariosListComponent {
   limpiarFiltros() {
     this.setCurrentDate();
     this.allDates = false;
+    this.asignado = 2;
 
     this.asignarValores();
     this.NgbModal.dismissAll();
@@ -182,11 +274,11 @@ export class TalonariosListComponent {
     this.asignarValores();
   }
 
-  FormsValuesDevolucion(gasto: Gasto) {
-    console.log("[DevolucionFacturaForm]", gasto);
+  FormsValuesTalonario(talonario: Talonario) {
+    console.log("[FormsValuesTalonario - talonario]", talonario);
 
     Swal.fire({
-      title: "Cargando el gasto",
+      title: "Cargando el talonario",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -197,29 +289,95 @@ export class TalonariosListComponent {
       },
     });
 
-    // this._TalonariosService.insertGasto(gasto).subscribe((data) => {
-    //   console.log("[response]", data);
-    //   // this.Gastos = [{ ...gasto, id: data.id }, ...this.Gastos];
-    //   Swal.fire({
-    //     text: "El gasto se agregó con éxito",
-    //     icon: "success",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.NgbModal.dismissAll();
-    //       // location.reload();
-    //     }
-    //   });
-    // });
+    this._TalonariosService
+      .insertTalonario(talonario)
+      .pipe(
+        catchError((http: HttpErrorResponse) => {
+          // console.log(http);
+          let error = http.error as { mensaje: string };
+          if (error.mensaje) {
+            Swal.fire({
+              text: error.mensaje,
+              icon: "warning",
+            }).then((result) => {
+              this.NgbModal.dismissAll();
+            });
+          }
+
+          return throwError(http);
+        })
+      )
+      .subscribe((data) => {
+        console.log("[response]", data);
+
+        Swal.fire({
+          text: "El talonario se agregó con éxito",
+          icon: "success",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.NgbModal.dismissAll();
+            // location.reload();
+          }
+        });
+      });
     // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
 
     // });
+  }
+
+  FormsValuesTalonarioLote(talonario: any) {
+    console.log("[FormsValuesTalonario - talonario]", talonario);
+
+    Swal.fire({
+      title: "Cargando los talonario",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this._TalonariosService
+      .insertTalonarioLote({ talonarios: talonario })
+      .pipe(
+        catchError((http: HttpErrorResponse) => {
+          // console.log(http);
+          let error = http.error as { mensaje: string };
+          if (error.mensaje) {
+            Swal.fire({
+              text: error.mensaje,
+              icon: "warning",
+            }).then((result) => {
+              // this.NgbModal.dismissAll();
+            });
+          }
+
+          return throwError(http);
+        })
+      )
+      .subscribe((data) => {
+        console.log("[response]", data);
+
+        Swal.fire({
+          text: "los talonarios se agregaron con éxito",
+          icon: "success",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.NgbModal.dismissAll();
+            location.reload();
+          }
+        });
+      });
   }
 
   FormsValuesDevolucionEditar(gasto: Gasto) {
     console.log("[DevolucionFacturaForm]", gasto);
 
     Swal.fire({
-      title: "Editando el gasto",
+      title: "Editando el talonario",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey: false,
@@ -229,31 +387,12 @@ export class TalonariosListComponent {
         Swal.showLoading();
       },
     });
-
-    // this._FinanzasService.editarGasto(gasto, gasto.id).subscribe((data) => {
-    //   console.log("[response]", data);
-    //   // this.Gastos = this.Gastos.map((pv) => {
-    //   //   if (pv.id == gasto.id) {
-    //   //     return {
-    //   //       ...gasto,
-    //   //     };
-    //   //   }
-    //   //   return pv;
-    //   // });
-    //   // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
-    //   Swal.fire({
-    //     text: "El gato se modificó con éxito",
-    //     icon: "success",
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.NgbModal.dismissAll();
-    //       // location.reload();
-    //     }
-    //   });
-    // });
   }
+
   asignarTalonario({ value }: HTMLSelectElement, talonario: Talonario) {
     console.log(value);
+    if(talonario.asignado == 1) return false;
+    
     let usuario = this.userStore.find((user) => user.id == Number(value));
     Swal.fire({
       html: `
@@ -293,10 +432,12 @@ export class TalonariosListComponent {
             icon: "success",
           });
         });
-      }else{
-        const selectElement = document.getElementById('select-talonario-'+talonario.id) as HTMLSelectElement;
+      } else {
+        const selectElement = document.getElementById(
+          "select-talonario-" + talonario.id
+        ) as HTMLSelectElement;
         console.log(selectElement);
-        
+
         if (selectElement) {
           selectElement.value = String(talonario.user_id);
         }

@@ -6,26 +6,28 @@ import Swal from "sweetalert2";
 import { Listado } from "@app/shared/services/listados.service";
 import { FinanzasService } from "@app/shared/services/finanzas.service";
 import { HelpersService } from "@app/shared/services/helpers.service";
-import { Gasto } from "@app/shared/models/Gasto.model";
 import { GastoErrorMessages } from "./utils/valid-messages";
 import { TalonarioForm, TalonarioFormBuilder } from "./utils/form";
 import { Talonario } from "@app/shared/models/Talonario.model";
+import logger from "@app/shared/utils/logger";
 
 @Component({
-  selector: "app-talonario-form",
-  templateUrl: "./talonario-form.component.html",
-  styleUrls: ["./talonario-form.component.scss"],
+  selector: "app-talonario-por-lote",
+  templateUrl: "./talonario-por-lote.component.html",
+  styleUrls: ["./talonario-por-lote.component.scss"],
 })
-export class TalonarioFormComponent {
+export class TalonarioPorLoteComponent {
   loadInfo: boolean = false;
   readonly GastoErrorMessages = GastoErrorMessages;
 
-  @Output() FormsValues = new EventEmitter<Talonario>();
+  // @Input() Gasto?: Gasto;
+  @Output() FormsValues = new EventEmitter<any[]>();
 
   FormTalonario: FormGroup<TalonarioForm>;
   readOnlyInputsForCalculation: boolean = true;
   isValidForm: boolean = false;
-  
+  talonarios = [];
+
   constructor(
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
@@ -34,12 +36,51 @@ export class TalonarioFormComponent {
 
   ngOnInit(): void {
     this.FormTalonario = TalonarioFormBuilder();
-
+    // console.log(this.Gasto);
     // console.log(this.producto_id);
 
     // this.FormGastos.patchValue({producto_id:this.producto_id});
     this.validStatusFromChange();
+    this.changeData();
+
     // if (this.Gasto) this.setFormValues();
+  }
+
+  changeData() {
+    this.FormTalonario.valueChanges.subscribe(
+      ({ inicio, cantidad, nroXlote }) => {
+        this.talonarios = [];
+        if (!inicio || !cantidad || !nroXlote) return false;
+
+        let contadorRecibos = inicio;
+
+        for (
+          let indexTalonario = 0;
+          indexTalonario < cantidad;
+          indexTalonario++
+        ) {
+          const posicionTalonario = indexTalonario;
+          
+          this.talonarios[posicionTalonario] = []
+            
+          // let inicioRecibo = inicio + contadorRecibos;
+          let inicioRecibo = 0;
+          while (inicioRecibo < nroXlote) {
+            this.talonarios[posicionTalonario]=[
+              ...this.talonarios[posicionTalonario],
+              Number(contadorRecibos)
+            ]
+            
+            logger.log("[contadorRecibos]", contadorRecibos);
+            logger.log("[inicioRecibo]", inicioRecibo);
+
+            contadorRecibos=++contadorRecibos
+            ++inicioRecibo 
+          }
+        }
+        logger.log("[this.talonarios]", this.talonarios);
+      }
+    );
   }
 
   validStatusFromChange() {
@@ -50,7 +91,7 @@ export class TalonarioFormComponent {
         })
       )
       .subscribe((status: boolean) => {
-        this.isValidForm = status;
+        this.isValidForm = status && this.talonarios.length > 0;
       });
   }
 
@@ -76,19 +117,9 @@ export class TalonarioFormComponent {
 
   EnviarFormulario() {
     if (this.FormTalonario.valid) {
-      const DATA_FORM = this.FormTalonario.getRawValue();
-
-      let talonario: Talonario = {
-        ...DATA_FORM,
-        user_id: null,
-        asignado: 0,
-      };
-      // if (this.Gasto) importacion.id = this.Gasto.id;
-      console.log(talonario);
-
-      this.FormsValues.emit(talonario);
+      this.FormsValues.emit(this.talonarios);
     } else {
-      Swal.fire({
+      Swal.fire({ 
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });

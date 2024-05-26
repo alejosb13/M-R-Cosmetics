@@ -33,7 +33,12 @@
               "src/styles.css"
 
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/chartist/dist/chartist.js",
+              "node_modules/bootstrap-notify/bootstrap-notify.js"
+            ],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,

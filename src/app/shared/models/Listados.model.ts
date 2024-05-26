@@ -34,6 +34,7 @@ export interface FiltrosList {
   allDates?: boolean;
   numeroRecibo?: string;
   categoriaId?: number;
+  asignado?: number;
   disablePaginate?: number|string;
   diasCobros?: any;
   despachado?: number;

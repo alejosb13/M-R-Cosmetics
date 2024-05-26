@@ -119,6 +119,8 @@ import { GastoFormComponent } from "@app/shared/components/forms/gasto-form/gast
 import { EstadosComponent } from "@app/pages/finanzas/estados/estados.component";
 import { TalonariosListComponent } from "@app/pages/talonarios/talonarios-list/talonarios-list.component";
 import { TalonarioFormComponent } from "@app/shared/components/forms/talonario-form/talonario-form.component";
+import { TalonarioPorLoteComponent } from "@app/shared/components/forms/talonario-por-lote/talonario-por-lote.component";
+import { FirstAndLastArrayPipe } from "@app/shared/pipes/first-and-last-array.pipe";
 
 @NgModule({
   imports: [
@@ -254,7 +256,9 @@ import { TalonarioFormComponent } from "@app/shared/components/forms/talonario-f
     EstadosComponent,
 
     TalonariosListComponent,
-    TalonarioFormComponent
+    TalonarioFormComponent,
+    TalonarioPorLoteComponent,
+    FirstAndLastArrayPipe
   ],
 })
 export class AdminLayoutModule {}

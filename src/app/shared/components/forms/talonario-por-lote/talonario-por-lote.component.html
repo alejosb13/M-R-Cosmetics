@@ -1,0 +1,142 @@
+<div [hidden]="loadInfo">
+  <br />
+  <form [formGroup]="FormTalonario" class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Número de inicio del primer talonario</label>
+        <input
+          type="text"
+          class="form-control"
+          name="inicio"
+          formControlName="inicio"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('inicio').invalid && getControl('inicio').touched,
+            'is-valid': getControl('inicio').valid
+          }"
+          appOnlyNumbers
+        />
+        <div *ngIf="getControlError('inicio') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.inicio"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cantidad de recibo por talonario</label>
+        <input
+          type="text"
+          class="form-control"
+          name="nroXlote"
+          formControlName="nroXlote"
+          autocomplete="off"
+          appOnlyNumberAndPoint
+          [ngClass]="{
+            'is-invalid':
+              getControl('nroXlote').invalid && getControl('nroXlote').touched,
+            'is-valid': getControl('nroXlote').valid
+          }"
+        />
+        <div *ngIf="getControlError('nroXlote') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.nroXlote"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cantidad de talonarios</label>
+        <input
+          type="text"
+          class="form-control"
+          name="cantidad"
+          formControlName="cantidad"
+          autocomplete="off"
+          appOnlyNumberAndPoint
+          [ngClass]="{
+            'is-invalid':
+              getControl('cantidad').invalid && getControl('cantidad').touched,
+            'is-valid': getControl('cantidad').valid
+          }"
+        />
+        <div *ngIf="getControlError('cantidad') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="GastoErrorMessages.cantidad"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <p
+    class="texto-mostrar mt-3"
+    data-toggle="collapse"
+    data-target="#collapseExample"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+    *ngIf="talonarios.length >0"
+  >
+    Visualizar 
+    <i class="far fa-eye"></i>
+  </p>
+
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+      <p>Listado de Talonarios</p>
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          Primer Recibo - Ultimo recibo
+          <span class="badge badge-primary badge-pill"
+            >Cantidad de recibos</span
+          >
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let talonario of talonarios">
+          <ng-container
+            class=""
+            *ngIf="talonario | firstAndLastArray as resultado"
+          >
+            {{ resultado.first }} - {{ resultado.last }}
+
+            <span class="badge badge-primary badge-pill">{{
+              resultado.count
+            }}</span>
+          </ng-container>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="mt-4 mb-4" />
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        [disabled]="!isValidForm"
+        (click)="EnviarFormulario()"
+      >
+        <!-- <div *ngIf="Gasto">Actualizar</div> -->
+        <div>Agregar</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando Talonario
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>
