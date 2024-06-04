@@ -171,6 +171,7 @@ export class ClientesComponent implements OnInit {
       ...this.listadoFilter,
       roleName: this.roleName,
       estado: this.estado,
+      diasCobros: this.diasCobros,
     };
 
     let Subscription = this._Listado.clienteList(this.listadoFilter).subscribe(
@@ -263,6 +264,18 @@ export class ClientesComponent implements OnInit {
     // console.log(this.filtros);
   }
 
+  editardiacobro(cliente:Cliente,modarDiasCobro:any) {
+    console.log("cliente",cliente);
+    console.log("cliente",modarDiasCobro);
+
+    this.NgbModal.open(modarDiasCobro, {
+      ariaLabelledBy: "modal-basic-title",
+    }).result.then(
+      (result) => {},
+      (reason) => {}
+    );
+  }
+
   aplicarFiltros(submit: boolean = false) {
     // console.log(this.allDates);
     let filtrosStorage = this._RememberFiltersService.getFilterStorage();
@@ -278,7 +291,7 @@ export class ClientesComponent implements OnInit {
     //   this.diasCobros = this.listadoFilter.diasCobros;
     // } else {
     if (!submit) {
-      console.log(this.userId);
+      // console.log(this.userId);
 
       this.userId = Number(this._AuthService.dataStorage.user.userId);
       // this.userId = 0;
@@ -301,7 +314,7 @@ export class ClientesComponent implements OnInit {
       userId: this.userId,
       categoriaId: this.categoriaId,
       allDates: this.allDates,
-      diasCobros: this.diasCobros,
+
     };
     // }
 

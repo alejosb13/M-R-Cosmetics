@@ -41,10 +41,7 @@
         </div>
       </div>
 
-      <div
-        class="col-md-12 d-flex flex-wrap"
-        *ngIf="isAdmin || isSupervisor"
-      >
+      <div class="col-md-12 d-flex flex-wrap">
         <button class="btn btn-primary mr-3" (click)="descargarPDF()">
           <i class="fas fa-file-download fa-lg"></i> Descargar
         </button>
@@ -71,8 +68,8 @@
             <th scope="col">Direccion de casa</th>
             <th scope="col">Direccion de negocio</th>
             <th scope="col">Facturas</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Frecuencia</th>
+            <!-- <th scope="col">Categoria</th>
+            <th scope="col">Frecuencia</th> -->
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
@@ -128,7 +125,7 @@
                 </div>
               </div>
             </td>
-            <td>
+            <!-- <td>
               {{ Cliente.categoria.descripcion }}
             </td>
             <td>
@@ -138,7 +135,7 @@
               <div class="mr-3" *ngIf="!Cliente.frecuencia">
                 <span> - </span>
               </div>
-            </td>
+            </td> -->
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
@@ -228,7 +225,7 @@
           <input [disabled]="allNumber" type="number"  class="form-control" [(ngModel)]="numHasta" >
         </div>
       </div> -->
-      <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
+      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
         <div class="form-group tipehead">
           <p class="font-weight-bold">Usuario</p>
           <!-- <input
@@ -245,7 +242,7 @@
             #instance="ngbTypeahead"
           /> -->
           <select name="" id="" class="form-control" [(ngModel)]="userId">
-            <option [selected]="userId == 0" value="0">
+            <option [selected]="userId == 0" value="0" *ngIf="">
               Todos los usuarios
             </option>
             <option
@@ -256,6 +253,15 @@
               {{ usuario.name }} {{ usuario.apellido }}
             </option>
           </select>
+        </div>
+      </div>
+      <div class="col-md-6 mt-3">
+        <p class="font-weight-bold">Días de cobro</p>
+        <div class="d-flex flex-wrap" id="diasCobrosElement">
+          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3" >
+            <input type="checkbox" [value]="day" class="mr-1" (change)="changeDiasCobros($event.target)" [checked]="existeDiaDeCobroEnFiltro(day)">
+            <label [innerHTML]="cortarLetrasYMayuscula(day,0,3)"></label>
+          </div>
         </div>
       </div>
     </div>

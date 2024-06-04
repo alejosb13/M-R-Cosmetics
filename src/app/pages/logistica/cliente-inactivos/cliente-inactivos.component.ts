@@ -37,6 +37,8 @@ export class ClienteInactivosComponent implements OnInit {
   isAdmin: boolean;
   isSupervisor: boolean;
 
+  diasCobros: string[] = [];
+
   userQuery: Usuario;
   Data: any[];
   total = 0;
@@ -105,7 +107,8 @@ export class ClienteInactivosComponent implements OnInit {
       allNumber: this.filtros.allNumber,
       // numDesde:this.filtros.numDesde,
       // numHasta:this.filtros.numHasta
-      numRecibo: Number(this.filtros.numRecibo),
+      // numRecibo: Number(this.filtros.numRecibo),
+      diasCobros: this.diasCobros,
     };
 
     this._LogisticaService.getClientesInactivos(bodyForm).subscribe(
@@ -229,6 +232,9 @@ export class ClienteInactivosComponent implements OnInit {
     if (!this.isAdmin) {
       this.userId = Number(this._AuthService.dataStorage.user.userId);
     }
+
+    this.clearDiasCobros()
+    this.diasCobros = []
 
     // this.tipoVenta = 1
     // this.status_pagado = 0 // por pagar
@@ -366,5 +372,37 @@ export class ClienteInactivosComponent implements OnInit {
         );
         Swal.fire("", "Descarga Completada", "success");
       });
+  }
+
+  
+  cortarLetrasYMayuscula(
+    palabra: string,
+    posicionIni: number,
+    posicionfin: number
+  ) {
+    let texto = palabra.slice(posicionIni, posicionfin);
+
+    return `${texto.charAt(posicionIni).toUpperCase()}${texto.slice(1)}`;
+  }
+
+  changeDiasCobros(event: HTMLInputElement) {
+    // console.log(this.diasCobros);
+    if (event.checked) {
+      this.diasCobros = [...this.diasCobros, event.value];
+    } else {
+      this.diasCobros = this.diasCobros.filter((dia) => dia != event.value);
+    }
+    // console.log(this.diasCobros);
+  }
+
+  existeDiaDeCobroEnFiltro(dia: string) {
+    return this.diasCobros.some((diaCobro) => diaCobro == dia);
+  }
+  clearDiasCobros() {
+    let element = document.getElementById("diasCobrosElement") as HTMLElement;
+    let lisInputs = element.getElementsByTagName("input");
+    Array.from(lisInputs).map((input: HTMLInputElement) => {
+      input.checked = false;
+    });
   }
 }

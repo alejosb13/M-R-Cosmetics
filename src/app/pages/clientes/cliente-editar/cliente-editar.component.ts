@@ -31,7 +31,7 @@ export class ClienteEditarComponent implements OnInit {
   
   ClientValuesForm(cliente:Cliente){
     Swal.fire({
-      title: "Creando cliente",
+      title: "Editando cliente",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
       allowEscapeKey:false,

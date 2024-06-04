@@ -28,7 +28,7 @@ import {
   switchMap,
 } from "rxjs/operators";
 
-import Swal from "sweetalert2";
+import Swal, { SweetAlertOptions } from "sweetalert2";
 import { catchError } from "rxjs/operators";
 
 @Component({
@@ -40,7 +40,7 @@ export class CheckoutComponent implements OnInit {
   model: any;
   searching = false;
   searchFailed = false;
-  showDelete = false
+  showDelete = false;
 
   productos: FacturaDetalle[] = [];
   factura: FacturaCheckout;
@@ -149,18 +149,18 @@ export class CheckoutComponent implements OnInit {
       // this.ValidClienteSelected();
     });
   }
-  
-  eventInputTypeHead(event:{item:string}){
-    // console.log("test ~ event:", event)
-    this.showDelete= true
-  }
-  
-  eliminarCliente(){
-    this.model = ""
-    this.showDelete = false
 
-    this.clienteSelected = false 
-    this.clienteData = null
+  eventInputTypeHead(event: { item: string }) {
+    // console.log("test ~ event:", event)
+    this.showDelete = true;
+  }
+
+  eliminarCliente() {
+    this.model = "";
+    this.showDelete = false;
+
+    this.clienteSelected = false;
+    this.clienteData = null;
   }
 
   search2: OperatorFunction<string, readonly string[]> = (
@@ -189,7 +189,7 @@ export class CheckoutComponent implements OnInit {
           })
         );
       }),
-      map((value)=>{
+      map((value) => {
         // console.log(value);
 
         this.clientes = [...value];
@@ -197,7 +197,7 @@ export class CheckoutComponent implements OnInit {
           (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
         );
 
-        return ClientesNames
+        return ClientesNames;
       }),
       tap(() => (this.searching = false))
     );
@@ -453,12 +453,17 @@ export class CheckoutComponent implements OnInit {
         (errorResponse: HttpErrorResponse) => {
           console.log(errorResponse);
           this.isLoad = false;
-
-          Swal.fire({
+          let option: SweetAlertOptions = {
             title: "Error",
-            text: errorResponse.error.mensaje,
             icon: "error",
-          });
+          };
+
+          if (errorResponse.error.cliente) {
+            option.html = errorResponse.error.mensaje;
+          } else {
+            option.text = errorResponse.error.mensaje;
+          }
+          Swal.fire(option);
         }
       );
     }

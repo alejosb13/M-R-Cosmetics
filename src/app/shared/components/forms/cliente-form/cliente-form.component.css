@@ -44,3 +44,9 @@
 .card label{
     font-weight:600;
 }
+
+button.dropdown-toggle.btn:disabled  {
+    background: #ccc !important;
+    border-color: #ccc !important;
+    color: #212529;
+}

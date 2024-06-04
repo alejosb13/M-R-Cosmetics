@@ -21,24 +21,28 @@
             <option selected value="" hidden>
               Seleccione una tipo de categoria
             </option>
-            <option
-              *ngFor="let categoria of Categorias"
-              value="{{ categoria.id }}"
-            >
-              {{ categoria.tipo }}
-            </option>
+            <ng-container *ngIf="Categorias.length > 0">
+              <option
+                *ngFor="let categoria of Categorias"
+                value="{{ categoria.id }}"
+              >
+                {{ categoria.tipo }}
+              </option>
+            </ng-container>
           </select>
         </div>
       </ng-container>
       <ng-container *ngIf="!isAdmin && !isSupervisor">
         <div class="form-group">
           <label>Categoria<span class="text-danger"></span></label>
-          <input
-            type="text"
-            class="form-control disabled"
-            [readOnly]="true"
-            [value]="Categoria.tipo"
-          />
+          <ng-container *ngIf="Categorias.length > 0">
+            <input
+              type="text"
+              class="form-control disabled"
+              [readOnly]="true"
+              [value]="Categoria.tipo"
+            />
+          </ng-container>
 
           <input
             type="text"
@@ -203,10 +207,10 @@
       <div class="form-group">
         <label
           >Cedula
-          <span class="text-danger"
+          <!-- <span class="text-danger"
             >(*) (No debe de poseer guiones)</span
-          ></label
-        >
+          > -->
+        </label>
         <input
           type="text"
           class="form-control"
@@ -248,7 +252,15 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'minlength',
-            message: 'La cedula debe tener como minimo 14 numeros',
+            message: 'La cedula debe tener como mínimo 14 numeros',
+            control: editarClienteForm.controls['cedula']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'customError',
+            message: 'La cedula tener como 13 números y terminar en letra',
             control: editarClienteForm.controls['cedula']
           }"
         ></ng-container>
@@ -446,6 +458,7 @@
             class="btn btn-outline-primary position-relative btn-desplegable mt-0"
             id="dropdownForm1"
             ngbDropdownToggle
+            [disabled]="IsVendedor && editar"
           >
             Días de cobro
           </button>

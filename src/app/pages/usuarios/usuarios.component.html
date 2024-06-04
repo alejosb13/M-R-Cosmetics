@@ -53,7 +53,7 @@
             <th scope="col">Recibo</th>
             <th scope="col">U.Recibo</th>
             <!-- <th scope="col">Meta</th> -->
-            <th scope="col">Estado</th>
+            <!-- <th scope="col">Estado</th> -->
             <th *ngIf="isAdmin" scope="col">Opciones</th>
           </tr>
         </thead>
@@ -99,10 +99,10 @@
               </div>
               <div *ngIf="!usuario.ultimo_recibo">---</div>
             </td>
-            <td>
+            <!-- <td>
               <span *ngIf="usuario.estado">Activo</span>
               <span *ngIf="!usuario.estado">Inactivo</span>
-            </td>
+            </td> -->
             <td *ngIf="isAdmin">
               <div class="d-flex flex-direction">
                 <div class="mr-3" ngbTooltip="Editar">

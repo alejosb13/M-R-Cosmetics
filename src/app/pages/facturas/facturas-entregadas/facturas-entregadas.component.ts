@@ -37,10 +37,10 @@ export class FacturasEntregadasComponent implements OnInit {
   listadoData: ListadoModel<Factura>;
   listadoFilter: FiltrosList = { link: null };
   status_entrega: number;
-  
+
   userStore: Usuario[];
   USersNames: string[] = [];
-  
+
   private Subscription = new Subscription();
 
   constructor(
@@ -61,12 +61,14 @@ export class FacturasEntregadasComponent implements OnInit {
     this.despachado = 0;
 
     this.getUsers();
-    
+
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.status_entrega = Number(params.get("status_entrega")) == 1 ? 1 : 0;
       console.log("this.status_entrega", this.status_entrega);
 
-      this.listadoFilter.userId = Number(this._AuthService.dataStorage.user.userId);
+      this.listadoFilter.userId = Number(
+        this._AuthService.dataStorage.user.userId
+      );
       this.asignarValores();
     });
 
@@ -179,32 +181,33 @@ export class FacturasEntregadasComponent implements OnInit {
     });
   }
 
-  openAgregarFactura(Factura:Factura){
+  openAgregarFactura(Factura: Factura) {
     Swal.fire({
-      title: '¿Estás seguro?',
+      title: "¿Estás seguro?",
       text: "Este factura será marcada como recibida.",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#51cbce',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Agregar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonColor: "#51cbce",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Agregar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-
-        this._FacturasService.entregarFactura(Factura.id).subscribe((data)=>{
-          this.Facturas = this.Facturas.filter(factura => factura.id != Factura.id)
+        this._FacturasService.entregarFactura(Factura.id).subscribe((data) => {
+          this.Facturas = this.Facturas.filter(
+            (factura) => factura.id != Factura.id
+          );
           // this.refreshCountries()
 
           Swal.fire({
             text: data[0],
-            icon: 'success',
-          })
-        })
+            icon: "success",
+          });
+        });
       }
-    })
+    });
   }
-  
+
   getUsers() {
     this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
       this.userStore = usuarios;
@@ -214,12 +217,11 @@ export class FacturasEntregadasComponent implements OnInit {
     });
   }
 
-
   limpiarFiltros() {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
-    this.listadoFilter.userId = this.userId
-    this.listadoFilter.roleName = this.roleName
+    this.listadoFilter.userId = this.userId;
+    this.listadoFilter.roleName = this.roleName;
 
     // this.setCurrentDate();
 
@@ -234,12 +236,14 @@ export class FacturasEntregadasComponent implements OnInit {
     // Administrador = 2,
     // Vendedor      = 3,
     // Supervisor    = 4,
-    let user = this.userStore.find((user)=>user.id == this.listadoFilter.userId);
-    let role =  user.role_id == 3 ? "vendedor": "administrador"; 
+    let user = this.userStore.find(
+      (user) => user.id == this.listadoFilter.userId
+    ) || { role_id: 3 };
+    let role = user.role_id == 3 ? "vendedor" : "administrador";
     this.listadoFilter.roleName = role;
 
     this.asignarValores();
-    this.NgbModal.dismissAll()
+    this.NgbModal.dismissAll();
   }
 
   ngOnDestroy() {
