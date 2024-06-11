@@ -223,6 +223,7 @@
               editarClienteForm.controls['cedula'].touched,
             'is-valid': editarClienteForm.controls['cedula'].valid
           }"
+          appOnlyAlphanumeric
         />
         <ng-container
           [ngTemplateOutlet]="formError"
@@ -232,19 +233,19 @@
             control: editarClienteForm.controls['cedula']
           }"
         ></ng-container>
-        <ng-container
+        <!-- <ng-container
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'pattern',
             message: 'La cedula debe poseer letras ni espacios',
             control: editarClienteForm.controls['cedula']
           }"
-        ></ng-container>
+        ></ng-container> -->
         <ng-container
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'La cedula debe tener como máximo 14 numeros',
+            message: 'La cedula debe tener como máximo 13 números y una letra',
             control: editarClienteForm.controls['cedula']
           }"
         ></ng-container>
@@ -252,7 +253,7 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'minlength',
-            message: 'La cedula debe tener como mínimo 14 numeros',
+            message: 'La cedula debe tener como mínimo 13 números y una letra',
             control: editarClienteForm.controls['cedula']
           }"
         ></ng-container>
@@ -260,7 +261,7 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'customError',
-            message: 'La cedula tener como 13 números y terminar en letra',
+            message: 'Los primeros 13 caracteres deben ser números y el 14º debe ser una letra en mayúscula.',
             control: editarClienteForm.controls['cedula']
           }"
         ></ng-container>

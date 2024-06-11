@@ -17,6 +17,7 @@ export interface Cliente {
     direccion_negocio: string;
     cedula: string;
     dias_cobro: string;
+    dias_cobro_original?: string[];
     fecha_vencimiento: string;
     saldo?: string;
     frecuencia?: Frecuencia;

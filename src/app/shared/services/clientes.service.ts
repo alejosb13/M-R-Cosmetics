@@ -61,6 +61,15 @@ export class ClientesService {
     );
   }
 
+  diasCobroCliente(data:any,id:number): Observable<any> {
+    const URL = `${ClienteURL}/dias-cobro/${id}`
+    return this.http.put<Cliente>(
+      URL,
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
+
   updateCliente(Id:number,data:Cliente): Observable<any> {
     const URL = `${ClienteURL}/${Id}`
 

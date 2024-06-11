@@ -21,10 +21,18 @@
           <i class="fas fa-plus"></i>
           Agregar
         </a>
-        <button *ngIf="isSupervisor || isAdmin" class="btn btn-primary mr-2" (click)="descargarPDF()">
+        <button
+          *ngIf="isSupervisor || isAdmin"
+          class="btn btn-primary mr-2"
+          (click)="descargarPDF()"
+        >
           <i class="fas fa-file-download fa-lg"></i> Reporte
         </button>
-        <button *ngIf="isSupervisor || isAdmin" class="btn btn-primary mr-2" (click)="descargarCSV()">
+        <button
+          *ngIf="isSupervisor || isAdmin"
+          class="btn btn-primary mr-2"
+          (click)="descargarCSV()"
+        >
           <i class="fas fa-file-excel fa-lg"></i> Reporte Excell
         </button>
       </div>
@@ -39,9 +47,7 @@
             >
           </div>
 
-          <form
-            class="d-flex align-items-center justify-content-end buscador"
-          >
+          <form class="d-flex align-items-center justify-content-end buscador">
             <div class="form-label-group input-group">
               <input
                 type="text"
@@ -94,8 +100,11 @@
               {{ cliente.nombreEmpresa }}
             </td>
             <td>
-              <div class="pointer" (click)="editardiacobro(cliente,diasCobroEditar)" >
-              <span [innerHTML]="cliente.dias_cobro" ></span>
+              <div
+                class="pointer"
+                (click)="editardiacobro(cliente, diasCobroEditar)"
+              >
+                <span [innerHTML]="cliente.dias_cobro"></span>
               </div>
             </td>
             <td>{{ cliente.direccion_casa }}</td>
@@ -125,15 +134,19 @@
               </div>
             </td>
             <td>
-              <span>{{ cliente.saldo |currency:"USD" }}</span>
+              <span>{{ cliente.saldo | currency : "USD" }}</span>
             </td>
             <td>
-              <a target="_blank" [routerLink]="['/cliente', 'productos', cliente.id]"
+              <a
+                target="_blank"
+                [routerLink]="['/cliente', 'productos', cliente.id]"
                 >Ver</a
               >
             </td>
             <td>
-              <a target="_blank" [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
+              <a
+                target="_blank"
+                [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
                 >Ver detalle</a
               >
             </td>
@@ -181,15 +194,16 @@
             </td>
             <td>
               <div class="d-flex flex-direction">
-                <div
-                  class="mr-3"
-                  ngbTooltip="Editar"
-                >
+                <div class="mr-3" ngbTooltip="Editar">
                   <a [routerLink]="['/cliente', 'editar', cliente.id]"
                     ><i class="fas fa-pencil-alt text-warning"></i
                   ></a>
                 </div>
-                <div class="mr-3" ngbTooltip="Eliminar" *ngIf="isAdmin && cliente.estado == 1">
+                <div
+                  class="mr-3"
+                  ngbTooltip="Eliminar"
+                  *ngIf="isAdmin && cliente.estado == 1"
+                >
                   <span
                     class="text-danger pointer"
                     role="button"
@@ -197,12 +211,17 @@
                     ><i class="fas fa-trash-alt"></i
                   ></span>
                 </div>
-                <div class="mr-3" ngbTooltip="Eliminar" *ngIf="isAdmin && cliente.estado == 0">
+                <div
+                  class="mr-3"
+                  ngbTooltip="Eliminar"
+                  *ngIf="isAdmin && cliente.estado == 0"
+                >
                   <span
                     class="text-danger pointer"
                     role="button"
                     (click)="eliminar(cliente)"
-                    ><i class="fas fa-undo-alt"></i></span>
+                    ><i class="fas fa-undo-alt"></i
+                  ></span>
                 </div>
               </div>
             </td>
@@ -325,7 +344,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6 mt-3"  *ngIf="isAdmin">
+      <div class="col-md-6 mt-3" *ngIf="isAdmin">
         <p class="font-weight-bold">Estado</p>
         <select name="" id="" class="form-control" [(ngModel)]="estado">
           <option value="2">Todos</option>
@@ -336,11 +355,16 @@
       <div class="col-md-6 mt-3">
         <p class="font-weight-bold">Días de cobro</p>
         <div class="d-flex flex-wrap" id="diasCobrosElement">
-          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3" >
-            <input type="checkbox" [value]="day" class="mr-1" (change)="changeDiasCobros($event.target)" [checked]="existeDiaDeCobroEnFiltro(day)">
-            <label [innerHTML]="cortarLetrasYMayuscula(day,0,3)"></label>
+          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3">
+            <input
+              type="checkbox"
+              [value]="day"
+              class="mr-1"
+              (change)="changeDiasCobros($event.target)"
+              [checked]="existeDiaDeCobroEnFiltro(day)"
+            />
+            <label [innerHTML]="cortarLetrasYMayuscula(day, 0, 3)"></label>
           </div>
-  
         </div>
       </div>
     </div>
@@ -364,7 +388,9 @@
 <ng-template #diasCobroEditar let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">Edición de días de cobro</h4>
+      <h4 class="modal-title m-0" id="modal-basic-title">
+        Edición de días de cobro
+      </h4>
     </div>
     <button
       type="button"
@@ -378,46 +404,133 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-md-12">
+        <label class="d-block"
+          >Días de cobro <span class="text-danger">(*)</span></label
+        >
+        <div class="list-group list-group-light flex-row flex-wrap" >
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="1"
 
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label class="d-block"
-            >Días de cobro <span class="text-danger">(*)</span></label
-          >
-
-          <div ngbDropdown class="d-inline-block" placement="top">
-            <button
-              class="btn btn-outline-primary position-relative btn-desplegable mt-0"
-              id="dropdownForm1"
-              ngbDropdownToggle
-
+              [id]="'diaCobro1'"
+              (click)="ChangediaCobro(1,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro1'  }}"
+              >Lunes</label
             >
-              Días de cobro
-            </button>
-            <div
-              ngbDropdownMenu
-              aria-labelledby="dropdownForm1"
-              class="desplegable"
-            >
-              <div class="parent-check" #diasCobro>
-                <div
-                  *ngFor="let day of daysOfWeek; let i = index"
-                  class="form-check"
-                >
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    name="dias_cobro"
-                    [value]="i"
-                  />
-                  <label class="form-check-label">
-                    {{ day }}
-                  </label>
-                </div>
-              </div>
-            </div>
           </div>
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="2"
+
+              [id]="'diaCobro2'"
+              (click)="ChangediaCobro(2,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro2'  }}"
+              >Martes</label
+            >
+          </div>
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="1"
+   
+              [id]="'diaCobro3'"
+              (click)="ChangediaCobro(3,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro3'  }}"
+              >Miércoles</label
+            >
+          </div>
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="1"
+
+              [id]="'diaCobro4'"
+              (click)="ChangediaCobro(4,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro4'  }}"
+              >Jueves</label
+            >
+          </div>
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="1"
+
+              [id]="'diaCobro5'"
+              (click)="ChangediaCobro(5,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro5'  }}"
+              >Viernes</label
+            >
+          </div>
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="6"
+
+              [id]="'diaCobro6'"
+              (click)="ChangediaCobro(6,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro6'  }}"
+              >Sábado</label
+            >
+          </div>
+          <div class="list-group-item border-0">
+            <input
+              class="form-check-input me-1 pointer"
+              type="checkbox"
+              [value]="0"
+
+              [id]="'diaCobro0'"
+              (click)="ChangediaCobro(0,$event.target)"
+            />
+            <label
+              class="form-check-label pointer"
+              for="{{ 'diaCobro0'  }}"
+              >Domingo</label
+            >
+          </div>
+          
+          <!-- <ng-container *ngFor="let day of daysOfWeek; let i = index" >
+            <div class="list-group-item border-0">
+              <input
+                class="form-check-input me-1 pointer"
+                type="checkbox"
+                [value]="i"
+                [checked]="IsChecked(day,diasCobrosSelected)"
+                [id]="'diaCobro' + i"
+                (click)="ChangediaCobro(lisCobros)"
+              />
+              <label
+                class="form-check-label pointer"
+                for="{{ 'diaCobro' + i }}"
+                >{{ day }}</label
+              >
+            </div>
+          </ng-container>  -->
         </div>
       </div>
     </div>
@@ -425,8 +538,11 @@
   <div class="modal-footer justify-content-center w-100">
     <div class="row w-100">
       <div class="col text-center">
-        <button class="btn btn-danger" >
-          Limpiar <i class="fas fa-eraser"></i>
+        <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">
+          Cancelar 
+        </button>
+        <button class="btn btn-primary" (click)="modificarDiasdeCobro()">
+          Modificar 
         </button>
       </div>
     </div>

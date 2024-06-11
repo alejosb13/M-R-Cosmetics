@@ -26,6 +26,7 @@ import { CategoriaService } from "app/shared/services/categoria.service";
 })
 export class ClientesComponent implements OnInit {
   Clientes: Cliente[];
+  cliente: Cliente;
 
   isLoad: boolean;
   isAdmin: boolean;
@@ -42,6 +43,7 @@ export class ClientesComponent implements OnInit {
   userStore: Usuario[];
   USersNames: string[] = [];
 
+  diasCobrosSelected: string[] = [];
   diasCobros: string[] = [];
 
   dateIni: string;
@@ -164,6 +166,39 @@ export class ClientesComponent implements OnInit {
       });
   }
 
+  ChangediaCobro(value: number, input: HTMLInputElement) {
+    // console.log(this.diasCobrosSelected);
+    if (input.checked) {
+      this.diasCobrosSelected = [
+        ...this.diasCobrosSelected,
+        this.daysOfWeek[value],
+      ];
+      this.diasCobrosSelected.forEach((dia) => {
+        // console.log(dia);
+        let posicion = this.daysOfWeek.findIndex(
+          (diaSelected) => diaSelected == dia
+        );
+        (
+          document.getElementById(`diaCobro${posicion}`) as HTMLInputElement
+        ).checked = true;
+
+        // console.log(document.getElementById(
+        //   `diaCobro${posicion}`
+        // ));
+      });
+    } else {
+      // console.log(this.diasCobrosSelected);
+      let posicion = this.diasCobrosSelected.findIndex(
+        (dia) => dia == this.daysOfWeek[value]
+      );
+      this.diasCobrosSelected.splice(posicion, 1); // valor b
+    }
+    // console.log(input);
+    // console.log(this.diasCobrosSelected);
+
+    // this.diasCobrosSelected
+  }
+
   asignarValores() {
     this.isLoad = true;
 
@@ -179,6 +214,7 @@ export class ClientesComponent implements OnInit {
         this.listadoData = { ...Paginacion };
         this.Clientes = Paginacion.data.map((cliente) => {
           let formatDiaCobro = cliente.dias_cobro.split(",");
+          cliente.dias_cobro_original = formatDiaCobro;
           let htmlCobro = ``;
           formatDiaCobro.map((dia) => {
             htmlCobro += `- ${dia.charAt(0).toUpperCase() + dia.slice(1)} <br>`; // Agrego listado salto de linea y primera letra mayuscula
@@ -201,6 +237,13 @@ export class ClientesComponent implements OnInit {
   BuscarValor() {
     this.listadoFilter.link = null;
     this.asignarValores();
+  }
+
+  IsChecked(value: string) {
+    // console.log(value,diascobro);
+
+    if (this.daysOfWeek[value] == this.diasCobrosSelected) return true;
+    return false;
   }
 
   openFiltros(content: any) {
@@ -264,9 +307,12 @@ export class ClientesComponent implements OnInit {
     // console.log(this.filtros);
   }
 
-  editardiacobro(cliente:Cliente,modarDiasCobro:any) {
-    console.log("cliente",cliente);
-    console.log("cliente",modarDiasCobro);
+  editardiacobro(cliente: Cliente, modarDiasCobro: any) {
+    // console.log("cliente", cliente);
+    // console.log("cliente", modarDiasCobro);
+    this.cliente = cliente;
+
+    this.diasCobrosSelected = [...cliente.dias_cobro_original];
 
     this.NgbModal.open(modarDiasCobro, {
       ariaLabelledBy: "modal-basic-title",
@@ -274,6 +320,22 @@ export class ClientesComponent implements OnInit {
       (result) => {},
       (reason) => {}
     );
+
+    setTimeout(() => {
+      this.diasCobrosSelected.forEach((dia) => {
+        // console.log(dia);
+        let posicion = this.daysOfWeek.findIndex(
+          (diaSelected) => diaSelected == dia
+        );
+        (
+          document.getElementById(`diaCobro${posicion}`) as HTMLInputElement
+        ).checked = true;
+
+        // console.log(document.getElementById(
+        //   `diaCobro${posicion}`
+        // ));
+      });
+    }, 20);
   }
 
   aplicarFiltros(submit: boolean = false) {
@@ -314,7 +376,6 @@ export class ClientesComponent implements OnInit {
       userId: this.userId,
       categoriaId: this.categoriaId,
       allDates: this.allDates,
-
     };
     // }
 
@@ -365,7 +426,7 @@ export class ClientesComponent implements OnInit {
           if (estado == 0) {
             this.Clientes = this.Clientes.map((cliente) => {
               // console.log(estado);
-              
+
               if (cliente.id == id) return { ...cliente, estado: 1 };
               return cliente;
             });
@@ -378,6 +439,52 @@ export class ClientesComponent implements OnInit {
         });
       }
     });
+  }
+
+  modificarDiasdeCobro() {
+    // console.log(this.diasCobrosSelected);
+
+    Swal.fire({
+      title: "Modificando días de cobro",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    
+    this.NgbModal.dismissAll()
+    this._ClientesService
+      .diasCobroCliente({ diasCobro: this.diasCobrosSelected }, this.cliente.id)
+      .subscribe((data) => {
+        console.log(data);
+        const cliente = data.cliente;
+
+        let formatDiaCobro = cliente.dias_cobro.split(",");
+        cliente.dias_cobro_original = formatDiaCobro;
+        let htmlCobro = ``;
+        formatDiaCobro.map((dia) => {
+          htmlCobro += `- ${dia.charAt(0).toUpperCase() + dia.slice(1)} <br>`; // Agrego listado salto de linea y primera letra mayuscula
+        });
+        this.Clientes = this.Clientes.map((client) => {
+          if (client.id == cliente.id) {
+            client.dias_cobro = htmlCobro;
+            client.dias_cobro_original = formatDiaCobro;
+          }
+
+          return client;
+        });
+
+        Swal.fire({
+          text: "Días de cobro modificada con exito",
+          icon: "success",
+        }).then((result) => {
+          // if (result.isConfirmed) window.location.reload();
+        });
+      });
   }
 
   ngOnDestroy() {
