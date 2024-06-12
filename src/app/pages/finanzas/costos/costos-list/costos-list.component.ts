@@ -63,6 +63,7 @@ export class CostosListComponent {
         this.Productos_Vendidos = [...Paginacion.productos.data];
         this.costoTotal = Paginacion.costoTotal;
         this.cantidadTotal = Paginacion.totalProductos;
+        this.listadoData = Paginacion.productos;
         this.isLoad = false;
       },
       (error) => {

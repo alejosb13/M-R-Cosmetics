@@ -19,15 +19,19 @@ import Swal from "sweetalert2";
   styleUrls: ["./gastos-list.component.scss"],
 })
 export class GastosListComponent {
+  
+  selectValuesPago: string[] = ["Efectivo", "Transferencia", "Otro"];
   Id: number;
   dateIni: string;
   dateFin: string;
   total_monto: number;
   tipoGasto: number = 99;
+  metodoPago: number = 99;
   allDates: boolean = false;
   listadoFilter: FiltrosList = {
     link: null,
     estado: 1,
+    filter:""
     // disablePaginate: "true",
   };
   selectValues: string[] = TIPOS_GASTOS;
@@ -58,6 +62,7 @@ export class GastosListComponent {
       dateFin: this.dateFin,
       allDates: this.allDates,
       tipoGasto: this.tipoGasto,
+      metodoPago: this.metodoPago,
     };
 
     this._FinanzasService.getGastos(this.listadoFilter).subscribe(

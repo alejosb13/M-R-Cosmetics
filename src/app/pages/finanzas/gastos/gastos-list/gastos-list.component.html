@@ -1,6 +1,6 @@
 <div class="bg-white container-fluid">
   <div class="card-header border-0 pt-4 bg-white">
-    <div class="d-flex">
+    <div class="d-flex justify-content-between flex-wrap">
       <div>
         <button
           class="btn btn-primary mt-0 mr-2"
@@ -8,14 +8,32 @@
         >
           Filtros <i class="fas fa-filter"></i>
         </button>
-      </div>
-      <div class="d-flex justify-content-start flex-wrap">
         <button
           (click)="openFiltros(contentGastos)"
           class="btn btn-primary mt-0"
         >
           Agregar <i class="fas fa-plus"></i>
         </button>
+      </div>
+      <div class="d-flex justify-content-end flex-wrap">
+        <div class="form-label-group input-group">
+          <input
+            type="text"
+            id="inputEmail"
+            class="form-control form-control-sm pt-1"
+            placeholder="Buscar"
+            name="buscar"
+            [(ngModel)]="listadoFilter.filter"
+          />
+          <button
+            class="btn btn-primary my-0"
+            (click)="BuscarValor()"
+            type="button"
+            id="button-addon2"
+          >
+            Buscar
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -39,6 +57,7 @@
           >Total gastos: <b>{{ total_monto | currency : "USD" }}</b></span
         >
         </div>
+
       </div>
 
       <div
@@ -50,6 +69,7 @@
               <th scope="col">#</th>
               <th scope="col">Número</th>
               <th scope="col">Tipo</th>
+              <th scope="col">Forma pago</th>
               <th scope="col">Monto</th>
               <th scope="col">Conceptualización</th>
               <th scope="col">Fecha</th>
@@ -61,6 +81,7 @@
               <th>{{ GastoItem.id }}</th>
               <td>{{ GastoItem.numero }}</td>
               <td>{{ GastoItem.tipo_desc }}</td>
+              <td>{{ selectValuesPago[GastoItem.tipo_pago] }}</td>
               <td>{{ GastoItem.monto | currency : "USD" }}</td>
               <td>{{ GastoItem.conceptualizacion }}</td>
               <td>{{ GastoItem.fecha_comprobante | date : "dd-MM-yyyy" }}</td>
@@ -188,6 +209,20 @@
               {{ valor }}
             </option>
             <option [ngValue]="99" selected>General</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Método pago</p>
+          <select class="form-control" name="tipo" [(ngModel)]="metodoPago">
+            <option [ngValue]="99" selected>Todos</option>
+            <option
+              *ngFor="let valor of selectValuesPago; let index = index"
+              [ngValue]="index"
+            >
+              {{ valor }}
+            </option>
           </select>
         </div>
       </div>
