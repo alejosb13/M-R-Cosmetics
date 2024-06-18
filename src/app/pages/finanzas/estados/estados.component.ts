@@ -59,6 +59,13 @@ export class EstadosComponent {
 
   asignarValores() {
     this.isLoad = true;
+    
+    this.listadoFilter = {
+      ...this.listadoFilter,
+      dateIni: this.dateIni,
+      dateFin: this.dateFin,
+      allDates: this.allDates,
+    };
 
     this._FinanzasService.getEstados(this.listadoFilter).subscribe(
       (EstadoResponse: EstadoResponse) => {

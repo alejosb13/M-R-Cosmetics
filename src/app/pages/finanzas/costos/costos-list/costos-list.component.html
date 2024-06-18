@@ -69,7 +69,7 @@
               <td>{{ pv.cantidad }}</td>
               <td>
                 <div *ngIf="pv.inversion">
-                  {{ pv.inversion.costo | currency : "USD" }}
+                  {{ pv.inversion.costo_total | currency : "USD" }}
                 </div>
                 <div *ngIf="!pv.inversion">
                   <div *ngIf="pv.costo_opcional">
@@ -80,7 +80,7 @@
               </td>
               <td>
                 <div *ngIf="pv.inversion">
-                  {{ pv.inversion.costo * pv.cantidad | currency : "USD" }}
+                  {{ pv.inversion.costo_total * pv.cantidad | currency : "USD" }}
                 </div>
                 <div *ngIf="!pv.inversion">
                   <div *ngIf="pv.costo_opcional">
