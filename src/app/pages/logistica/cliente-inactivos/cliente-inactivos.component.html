@@ -62,11 +62,13 @@
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
             <th scope="col">Empresa</th>
-            <th scope="col">Usuario</th>
+            <!-- <th scope="col">Usuario</th> -->
+            <th scope="col">E.cuentas</th>
             <th scope="col">Cedula</th>
             <th scope="col">Días cobro</th>
-            <th scope="col">Direccion de casa</th>
-            <th scope="col">Direccion de negocio</th>
+            <th scope="col">Observación</th>
+            <th scope="col">Dirección de casa</th>
+            <th scope="col">Dirección de negocio</th>
             <th scope="col">Facturas</th>
             <!-- <th scope="col">Categoria</th>
             <th scope="col">Frecuencia</th> -->
@@ -76,17 +78,37 @@
           <tr *ngFor="let Cliente of _TablasService.datosTablaStorage">
             <!-- <th scope="row">{{ Recibo.id }}</th> -->
             <th>#{{ Cliente.id }}</th>
-            <td>
+            <!-- <td>
               {{ Cliente.nombreCompleto }}
+            </td> -->
+            <td>
+              <a
+                [routerLink]="['/cliente', 'editar', Cliente.id]"
+                target="_blank"
+                class="text-dark"
+                >{{ Cliente.nombreCompleto }}</a
+              >
             </td>
             <td>
-              {{ Cliente.nombreEmpresa }}
+              <a
+                [routerLink]="['/cliente', 'editar', Cliente.id]"
+                target="_blank"
+                class="text-dark"
+                >{{ Cliente.nombreEmpresa }}</a
+              >
             </td>
-            <td>
+            <!-- <td>
               <div *ngIf="Cliente.user_id">
                 {{ Cliente.user.name }} {{ Cliente.user.apellido }}
               </div>
               <div *ngIf="!Cliente.user_id">No tiene usuario asignado</div>
+            </td> -->
+            <td>
+              <a
+                target="_blank"
+                [routerLink]="['/cliente', 'estado-cuenta', Cliente.id]"
+                >Ver detalle</a
+              >
             </td>
             <td>
               {{ Cliente.cedula }}
@@ -97,6 +119,33 @@
                 ngbTooltip="{{ Cliente.dias_cobro | uppercase }}"
               >
                 <i class="fas fa-info-circle"></i>
+              </div>
+            </td>
+            <td>
+              <div class="form-group tipehead">
+                <select
+                  class="form-control"
+                  (change)="SetNota($event.target, Cliente)"
+                >
+                  <option [selected]="true" value="0" hidden>
+                    Sin seleccionar
+                  </option>
+                  <option [selected]="Cliente.nota?.tipos == 1" value="1">
+                    Fuera del país
+                  </option>
+                  <option [selected]="Cliente.nota?.tipos == 2" value="2">
+                    Inconformidad
+                  </option>
+                  <option [selected]="Cliente.nota?.tipos == 3" value="3">
+                    Cambio de dirección
+                  </option>
+                  <option [selected]="Cliente.nota?.tipos == 4" value="4">
+                    Código duplicado
+                  </option>
+                  <option [selected]="Cliente.nota?.tipos == 5" value="5">
+                    Cierre de negocio
+                  </option>
+                </select>
               </div>
             </td>
             <td>
@@ -112,7 +161,9 @@
                   class="mr-3"
                   ngbTooltip="Facturas"
                 >
-                  <a [routerLink]="['/cliente', 'factura', Cliente.id]"
+                  <a
+                    [routerLink]="['/cliente', 'factura', Cliente.id]"
+                    target="_blank"
                     ><i class="fas fa-receipt"></i
                   ></a>
                 </div>
@@ -125,6 +176,7 @@
                 </div>
               </div>
             </td>
+
             <!-- <td>
               {{ Cliente.categoria.descripcion }}
             </td>
@@ -242,7 +294,7 @@
             #instance="ngbTypeahead"
           /> -->
           <select name="" id="" class="form-control" [(ngModel)]="userId">
-            <option [selected]="userId == 0" value="0" *ngIf="">
+            <option [selected]="userId == 0" value="0">
               Todos los usuarios
             </option>
             <option
@@ -258,10 +310,33 @@
       <div class="col-md-6 mt-3">
         <p class="font-weight-bold">Días de cobro</p>
         <div class="d-flex flex-wrap" id="diasCobrosElement">
-          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3" >
-            <input type="checkbox" [value]="day" class="mr-1" (change)="changeDiasCobros($event.target)" [checked]="existeDiaDeCobroEnFiltro(day)">
-            <label [innerHTML]="cortarLetrasYMayuscula(day,0,3)"></label>
+          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3">
+            <input
+              type="checkbox"
+              [value]="day"
+              class="mr-1"
+              (change)="changeDiasCobros($event.target)"
+              [checked]="existeDiaDeCobroEnFiltro(day)"
+            />
+            <label [innerHTML]="cortarLetrasYMayuscula(day, 0, 3)"></label>
           </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-3">
+        <p class="font-weight-bold">Observación</p>
+        <div class="d-flex flex-wrap">
+          <select name="" id="" class="form-control" [(ngModel)]="tipos">
+            <option [selected]="tipos == 0" value="0">
+              Todos las observaciones
+            </option>
+            <option [selected]="tipos == 1" value="1">Fuera del país</option>
+            <option [selected]="tipos == 2" value="2">Inconformidad</option>
+            <option [selected]="tipos == 3" value="3">
+              Cambio de dirección
+            </option>
+            <option [selected]="tipos == 4" value="4">Código duplicado</option>
+            <option [selected]="tipos == 5" value="5">Cierre de negocio</option>
+          </select>
         </div>
       </div>
     </div>

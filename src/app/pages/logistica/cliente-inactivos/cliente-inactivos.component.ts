@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Cliente } from "@app/shared/models/Cliente.model";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
@@ -37,6 +38,7 @@ export class ClienteInactivosComponent implements OnInit {
   isAdmin: boolean;
   isSupervisor: boolean;
 
+  tipos: number = 0;
   diasCobros: string[] = [];
 
   userQuery: Usuario;
@@ -105,6 +107,7 @@ export class ClienteInactivosComponent implements OnInit {
       status_pagado: this.filtros.status_pagado,
       allDates: this.filtros.allDates,
       allNumber: this.filtros.allNumber,
+      tipos: this.filtros.tipos,
       // numDesde:this.filtros.numDesde,
       // numHasta:this.filtros.numHasta
       // numRecibo: Number(this.filtros.numRecibo),
@@ -233,13 +236,14 @@ export class ClienteInactivosComponent implements OnInit {
       this.userId = Number(this._AuthService.dataStorage.user.userId);
     }
 
-    this.clearDiasCobros()
-    this.diasCobros = []
+    this.clearDiasCobros();
+    this.diasCobros = [];
 
     // this.tipoVenta = 1
     // this.status_pagado = 0 // por pagar
     // this.numDesde = 0
     // this.numHasta = 0
+    this.tipos = 0;
     this.numRecibo = 0;
     this.allNumber = true;
     this.allDates = false;
@@ -263,6 +267,7 @@ export class ClienteInactivosComponent implements OnInit {
       this.allDates = this.filtros.allDates;
       this.allNumber = this.filtros.allNumber;
       this.numRecibo = this.filtros.numRecibo;
+      this.tipos = this.filtros.tipos;
     } else {
       if (!submit) {
         this.userId = Number(this._AuthService.dataStorage.user.userId);
@@ -284,6 +289,7 @@ export class ClienteInactivosComponent implements OnInit {
         userId: Number(this.userId),
         allDates: this.allDates,
         allNumber: this.allNumber,
+        tipos: Number(this.tipos),
         // numDesde: this.numDesde ? this.numDesde : 0,
         // numHasta: this.numHasta ? this.numHasta : 0,
         numRecibo: this.numRecibo ? this.numRecibo : 0,
@@ -374,7 +380,6 @@ export class ClienteInactivosComponent implements OnInit {
       });
   }
 
-  
   cortarLetrasYMayuscula(
     palabra: string,
     posicionIni: number,
@@ -398,11 +403,49 @@ export class ClienteInactivosComponent implements OnInit {
   existeDiaDeCobroEnFiltro(dia: string) {
     return this.diasCobros.some((diaCobro) => diaCobro == dia);
   }
+
   clearDiasCobros() {
     let element = document.getElementById("diasCobrosElement") as HTMLElement;
     let lisInputs = element.getElementsByTagName("input");
     Array.from(lisInputs).map((input: HTMLInputElement) => {
       input.checked = false;
     });
+  }
+
+  SetNota(event: HTMLInputElement, cliente: Cliente) {
+    // console.log(event.value);
+    console.log(cliente.id);
+    Swal.fire({
+      title: "Cargando la observación",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this._LogisticaService
+      .clientesInactivosNotas({
+        cliente_id: cliente.id,
+        tipos: Number(event.value),
+      })
+      .subscribe(
+        (data) => {
+          console.log(data);
+          Swal.fire({
+            text: "Observación cargada con éxito",
+            icon: "success",
+          });
+        },
+        (error) => {
+          Swal.fire({
+            text: "Error",
+            icon: "error",
+          });
+        }
+      );
   }
 }

@@ -18,6 +18,7 @@ export interface CarteraDateBodyForm{
   allNumber? : boolean
   numDesde?:number
   numHasta?:number
+  tipos?:number
   numRecibo?:number
   diasCobros?: string[]
 }

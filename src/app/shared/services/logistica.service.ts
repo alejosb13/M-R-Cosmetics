@@ -267,4 +267,13 @@ export class LogisticaService {
 
     return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
   }
+
+  clientesInactivosNotas(data:any): Observable<any> { 
+
+    return this.http.post<any>(
+      `${Logistica}/clientes-inactivos/notas`,
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 }
