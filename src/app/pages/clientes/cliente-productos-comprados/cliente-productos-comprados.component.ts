@@ -20,18 +20,19 @@ import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 import { ActivatedRoute } from "@angular/router";
 import { FacturaDetalle } from "app/shared/models/FacturaDetalle.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
-  selector: 'app-cliente-productos-comprados',
-  templateUrl: './cliente-productos-comprados.component.html',
-  styleUrls: ['./cliente-productos-comprados.component.css']
+  selector: "app-cliente-productos-comprados",
+  templateUrl: "./cliente-productos-comprados.component.html",
+  styleUrls: ["./cliente-productos-comprados.component.css"],
 })
 export class ClienteProductosCompradosComponent implements OnInit {
   Productos: FacturaDetalle[];
   TiposMetodos = TiposMetodos;
   numeroRecibo: string = "";
 
-  metodoPagoEditar: number ;
+  metodoPagoEditar: number;
   detallePagoEditar: string = "";
   editarAbonoId: number;
 
@@ -50,7 +51,7 @@ export class ClienteProductosCompradosComponent implements OnInit {
   dateIni: string;
   dateFin: string;
   allDates: boolean = false;
-  clienteId:number
+  clienteId: number;
 
   roleName: string;
   listadoData: ListadoModel<FacturaDetalle>;
@@ -60,7 +61,11 @@ export class ClienteProductosCompradosComponent implements OnInit {
 
   private Subscription = new Subscription();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -68,10 +73,9 @@ export class ClienteProductosCompradosComponent implements OnInit {
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
     private _AbonoService: AbonoService,
-    route: ActivatedRoute,
+    route: ActivatedRoute
   ) {
     this.clienteId = Number(route.snapshot.params.id);
-
   }
 
   ngOnInit(): void {
@@ -82,6 +86,12 @@ export class ClienteProductosCompradosComponent implements OnInit {
     this.setCurrentDate();
     this.getUsers();
     this.aplicarFiltros();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getUsers() {
@@ -99,20 +109,21 @@ export class ClienteProductosCompradosComponent implements OnInit {
     this.listadoFilter = {
       ...this.listadoFilter,
       roleName: this.roleName,
-      clienteId:this.clienteId,
-      
+      clienteId: this.clienteId,
     };
 
-    let Subscription = this._Listado.clienteProductosCompradosList(this.listadoFilter).subscribe(
-      (Paginacion) => {
-        this.listadoData = { ...Paginacion };
-        this.Productos = [...Paginacion.data];
-        this.isLoad = false;
-      },
-      (error) => {
-        this.isLoad = false;
-      }
-    );
+    let Subscription = this._Listado
+      .clienteProductosCompradosList(this.listadoFilter)
+      .subscribe(
+        (Paginacion) => {
+          this.listadoData = { ...Paginacion };
+          this.Productos = [...Paginacion.data];
+          this.isLoad = false;
+        },
+        (error) => {
+          this.isLoad = false;
+        }
+      );
     this.Subscription.add(Subscription);
   }
 
@@ -127,6 +138,7 @@ export class ClienteProductosCompradosComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -220,7 +232,7 @@ export class ClienteProductosCompradosComponent implements OnInit {
         dateFin: this.dateFin,
         userId: this.userId,
         allDates: this.allDates,
-        clienteId:this.clienteId
+        clienteId: this.clienteId,
       };
     }
 
@@ -228,43 +240,57 @@ export class ClienteProductosCompradosComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
-    this.NgbModal.dismissAll()
+    this.NgbModal.dismissAll();
   }
 
   eliminar({ id }: Abono) {
     // console.log(id);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Este abono se eliminará y no podrás recuperarlo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Eliminando el abono",
-          text: "Esto puede demorar un momento.",
-          timerProgressBar: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          allowEnterKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        this._AbonoService.deleteAbono(id).subscribe((data) => {
-          // this.Abonos = this.Abonos.filter((abono) => abono.id != id);
-
-          Swal.fire({
-            text: data[0],
-            icon: "success",
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Este abono se eliminará y no podrás recuperarlo.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
+            title: "Eliminando el abono",
+            text: "Esto puede demorar un momento.",
+            timerProgressBar: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
-        });
-      }
-    });
+          this._AbonoService.deleteAbono(id).subscribe((data) => {
+            // this.Abonos = this.Abonos.filter((abono) => abono.id != id);
+
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
+              text: data[0],
+              icon: "success",
+            });
+          });
+        }
+      });
   }
 
   editarAbono(content: any, abono: Abono) {
@@ -274,46 +300,58 @@ export class ClienteProductosCompradosComponent implements OnInit {
 
     logger.log(abono);
 
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
 
   editarAbonoEnviar() {
     logger.log({
-      metodoPagoEditar: this.metodoPagoEditar ,
-      detallePagoEditar:this.detallePagoEditar
+      metodoPagoEditar: this.metodoPagoEditar,
+      detallePagoEditar: this.detallePagoEditar,
     });
-    if(this.metodoPagoEditar && this.detallePagoEditar){
+    if (this.metodoPagoEditar && this.detallePagoEditar) {
       this._AbonoService
-      .updateAbono(this.editarAbonoId, {
-        metodoPagoEditar: this.metodoPagoEditar,
-        detallePagoEditar: this.detallePagoEditar,
-      })
-      .subscribe(
-        (data) => {
-          Swal.fire({
-            text: "Abono modificado con exito",
-            icon: 'success',
-          }).then((result) => {
-            window.location.reload()
-          })
-
+        .updateAbono(this.editarAbonoId, {
+          metodoPagoEditar: this.metodoPagoEditar,
+          detallePagoEditar: this.detallePagoEditar,
+        })
+        .subscribe(
+          (data) => {
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            })
+              .fire({
+                text: "Abono modificado con exito",
+                icon: "success",
+              })
+              .then((result) => {
+                window.location.reload();
+              });
+          },
+          (error) => {
+            this.isLoad = false;
+          }
+        );
+    } else {
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
         },
-        (error) => {
-          this.isLoad = false;
-        }
-      );
-    }else{
-      Swal.fire({
+      }).fire({
         text: "Complete todos los campos",
-        icon: 'warning',
-      })
+        icon: "warning",
+      });
     }
- 
   }
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

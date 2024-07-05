@@ -21,3 +21,199 @@ ngb-pagination .pagination {
 .form-check .form-check-label {
   padding-left: 10px;
 }
+
+.main-panel .navbar.navbar-transparent:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  height: 1px;
+  width: calc(100% - 50px);
+}
+
+[data-color="black"] {
+  scrollbar-face-color: #6f6f6e;
+  scrollbar-base-color: #6f6f6e;
+  scrollbar-3dlight-color: #6f6f6e;
+  scrollbar-highlight-color: #6f6f6e;
+  scrollbar-track-color: #171717;
+  scrollbar-arrow-color: #171717;
+  scrollbar-shadow-color: #6f6f6e;
+  scrollbar-dark-shadow-color: #6f6f6e;
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-button {
+    background-color: #666;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #6f6f6e;
+  }
+  ::-webkit-scrollbar-track-piece {
+    background-color: #171717;
+  }
+  ::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: #666;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: #6f6f6e;
+  }
+  ::-webkit-resizer {
+    background-color: #666;
+  }
+}
+
+/* SIDEBAR DARK */
+.sidebar[data-color="black"]:after,
+.off-canvas-sidebar[data-color="black"]:after {
+}
+
+body
+  .sidebar[data-color="black"]
+  .sidebar-wrapper
+  li.active
+  > a:not([data-toggle="collapse"]):before,
+.sidebar
+  .sidebar-wrapper
+  li.active
+  > [data-toggle="collapse"]
+  + div
+  .nav
+  li:before {
+  border-right: 17px solid #6f6f6e !important;
+}
+body
+  .sidebar[data-color="black"]
+  .sidebar-wrapper
+  li.active
+  > a:not([data-toggle="collapse"]):after,
+.sidebar
+  .sidebar-wrapper
+  li.active
+  > [data-toggle="collapse"]
+  + div
+  .nav
+  li:after {
+  border-right: 17px solid #6f6f6e !important;
+}
+
+.sidebar[data-color="black"] .logo:after {
+  height: 1px;
+  background-color: #4ab3b5;
+}
+
+.sidebar[data-color="black"] .nav li.active p,
+.sidebar[data-color="black"] .nav li.active i {
+  color: #4ab3b5 !important;
+}
+
+/* SIDEBAR WHITE */
+
+.sidebar[data-color="white"] .logo:after {
+  height: 2px;
+  background-color: #ddd;
+}
+
+/* PANEL DARK */
+body .main-panel[data-color="black"],
+body .main-panel[data-color="black"] .page-item,
+body .main-panel[data-color="black"] .card,
+body .main-panel[data-color="black"] .card label,
+body .main-panel[data-color="black"] .table {
+  color: #e0e0e0 !important;
+}
+
+/* PANEL DARK Pagination */
+body .main-panel[data-color="black"] .page-item {
+  background-color: #e0e0e0 !important;
+  border-radius: 3px;
+}
+
+body .main-panel[data-color="black"] .page-item .page-link {
+  color: #151515;
+}
+body .main-panel[data-color="black"] .page-item.active .page-link {
+  color: #4ab3b5;
+  border-color: #4ab3b5;
+}
+
+body .main-panel[data-color="black"] .page-item.disabled .page-link {
+  color: #a0a0a0 !important;
+}
+
+body .main-panel[data-color="black"] .bg-white {
+  background-color: #212120 !important;
+}
+
+body .main-panel[data-color="black"] .page-link {
+  background-color: transparent !important;
+}
+
+.main-panel[data-color="black"] {
+  background-color: #171717 !important;
+}
+
+.main-panel[data-color="black"] .navbar.navbar-transparent:after {
+  background-color: #4ab3b5;
+}
+
+.main-panel[data-color="black"] .card {
+  background-color: #212120; /* Fondo de la tarjeta */
+}
+.main-panel[data-color="black"] .dropdown-menu.desplegable div label  {
+  color: #151515 !important;
+}
+
+.main-panel[data-color="black"] input,
+.main-panel[data-color="black"] select,
+.main-panel[data-color="black"] textarea {
+  background-color: #e0e0e0; /* Fondo de la tarjeta */
+  color: #151515;
+}
+
+/* PANEL WHITE */
+.main-panel[data-color="white"] .navbar.navbar-transparent:after {
+  background-color: #ddd;
+}
+
+.dark-mode  {
+  background-color: #39474757 !important;
+}
+
+.dark-mode .swal2-popup {
+  background-color: #212120;
+  color: #e0e0e0;
+}
+
+.dark-mode .swal2-popup .swal2-success-circular-line-left {
+  background-color: #212121 !important;
+}
+
+.dark-mode .swal2-popup .swal2-success-fix {
+  background-color: #212121 !important;
+}
+
+.dark-mode .swal2-popup .swal2-success-circular-line-right {
+  background-color: #212121 !important;
+}
+
+.dark-modal .modal-content {
+  background-color: #212120;
+  color: #e0e0e0;
+}
+
+.dark-modal .modal-header {
+  border-bottom: 1px solid #4ab3b5;
+}
+
+.dark-modal .invalid-feedback {
+  color: #ffacb4;
+}
+
+.modal-backdrop ~ .modal.dark-modal {
+  background-color: #39474757; /* Cambia esto según el estilo que desees aplicar */
+}

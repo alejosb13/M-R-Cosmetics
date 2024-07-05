@@ -11,6 +11,7 @@ import logger from "app/shared/utils/logger";
 import Swal from "sweetalert2";
 import { Auth } from "./models/auth.model";
 import { AuthService } from "./service/auth.service";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-login",
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
     private router: Router,
-    private _RememberFiltersService: RememberFiltersService
+    private _RememberFiltersService: RememberFiltersService,
+    private _CommunicationService: CommunicationService,
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +85,9 @@ export class LoginComponent implements OnInit {
           let Auth: Auth = { ...data };
           this._AuthService.dataStorage = { ...Auth };
           this._RememberFiltersService.deleteAllFilterStorage();
+
+          this._CommunicationService.removeTheme() // Elimino localstore 
+          this._CommunicationService.setTheme("white") // agrego localstore 
           // this.loadInfo = false;
           this.router.navigateByUrl("/inicio");
         },

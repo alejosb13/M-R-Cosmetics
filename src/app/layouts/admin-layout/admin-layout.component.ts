@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { CronService } from "app/shared/services/cron.service";
 import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
-import { interval, Subject } from "rxjs";
+import { interval, Observable, Subject, Subscription } from "rxjs";
 import { catchError, exhaustMap, takeUntil } from "rxjs/operators";
 
 @Component({
@@ -13,13 +14,22 @@ import { catchError, exhaustMap, takeUntil } from "rxjs/operators";
 })
 export class AdminLayoutComponent implements OnInit {
   private ngUnsubscribe = new Subject<void>();
+  themeSubscription: Subscription;
+  themeSite: string;
+
   constructor(
     private _CronService: CronService,
-    private _AuthService: AuthService
+    private _AuthService: AuthService,
+    public _CommunicationService: CommunicationService
   ) {}
 
   ngOnInit() {
     this.refreshIndices();
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color;
+      });
   }
 
   private refreshIndices() {
@@ -34,7 +44,9 @@ export class AdminLayoutComponent implements OnInit {
         catchError((e, caught) => caught)
       );
       // if(environment.production)
-        refreshIndices.subscribe((result) => {logger.log(result)});
+      refreshIndices.subscribe((result) => {
+        logger.log(result);
+      });
       // }
     }
   }
@@ -42,5 +54,6 @@ export class AdminLayoutComponent implements OnInit {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.themeSubscription.unsubscribe();
   }
 }

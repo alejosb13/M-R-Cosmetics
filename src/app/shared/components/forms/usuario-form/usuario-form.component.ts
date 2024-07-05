@@ -1,11 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { Role } from "app/shared/models/Role.model";
 import { Usuario, UsuarioServ } from "app/shared/models/Usuario.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { RolesService } from "app/shared/services/roles.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -24,11 +30,15 @@ export class UsuarioFormComponent implements OnInit {
   @Input() Id?: number;
   @Output() FormsValues = new EventEmitter<UsuarioServ>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
     private fb: UntypedFormBuilder,
     private _RolesService: RolesService,
     public _UsuariosService: UsuariosService,
-    public _HelpersService: HelpersService
+    public _HelpersService: HelpersService,
+    private _CommunicationService: CommunicationService
   ) {
     this._RolesService
       .getRole()
@@ -40,6 +50,12 @@ export class UsuarioFormComponent implements OnInit {
     this.definirValidacionesEstado();
 
     if (this.Id) this.setFormValues();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   definirValidaciones() {
@@ -139,7 +155,7 @@ export class UsuarioFormComponent implements OnInit {
       .subscribe((usuario: Usuario) => {
         let role = this.Roles.find((role) => role.id == usuario.role_id);
         // console.log(usuario);
-        
+
         this.editarUsuarioForm.patchValue({
           nombre: usuario.name,
           apellido: usuario.apellido,
@@ -228,7 +244,11 @@ export class UsuarioFormComponent implements OnInit {
 
       this.FormsValues.emit(usuarioService);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });

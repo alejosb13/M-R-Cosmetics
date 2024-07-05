@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { UsuarioServ } from "app/shared/models/Usuario.model";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -12,16 +14,30 @@ import Swal from "sweetalert2";
   styleUrls: ["./usuario-insertar.component.css"],
 })
 export class UsuarioInsertarComponent implements OnInit {
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private router: Router,
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
+  }
 
   ValuesForm(usuario: UsuarioServ) {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Creando el usario",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -39,7 +55,11 @@ export class UsuarioInsertarComponent implements OnInit {
       (UsuarioResponse) => {
         this._UsuariosService.isLoad = false;
 
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "Usuario agregado con exito",
           icon: "success",
         }).then((result) => {
@@ -52,12 +72,21 @@ export class UsuarioInsertarComponent implements OnInit {
           this._HelpersService.errorResponse(HttpErrorResponse);
         this._UsuariosService.isLoad = false;
 
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           title: "Error",
           html: error,
           icon: "error",
         });
       }
     );
+  }
+
+  
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

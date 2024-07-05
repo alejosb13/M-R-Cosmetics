@@ -18,6 +18,7 @@ import { ClientesService } from "app/shared/services/clientes.service";
 import { Cliente } from "app/shared/models/Cliente.model";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-clientes",
@@ -60,7 +61,11 @@ export class ClientesComponent implements OnInit {
 
   daysOfWeek: string[];
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -83,6 +88,12 @@ export class ClientesComponent implements OnInit {
     this.getCategoria();
     this.aplicarFiltros();
     // this.limpiarFiltros();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getUsers() {
@@ -114,7 +125,11 @@ export class ClientesComponent implements OnInit {
     // This arrangement can be altered based on how we want the date's format to appear.
     let currentDate = `${day}-${month}-${year}`;
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Descargando el archivo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -128,7 +143,11 @@ export class ClientesComponent implements OnInit {
     this._Listado.registerClientesPDF(this.listadoFilter).subscribe((data) => {
       // console.log(data);
       this._HelpersService.downloadFile(data, `Detalle_Factura_${currentDate}`);
-      Swal.fire("", "Descarga Completada", "success");
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire("", "Descarga Completada", "success");
     });
   }
 
@@ -252,6 +271,7 @@ export class ClientesComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -316,6 +336,7 @@ export class ClientesComponent implements OnInit {
 
     this.NgbModal.open(modarDiasCobro, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -389,62 +410,86 @@ export class ClientesComponent implements OnInit {
   eliminar({ id, estado }: Cliente) {
     // console.log(id);
 
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text:
-        estado == 1
-          ? "Este cliente se eliminará."
-          : "Este cliente se restaurara.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: estado == 1 ? "Eliminar" : "Restaurar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Eliminando el cliente",
-          text: "Esto puede demorar un momento.",
-          timerProgressBar: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          allowEnterKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        this._ClientesService.deleteCliente(id).subscribe((data) => {
-          if (estado == 1) {
-            this.Clientes = this.Clientes.filter((cliente) => cliente.id != id);
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text:
+          estado == 1
+            ? "Este cliente se eliminará."
+            : "Este cliente se restaurara.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: estado == 1 ? "Eliminar" : "Restaurar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
+            title: "Eliminando el cliente",
+            text: "Esto puede demorar un momento.",
+            timerProgressBar: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+          this._ClientesService.deleteCliente(id).subscribe((data) => {
+            if (estado == 1) {
+              this.Clientes = this.Clientes.filter(
+                (cliente) => cliente.id != id
+              );
 
-            Swal.fire({
-              text: data[0],
-              icon: "success",
-            });
-          }
-          if (estado == 0) {
-            this.Clientes = this.Clientes.map((cliente) => {
-              // console.log(estado);
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            }
+            if (estado == 0) {
+              this.Clientes = this.Clientes.map((cliente) => {
+                // console.log(estado);
 
-              if (cliente.id == id) return { ...cliente, estado: 1 };
-              return cliente;
-            });
+                if (cliente.id == id) return { ...cliente, estado: 1 };
+                return cliente;
+              });
 
-            Swal.fire({
-              text: data[0],
-              icon: "success",
-            });
-          }
-        });
-      }
-    });
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            }
+          });
+        }
+      });
   }
 
   modificarDiasdeCobro() {
     // console.log(this.diasCobrosSelected);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Modificando días de cobro",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -455,8 +500,8 @@ export class ClientesComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    
-    this.NgbModal.dismissAll()
+
+    this.NgbModal.dismissAll();
     this._ClientesService
       .diasCobroCliente({ diasCobro: this.diasCobrosSelected }, this.cliente.id)
       .subscribe((data) => {
@@ -478,16 +523,23 @@ export class ClientesComponent implements OnInit {
           return client;
         });
 
-        Swal.fire({
-          text: "Días de cobro modificada con exito",
-          icon: "success",
-        }).then((result) => {
-          // if (result.isConfirmed) window.location.reload();
-        });
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        })
+          .fire({
+            text: "Días de cobro modificada con exito",
+            icon: "success",
+          })
+          .then((result) => {
+            // if (result.isConfirmed) window.location.reload();
+          });
       });
   }
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

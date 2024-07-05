@@ -9,6 +9,7 @@ import { UserAuth } from "app/auth/login/models/auth.model";
 import { RememberFiltersService } from "../../services/remember-filters.service";
 import logger from "app/shared/utils/logger";
 import { HelpersService } from "../../services/helpers.service";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   moduleId: module.id,
@@ -37,7 +38,8 @@ export class NavbarComponent implements OnInit {
     public _CheckoutService: CheckoutService,
     private _AuthService: AuthService,
     private _RememberFiltersService: RememberFiltersService,
-    private _HelpersService: HelpersService
+    private _HelpersService: HelpersService,
+    private _CommunicationService: CommunicationService,
   ) {
     this.location = location;
 
@@ -113,11 +115,14 @@ export class NavbarComponent implements OnInit {
       (data) => {
         this._RememberFiltersService.deleteAllFilterStorage();
         this._AuthService.deleteSession();
+        this._CommunicationService.removeTheme();
         this.router.navigateByUrl("/login");
       },
       (error) => {
         this._RememberFiltersService.deleteAllFilterStorage();
         this._AuthService.deleteSession();
+        this._CommunicationService.removeTheme();
+
         this.router.navigateByUrl("/login");
       }
     );

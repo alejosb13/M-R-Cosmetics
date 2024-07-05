@@ -20,7 +20,7 @@
             >
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
                 validation: 'required',
-                message: 'El mínimo es requerida',
+                message: 'El mínimo es requerido',
                 control: ReciboForm.controls['min']
             }"></ng-container>
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
@@ -51,7 +51,7 @@
             >
             <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
               validation: 'required',
-              message: 'El máximo es requerida',
+              message: 'El máximo es requerido',
               control: ReciboForm.controls['max']
           }"></ng-container>
           <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{

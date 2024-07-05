@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Role } from "app/auth/login/models/auth.model";
 import { Meta } from "app/shared/models/meta.model";
@@ -15,6 +16,7 @@ import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { AuthService } from "../../auth/login/service/auth.service";
 
@@ -40,19 +42,29 @@ export class UsuariosComponent implements OnInit {
 
   isAdmin: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _UsuariosService: UsuariosService,
     private _TablasService: TablasService,
     private _ReciboService: ReciboService,
     private _HelpersService: HelpersService,
     private _MetaService: MetaService,
     private modalService: NgbModal,
-    private _AuthService: AuthService
+    private _AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin();
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
@@ -100,43 +112,61 @@ export class UsuariosComponent implements OnInit {
 
   eliminar({ id }: Usuario) {
     // console.log(id);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Este usuario se eliminará y no podrás recuperarlo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Eliminando el usuario",
-          text: "Esto puede demorar un momento.",
-          timerProgressBar: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          allowEnterKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        this._UsuariosService.deleteUsuario(id).subscribe((data) => {
-          this.Usuarios = this.Usuarios.filter((Usuario) => Usuario.id != id);
-          this.refreshCountries();
-
-          Swal.fire({
-            text: data[0],
-            icon: "success",
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Este usuario se eliminará y no podrás recuperarlo.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
+            title: "Eliminando el usuario",
+            text: "Esto puede demorar un momento.",
+            timerProgressBar: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
-        });
-      }
-    });
+          this._UsuariosService.deleteUsuario(id).subscribe((data) => {
+            this.Usuarios = this.Usuarios.filter((Usuario) => Usuario.id != id);
+            this.refreshCountries();
+
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
+              text: data[0],
+              icon: "success",
+            });
+          });
+        }
+      });
   }
 
   cambiarEstadoRangoRecibos({ id }: RecibosRangosSinTerminar) {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Ignorando rango de recibo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -171,7 +201,11 @@ export class UsuariosComponent implements OnInit {
         this._TablasService.datosTablaStorage = this.Usuarios;
         // this.refreshCountries();
 
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "Estatus Modificado",
           icon: "success",
         });
@@ -184,7 +218,11 @@ export class UsuariosComponent implements OnInit {
     // console.log(this.recibo);
 
     this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .open(content, {
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      })
       .result.then(
         (result) => {},
         (reason) => {}
@@ -198,7 +236,11 @@ export class UsuariosComponent implements OnInit {
     // console.log(this.recibo);
 
     this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .open(content, {
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      })
       .result.then(
         (result) => {},
         (reason) => {}
@@ -213,7 +255,11 @@ export class UsuariosComponent implements OnInit {
     this.idUsuario = meta.user_id;
 
     this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .open(content, {
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      })
       .result.then(
         (result) => {},
         (reason) => {}
@@ -225,7 +271,11 @@ export class UsuariosComponent implements OnInit {
     this.idUsuario = userId;
 
     this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .open(content, {
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      })
       .result.then(
         (result) => {},
         (reason) => {}
@@ -236,7 +286,11 @@ export class UsuariosComponent implements OnInit {
     this.recibosRangosSinTerminar = user.recibosRangosSinTerminar;
     console.log(this.recibosRangosSinTerminar);
     this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
+      .open(content, {
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      })
       .result.then(
         (result) => {},
         (reason) => {}
@@ -259,25 +313,39 @@ export class UsuariosComponent implements OnInit {
             }
           );
 
-          Swal.fire({
-            text: "Recibo modificado con exito",
-            icon: "success",
-          }).then((result) => {
-            if (result.isConfirmed) window.location.reload();
-          });
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          })
+            .fire({
+              text: "Recibo modificado con exito",
+              icon: "success",
+            })
+            .then((result) => {
+              if (result.isConfirmed) window.location.reload();
+            });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
           let error: string = HttpErrorResponse.error[0];
           console.log(HttpErrorResponse);
 
           if (Array.isArray(HttpErrorResponse.error)) {
-            Swal.fire({
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
               title: "Error",
               html: error,
               icon: "error",
             });
           } else {
-            Swal.fire({
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
               title: "Error",
               html: HttpErrorResponse.error.mensaje,
               icon: "error",
@@ -295,19 +363,29 @@ export class UsuariosComponent implements OnInit {
               return usuario;
             }
           );
-          Swal.fire({
-            text: "Recibo agregado con exito",
-            icon: "success",
-          }).then((result) => {
-            if (result.isConfirmed) window.location.reload();
-          });
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          })
+            .fire({
+              text: "Recibo agregado con exito",
+              icon: "success",
+            })
+            .then((result) => {
+              if (result.isConfirmed) window.location.reload();
+            });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
           // let error:string =  HttpErrorResponse.error[0]
           let error: string =
             this._HelpersService.errorResponse(HttpErrorResponse);
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             title: "Error",
             html: error,
             icon: "error",
@@ -332,7 +410,11 @@ export class UsuariosComponent implements OnInit {
             }
           );
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: "Meta modificada con exito",
             icon: "success",
           });
@@ -340,7 +422,11 @@ export class UsuariosComponent implements OnInit {
         (HttpErrorResponse: HttpErrorResponse) => {
           let error: string = HttpErrorResponse.error[0];
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             title: "Error",
             html: error,
             icon: "error",
@@ -357,19 +443,29 @@ export class UsuariosComponent implements OnInit {
               return usuario;
             }
           );
-          Swal.fire({
-            text: "Meta agregada con exito",
-            icon: "success",
-          }).then((result) => {
-            // if (result.isConfirmed) window.location.reload()
-          });
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          })
+            .fire({
+              text: "Meta agregada con exito",
+              icon: "success",
+            })
+            .then((result) => {
+              // if (result.isConfirmed) window.location.reload()
+            });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
           // let error:string =  HttpErrorResponse.error[0]
           let error: string =
             this._HelpersService.errorResponse(HttpErrorResponse);
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             title: "Error",
             html: error,
             icon: "error",
@@ -377,5 +473,9 @@ export class UsuariosComponent implements OnInit {
         }
       );
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }
