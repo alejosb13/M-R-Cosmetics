@@ -1,178 +1,179 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Producto } from 'app/shared/models/Producto.model';
-import { HelpersService } from 'app/shared/services/helpers.service';
-import { ProductosService } from 'app/shared/services/productos.service';
-import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
-import Swal from 'sweetalert2';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { CommunicationService } from "@app/shared/services/communication.service";
+import { Producto } from "app/shared/models/Producto.model";
+import { HelpersService } from "app/shared/services/helpers.service";
+import { ProductosService } from "app/shared/services/productos.service";
+import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
+import { Subscription } from "rxjs";
+import Swal from "sweetalert2";
 
 @Component({
-  selector: 'app-producto-form',
-  templateUrl: './producto-form.component.html',
-  styleUrls: ['./producto-form.component.css']
+  selector: "app-producto-form",
+  templateUrl: "./producto-form.component.html",
+  styleUrls: ["./producto-form.component.css"],
 })
 export class ProductoFormComponent implements OnInit {
-
   ProductForm: UntypedFormGroup;
   EstadoForm: UntypedFormGroup;
   // Categorias:Categoria[]
   // Frecuencias:Frecuencia[]
-  daysOfWeek:string[]
-  loadInfo:boolean = false;
+  daysOfWeek: string[];
+  loadInfo: boolean = false;
 
   // @ViewChild('diasCobro') diasCobroInput: ElementRef;
-  @Input() Id?:number
+  @Input() Id?: number;
   @Output() FormsValues = new EventEmitter<Producto>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
-    public _ProductosService: ProductosService,
+    public _ProductosService: ProductosService
   ) {}
 
   ngOnInit(): void {
+    this.definirValidaciones();
+    this.definirValidacionesEstado();
 
-    this.definirValidaciones()
-    this.definirValidacionesEstado()
+    if (this.Id) this.setFormValues();
 
-    if(this.Id) this.setFormValues()
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
-  definirValidaciones(){
-    this.ProductForm = this.fb.group(
-      {
-        marca: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.maxLength(30),
-          ]),
-        ],
-        modelo: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.maxLength(43),
-          ]),
-        ],
-        stock: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.pattern(ValidFunctionsValidator.NumberRegEx),
-            Validators.maxLength(11),
-            // Validators.min(1),
-          ]),
-        ],
-        precio: [
-          '',
-          Validators.compose([
-            Validators.required,
-            // Validators.maxLength(80),
-            Validators.pattern(ValidFunctionsValidator.DecimalRegEx),
-            // Validators.minLength(3),
-          ]),
-        ],
-        // comision: [
-        //   '',
-        //   Validators.compose([
-        //     Validators.required,
-        //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),
-        //     Validators.maxLength(11),
-        //   ]),
-        // ],
-        linea: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.maxLength(50),
+  definirValidaciones() {
+    this.ProductForm = this.fb.group({
+      marca: [
+        "",
+        Validators.compose([Validators.required, Validators.maxLength(30)]),
+      ],
+      modelo: [
+        "",
+        Validators.compose([Validators.required, Validators.maxLength(43)]),
+      ],
+      stock: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+          Validators.maxLength(11),
+          // Validators.min(1),
+        ]),
+      ],
+      precio: [
+        "",
+        Validators.compose([
+          Validators.required,
+          // Validators.maxLength(80),
+          Validators.pattern(ValidFunctionsValidator.DecimalRegEx),
+          // Validators.minLength(3),
+        ]),
+      ],
+      // comision: [
+      //   '',
+      //   Validators.compose([
+      //     Validators.required,
+      //     Validators.pattern(ValidFunctionsValidator.NumberRegEx),
+      //     Validators.maxLength(11),
+      //   ]),
+      // ],
+      linea: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(50),
 
-            // Validators.maxLength(12),
-          ]),
-        ],
-        descripcion: [
-          '',
-          Validators.compose([
-            Validators.required,
-            Validators.maxLength(200),
+          // Validators.maxLength(12),
+        ]),
+      ],
+      descripcion: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(200),
 
-            // Validators.maxLength(12),
-          ]),
-        ],
-        // estado: [
-        //   1,
-        //   Validators.compose([
-        //     Validators.required,
-        //   ]),
-        // ],
-
-      }
-    );
-  }
-
-  get formularioStadoControls(){
-    return this.EstadoForm.controls
-  }
-
-  definirValidacionesEstado(){
-    this.EstadoForm = this.fb.group(
-      {
-        estado: [
-          1,
-          Validators.compose([
-            Validators.required,
-
-          ]),
-        ],
-      }
-    );
-  }
-
-  setEstadoValues(estado:number){
-    this.EstadoForm.patchValue({
-      "estado" : estado,
+          // Validators.maxLength(12),
+        ]),
+      ],
+      // estado: [
+      //   1,
+      //   Validators.compose([
+      //     Validators.required,
+      //   ]),
+      // ],
     });
   }
 
+  get formularioStadoControls() {
+    return this.EstadoForm.controls;
+  }
 
-  setFormValues(){
-    this.loadInfo = true
-    this._ProductosService.getProductoById(this.Id).subscribe((producto:Producto)=>{
-      this.ProductForm.setValue({
-        "marca" : producto.marca,
-        "modelo" : producto.modelo,
-        "stock" : producto.stock,
-        "precio" : producto.precio,
-        // "comision" : producto.comision,
-        "linea" : producto.linea,
-        "descripcion" : producto.descripcion,
-        // "estado" : producto.estado,
+  definirValidacionesEstado() {
+    this.EstadoForm = this.fb.group({
+      estado: [1, Validators.compose([Validators.required])],
+    });
+  }
+
+  setEstadoValues(estado: number) {
+    this.EstadoForm.patchValue({
+      estado: estado,
+    });
+  }
+
+  setFormValues() {
+    this.loadInfo = true;
+    this._ProductosService
+      .getProductoById(this.Id)
+      .subscribe((producto: Producto) => {
+        this.ProductForm.setValue({
+          marca: producto.marca,
+          modelo: producto.modelo,
+          stock: producto.stock,
+          precio: producto.precio,
+          // "comision" : producto.comision,
+          linea: producto.linea,
+          descripcion: producto.descripcion,
+          // "estado" : producto.estado,
+        });
+
+        this.setEstadoValues(producto.estado);
+        // let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
+        // console.log(dias_cobro);
+
+        // const formArray: FormArray = this.editarClienteForm.get("dias_cobro") as FormArray; // obtengo el campo del formulario angular
+        // dias_cobro.map((numberDay:number) => formArray.push(new FormControl(numberDay)) )// ingreso el valor de los dias en el formulario angular
+
+        // let arrayInput = Array.from(this.diasCobroInput.nativeElement.querySelectorAll('input[type="checkbox"]'))
+        // arrayInput.map((input: any, i: number) => {
+        //   if (dias_cobro.some((numberDay) => numberDay == input.value)) {
+        //     input.setAttribute('checked', true)
+        //   }
+        // })
+
+        this.loadInfo = false;
       });
-
-      this.setEstadoValues(producto.estado)
-      // let dias_cobro = cliente.dias_cobro.split(",").map((dia)=> this._HelpersService.DaysOfTheWeek.indexOf(dia.toLowerCase())) // obtengo el dia de la semana en numero
-      // console.log(dias_cobro);
-
-      // const formArray: FormArray = this.editarClienteForm.get("dias_cobro") as FormArray; // obtengo el campo del formulario angular
-      // dias_cobro.map((numberDay:number) => formArray.push(new FormControl(numberDay)) )// ingreso el valor de los dias en el formulario angular
-
-      // let arrayInput = Array.from(this.diasCobroInput.nativeElement.querySelectorAll('input[type="checkbox"]'))
-      // arrayInput.map((input: any, i: number) => {
-      //   if (dias_cobro.some((numberDay) => numberDay == input.value)) {
-      //     input.setAttribute('checked', true)
-      //   }
-      // })
-
-      this.loadInfo = false
-    })
-
-
-
-
   }
 
   changeValueFormArray({ name, value, checked }) {
     // const formArray: FormArray = this.editarClienteForm.get(name) as FormArray;
-
     // if (checked) {
     //   formArray.push(new FormControl(value));
     // } else {
@@ -181,38 +182,44 @@ export class ProductoFormComponent implements OnInit {
     // }
   }
 
-  get formularioControls(){
-    return this.ProductForm.controls
+  get formularioControls() {
+    return this.ProductForm.controls;
   }
 
-
-  EnviarFormulario(){
+  EnviarFormulario() {
     // console.log(this.editarClienteForm);
     // console.log(this.formularioControls);
     // console.log(this.ProductForm.getRawValue());
 
-    if(this.ProductForm.valid){
-      let producto = {} as Producto
+    if (this.ProductForm.valid) {
+      let producto = {} as Producto;
 
       // producto.comision =  Number(this.formularioControls.comision.value)
-      producto.linea        =  this.formularioControls.linea.value
-      producto.marca        =  this.formularioControls.marca.value
-      producto.modelo       = this.formularioControls.modelo.value
-      producto.precio       = Number(this.formularioControls.precio.value)
-      producto.stock        = Number(this.formularioControls.stock.value)
-      producto.descripcion  = String(this.formularioControls.descripcion.value)
+      producto.linea = this.formularioControls.linea.value;
+      producto.marca = this.formularioControls.marca.value;
+      producto.modelo = this.formularioControls.modelo.value;
+      producto.precio = Number(this.formularioControls.precio.value);
+      producto.stock = Number(this.formularioControls.stock.value);
+      producto.descripcion = String(this.formularioControls.descripcion.value);
       // producto.estado       = Number(this.formularioControls.estado.value)
-      producto.estado       = Number(this.formularioStadoControls.estado.value)
+      producto.estado = Number(this.formularioStadoControls.estado.value);
 
       // console.log(producto);
 
-      this.FormsValues.emit(producto)
-    }else{
-      Swal.fire({
+      this.FormsValues.emit(producto);
+    } else {
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
-        icon: 'warning',
-      })
+        icon: "warning",
+      });
     }
+  }
 
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

@@ -10,6 +10,8 @@ import { GastoErrorMessages } from "./utils/valid-messages";
 import { TalonarioForm, TalonarioFormBuilder } from "./utils/form";
 import { Talonario } from "@app/shared/models/Talonario.model";
 import logger from "@app/shared/utils/logger";
+import { CommunicationService } from "@app/shared/services/communication.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-talonario-por-lote",
@@ -28,7 +30,11 @@ export class TalonarioPorLoteComponent {
   isValidForm: boolean = false;
   talonarios = [];
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
     public _HelpersService: HelpersService
@@ -44,6 +50,12 @@ export class TalonarioPorLoteComponent {
     this.changeData();
 
     // if (this.Gasto) this.setFormValues();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   changeData() {
@@ -60,22 +72,22 @@ export class TalonarioPorLoteComponent {
           indexTalonario++
         ) {
           const posicionTalonario = indexTalonario;
-          
-          this.talonarios[posicionTalonario] = []
-            
+
+          this.talonarios[posicionTalonario] = [];
+
           // let inicioRecibo = inicio + contadorRecibos;
           let inicioRecibo = 0;
           while (inicioRecibo < nroXlote) {
-            this.talonarios[posicionTalonario]=[
+            this.talonarios[posicionTalonario] = [
               ...this.talonarios[posicionTalonario],
-              Number(contadorRecibos)
-            ]
-            
+              Number(contadorRecibos),
+            ];
+
             logger.log("[contadorRecibos]", contadorRecibos);
             logger.log("[inicioRecibo]", inicioRecibo);
 
-            contadorRecibos=++contadorRecibos
-            ++inicioRecibo 
+            contadorRecibos = ++contadorRecibos;
+            ++inicioRecibo;
           }
         }
         logger.log("[this.talonarios]", this.talonarios);
@@ -119,10 +131,18 @@ export class TalonarioPorLoteComponent {
     if (this.FormTalonario.valid) {
       this.FormsValues.emit(this.talonarios);
     } else {
-      Swal.fire({ 
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

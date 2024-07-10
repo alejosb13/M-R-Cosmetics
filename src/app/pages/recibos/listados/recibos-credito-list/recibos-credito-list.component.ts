@@ -17,6 +17,7 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import { RememberFiltersService } from "app/shared/services/remember-filters.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { ReciboService } from "app/shared/services/recibo.service";
+import { CommunicationService } from "@app/shared/services/communication.service";
 @Component({
   selector: "app-recibos-credito-list",
   templateUrl: "./recibos-credito-list.component.html",
@@ -50,7 +51,11 @@ export class RecibosCreditoListComponent implements OnInit {
 
   private Subscription = new Subscription();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -69,6 +74,12 @@ export class RecibosCreditoListComponent implements OnInit {
     this.setCurrentDate();
     this.getUsers();
     this.aplicarFiltros();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getUsers() {
@@ -112,6 +123,7 @@ export class RecibosCreditoListComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -210,51 +222,64 @@ export class RecibosCreditoListComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
-    this.NgbModal.dismissAll()
-
+    this.NgbModal.dismissAll();
   }
 
   eliminar(reciboEliminar: ReciboHistorial) {
     // console.log(devolucion);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Al eliminar este recibo se eliminará también el abono asociado a él y no podrás recuperarlo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Eliminando el recibo",
-          text: "Esto puede demorar un momento.",
-          timerProgressBar: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          allowEnterKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        this._ReciboService
-          .deleteReciboHistorialCredito(reciboEliminar.id)
-          .subscribe((data) => {
-            this.Recibos = this.Recibos.filter(
-              (recibo) => recibo.id != reciboEliminar.id
-            );
-
-            Swal.fire({
-              text: data[0],
-              icon: "success",
-            });
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Al eliminar este recibo se eliminará también el abono asociado a él y no podrás recuperarlo.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
+            title: "Eliminando el recibo",
+            text: "Esto puede demorar un momento.",
+            timerProgressBar: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
-      }
-    });
+          this._ReciboService
+            .deleteReciboHistorialCredito(reciboEliminar.id)
+            .subscribe((data) => {
+              this.Recibos = this.Recibos.filter(
+                (recibo) => recibo.id != reciboEliminar.id
+              );
+
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            });
+        }
+      });
   }
 
   ngOnDestroy() {
-    this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

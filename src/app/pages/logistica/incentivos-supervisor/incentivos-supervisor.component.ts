@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
@@ -11,7 +12,7 @@ import { RememberFiltersService } from 'app/shared/services/remember-filters.ser
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
-import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
+import { merge, Observable, OperatorFunction, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, filter, tap } from 'rxjs/operators';
 
 @Component({
@@ -57,7 +58,11 @@ export class IncentivosSupervisorComponent implements OnInit {
 
   FilterSection:TypesFiltersForm = "incentivosFilter"
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _TablasService:TablasService,
     private _AuthService:AuthService,
     private _LogisticaService: LogisticaService,
@@ -80,6 +85,12 @@ export class IncentivosSupervisorComponent implements OnInit {
     // this.setCurrentDate();
     this.aplicarFiltros();
     // this.asignarValores()
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
 
@@ -179,8 +190,10 @@ export class IncentivosSupervisorComponent implements OnInit {
 
   openFiltros(content: any) {
     this.NgbModal.open(content, {
-      ariaLabelledBy: "modal-basic-title",
-    }).result.then(
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      }).result.then(
       (result) => {},
       (reason) => {}
     );
@@ -283,4 +296,8 @@ export class IncentivosSupervisorComponent implements OnInit {
     }
   }
 
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
+  }
 }

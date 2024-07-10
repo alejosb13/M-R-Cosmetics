@@ -27,6 +27,8 @@ import { Usuario } from "app/shared/models/Usuario.model";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { AuthService } from "../../../../auth/login/service/auth.service";
 import { customValidator } from "./utils/validaciones";
+import { CommunicationService } from "@app/shared/services/communication.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-cliente-form",
@@ -54,7 +56,11 @@ export class ClienteFormComponent implements OnInit {
   @Input() clienteId?: number;
   @Output() FormsValues = new EventEmitter<Cliente>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
     private _CategoriaService: CategoriaService,
     public _ClientesService: ClientesService,
@@ -90,6 +96,12 @@ export class ClienteFormComponent implements OnInit {
     if (this.clienteId) this.setFormValues();
 
     this.isClienteEditando();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   isClienteEditando() {
@@ -309,10 +321,18 @@ export class ClienteFormComponent implements OnInit {
 
       this.FormsValues.emit(cliente);
     } else {
-      Swal.fire({
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

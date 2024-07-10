@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { ReciboHistorialContado } from 'app/shared/models/ReciboHistorial.model';
 import { ReciboService } from 'app/shared/services/recibo.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,7 +22,11 @@ export class RecibosContadoListComponent implements OnInit {
   isLoad:boolean
   isAdmin:boolean
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _ReciboService:ReciboService,
     private _TablasService:TablasService,
     private _AuthService:AuthService,
@@ -29,6 +35,12 @@ export class RecibosContadoListComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
 
@@ -71,7 +83,11 @@ export class RecibosContadoListComponent implements OnInit {
 
   eliminar(reciboEliminar:ReciboHistorialContado){
     // console.log(reciboEliminar);
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: '¿Estás seguro?',
       text: "Al eliminar este recibo se eliminará también la factura asociada a él y no podrás recuperarla.",
       icon: 'warning',
@@ -82,7 +98,11 @@ export class RecibosContadoListComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
+        Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
           title: "Eliminando el recibo",
           text: "Esto puede demorar un momento.",
           timerProgressBar: true,
@@ -97,12 +117,20 @@ export class RecibosContadoListComponent implements OnInit {
           this.Recibos = this.Recibos.filter(recibo => recibo.id != reciboEliminar.id)
           this.refreshCountries()
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: data[0],
             icon: 'success',
           })
         })
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

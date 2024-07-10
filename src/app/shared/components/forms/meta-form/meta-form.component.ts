@@ -1,8 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { Meta } from "app/shared/models/meta.model";
 import { Recibo } from "app/shared/models/Recibo.model";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -17,12 +23,24 @@ export class MetaFormComponent implements OnInit {
   MetaForm: UntypedFormGroup;
   loadInfo: boolean = false;
 
-  constructor(private fb: UntypedFormBuilder) {}
+  themeSite: string;
+  themeSubscription: Subscription;
+
+  constructor(
+    private _CommunicationService: CommunicationService,
+    private fb: UntypedFormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.definirValidaciones();
 
     if (this.meta) this.setFormValues();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   definirValidaciones() {
@@ -52,18 +70,26 @@ export class MetaFormComponent implements OnInit {
   EnviarFormulario() {
     if (this.MetaForm.valid) {
       let meta = {
-        ...this.meta
+        ...this.meta,
       } as Meta;
       meta.monto = Number(this.formularioControls.monto.value);
 
-      console.log("Form",meta);
-    
+      console.log("Form", meta);
+
       this.submitForm.emit(meta);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

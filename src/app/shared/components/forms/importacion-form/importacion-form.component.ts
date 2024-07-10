@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, OnInit } from "@angular/core";
 import { FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { ImportacionForm, ImportacionFormBuilder } from "./utils/form";
 import { ImportacionErrorMessages } from "./utils/valid-messages";
@@ -11,20 +11,24 @@ import {
   catchError,
 } from "rxjs/operators";
 import Swal from "sweetalert2";
-import { Observable, of, OperatorFunction } from "rxjs";
+import { Observable, of, OperatorFunction, Subscription } from "rxjs";
 import { Listado } from "app/shared/services/listados.service";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { FiltrosList } from "app/shared/models/Listados.model";
 import { InversionResponse } from "app/shared/models/Inversion.model";
 import { HelpersService } from "app/shared/services/helpers.service";
-import { Importacion, ImportacionResponse } from "app/shared/models/Importacion.model";
+import {
+  Importacion,
+  ImportacionResponse,
+} from "app/shared/models/Importacion.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-importacion-form",
   templateUrl: "./importacion-form.component.html",
   styleUrls: ["./importacion-form.component.scss"],
 })
-export class ImportacionFormComponent {
+export class ImportacionFormComponent implements OnInit {
   loadInfo: boolean = false;
   readonly InversionErrorMessages = ImportacionErrorMessages;
 
@@ -38,7 +42,11 @@ export class ImportacionFormComponent {
   searching: boolean = false;
   searchFailed: boolean = false;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
     public _HelpersService: HelpersService
@@ -54,6 +62,12 @@ export class ImportacionFormComponent {
     if (this.Id) this.setFormValues();
 
     this.validStatusFromChange();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   validStatusFromChange() {
@@ -72,20 +86,20 @@ export class ImportacionFormComponent {
   }
 
   setFormValues() {
-    this.loadInfo = true
+    this.loadInfo = true;
     this._FinanzasService.getImportacionById(this.Id).subscribe(
       (data: ImportacionResponse) => {
-        const patchValue:Partial<Importacion> = {
-          conceptualizacion:data.conceptualizacion,
-          numero_recibo:data.numero_recibo,
-          numero_inversion:data.inversion.numero_seguimiento,
-          fecha_inversion:this._HelpersService.changeformatDate(
+        const patchValue: Partial<Importacion> = {
+          conceptualizacion: data.conceptualizacion,
+          numero_recibo: data.numero_recibo,
+          numero_inversion: data.inversion.numero_seguimiento,
+          fecha_inversion: this._HelpersService.changeformatDate(
             data.fecha_inversion,
             "YYYY-MM-DD HH:mm:ss",
             "YYYY-MM-DD"
           ),
-          monto_compra:data.monto_compra,
-          precio_envio:data.precio_envio,
+          monto_compra: data.monto_compra,
+          precio_envio: data.precio_envio,
         };
         this.FormImportacion.patchValue(patchValue);
         this.loadInfo = false;
@@ -139,7 +153,11 @@ export class ImportacionFormComponent {
       // frecuencia.dias = Number(this.formularioControls.dias.value);
       this.FormsValues.emit(importacion);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
@@ -191,5 +209,9 @@ export class ImportacionFormComponent {
       // conceptualizacion: "",
       precio_envio: item.envio,
     });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

@@ -9,6 +9,8 @@ import { HelpersService } from "@app/shared/services/helpers.service";
 import { Gasto } from "@app/shared/models/Gasto.model";
 import { GastoFormBuilder, GastosForm } from "./utils/form";
 import { GastoErrorMessages } from "./utils/valid-messages";
+import { CommunicationService } from "@app/shared/services/communication.service";
+import { Subscription } from "rxjs";
 export const TIPOS_GASTOS: string[] = ["Empresa", "MaRo", "Adicional"];
 
 @Component({
@@ -30,7 +32,11 @@ export class GastoFormComponent {
 
   selectValuesPago: string[] = ["Efectivo", "Transferencia", "Otro"];
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
     public _HelpersService: HelpersService
@@ -44,6 +50,12 @@ export class GastoFormComponent {
     // this.FormGastos.patchValue({producto_id:this.producto_id});
     this.validStatusFromChange();
     if (this.Gasto) this.setFormValues();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   validStatusFromChange() {
@@ -100,10 +112,18 @@ export class GastoFormComponent {
 
       this.FormsValues.emit(importacion);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

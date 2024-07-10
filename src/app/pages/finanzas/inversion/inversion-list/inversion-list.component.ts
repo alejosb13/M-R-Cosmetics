@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { InversionResponse } from "app/shared/models/Inversion.model";
@@ -6,6 +7,7 @@ import { FiltrosList, Link, ListadoModel } from "app/shared/models/Listados.mode
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import logger from "app/shared/utils/logger";
+import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import Swal from "sweetalert2";
 
@@ -29,7 +31,11 @@ export class InversionListComponent {
 
   isLoad: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -39,6 +45,12 @@ export class InversionListComponent {
   ngOnInit(): void {
     this.setCurrentDate();
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   asignarValores() {
@@ -76,8 +88,10 @@ export class InversionListComponent {
     this.listadoFilter.link = null;
 
     this.NgbModal.open(content, {
-      ariaLabelledBy: "modal-basic-title",
-    }).result.then(
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      }).result.then(
       (result) => {},
       (reason) => {}
     );
@@ -119,7 +133,11 @@ export class InversionListComponent {
 
   eliminar(data: InversionResponse) {
     // console.log(data);
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: "¿Estás seguro?",
       text: "Esta inversión se eliminará y no podrás recuperarla.",
       icon: "warning",
@@ -130,7 +148,11 @@ export class InversionListComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
+        Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
           title: "Eliminando la inversión",
           text: "Esto puede demorar un momento.",
           timerProgressBar: true,
@@ -144,7 +166,11 @@ export class InversionListComponent {
         this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
           // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
           this.asignarValores();
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: data[0],
             icon: "success",
           });
@@ -155,7 +181,11 @@ export class InversionListComponent {
 
   bloquear(data: InversionResponse) {
     // console.log(data);
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: "¿Estás seguro?",
       text: "Una vez cerrada solo podras visualizar los datos.",
       icon: "warning",
@@ -173,7 +203,11 @@ export class InversionListComponent {
           .subscribe((data) => {
             // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
             this.asignarValores();
-            Swal.fire({
+            Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
               text: data[0],
               icon: "success",
             });
@@ -197,6 +231,10 @@ export class InversionListComponent {
     this.listadoFilter.link = link.url;
 
     this.asignarValores();
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 
 }

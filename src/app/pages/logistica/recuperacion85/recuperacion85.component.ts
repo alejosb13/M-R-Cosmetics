@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
@@ -11,6 +12,7 @@ import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
+import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 type Recuperacion = {
   facturasTotal: number;
@@ -53,8 +55,11 @@ export class Recuperacion85Component implements OnInit {
   totalAbonos: number;
   totalMetas: number;
   recuperacionPorcentaje: number | string;
+  themeSite: string;
+  themeSubscription: Subscription;
 
   constructor(
+    private _CommunicationService: CommunicationService,
     private _TablasService: TablasService,
     private _AuthService: AuthService,
     private _LogisticaService: LogisticaService,
@@ -78,6 +83,12 @@ export class Recuperacion85Component implements OnInit {
     // this.setCurrentDate();
     this.aplicarFiltros();
     // this.asignarValores()
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   getUsers() {
@@ -260,8 +271,10 @@ export class Recuperacion85Component implements OnInit {
 
   openFiltros(content: any) {
     this.NgbModal.open(content, {
-      ariaLabelledBy: "modal-basic-title",
-    }).result.then(
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      }).result.then(
       (result) => {},
       (reason) => {}
     );
@@ -290,5 +303,9 @@ export class Recuperacion85Component implements OnInit {
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
     // console.log(this.filtros);
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

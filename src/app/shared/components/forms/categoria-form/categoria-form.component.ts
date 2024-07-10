@@ -1,8 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -20,7 +26,11 @@ export class CategoriaFormComponent implements OnInit {
   @Input() Id?: number;
   @Output() FormsValues = new EventEmitter<Categoria>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
     public _CategoriaService: CategoriaService
   ) {}
@@ -31,6 +41,12 @@ export class CategoriaFormComponent implements OnInit {
     this.changeCondicion();
 
     if (this.Id) this.setFormValues();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   definirValidaciones() {
@@ -188,10 +204,18 @@ export class CategoriaFormComponent implements OnInit {
       categoria.estado = Number(this.formularioStadoControls.estado.value);
       this.FormsValues.emit(categoria);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

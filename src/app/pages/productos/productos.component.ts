@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { Producto } from 'app/shared/models/Producto.model';
 import { LogisticaService } from 'app/shared/services/logistica.service';
 import { ProductosService } from 'app/shared/services/productos.service';
 import { TablasService } from 'app/shared/services/tablas.service';
 import { environment } from 'environments/environment';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth/login/service/auth.service';
 import { HelpersService } from '../../shared/services/helpers.service';
@@ -25,7 +27,11 @@ export class ProductosComponent implements OnInit {
   monto_total:number = 0
   isAdmin:boolean
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _ProductosService:ProductosService,
     private _TablasService:TablasService,
     private _LogisticaService:LogisticaService,    
@@ -37,6 +43,12 @@ export class ProductosComponent implements OnInit {
     this.isAdmin = this._AuthService.isAdmin()
     this.asignarValores()
     this.getLogisticaProductos()
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
 
@@ -86,7 +98,11 @@ export class ProductosComponent implements OnInit {
 
   eliminar({id}:Producto){
     // console.log(id);
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: '¿Estás seguro?',
       text: "Este producto se eliminará y no podrás recuperarlo.",
       icon: 'warning',
@@ -97,7 +113,11 @@ export class ProductosComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
+        Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
           title: "Eliminando producto",
           text: "Esto puede demorar un momento.",
           timerProgressBar: true,
@@ -112,7 +132,11 @@ export class ProductosComponent implements OnInit {
           this.Productos = this.Productos.filter(producto => producto.id != id)
           this.refreshCountries()
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: data[0],
             icon: 'success',
           })
@@ -123,7 +147,11 @@ export class ProductosComponent implements OnInit {
 
   descargarInventario(){
     // console.log(id);
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: "Descargando el archivo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -147,12 +175,20 @@ export class ProductosComponent implements OnInit {
           // console.log(data);
       this._HelpersService.downloadFile(data,`Inventario_${currentDate}`)
 
-      Swal.fire(
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire(
         '',
         'Descarga Completada',
         'success'
       )
 
     })
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

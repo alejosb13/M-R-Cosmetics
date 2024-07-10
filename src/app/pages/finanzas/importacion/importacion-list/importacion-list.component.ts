@@ -1,17 +1,23 @@
-import { Component } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService } from 'app/auth/login/service/auth.service';
-import { InversionResponse } from 'app/shared/models/Inversion.model';
-import { FiltrosList, Link, ListadoModel } from 'app/shared/models/Listados.model';
-import { FinanzasService } from 'app/shared/services/finanzas.service';
-import { HelpersService } from 'app/shared/services/helpers.service';
-import Swal from 'sweetalert2';
-import { ImportacionResponse } from 'app/shared/models/Importacion.model';
+import { Component } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { AuthService } from "app/auth/login/service/auth.service";
+import { InversionResponse } from "app/shared/models/Inversion.model";
+import {
+  FiltrosList,
+  Link,
+  ListadoModel,
+} from "app/shared/models/Listados.model";
+import { FinanzasService } from "app/shared/services/finanzas.service";
+import { HelpersService } from "app/shared/services/helpers.service";
+import Swal from "sweetalert2";
+import { ImportacionResponse } from "app/shared/models/Importacion.model";
+import { Subscription } from "rxjs";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
-  selector: 'app-importacion-list',
-  templateUrl: './importacion-list.component.html',
-  styleUrls: ['./importacion-list.component.scss']
+  selector: "app-importacion-list",
+  templateUrl: "./importacion-list.component.html",
+  styleUrls: ["./importacion-list.component.scss"],
 })
 export class ImportacionListComponent {
   dateIni: string;
@@ -28,7 +34,11 @@ export class ImportacionListComponent {
 
   isLoad: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -38,24 +48,28 @@ export class ImportacionListComponent {
   ngOnInit(): void {
     this.setCurrentDate();
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
     this.isLoad = true;
 
-    this._FinanzasService
-      .getImportacion(this.listadoFilter)
-      .subscribe(
-        (Paginacion: ListadoModel<ImportacionResponse>) => {
-          console.log(Paginacion);
-          this.listadoData = { ...Paginacion };
-          this.Importaciones = [...Paginacion.data];
-          this.isLoad = false;
-        },
-        (error) => {
-          this.isLoad = false;
-        }
-      );
+    this._FinanzasService.getImportacion(this.listadoFilter).subscribe(
+      (Paginacion: ListadoModel<ImportacionResponse>) => {
+        console.log(Paginacion);
+        this.listadoData = { ...Paginacion };
+        this.Importaciones = [...Paginacion.data];
+        this.isLoad = false;
+      },
+      (error) => {
+        this.isLoad = false;
+      }
+    );
     this.NgbModal.dismissAll();
   }
 
@@ -65,6 +79,7 @@ export class ImportacionListComponent {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -107,67 +122,91 @@ export class ImportacionListComponent {
 
   eliminar(data: InversionResponse) {
     // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Esta importación se eliminará y no podrás recuperarla.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Eliminando la importación",
-          text: "Esto puede demorar un momento.",
-          timerProgressBar: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          allowEnterKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
-          // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-          this.asignarValores();
-          Swal.fire({
-            text: data[0],
-            icon: "success",
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Esta importación se eliminará y no podrás recuperarla.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
+            title: "Eliminando la importación",
+            text: "Esto puede demorar un momento.",
+            timerProgressBar: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
-        });
-      }
-    });
-  }
-
-  bloquear(data: InversionResponse) {
-    // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Una vez cerrada solo podras visualizar los datos.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Aceptar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService
-          .changeValueInversion(data.id, {
-            estatus_cierre: 1,
-          })
-          .subscribe((data) => {
+          this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
             // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
             this.asignarValores();
-            Swal.fire({
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
               text: data[0],
               icon: "success",
             });
           });
-      }
-    });
+        }
+      });
+  }
+
+  bloquear(data: InversionResponse) {
+    // console.log(data);
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Una vez cerrada solo podras visualizar los datos.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FinanzasService
+            .changeValueInversion(data.id, {
+              estatus_cierre: 1,
+            })
+            .subscribe((data) => {
+              // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
+              this.asignarValores();
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            });
+        }
+      });
   }
 
   limpiarFiltros() {
@@ -186,5 +225,7 @@ export class ImportacionListComponent {
 
     this.asignarValores();
   }
-
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
+  }
 }

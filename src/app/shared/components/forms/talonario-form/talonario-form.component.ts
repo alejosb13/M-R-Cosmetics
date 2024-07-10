@@ -10,6 +10,8 @@ import { Gasto } from "@app/shared/models/Gasto.model";
 import { GastoErrorMessages } from "./utils/valid-messages";
 import { TalonarioForm, TalonarioFormBuilder } from "./utils/form";
 import { Talonario } from "@app/shared/models/Talonario.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-talonario-form",
@@ -25,8 +27,12 @@ export class TalonarioFormComponent {
   FormTalonario: FormGroup<TalonarioForm>;
   readOnlyInputsForCalculation: boolean = true;
   isValidForm: boolean = false;
-  
+
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
     public _HelpersService: HelpersService
@@ -40,6 +46,12 @@ export class TalonarioFormComponent {
     // this.FormGastos.patchValue({producto_id:this.producto_id});
     this.validStatusFromChange();
     // if (this.Gasto) this.setFormValues();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   validStatusFromChange() {
@@ -88,10 +100,18 @@ export class TalonarioFormComponent {
 
       this.FormsValues.emit(talonario);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

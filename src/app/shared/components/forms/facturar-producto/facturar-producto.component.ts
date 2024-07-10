@@ -1,10 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { AuthService } from 'app/auth/login/service/auth.service';
 import { Producto } from 'app/shared/models/Producto.model';
 // import { HelpersService } from 'app/shared/services/helpers.service';
 // import { ProductosService } from 'app/shared/services/productos.service';
 import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -27,7 +29,11 @@ export class FacturarProductoComponent implements OnInit {
   @Input() producto:Producto
   @Output() FormsValues = new EventEmitter<Producto>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
   ) {
@@ -44,6 +50,12 @@ export class FacturarProductoComponent implements OnInit {
     console.log(this.producto);
     this.setFormValues()
     this.changeValues()
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
 
@@ -180,13 +192,21 @@ export class FacturarProductoComponent implements OnInit {
       this.FormsValues.emit(producto)
     }else{
       if(!this.ProductForm.get("stock").valid){
-        Swal.fire({
+        Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
           text: "La cantidad del producto supera el maximo en stock",
           icon: 'warning',
         })
 
       }else{
-        Swal.fire({
+        Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
           text: "Complete todos los campos obligatorios",
           icon: 'warning',
         })
@@ -194,5 +214,9 @@ export class FacturarProductoComponent implements OnInit {
       }
     }
 
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

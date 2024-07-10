@@ -20,6 +20,7 @@ import { TypesFiltersForm } from "app/shared/models/FiltersForm";
 import logger from "app/shared/utils/logger";
 import { MetaService } from "app/shared/services/meta.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-metas",
@@ -45,7 +46,7 @@ export class MetasComponent implements OnInit {
   dateIni: string;
   dateFin: string;
   allDates: boolean = false;
-  
+
   mesNewMeta: string;
 
   roleName: string;
@@ -60,7 +61,11 @@ export class MetasComponent implements OnInit {
   montoMetaHistorialEditar: number;
   IdMetaHistorialEditar: number;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _DevolucionFacturaService: DevolucionFacturaService,
     private _AuthService: AuthService,
@@ -80,6 +85,12 @@ export class MetasComponent implements OnInit {
     this.setCurrentDate();
     this.getUsers();
     this.aplicarFiltros();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getUsers() {
@@ -122,9 +133,10 @@ export class MetasComponent implements OnInit {
   openFiltros(content: any) {
     // console.log(this.mesNewMeta);
     this.listadoFilter.link = null;
-    
+
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -132,7 +144,10 @@ export class MetasComponent implements OnInit {
   }
 
   openModalMetaDeclarada(content: any) {
-    this.NgbModal.open(content, { size: "xl" }).result.then(
+    this.NgbModal.open(content, {
+      size: "xl",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    }).result.then(
       (result) => {},
       (reason) => {}
     );
@@ -140,7 +155,10 @@ export class MetasComponent implements OnInit {
 
   openDevolverFactura(content: any, Factura: Factura) {
     this.Factura = Factura;
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
@@ -148,7 +166,11 @@ export class MetasComponent implements OnInit {
   FormsValuesDevolucion(DevolucionProducto: any) {
     // console.log("[DevolucionFacturaForm]", DevolucionProducto);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Cargando la devolución",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -165,14 +187,20 @@ export class MetasComponent implements OnInit {
       .subscribe((data) => {
         console.log("[response]", data);
 
-        Swal.fire({
-          text: "La devolución fue realizada con exito",
-          icon: "success",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        });
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        })
+          .fire({
+            text: "La devolución fue realizada con exito",
+            icon: "success",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
+          });
       });
   }
 
@@ -266,8 +294,7 @@ export class MetasComponent implements OnInit {
       ...this.listadoFilter,
     });
     this.asignarValores();
-    this.NgbModal.dismissAll()
-
+    this.NgbModal.dismissAll();
   }
 
   modificarMeta(content: any, meta: Meta) {
@@ -279,6 +306,7 @@ export class MetasComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -291,6 +319,7 @@ export class MetasComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -309,13 +338,20 @@ export class MetasComponent implements OnInit {
 
     logger.log(meta);
 
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
 
   sendModificacionMetaHistorial() {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Modificando Meta",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -337,13 +373,19 @@ export class MetasComponent implements OnInit {
         (data) => {
           this._MetaService.IsLoad = false;
           // console.log(data);
-          Swal.fire({
-            text: "Meta modificada con exito",
-            icon: "success",
-          }).then((result) => {
-            if (result.isConfirmed) this.aplicarFiltros();
-            // if (result.isConfirmed) window.location.reload();
-          });
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          })
+            .fire({
+              text: "Meta modificada con exito",
+              icon: "success",
+            })
+            .then((result) => {
+              if (result.isConfirmed) this.aplicarFiltros();
+              // if (result.isConfirmed) window.location.reload();
+            });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
           this._MetaService.IsLoad = false;
@@ -351,7 +393,11 @@ export class MetasComponent implements OnInit {
           let error: string =
             this._HelpersService.errorResponse(HttpErrorResponse);
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             title: "Error",
             html: error,
             icon: "error",
@@ -373,7 +419,11 @@ export class MetasComponent implements OnInit {
             return usuario;
           });
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: "Meta modificada con exito",
             icon: "success",
           });
@@ -381,7 +431,11 @@ export class MetasComponent implements OnInit {
         (HttpErrorResponse: HttpErrorResponse) => {
           let error: string = HttpErrorResponse.error[0];
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             title: "Error",
             html: error,
             icon: "error",
@@ -396,19 +450,29 @@ export class MetasComponent implements OnInit {
 
             return usuario;
           });
-          Swal.fire({
-            text: "Meta agregada con exito",
-            icon: "success",
-          }).then((result) => {
-            // if (result.isConfirmed) window.location.reload()
-          });
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          })
+            .fire({
+              text: "Meta agregada con exito",
+              icon: "success",
+            })
+            .then((result) => {
+              // if (result.isConfirmed) window.location.reload()
+            });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
           // let error:string =  HttpErrorResponse.error[0]
           let error: string =
             this._HelpersService.errorResponse(HttpErrorResponse);
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             title: "Error",
             html: error,
             icon: "error",
@@ -420,35 +484,47 @@ export class MetasComponent implements OnInit {
 
   eliminarMetaHistorial(meta: MetaHistorial) {
     // console.log(id);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Esta se eliminará y no podrás recuperarla.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._MetaService.deleteMetaHistorial(meta.id).subscribe((data) => {
-          this.MetasHistorico = this.MetasHistorico.filter(
-            (metah) => metah.id != meta.id
-          );
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Esta se eliminará y no podrás recuperarla.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._MetaService.deleteMetaHistorial(meta.id).subscribe((data) => {
+            this.MetasHistorico = this.MetasHistorico.filter(
+              (metah) => metah.id != meta.id
+            );
 
-          Swal.fire({
-            text: data[0],
-            icon: "success",
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
+              text: data[0],
+              icon: "success",
+            });
           });
-        });
-      }
-    });
+        }
+      });
   }
 
   newMetaHistorial() {
-
-    
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Creando Meta",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -461,14 +537,22 @@ export class MetasComponent implements OnInit {
     });
 
     this._MetaService.IsLoad = true;
-    let mesNewMeta = this._HelpersService.changeformatDate(this.mesNewMeta,"YYYY-MM","YYYY-MM-DD")
+    let mesNewMeta = this._HelpersService.changeformatDate(
+      this.mesNewMeta,
+      "YYYY-MM",
+      "YYYY-MM-DD"
+    );
     // console.log(this.mesNewMeta);
     // console.log(mesNewMeta);
     this._MetaService.newMetaHistorial(mesNewMeta).subscribe(
       (data) => {
         this._MetaService.IsLoad = false;
         // console.log(data);
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "Meta agregada con exito",
           icon: "success",
         });
@@ -479,7 +563,11 @@ export class MetasComponent implements OnInit {
         let error: string =
           this._HelpersService.errorResponse(HttpErrorResponse);
 
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           title: "Error",
           html: error,
           icon: "error",
@@ -490,5 +578,6 @@ export class MetasComponent implements OnInit {
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Cliente } from "@app/shared/models/Cliente.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
@@ -16,7 +17,13 @@ import { RememberFiltersService } from "app/shared/services/remember-filters.ser
 import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { environment } from "environments/environment";
-import { merge, Observable, OperatorFunction, Subject } from "rxjs";
+import {
+  merge,
+  Observable,
+  OperatorFunction,
+  Subject,
+  Subscription,
+} from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -68,7 +75,11 @@ export class ClienteInactivosComponent implements OnInit {
 
   FilterSection: TypesFiltersForm = "clientesInactivosFilter";
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _TablasService: TablasService,
     private _AuthService: AuthService,
     private _LogisticaService: LogisticaService,
@@ -95,6 +106,12 @@ export class ClienteInactivosComponent implements OnInit {
     // this.setCurrentDate();
     this.aplicarFiltros();
     // this.asignarValores()
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
@@ -208,6 +225,7 @@ export class ClienteInactivosComponent implements OnInit {
     console.log(this.userId);
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -339,7 +357,11 @@ export class ClienteInactivosComponent implements OnInit {
   }
 
   descargarPDF() {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Descargando el archivo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -376,7 +398,11 @@ export class ClienteInactivosComponent implements OnInit {
             "DD-MM-YYYY_HH:mm:ss"
           )}`
         );
-        Swal.fire("", "Descarga Completada", "success");
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire("", "Descarga Completada", "success");
       });
   }
 
@@ -415,7 +441,11 @@ export class ClienteInactivosComponent implements OnInit {
   SetNota(event: HTMLInputElement, cliente: Cliente) {
     // console.log(event.value);
     console.log(cliente.id);
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Cargando la observación",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -435,17 +465,29 @@ export class ClienteInactivosComponent implements OnInit {
       .subscribe(
         (data) => {
           console.log(data);
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: "Observación cargada con éxito",
             icon: "success",
           });
         },
         (error) => {
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: "Error",
             icon: "error",
           });
         }
       );
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

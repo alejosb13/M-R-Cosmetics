@@ -66,7 +66,11 @@ export class DevolucionFacturaListComponent implements OnInit {
 
   // eliminar(devolucion:DevolucionFactura){
   //   console.log(devolucion);
-  //   Swal.fire({
+  //   Swal.mixin({
+          //   customClass: {
+          //     container: this.themeSite, // Clase para el modo oscuro
+          //   },
+          // }).fire({
   //     title: '¿Estás seguro?',
   //     text: "Esta devolución se eliminará y no podrás recuperarla.",
   //     icon: 'warning',
@@ -82,7 +86,11 @@ export class DevolucionFacturaListComponent implements OnInit {
   //         this.DevolucionProducto = this.DevolucionProducto.filter(devolucionProducto => devolucionProducto.id != devolucion.id)
   //         this.refreshCountries()
 
-  //         Swal.fire({
+  //         Swal.mixin({
+          //   customClass: {
+          //     container: this.themeSite, // Clase para el modo oscuro
+          //   },
+          // }).fire({
   //           text: data[0],
   //           icon: 'success',
   //         })

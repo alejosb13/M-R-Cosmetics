@@ -29,9 +29,10 @@ import {
   InversionResponse,
 } from "@shared/models/Inversion.model";
 import { FinanzasService } from "@shared/services/finanzas.service";
-import { Observable, of, OperatorFunction } from "rxjs";
+import { Observable, of, OperatorFunction, Subscription } from "rxjs";
 import { Listado } from "@shared/services/listados.service";
 import { Producto } from "@shared/models/Producto.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-inversion-form",
@@ -62,7 +63,11 @@ export class InversionFormComponent {
 
   InversionData: InversionResponse;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _FinanzasService: FinanzasService,
     public _Listado: Listado
   ) {}
@@ -313,7 +318,11 @@ export class InversionFormComponent {
       "inversion"
     ) as FormArray;
     if (!this.isValidForm) {
-      Swal.fire({
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
         text: "Asegurese de completar todos los campos editables de los productos existentes",
         icon: "warning",
       });
@@ -353,7 +362,11 @@ export class InversionFormComponent {
 
       this.FormsValues.emit(response);
     } else {
-      Swal.fire({
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
@@ -418,7 +431,11 @@ export class InversionFormComponent {
     // remove address from the list
     const control = <FormArray>this.FormInversion.controls["inversion"];
     if (control.length == 0) {
-      Swal.fire({
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
         text: "El mínimo de productos es de 1",
         icon: "warning",
       });
@@ -443,7 +460,11 @@ export class InversionFormComponent {
 
   agregarAlInventario(data: number) {
     // console.log(this.InversionData.inversion_detalle[data]);
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: "¿Deseas cargar este producto al inventario?",
       text: "Una vez cargado se actualizara el stock y el precio del producto. Esta accion no podras revertirla luego de aceptar.",
       icon: "warning",
@@ -462,7 +483,11 @@ export class InversionFormComponent {
           })
           .subscribe((data) => {
             // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-            Swal.fire({
+            Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
               text: data[0],
               icon: "success",
             }).then(() => {
@@ -471,5 +496,9 @@ export class InversionFormComponent {
           });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

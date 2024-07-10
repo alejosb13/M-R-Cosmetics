@@ -5,7 +5,11 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Abono } from "app/shared/models/Abono.model";
@@ -22,8 +26,15 @@ import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
 import logger from "app/shared/utils/logger";
-import { merge, Observable, of, OperatorFunction, Subject } from "rxjs";
-import { switchMap} from "rxjs/operators";
+import {
+  merge,
+  Observable,
+  of,
+  OperatorFunction,
+  Subject,
+  Subscription,
+} from "rxjs";
+import { switchMap } from "rxjs/operators";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -34,7 +45,7 @@ import Swal from "sweetalert2";
 import { AbonoService } from "../../../services/abono.service";
 import { Listado } from "app/shared/services/listados.service";
 import { FiltrosList } from "app/shared/models/Listados.model";
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap } from "rxjs/operators";
 
 type FacturaReciboHistorial = Abono & ReciboHistorial;
 
@@ -52,7 +63,7 @@ export class AbonoFormComponent implements OnInit {
   model: any;
   searching = false;
   searchFailed = false;
-  showDelete = false
+  showDelete = false;
 
   loadInfo: boolean = false;
   AbonoForm: UntypedFormGroup;
@@ -81,6 +92,9 @@ export class AbonoFormComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
     private fb: UntypedFormBuilder,
     private _AuthService: AuthService,
@@ -106,6 +120,12 @@ export class AbonoFormComponent implements OnInit {
     this.getReciboUSer();
     this.changeValues();
     this.changeValueResetForm();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   ValidacionBotonAgregar() {
@@ -295,14 +315,22 @@ export class AbonoFormComponent implements OnInit {
     console.log(this.AbonoForm.getRawValue());
 
     if (this.bloqueo) {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "No puede agregar abonos en una factura que ya esta pagada",
         icon: "warning",
       });
     } else {
       if (this.AbonoForm.valid && this.AbonoForm.get("recibo").value != "") {
         if (!this.AbonoForm.get("cliente_id").value.includes("-")) {
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: "El Cliente debe ser seleccionado de la lista desplegable.",
             icon: "warning",
           });
@@ -330,7 +358,11 @@ export class AbonoFormComponent implements OnInit {
         // console.log(this.AbonoForm.valid);
         // console.log("[recibo]",this.AbonoForm.get("recibo").value);
 
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "Complete todos los campos obligatorios",
           icon: "warning",
         });
@@ -365,7 +397,11 @@ export class AbonoFormComponent implements OnInit {
         this.AbonoForm.get("recibo").patchValue(data.numero);
       },
       () => {
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           title: "No posee un numero de recibo.",
           text: "Pide que asignen un talonario de recibos.",
           icon: "error",
@@ -407,7 +443,6 @@ export class AbonoFormComponent implements OnInit {
     );
   };
 
-
   search2: OperatorFunction<string, readonly string[]> = (
     text$: Observable<string>
   ) => {
@@ -434,7 +469,7 @@ export class AbonoFormComponent implements OnInit {
           })
         );
       }),
-      map((value)=>{
+      map((value) => {
         // console.log(value);
 
         // this.clientes = [...value];
@@ -442,21 +477,24 @@ export class AbonoFormComponent implements OnInit {
           (cliente) => `${cliente.id} - ${cliente.nombreCompleto}`
         );
 
-        return ClientesNames
+        return ClientesNames;
       }),
       tap(() => (this.searching = false))
     );
   };
 
-  eventInputTypeHead(event:{item:string}){
+  eventInputTypeHead(event: { item: string }) {
     // console.log("test ~ event:", event)
-    this.showDelete= true
+    this.showDelete = true;
   }
 
-  eliminarCliente(){
+  eliminarCliente() {
     // this.model = ""
-    this.AbonoForm.get("cliente_id").setValue("")
-    this.showDelete = false
+    this.AbonoForm.get("cliente_id").setValue("");
+    this.showDelete = false;
+  }
 
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

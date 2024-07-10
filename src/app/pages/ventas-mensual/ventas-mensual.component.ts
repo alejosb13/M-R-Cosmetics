@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
@@ -11,6 +12,7 @@ import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
+import { Subscription } from "rxjs";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -54,7 +56,11 @@ export class VentasMensualComponent {
   totalMetas: number;
   recuperacionPorcentaje: number | string;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _TablasService: TablasService,
     private _AuthService: AuthService,
     private _LogisticaService: LogisticaService,
@@ -78,6 +84,12 @@ export class VentasMensualComponent {
     // this.setCurrentDate();
     this.aplicarFiltros();
     // this.asignarValores()
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getUsers() {
@@ -126,8 +138,7 @@ export class VentasMensualComponent {
       ...this.filtros,
     });
     this.asignarValores();
-    this.NgbModal.dismissAll()
-
+    this.NgbModal.dismissAll();
   }
 
   setCurrentDate() {
@@ -198,9 +209,9 @@ export class VentasMensualComponent {
           this.refreshCountries();
           this.isLoad = false;
 
-          this.totalAbonos = recuperacion.totalVentas
-          this.totalMetas = recuperacion.totalMetas
-          this.recuperacionPorcentaje = recuperacion.porcentaje
+          this.totalAbonos = recuperacion.totalVentas;
+          this.totalMetas = recuperacion.totalMetas;
+          this.recuperacionPorcentaje = recuperacion.porcentaje;
         },
         (error) => {
           this.isLoad = false;
@@ -235,6 +246,7 @@ export class VentasMensualComponent {
   openFiltros(content: any) {
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -264,5 +276,9 @@ export class VentasMensualComponent {
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
     // console.log(this.filtros);
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

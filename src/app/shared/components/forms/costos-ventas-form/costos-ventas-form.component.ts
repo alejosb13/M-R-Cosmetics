@@ -12,6 +12,8 @@ import {
 } from "@app/shared/components/forms/costos-ventas-form/utils/form";
 import { CostoVentaErrorMessages } from "@app/shared/components/forms/costos-ventas-form/utils/valid-messages";
 import { CostoVenta } from "@app/shared/models/CostosVentas.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-costos-ventas-form",
@@ -33,7 +35,11 @@ export class CostosVentasFormComponent {
   searching: boolean = false;
   searchFailed: boolean = false;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
     public _HelpersService: HelpersService
@@ -43,9 +49,15 @@ export class CostosVentasFormComponent {
     this.FormCostoVenta = CostosVentasFormBuilder();
     if (this.Id) this.setFormValues();
     // console.log(this.producto_id);
-    
-    this.FormCostoVenta.patchValue({producto_id:this.producto_id});
+
+    this.FormCostoVenta.patchValue({ producto_id: this.producto_id });
     this.validStatusFromChange();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   validStatusFromChange() {
@@ -105,10 +117,18 @@ export class CostosVentasFormComponent {
       // frecuencia.dias = Number(this.formularioControls.dias.value);
       this.FormsValues.emit(importacion);
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

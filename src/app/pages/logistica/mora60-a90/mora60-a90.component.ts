@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'app/auth/login/service/auth.service';
@@ -12,7 +13,7 @@ import { RememberFiltersService } from 'app/shared/services/remember-filters.ser
 import { TablasService } from 'app/shared/services/tablas.service';
 import { UsuariosService } from 'app/shared/services/usuarios.service';
 import { environment } from 'environments/environment';
-import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
+import { merge, Observable, OperatorFunction, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
@@ -50,7 +51,11 @@ export class Mora60A90Component implements OnInit {
 
   FilterSection:TypesFiltersForm = "mora60_90Filter"
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _TablasService:TablasService,
     private _AuthService:AuthService,
     private _LogisticaService: LogisticaService,
@@ -73,6 +78,12 @@ export class Mora60A90Component implements OnInit {
     // this.setCurrentDate();
     this.aplicarFiltros();
     // this.asignarValores()
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
 
@@ -151,8 +162,10 @@ export class Mora60A90Component implements OnInit {
 
   openFiltros(content: any) {
     this.NgbModal.open(content, {
-      ariaLabelledBy: "modal-basic-title",
-    }).result.then(
+        ariaLabelledBy: "modal-basic-title",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      }).result.then(
       (result) => {},
       (reason) => {}
     );
@@ -246,7 +259,11 @@ export class Mora60A90Component implements OnInit {
   }
 
   descargarPDF(){
-    Swal.fire({
+    Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
       title: "Descargando el archivo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -260,12 +277,20 @@ export class Mora60A90Component implements OnInit {
     this._LogisticaService.getmora60a90PDF(this.filtros).subscribe((data)=>{
       // console.log(data);
       this._HelpersService.downloadFile(data,`Mora_60_90_${this.userId}_${ this._HelpersService.changeformatDate(this._HelpersService.currentFullDay(),'MM/DD/YYYY HH:mm:ss',"DD-MM-YYYY_HH:mm:ss") }`)
-      Swal.fire(
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire(
         '',
         'Descarga Completada',
         'success'
       )
     })
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 
 }

@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { Frecuencia } from 'app/shared/models/Frecuencia.model';
 import { FrecuenciaService } from 'app/shared/services/frecuencia.service';
 import { ValidFunctionsValidator } from 'app/shared/utils/valid-functions.validator';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,7 +23,11 @@ export class FrecuenciaFormComponent implements OnInit {
   @Input() Id?:number
   @Output() FormsValues = new EventEmitter<Frecuencia>();
   
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
     public _FrecuenciaService: FrecuenciaService,
   ) {}
@@ -32,6 +38,12 @@ export class FrecuenciaFormComponent implements OnInit {
     this.definirValidacionesEstado()
     
     if(this.Id) this.setFormValues()
+
+      this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
   
   definirValidaciones(){
@@ -120,12 +132,20 @@ export class FrecuenciaFormComponent implements OnInit {
       frecuencia.estado        = Number(this.formularioStadoControls.estado.value)
       this.FormsValues.emit(frecuencia)
     }else{
-      Swal.fire({
+      Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
         text: "Complete todos los campos obligatorios",
         icon: 'warning',
       })
     }
     
+  }
+  
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 
 }
