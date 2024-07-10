@@ -39,33 +39,35 @@ ngb-pagination .pagination {
   scrollbar-track-color: #171717;
   scrollbar-arrow-color: #171717;
   scrollbar-shadow-color: #6f6f6e;
-  scrollbar-dark-shadow-color: #6f6f6e;
 
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 3px;
-  }
-  ::-webkit-scrollbar-button {
-    background-color: #666;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: #6f6f6e;
-  }
-  ::-webkit-scrollbar-track-piece {
-    background-color: #171717;
-  }
-  ::-webkit-scrollbar-thumb {
-    height: 50px;
-    background-color: #666;
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: #6f6f6e;
-  }
-  ::-webkit-resizer {
-    background-color: #666;
-  }
+
 }
+
+[data-color="black"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 3px;
+}
+[data-color="black"] ::-webkit-scrollbar-button {
+  background-color: #666;
+}
+[data-color="black"] ::-webkit-scrollbar-track {
+  background-color: #6f6f6e;
+}
+[data-color="black"] ::-webkit-scrollbar-track-piece {
+  background-color: #171717;
+}
+[data-color="black"] ::-webkit-scrollbar-thumb {
+  height: 50px;
+  background-color: #666;
+  border-radius: 3px;
+}
+[data-color="black"] ::-webkit-scrollbar-corner {
+  background-color: #6f6f6e;
+}
+[data-color="black"] ::-webkit-resizer {
+  background-color: #666;
+}
+
 
 /* SIDEBAR DARK */
 .sidebar[data-color="black"]:after,
@@ -139,6 +141,10 @@ body .main-panel[data-color="black"] .page-item .page-link {
 body .main-panel[data-color="black"] .page-item.active .page-link {
   color: #4ab3b5;
   border-color: #4ab3b5;
+}
+
+body .main-panel[data-color="black"] td a.text-dark {
+  color: #4ab3b5 !important;
 }
 
 body .main-panel[data-color="black"] .page-item.disabled .page-link {

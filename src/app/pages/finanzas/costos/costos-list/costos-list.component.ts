@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { InversionResponse } from "app/shared/models/Inversion.model";
@@ -9,6 +10,7 @@ import {
 } from "app/shared/models/Listados.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { CostoVenta } from "../../../../shared/models/CostosVentas.model";
 
@@ -36,7 +38,11 @@ export class CostosListComponent {
 
   isLoad: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -46,6 +52,12 @@ export class CostosListComponent {
   ngOnInit(): void {
     this.setCurrentDate();
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
@@ -86,6 +98,7 @@ export class CostosListComponent {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -128,56 +141,76 @@ export class CostosListComponent {
 
   eliminar(data: InversionResponse) {
     // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Esta inversión se eliminará y no podrás recuperarla.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
-          // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-          this.asignarValores();
-          Swal.fire({
-            text: data[0],
-            icon: "success",
-          });
-        });
-      }
-    });
-  }
-
-  bloquear(data: InversionResponse) {
-    // console.log(data);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Una vez cerrada solo podras visualizar los datos.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Aceptar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService
-          .changeValueInversion(data.id, {
-            estatus_cierre: 1,
-          })
-          .subscribe((data) => {
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Esta inversión se eliminará y no podrás recuperarla.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FinanzasService.deleteInversion(data.id).subscribe((data) => {
             // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
             this.asignarValores();
-            Swal.fire({
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
               text: data[0],
               icon: "success",
             });
           });
-      }
-    });
+        }
+      });
+  }
+
+  bloquear(data: InversionResponse) {
+    // console.log(data);
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Una vez cerrada solo podras visualizar los datos.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FinanzasService
+            .changeValueInversion(data.id, {
+              estatus_cierre: 1,
+            })
+            .subscribe((data) => {
+              // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
+              this.asignarValores();
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            });
+        }
+      });
   }
 
   limpiarFiltros() {
@@ -200,17 +233,31 @@ export class CostosListComponent {
   FormsValuesDevolucion(costosVenta: CostoVenta) {
     console.log("[DevolucionFacturaForm]", costosVenta);
 
-    Swal.fire({
-      title: "Cargando el costo",
-      text: "Esto puede demorar un momento.",
-      timerProgressBar: true,
-      allowEscapeKey: false,
-      allowOutsideClick: false,
-      allowEnterKey: false,
-      didOpen: () => {
-        Swal.showLoading();
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
       },
-    });
+    })
+      .mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      })
+      .fire({
+        title: "Cargando el costo",
+        text: "Esto puede demorar un momento.",
+        timerProgressBar: true,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        didOpen: () => {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).showLoading();
+        },
+      });
 
     this._FinanzasService.insertCostoVenta(costosVenta).subscribe((data) => {
       console.log("[response]", data);
@@ -225,22 +272,32 @@ export class CostosListComponent {
       });
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
       this.costoTotal = Number(this.costoTotal) + Number(costosVenta.costo);
-      Swal.fire({
-        text: "El costo se agregó con éxito",
-        icon: "success",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.NgbModal.dismissAll();
-          // location.reload();
-        }
-      });
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      })
+        .fire({
+          text: "El costo se agregó con éxito",
+          icon: "success",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.NgbModal.dismissAll();
+            // location.reload();
+          }
+        });
     });
   }
 
   FormsValuesDevolucionEditar(costosVenta: CostoVenta) {
     console.log("[DevolucionFacturaForm]", costosVenta);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Editando el costo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -269,15 +326,25 @@ export class CostosListComponent {
           return pv;
         });
         // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
-        Swal.fire({
-          text: "El costo se modificó con éxito",
-          icon: "success",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.NgbModal.dismissAll();
-            // location.reload();
-          }
-        });
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        })
+          .fire({
+            text: "El costo se modificó con éxito",
+            icon: "success",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.NgbModal.dismissAll();
+              // location.reload();
+            }
+          });
       });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

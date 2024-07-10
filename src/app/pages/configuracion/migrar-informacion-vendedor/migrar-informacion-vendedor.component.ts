@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { Usuario } from "app/shared/models/Usuario.model";
 import { ConfiguracionService } from "app/shared/services/configuracion.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -19,13 +21,23 @@ export class MigrarInformacionVendedorComponent implements OnInit {
 
   isLoad: boolean = false;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _UsuariosService: UsuariosService,
     public _ConfiguracionService: ConfiguracionService
   ) {}
 
   ngOnInit(): void {
     this.getUsers();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   getUsers() {
@@ -37,7 +49,11 @@ export class MigrarInformacionVendedorComponent implements OnInit {
   sendDataMigracion() {
     if(this.idClientes.length > 0){
       this.isLoad = true;
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         title: "¿Estas seguro?",
         text: "Una vez que realices este proceso no podrás revertirlo.",
         icon: "warning",
@@ -55,7 +71,11 @@ export class MigrarInformacionVendedorComponent implements OnInit {
                 this.isLoad = false;
   
                 console.log(data);
-                Swal.fire({
+                Swal.mixin({
+                  customClass: {
+                    container: this.themeSite, // Clase para el modo oscuro
+                  },
+                }).fire({
                   text: data.mensaje,
                   icon: "success",
                 });
@@ -70,7 +90,11 @@ export class MigrarInformacionVendedorComponent implements OnInit {
                 this.isLoad = false;
                 this.idClientes = []
                 this.migrationUserID = 0
-                Swal.fire({
+                Swal.mixin({
+                  customClass: {
+                    container: this.themeSite, // Clase para el modo oscuro
+                  },
+                }).fire({
                   title: "Error",
                   text: "Hay un problema al realizar el proceso",
                   icon: "error",
@@ -105,5 +129,9 @@ export class MigrarInformacionVendedorComponent implements OnInit {
       paso2: this.idClientes.length > 0,
       paso3: this.migrationUserID > 0,
     };
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

@@ -15,6 +15,7 @@ import {
   Link,
   ListadoModel,
 } from "app/shared/models/Listados.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-facturas",
@@ -36,7 +37,11 @@ export class FacturasComponent implements OnInit, OnDestroy {
 
   private Subscription = new Subscription();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _DevolucionFacturaService: DevolucionFacturaService,
     private _AuthService: AuthService,
@@ -100,7 +105,11 @@ export class FacturasComponent implements OnInit, OnDestroy {
   FormsValuesDevolucion(DevolucionProducto: any) {
     // console.log("[DevolucionFacturaForm]", DevolucionProducto);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Cargando la devolución",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -117,7 +126,11 @@ export class FacturasComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         console.log("[response]", data);
 
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "La devolución fue realizada con exito",
           icon: "success",
         }).then((result) => {
@@ -139,5 +152,6 @@ export class FacturasComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

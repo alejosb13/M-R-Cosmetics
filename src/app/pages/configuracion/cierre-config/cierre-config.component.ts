@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { ConfiguracionService } from "app/shared/services/configuracion.service";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -8,12 +10,24 @@ import Swal from "sweetalert2";
   styleUrls: ["./cierre-config.component.css"],
 })
 export class CierreConfigComponent implements OnInit {
-  constructor(private _ConfiguracionService: ConfiguracionService) {}
+  themeSite: string;
+  themeSubscription: Subscription;
+
+  constructor(
+    private _CommunicationService: CommunicationService,
+    private _ConfiguracionService: ConfiguracionService
+  ) {}
 
   statusCierre: number;
 
   ngOnInit(): void {
     this.getCierre();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getCierre() {
@@ -24,7 +38,11 @@ export class CierreConfigComponent implements OnInit {
   }
 
   actualizarCierre() {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Modificando el estado del cierre",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -36,20 +54,32 @@ export class CierreConfigComponent implements OnInit {
       },
     });
 
-    this._ConfiguracionService.updateCierraConfig().subscribe(({data}) => {
+    this._ConfiguracionService.updateCierraConfig().subscribe(({ data }) => {
       // console.log(data);
       if (data.cierre == 1) {
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "Cierre activado",
           icon: "success",
         });
       } else {
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           text: "Cierre desactivado",
           icon: "success",
         });
       }
       this.getCierre();
     });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

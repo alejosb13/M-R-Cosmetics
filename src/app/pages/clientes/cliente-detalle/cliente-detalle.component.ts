@@ -77,7 +77,11 @@ export class ClienteDetalleComponent implements OnInit {
   }
 
   descargarPDF() {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Descargando el archivo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -102,7 +106,11 @@ export class ClienteDetalleComponent implements OnInit {
             "DD-MM-YYYY_HH:mm:ss"
           )}`
         );
-        Swal.fire("", "Descarga Completada", "success");
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire("", "Descarga Completada", "success");
       });
   }
 

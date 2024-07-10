@@ -18,6 +18,7 @@ import {
 import { Listado } from "app/shared/services/listados.service";
 import { Usuario } from "app/shared/models/Usuario.model";
 import { UsuariosService } from "app/shared/services/usuarios.service";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-facturas-entregadas",
@@ -43,7 +44,11 @@ export class FacturasEntregadasComponent implements OnInit {
 
   private Subscription = new Subscription();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _DevolucionFacturaService: DevolucionFacturaService,
     private _AuthService: AuthService,
@@ -73,6 +78,11 @@ export class FacturasEntregadasComponent implements OnInit {
     });
 
     // this.asignarValores();
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
@@ -108,7 +118,10 @@ export class FacturasEntregadasComponent implements OnInit {
 
   openDevolverFactura(content: any, Factura: Factura) {
     this.Factura = Factura;
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
@@ -116,7 +129,11 @@ export class FacturasEntregadasComponent implements OnInit {
   FormsValuesDevolucion(DevolucionProducto: any) {
     // console.log("[DevolucionFacturaForm]", DevolucionProducto);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Cargando la devolución",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -133,14 +150,20 @@ export class FacturasEntregadasComponent implements OnInit {
       .subscribe((data) => {
         console.log("[response]", data);
 
-        Swal.fire({
-          text: "La devolución fue realizada con exito",
-          icon: "success",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        });
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        })
+          .fire({
+            text: "La devolución fue realizada con exito",
+            icon: "success",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
+          });
       });
   }
 
@@ -155,57 +178,81 @@ export class FacturasEntregadasComponent implements OnInit {
 
   despachar(id: number) {
     // console.log(id);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Este factura será despachada.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Despachar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FacturasService
-          .despacharFactura(id, { despachado: 1 })
-          .subscribe((data) => {
-            this.Facturas = this.Facturas.filter((factura) => factura.id != id);
-            // this.refreshCountries()
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Este factura será despachada.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Despachar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FacturasService
+            .despacharFactura(id, { despachado: 1 })
+            .subscribe((data) => {
+              this.Facturas = this.Facturas.filter(
+                (factura) => factura.id != id
+              );
+              // this.refreshCountries()
 
-            Swal.fire({
-              text: data[0],
-              icon: "success",
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
             });
-          });
-      }
-    });
+        }
+      });
   }
 
   openAgregarFactura(Factura: Factura) {
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Este factura será marcada como recibida.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Agregar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FacturasService.entregarFactura(Factura.id).subscribe((data) => {
-          this.Facturas = this.Facturas.filter(
-            (factura) => factura.id != Factura.id
-          );
-          // this.refreshCountries()
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Este factura será marcada como recibida.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Agregar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FacturasService
+            .entregarFactura(Factura.id)
+            .subscribe((data) => {
+              this.Facturas = this.Facturas.filter(
+                (factura) => factura.id != Factura.id
+              );
+              // this.refreshCountries()
 
-          Swal.fire({
-            text: data[0],
-            icon: "success",
-          });
-        });
-      }
-    });
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            });
+        }
+      });
   }
 
   getUsers() {
@@ -248,6 +295,7 @@ export class FacturasEntregadasComponent implements OnInit {
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 
   openFiltros(content: any) {
@@ -256,6 +304,7 @@ export class FacturasEntregadasComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}

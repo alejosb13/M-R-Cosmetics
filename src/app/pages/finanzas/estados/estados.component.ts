@@ -11,6 +11,8 @@ import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import Swal from "sweetalert2";
 import { ImportacionResponse } from "app/shared/models/Importacion.model";
+import { Subscription } from "rxjs";
+import { CommunicationService } from "@app/shared/services/communication.service";
 type EstadoResponse = {
   ventas_listado: any;
   ventas_totalMetas: number;
@@ -45,7 +47,11 @@ export class EstadosComponent {
 
   isLoad: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -55,6 +61,12 @@ export class EstadosComponent {
   ngOnInit(): void {
     this.setCurrentDate();
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   asignarValores() {
@@ -87,6 +99,8 @@ export class EstadosComponent {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass:
+        this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -146,7 +160,11 @@ export class EstadosComponent {
 
   
   descargarPDF() {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Descargando el archivo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -172,7 +190,15 @@ export class EstadosComponent {
             "DD-MM-YYYY_HH:mm:ss"
           )}`
         );
-        Swal.fire("", "Descarga Completada", "success");
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire("", "Descarga Completada", "success");
       });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

@@ -18,7 +18,7 @@ import { HelpersService } from "app/shared/services/helpers.service";
 import { Listado } from "app/shared/services/listados.service";
 import { ReciboService } from "app/shared/services/recibo.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
-import { Observable, Subject, merge, OperatorFunction, of } from "rxjs";
+import { Observable, Subject, merge, OperatorFunction, of, Subscription } from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -30,6 +30,7 @@ import {
 
 import Swal, { SweetAlertOptions } from "sweetalert2";
 import { catchError } from "rxjs/operators";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-checkout",
@@ -72,7 +73,11 @@ export class CheckoutComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _location: Location,
     public _CheckoutService: CheckoutService,
     private _ClientesService: ClientesService,
@@ -100,6 +105,12 @@ export class CheckoutComponent implements OnInit {
     this.getFrecuenciafactura();
     // console.log("Factura",this.factura);
     // console.log("Factura",(this.factura.tipo_venta == 1 && this.factura.tipo_venta));
+  
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   getClientes() {
@@ -212,7 +223,11 @@ export class CheckoutComponent implements OnInit {
         this.numeroRecibo = data.numero;
       },
       () => {
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           title: "No posee un numero de recibo.",
           text: "Pide que asignen un talonario de recibos.",
           icon: "error",
@@ -368,7 +383,11 @@ export class CheckoutComponent implements OnInit {
   deleteProduct(productoCheckout: FacturaDetalle) {
     console.log(productoCheckout);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "¿Estás seguro?",
       text: "Este producto se eliminará",
       icon: "warning",
@@ -386,7 +405,11 @@ export class CheckoutComponent implements OnInit {
   }
 
   async generarfactura() {
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Creando factura",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -433,7 +456,11 @@ export class CheckoutComponent implements OnInit {
           this._CheckoutService.vaciarCheckout();
 
           if (data.status) {
-            Swal.fire({
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
               title: "¡Pedido Generado!",
               text: "Su pedido fue generado con exito",
               icon: "success",
@@ -443,7 +470,11 @@ export class CheckoutComponent implements OnInit {
               this.router.navigateByUrl(`/factura/detalle/${data.factura_id}`)
             );
           } else {
-            Swal.fire({
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
               title: "Error",
               text: "Error generando la factura",
               icon: "error",
@@ -463,7 +494,11 @@ export class CheckoutComponent implements OnInit {
           } else {
             option.text = errorResponse.error.mensaje;
           }
-          Swal.fire(option);
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire(option);
         }
       );
     }
@@ -490,7 +525,11 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (error) {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         title: "¡Error!",
         text: mensaje,
         icon: "warning",
@@ -500,5 +539,9 @@ export class CheckoutComponent implements OnInit {
     }
 
     return error;
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

@@ -13,6 +13,7 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { FacturasService } from "app/shared/services/facturas.service";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-factura-despachada",
@@ -34,7 +35,11 @@ export class FacturaDespachadaComponent implements OnInit {
 
   private Subscription = new Subscription();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _DevolucionFacturaService: DevolucionFacturaService,
     private _AuthService: AuthService,
@@ -48,7 +53,7 @@ export class FacturaDespachadaComponent implements OnInit {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
     this.despachado = 0;
-    
+
     this.asignarValores();
   }
 
@@ -84,7 +89,10 @@ export class FacturaDespachadaComponent implements OnInit {
 
   openDevolverFactura(content: any, Factura: Factura) {
     this.Factura = Factura;
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
@@ -92,7 +100,11 @@ export class FacturaDespachadaComponent implements OnInit {
   FormsValuesDevolucion(DevolucionProducto: any) {
     // console.log("[DevolucionFacturaForm]", DevolucionProducto);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Cargando la devolución",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -109,14 +121,20 @@ export class FacturaDespachadaComponent implements OnInit {
       .subscribe((data) => {
         console.log("[response]", data);
 
-        Swal.fire({
-          text: "La devolución fue realizada con exito",
-          icon: "success",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        });
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        })
+          .fire({
+            text: "La devolución fue realizada con exito",
+            icon: "success",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
+          });
       });
   }
 
@@ -131,33 +149,46 @@ export class FacturaDespachadaComponent implements OnInit {
 
   despachar(id: number) {
     // console.log(id);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Este factura será despachada.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Despachar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FacturasService
-          .despacharFactura(id, { despachado: 1 })
-          .subscribe((data) => {
-            this.Facturas = this.Facturas.filter((factura) => factura.id != id);
-            // this.refreshCountries()
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Este factura será despachada.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Despachar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FacturasService
+            .despacharFactura(id, { despachado: 1 })
+            .subscribe((data) => {
+              this.Facturas = this.Facturas.filter(
+                (factura) => factura.id != id
+              );
+              // this.refreshCountries()
 
-            Swal.fire({
-              text: data[0],
-              icon: "success",
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
             });
-          });
-      }
-    });
+        }
+      });
   }
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

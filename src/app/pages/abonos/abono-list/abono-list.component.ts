@@ -21,6 +21,7 @@ import { Abono } from "app/shared/models/Abono.model";
 import { AbonoService } from "app/shared/services/abono.service";
 import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 
 @Component({
   selector: "app-abono-list",
@@ -60,7 +61,11 @@ export class AbonoListComponent implements OnInit {
 
   private Subscription = new Subscription();
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -79,6 +84,12 @@ export class AbonoListComponent implements OnInit {
     this.setCurrentDate();
     this.getUsers();
     this.aplicarFiltros();
+
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   getUsers() {
@@ -122,6 +133,7 @@ export class AbonoListComponent implements OnInit {
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -224,32 +236,42 @@ export class AbonoListComponent implements OnInit {
     });
     this.asignarValores();
 
-    this.NgbModal.dismissAll()
+    this.NgbModal.dismissAll();
   }
 
   eliminar({ id }: Abono) {
     // console.log(id);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Este abono se eliminará y no podrás recuperarlo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._AbonoService.deleteAbono(id).subscribe((data) => {
-          this.Abonos = this.Abonos.filter((abono) => abono.id != id);
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Este abono se eliminará y no podrás recuperarlo.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._AbonoService.deleteAbono(id).subscribe((data) => {
+            this.Abonos = this.Abonos.filter((abono) => abono.id != id);
 
-          Swal.fire({
-            text: data[0],
-            icon: "success",
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            }).fire({
+              text: data[0],
+              icon: "success",
+            });
           });
-        });
-      }
-    });
+        }
+      });
   }
 
   editarAbono(content: any, abono: Abono) {
@@ -259,7 +281,10 @@ export class AbonoListComponent implements OnInit {
 
     logger.log(abono);
 
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
@@ -277,19 +302,29 @@ export class AbonoListComponent implements OnInit {
         })
         .subscribe(
           (data) => {
-            Swal.fire({
-              text: "Abono modificado con exito",
-              icon: "success",
-            }).then((result) => {
-              window.location.reload();
-            });
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            })
+              .fire({
+                text: "Abono modificado con exito",
+                icon: "success",
+              })
+              .then((result) => {
+                window.location.reload();
+              });
           },
           (error) => {
             this.isLoad = false;
           }
         );
     } else {
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos",
         icon: "warning",
       });
@@ -298,45 +333,61 @@ export class AbonoListComponent implements OnInit {
 
   eliminarRecibo(reciboEliminar: Abono) {
     console.log(reciboEliminar);
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Al eliminar este abono se eliminará también el recibo asociado a él y no podrás recuperarlo.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Anulando el recibo",
-          text: "Esto puede demorar un momento.",
-          timerProgressBar: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          allowEnterKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        this._ReciboService
-          .deleteReciboHistorialCredito(reciboEliminar.recibo_historial.id)
-          .subscribe((data) => {
-            this.Abonos = this.Abonos.filter(
-              (abono) =>
-                abono.recibo_historial.id != reciboEliminar.recibo_historial.id
-            );
-            Swal.fire({
-              text: data[0],
-              icon: "success",
-            });
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Estás seguro?",
+        text: "Al eliminar este abono se eliminará también el recibo asociado a él y no podrás recuperarlo.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
+            title: "Anulando el recibo",
+            text: "Esto puede demorar un momento.",
+            timerProgressBar: true,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
-      }
-    });
+          this._ReciboService
+            .deleteReciboHistorialCredito(reciboEliminar.recibo_historial.id)
+            .subscribe((data) => {
+              this.Abonos = this.Abonos.filter(
+                (abono) =>
+                  abono.recibo_historial.id !=
+                  reciboEliminar.recibo_historial.id
+              );
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              }).fire({
+                text: data[0],
+                icon: "success",
+              });
+            });
+        }
+      });
   }
 
   ngOnDestroy() {
     this.Subscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
   }
 }

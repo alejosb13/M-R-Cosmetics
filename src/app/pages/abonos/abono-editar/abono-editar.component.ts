@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommunicationService } from '@app/shared/services/communication.service';
 import { Abono } from 'app/shared/models/Abono.model';
 import { AbonoService } from 'app/shared/services/abono.service';
 import { HelpersService } from 'app/shared/services/helpers.service';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,7 +16,11 @@ import Swal from 'sweetalert2';
 export class AbonoEditarComponent implements OnInit {
   isLoad:boolean = false
   AbonoId:number= 0
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _AbonoService: AbonoService,
     private _HelpersService: HelpersService,
     // private router:Router,
@@ -24,12 +30,20 @@ export class AbonoEditarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.themeSubscription = this._CommunicationService
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   FormValuesForm(abono:Abono){
     // console.log(abono);
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Creando recibo",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -45,7 +59,11 @@ export class AbonoEditarComponent implements OnInit {
     this._AbonoService.updateAbono(this.AbonoId,abono).subscribe(data => {
       this._AbonoService.isLoad = false
       // console.log(ProductoResponse);
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Abono modificado con exito",
         icon: 'success',
       }).then((result) => {
@@ -58,7 +76,11 @@ export class AbonoEditarComponent implements OnInit {
       let error:string =  this._HelpersService.errorResponse(HttpErrorResponse)
       console.log(error);
 
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         title: "Error",
         html: error,
         icon: 'error',
@@ -66,4 +88,8 @@ export class AbonoEditarComponent implements OnInit {
     })
   }
 
+  
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
+  }
 }

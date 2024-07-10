@@ -1,9 +1,11 @@
 import { Component, OnInit } from "@angular/core";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
 import { TablasService } from "app/shared/services/tablas.service";
 import { environment } from "environments/environment";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -20,7 +22,11 @@ export class CategoriaListComponent implements OnInit {
   isAdmin: boolean;
   isSupervisor: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     private _CategoriaService: CategoriaService,
     private _AuthService: AuthService,
     private _TablasService: TablasService
@@ -31,6 +37,12 @@ export class CategoriaListComponent implements OnInit {
     this.isSupervisor = this._AuthService.isSupervisor();
 
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   asignarValores() {
@@ -116,7 +128,11 @@ export class CategoriaListComponent implements OnInit {
 
   eliminar({ id }: Categoria) {
     // console.log(id);
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "¿Estás seguro?",
       text: "Esta categoria se eliminará y no podrás recuperarla.",
       icon: "warning",
@@ -127,7 +143,11 @@ export class CategoriaListComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           title: "Eliminando categoria",
           text: "Esto puede demorar un momento.",
           timerProgressBar: true,
@@ -144,12 +164,20 @@ export class CategoriaListComponent implements OnInit {
           );
           this.refreshCountries();
 
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: data[0],
             icon: "success",
           });
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }

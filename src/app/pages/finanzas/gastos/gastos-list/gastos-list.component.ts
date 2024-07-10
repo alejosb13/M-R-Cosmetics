@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { TIPOS_GASTOS } from "@app/shared/components/forms/gasto-form/gasto-form.component";
 import { Gasto } from "@app/shared/models/Gasto.model";
+import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { InversionResponse } from "app/shared/models/Inversion.model";
@@ -11,6 +12,7 @@ import {
 } from "app/shared/models/Listados.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
+import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 
 @Component({
@@ -42,7 +44,11 @@ export class GastosListComponent {
 
   isLoad: boolean;
 
+  themeSite: string;
+  themeSubscription: Subscription;
+
   constructor(
+    private _CommunicationService: CommunicationService,
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
     private NgbModal: NgbModal,
@@ -52,6 +58,12 @@ export class GastosListComponent {
   ngOnInit(): void {
     this.setCurrentDate();
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   asignarValores() {
@@ -87,8 +99,10 @@ export class GastosListComponent {
 
     this.listadoFilter.link = null;
 
-    this.NgbModal.open(content, {
+    this.NgbModal.open(content,  {
       ariaLabelledBy: "modal-basic-title",
+      windowClass:
+        this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
     }).result.then(
       (result) => {},
       (reason) => {}
@@ -131,7 +145,11 @@ export class GastosListComponent {
 
   eliminar(data: Gasto) {
     // console.log(data);
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "¿Estás seguro?",
       text: "Este gasto se eliminará y no podrás recuperarlo.",
       icon: "warning",
@@ -142,7 +160,11 @@ export class GastosListComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
           title: "Eliminando el gasto",
           text: "Esto puede demorar un momento.",
           timerProgressBar: true,
@@ -155,7 +177,11 @@ export class GastosListComponent {
         });
         this._FinanzasService.deleteGasto(data.id).subscribe((data) => {
           this.asignarValores();
-          Swal.fire({
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite, // Clase para el modo oscuro
+            },
+          }).fire({
             text: data.mensaje,
             icon: "success",
           });
@@ -184,7 +210,11 @@ export class GastosListComponent {
   FormsValuesDevolucion(gasto: Gasto) {
     console.log("[DevolucionFacturaForm]", gasto);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Cargando el gasto",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -199,7 +229,11 @@ export class GastosListComponent {
     this._FinanzasService.insertGasto(gasto).subscribe((data) => {
       console.log("[response]", data);
       this.Gastos = [{ ...gasto, id: data.id }, ...this.Gastos];
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "El gasto se agregó con éxito",
         icon: "success",
       }).then((result) => {
@@ -217,7 +251,11 @@ export class GastosListComponent {
   FormsValuesDevolucionEditar(gasto: Gasto) {
     console.log("[DevolucionFacturaForm]", gasto);
 
-    Swal.fire({
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
       title: "Editando el gasto",
       text: "Esto puede demorar un momento.",
       timerProgressBar: true,
@@ -240,7 +278,11 @@ export class GastosListComponent {
         return pv;
       });
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
-      Swal.fire({
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "El gasto se modificó con éxito",
         icon: "success",
       }).then((result) => {
@@ -250,5 +292,9 @@ export class GastosListComponent {
         }
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.themeSubscription.unsubscribe();
   }
 }
