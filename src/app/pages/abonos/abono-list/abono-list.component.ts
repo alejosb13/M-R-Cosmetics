@@ -93,12 +93,20 @@ export class AbonoListComponent implements OnInit {
   }
 
   getUsers() {
-    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
-    });
+    this._Listado
+      .UsuariosList({
+        disablePaginate: 1,
+        estado: 1,
+        // factura: 1,
+        // recibo: 1,
+        // recibosRangosSinTerminar: 1,
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
+      });
   }
 
   asignarValores() {

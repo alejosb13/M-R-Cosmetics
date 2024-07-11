@@ -11,7 +11,7 @@ import { Cliente } from "../models/Cliente.model";
 import { FacturaDetalle } from "../models/FacturaDetalle.model";
 
 const ListadoURL = `${environment.urlAPI}list`;
-const ClienteURL = `${environment.urlAPI}cliente`
+const ClienteURL = `${environment.urlAPI}cliente`;
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +23,7 @@ export class Listado {
 
   headerJson_Token(): HttpHeaders {
     let config = {
-      'Content-Type': "application/json",
+      "Content-Type": "application/json",
     };
 
     return new HttpHeaders(config);
@@ -146,7 +146,9 @@ export class Listado {
     });
   }
 
-  clienteProductosCompradosList(options: FiltrosList): Observable<ListadoModel<FacturaDetalle>> {
+  clienteProductosCompradosList(
+    options: FiltrosList
+  ): Observable<ListadoModel<FacturaDetalle>> {
     // console.log("FiltrosList", options);
     let URL: string;
 
@@ -200,9 +202,7 @@ export class Listado {
     });
   }
 
-  clienteListCarrito(
-    options: FiltrosList
-  ): Observable<any> {
+  clienteListCarrito(options: FiltrosList): Observable<any> {
     // console.log("FiltrosList", options);
     let URL: string;
 
@@ -228,9 +228,7 @@ export class Listado {
     });
   }
 
-  ProductoList(
-    options: any
-  ): Observable<any> {
+  ProductoList(options: any): Observable<any> {
     let params = new HttpParams();
     for (const key in options) {
       params = params.append(key, options[key]);
@@ -243,15 +241,39 @@ export class Listado {
     });
   }
 
-  registerClientesPDF(
-    options: any
-  ) {
+  UsuariosList(options: any): Observable<any> {
+    let params = new HttpParams();
+    for (const key in options) {
+      params = params.append(key, options[key]);
+    }
+
+    return this.http.get<any>(`${ListadoURL}/usuarios`, {
+      params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  CategoriaList(options: any): Observable<any> {
+    let params = new HttpParams();
+    for (const key in options) {
+      params = params.append(key, options[key]);
+    }
+
+    return this.http.get<any>(`${ListadoURL}/categorias`, {
+      params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  registerClientesPDF(options: any) {
     // console.log("FiltrosList", options);
     let URL = `${environment.urlAPI}pdf/registroclientes`;
 
     if (Object.keys(options).length > 0) {
       // let URLOptions = `${ListadoURL}/facturas?`
-      // options.alldate = options.allDates 
+      // options.alldate = options.allDates
       // delete options.allDates;
       URL = this.urlParams(URL, options);
 
@@ -261,14 +283,12 @@ export class Listado {
     // console.log(URL);
 
     let headers = new HttpHeaders();
-    headers = headers.set('Accept', 'application/pdf');
+    headers = headers.set("Accept", "application/pdf");
 
-    return this.http.get(`${URL}`, { headers: headers, responseType: 'blob' });
+    return this.http.get(`${URL}`, { headers: headers, responseType: "blob" });
   }
 
-  registerClientesCSV(
-    options: any
-  ) {
+  registerClientesCSV(options: any) {
     let URL = `${environment.urlAPI}xlsx/registroclientes`;
     // let URL = `${environment.urlAPI}csv/registroclientes`;
 
@@ -276,6 +296,6 @@ export class Listado {
       URL = this.urlParams(URL, options);
     }
 
-    window.open(`${URL}`, '_blank');
+    window.open(`${URL}`, "_blank");
   }
 }
