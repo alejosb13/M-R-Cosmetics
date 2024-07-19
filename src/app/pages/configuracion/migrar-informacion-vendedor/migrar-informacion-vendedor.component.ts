@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { Listado } from "@app/shared/services/listados.service";
 import { Usuario } from "app/shared/models/Usuario.model";
 import { ConfiguracionService } from "app/shared/services/configuracion.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
@@ -27,7 +28,8 @@ export class MigrarInformacionVendedorComponent implements OnInit {
   constructor(
     private _CommunicationService: CommunicationService,
     public _UsuariosService: UsuariosService,
-    public _ConfiguracionService: ConfiguracionService
+    public _ConfiguracionService: ConfiguracionService,
+    public _Listado: Listado,
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +43,14 @@ export class MigrarInformacionVendedorComponent implements OnInit {
   }
 
   getUsers() {
-    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
+    this._Listado
+      .UsuariosList({
+        disablePaginate: 1,
+        estado: 1,
+        // factura: 1,
+        // recibo: 1,
+        // recibosRangosSinTerminar: 1,
+      }).subscribe((usuarios: Usuario[]) => {
       this.userStore = usuarios;
     });
   }

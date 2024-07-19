@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { Listado } from "@app/shared/services/listados.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
@@ -70,7 +71,8 @@ export class CarteraFiltrosComponent implements OnInit {
     private _LogisticaService: LogisticaService,
     private NgbModal: NgbModal,
     private _HelpersService: HelpersService,
-    private _UsuariosService: UsuariosService
+    private _UsuariosService: UsuariosService,
+    private _Listado: Listado
   ) {}
 
   ngOnInit(): void {
@@ -140,14 +142,22 @@ export class CarteraFiltrosComponent implements OnInit {
   }
 
   getUsers() {
-    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
+    this._Listado
+      .UsuariosList({
+        disablePaginate: 1,
+        estado: 1,
+        // factura: 1,
+        // recibo: 1,
+        // recibosRangosSinTerminar: 1,
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
 
-      this.resetUser();
-    });
+        this.resetUser();
+      });
   }
 
   setCurrentDate() {

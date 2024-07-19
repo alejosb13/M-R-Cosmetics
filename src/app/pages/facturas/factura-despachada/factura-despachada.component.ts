@@ -55,6 +55,12 @@ export class FacturaDespachadaComponent implements OnInit {
     this.despachado = 0;
 
     this.asignarValores();
+
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   asignarValores() {

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { Listado } from "@app/shared/services/listados.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
@@ -16,7 +17,13 @@ import { RememberFiltersService } from "app/shared/services/remember-filters.ser
 import { TablasService } from "app/shared/services/tablas.service";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { environment } from "environments/environment";
-import { merge, Observable, OperatorFunction, Subject, Subscription } from "rxjs";
+import {
+  merge,
+  Observable,
+  OperatorFunction,
+  Subject,
+  Subscription,
+} from "rxjs";
 import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
 
 @Component({
@@ -54,7 +61,7 @@ export class VentasComponent implements OnInit {
   userIdString: string;
   userStore: Usuario[];
 
-  FilterSection:TypesFiltersForm = "ventasFilter"
+  FilterSection: TypesFiltersForm = "ventasFilter";
 
   themeSite: string;
   themeSubscription: Subscription;
@@ -68,6 +75,7 @@ export class VentasComponent implements OnInit {
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService,
+    private _Listado: Listado,
   ) {}
 
   ngOnInit(): void {
@@ -84,10 +92,10 @@ export class VentasComponent implements OnInit {
     // this.asignarValores()
 
     this.themeSubscription = this._CommunicationService
-    .getTheme()
-    .subscribe((color: string) => {
-      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
-    });
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
@@ -147,14 +155,22 @@ export class VentasComponent implements OnInit {
   }
 
   getUsers() {
-    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
+    this._Listado
+      .UsuariosList({
+        disablePaginate: 1,
+        estado: 1,
+        // factura: 1,
+        // recibo: 1,
+        // recibosRangosSinTerminar: 1,
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
 
-      this.resetUser();
-    });
+        this.resetUser();
+      });
   }
 
   setCurrentDate() {
@@ -183,13 +199,12 @@ export class VentasComponent implements OnInit {
       dateFin: this.dateFin,
     };
   }
-  
+
   openFiltros(content: any) {
     this.NgbModal.open(content, {
-        ariaLabelledBy: "modal-basic-title",
-        windowClass:
-          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
-      }).result.then(
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    }).result.then(
       (result) => {},
       (reason) => {}
     );
@@ -207,36 +222,34 @@ export class VentasComponent implements OnInit {
   limpiarFiltros() {
     this.setCurrentDate();
     this.tipoVenta = 1;
-    this.allDates = false
+    this.allDates = false;
     this.status_pagado = 0; // por pagar
 
     if (this.isAdmin || this.isSupervisor) this.resetUser();
-    this._RememberFiltersService.deleteFilterStorage(this.FilterSection)
+    this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
     // console.log(this.filtros);
   }
 
-  aplicarFiltros(submit:boolean = false) {
-    let filtrosStorage = this._RememberFiltersService.getFilterStorage()
+  aplicarFiltros(submit: boolean = false) {
+    let filtrosStorage = this._RememberFiltersService.getFilterStorage();
 
-    if(filtrosStorage.hasOwnProperty(this.FilterSection) && !submit){
-      this.filtros = {...filtrosStorage[this.FilterSection]} 
+    if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
+      this.filtros = { ...filtrosStorage[this.FilterSection] };
 
-      this.dateIni = this.filtros.dateIni
-      this.dateFin = this.filtros.dateFin
-      this.userId = Number(this.filtros.userId)
-      this.tipoVenta = this.filtros.tipo_venta
-      this.status_pagado = this.filtros.status_pagado
-      this.allDates = this.filtros.allDates
-
-
-    }else{
-      if(!submit){
+      this.dateIni = this.filtros.dateIni;
+      this.dateFin = this.filtros.dateFin;
+      this.userId = Number(this.filtros.userId);
+      this.tipoVenta = this.filtros.tipo_venta;
+      this.status_pagado = this.filtros.status_pagado;
+      this.allDates = this.filtros.allDates;
+    } else {
+      if (!submit) {
         this.userId = Number(this._AuthService.dataStorage.user.userId);
       }
 
       if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
-  
+
       if (
         this._HelpersService.siUnaFechaEsIgualOAnterior(
           this.dateIni,
@@ -244,7 +257,7 @@ export class VentasComponent implements OnInit {
         )
       )
         this.setCurrentDate(); // si las fecha inicial es mayor a la final, se setean las fechas mes actual
-  
+
       this.filtros = {
         dateIni: this.dateIni,
         dateFin: this.dateFin,
@@ -253,14 +266,14 @@ export class VentasComponent implements OnInit {
         status_pagado: this.status_pagado,
         allDates: this.allDates,
       };
-
     }
 
-    this._RememberFiltersService.setFilterStorage(this.FilterSection,{...this.filtros})
+    this._RememberFiltersService.setFilterStorage(this.FilterSection, {
+      ...this.filtros,
+    });
 
     this.asignarValores();
-    this.NgbModal.dismissAll()
-
+    this.NgbModal.dismissAll();
   }
 
   search: OperatorFunction<string, readonly string[]> = (

@@ -18,6 +18,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Subscription, throwError } from "rxjs";
 import { ReciboService } from "@app/shared/services/recibo.service";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { Listado } from "@app/shared/services/listados.service";
 
 @Component({
   selector: "app-talonarios-list",
@@ -55,7 +56,8 @@ export class TalonariosListComponent {
     public _ReciboService: ReciboService,
     private NgbModal: NgbModal,
     private _HelpersService: HelpersService,
-    private _UsuariosService: UsuariosService
+    private _UsuariosService: UsuariosService,
+    private _Listado: Listado
   ) {}
 
   ngOnInit(): void {
@@ -309,9 +311,17 @@ export class TalonariosListComponent {
   }
 
   getUsers() {
-    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-    });
+    this._Listado
+      .UsuariosList({
+        disablePaginate: 1,
+        estado: 1,
+        // factura: 1,
+        recibo: 1,
+        // recibosRangosSinTerminar: 1,
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+      });
   }
 
   newPage(link: Link) {
@@ -547,7 +557,6 @@ export class TalonariosListComponent {
       });
     // <p class="font-italic font-weight-bolder" style="font-size:0.725em">Esta acción no es modificable.</p>
   }
-  
 
   ngOnDestroy() {
     this.themeSubscription.unsubscribe();

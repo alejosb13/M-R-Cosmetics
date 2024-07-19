@@ -17,9 +17,7 @@ import {
 import { Cliente } from "app/shared/models/Cliente.model";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { Frecuencia } from "app/shared/models/Frecuencia.model";
-import { CategoriaService } from "app/shared/services/categoria.service";
 import { ClientesService } from "app/shared/services/clientes.service";
-import { FrecuenciaService } from "app/shared/services/frecuencia.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
 import Swal from "sweetalert2";
@@ -29,6 +27,7 @@ import { AuthService } from "../../../../auth/login/service/auth.service";
 import { customValidator } from "./utils/validaciones";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Subscription } from "rxjs";
+import { Listado } from "@app/shared/services/listados.service";
 
 @Component({
   selector: "app-cliente-form",
@@ -62,23 +61,26 @@ export class ClienteFormComponent implements OnInit {
   constructor(
     private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
-    private _CategoriaService: CategoriaService,
     public _ClientesService: ClientesService,
-    private _FrecuenciaService: FrecuenciaService,
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,
-    private _AuthService: AuthService
+    private _AuthService: AuthService,
+    private _Listado: Listado
   ) {}
 
   ngOnInit(): void {
     // console.log(this.Categorias);
+    this._Listado
+      .CategoriaList({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: Categoria[]) => {
+        this.Categorias = [...data];
+        this.Categoria = data.find((categoria) => categoria.id == 3);
 
-    this._CategoriaService.getCategoria().subscribe((data: Categoria[]) => {
-      this.Categorias = [...data];
-      this.Categoria = data.find((categoria) => categoria.id == 3);
-
-      this.setearData();
-    });
+        this.setearData();
+      });
     // this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
     this._UsuariosService
       .getUsuario()
@@ -98,10 +100,10 @@ export class ClienteFormComponent implements OnInit {
     this.isClienteEditando();
 
     this.themeSubscription = this._CommunicationService
-    .getTheme()
-    .subscribe((color: string) => {
-      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
-    });
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   isClienteEditando() {
@@ -109,13 +111,12 @@ export class ClienteFormComponent implements OnInit {
     const editar = !!this.clienteId;
     console.log([IsVendedor, editar]);
 
-    if(IsVendedor && editar){
-      this.ClienteEstadoForm.get('estado').disable();
+    if (IsVendedor && editar) {
+      this.ClienteEstadoForm.get("estado").disable();
     }
 
-    this.IsVendedor = IsVendedor
-    this.editar = editar
-    
+    this.IsVendedor = IsVendedor;
+    this.editar = editar;
   }
 
   definirValidaciones() {
@@ -158,7 +159,7 @@ export class ClienteFormComponent implements OnInit {
         Validators.compose([
           // Validators.pattern(ValidFunctionsValidator.NumberRegEx),
           Validators.minLength(14),
-          customValidator()
+          customValidator(),
         ]),
       ],
       celular: [
@@ -322,10 +323,10 @@ export class ClienteFormComponent implements OnInit {
       this.FormsValues.emit(cliente);
     } else {
       Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });

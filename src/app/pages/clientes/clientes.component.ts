@@ -97,12 +97,20 @@ export class ClientesComponent implements OnInit {
   }
 
   getUsers() {
-    this._UsuariosService.getUsuario().subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
-    });
+    this._Listado
+      .UsuariosList({
+        disablePaginate: 1,
+        estado: 1,
+        // factura: 1,
+        // recibo: 1,
+        // recibosRangosSinTerminar: 1,
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
+      });
   }
 
   cortarLetrasYMayuscula(
@@ -178,8 +186,11 @@ export class ClientesComponent implements OnInit {
   }
 
   getCategoria() {
-    this._CategoriaService
-      .getCategoria()
+    this._Listado
+      .CategoriaList({
+        estado: 1,
+        disablePaginate: 1,
+      })
       .subscribe((categorias: Categoria[]) => {
         this.categorias = categorias;
       });

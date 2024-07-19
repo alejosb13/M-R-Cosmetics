@@ -59,6 +59,12 @@ export class FacturasComponent implements OnInit, OnDestroy {
       this.status_pagado = params.get("status_pagado") == "pagadas" ? 1 : 0;
       this.asignarValores();
     });
+    
+    this.themeSubscription = this._CommunicationService
+    .getTheme()
+    .subscribe((color: string) => {
+      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+    });
   }
 
   asignarValores() {
