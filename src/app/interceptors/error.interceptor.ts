@@ -38,12 +38,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    // logger.log(next);
+    logger.log("request",request);
+    logger.log("next",next);
 
     return next.handle(request).pipe(
       catchError<any, any>((error: HttpErrorResponse) => {
-        console.log();
-
         // if (error.status == 401 && MensajesAuth.includes(error.statusText) ) {
         // console.log("error",error);
 
