@@ -18,7 +18,6 @@ import { FacturaDetalleService } from "app/shared/services/facturaDetalle.servic
 import { FacturasService } from "app/shared/services/facturas.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import { Subscription } from "rxjs";
-import { map } from "rxjs/operators";
 import Swal from "sweetalert2";
 import { ConfiguracionService } from "../../../shared/services/configuracion.service";
 import { RegaloService } from "../../../shared/services/regalo.service";

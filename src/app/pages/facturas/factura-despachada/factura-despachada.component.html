@@ -24,9 +24,7 @@
           >
         </div>
 
-        <form
-          class="d-flex align-items-center justify-content-end buscador"
-        >
+        <form class="d-flex align-items-center justify-content-end buscador">
           <div class="form-label-group input-group">
             <input
               type="email"
@@ -64,7 +62,7 @@
             <th scope="col">Estado</th>
             <th scope="col">Ver</th>
             <th scope="col">Fecha de Vencimiento</th>
-            <th *ngIf="isAdmin" scope="col">Despachar</th>
+            <th *ngIf="isAdmin" scope="col">Opciones</th>
           </tr>
         </thead>
         <tbody *ngIf="Facturas.length > 0">
@@ -93,8 +91,22 @@
             </td>
             <td>{{ factura.fecha_vencimiento | date : "dd-MM-yyyy" }}</td>
             <td *ngIf="isAdmin">
-              <div role="button" (click)="despachar(factura.id)">
-                <i class="fas fa-plus-circle text-success"></i>
+              <div class="d-flex justify-content-center">
+                <div
+                  role="button"
+                  class="mr-2"
+                  (click)="despachar(factura.id)"
+                  ngbTooltip="Despachar"
+                >
+                  <i class="fas fa-plus-circle text-success"></i>
+                </div>
+                <div
+                  role="button"
+                  (click)="openDevolverFactura(contentDevolver, factura)"
+                  ngbTooltip="Devolución"
+                >
+                  <i class="fas fa-undo text-danger"></i>
+                </div>
               </div>
             </td>
           </tr>
@@ -138,3 +150,25 @@
     </div>
   </ng-container>
 </div>
+
+<ng-template #contentDevolver let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Devolver factura</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-devolucion-factura-form
+      [factura]="Factura"
+      (FormsValues)="FormsValuesDevolucion($event)"
+    ></app-devolucion-factura-form>
+  </div>
+</ng-template>
