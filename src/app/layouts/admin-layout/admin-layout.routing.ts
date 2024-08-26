@@ -81,6 +81,8 @@ import { CostosListComponent } from "@app/pages/finanzas/costos/costos-list/cost
 import { GastosListComponent } from "@app/pages/finanzas/gastos/gastos-list/gastos-list.component";
 import { EstadosComponent } from "@app/pages/finanzas/estados/estados.component";
 import { TalonariosListComponent } from "@app/pages/talonarios/talonarios-list/talonarios-list.component";
+import { ListadoDevolucionIncentivosSupervisorComponent } from "@app/pages/devoluciones/listado/listado-devolucion-incentivos-supervisor/listado-devolucion-incentivos-supervisor.component";
+import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from '../../pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component';
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -178,6 +180,14 @@ export const AdminLayoutRoutes: Routes = [
         children: [
           { path: "factura", component: DevolucionFacturaListComponent },
           { path: "producto", component: DevolucionProductoListComponent },
+          {
+            path: "devolucion-incentivos",
+            component: ListadoDevolucionIncentivosSupervisorComponent,
+          },
+          {
+            path: "deduccion-incentivos",
+            component: ListadoDevolucionIncentivosSupervisorAplicadosComponent,
+          },
         ],
       },
     ],
@@ -268,9 +278,7 @@ export const AdminLayoutRoutes: Routes = [
     path: "talonarios",
     canActivate: [AuthGuard],
     data: { role: [ADMINISTRADOR] },
-    children: [
-      { path: "", component: TalonariosListComponent },
-    ],
+    children: [{ path: "", component: TalonariosListComponent }],
   },
   {
     path: "finanzas",
@@ -297,21 +305,15 @@ export const AdminLayoutRoutes: Routes = [
       },
       {
         path: "costos",
-        children: [
-          { path: "", component: CostosListComponent },
-        ],
+        children: [{ path: "", component: CostosListComponent }],
       },
       {
         path: "gastos",
-        children: [
-          { path: "", component: GastosListComponent },
-        ],
+        children: [{ path: "", component: GastosListComponent }],
       },
       {
         path: "estados",
-        children: [
-          { path: "", component: EstadosComponent },
-        ],
+        children: [{ path: "", component: EstadosComponent }],
       },
     ],
   },

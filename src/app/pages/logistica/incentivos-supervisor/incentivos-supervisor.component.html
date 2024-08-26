@@ -1,55 +1,77 @@
 <div class="bg-white">
-
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
         Cargando incentivo
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
-
     </div>
   </div>
 
-  <ng-container  *ngIf="!isLoad ">
-
-    <div class=" card-header border-0 pt-4  bg-white">
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
       <!-- <a class="btn btn-primary" routerLink="/devolucion/agregar/producto">
         <i class="fas fa-plus"></i>
         Agregar
       </a> -->
-        <div class="col-md-12">
-          <div class="d-flex flex-row justify-content-between mt-3">
-            <div class="card-title align-items-start flex-column">
-              <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
-              <span class="fuvi-text-black mt-1 fw-bold fs-5">Total de filas: {{ _TablasService.total }}</span>
-            </div>
-
-            <form class="d-flex align-items-center col-4 buscador pr-0">
-                <div class="form-label-group w-100">
-                    <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
-                    <label for="inputEmail">Buscar</label>
-                </div>
-            </form>
+      <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-between mt-3">
+          <div class="card-title align-items-start flex-column">
+            <!-- <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Recibos de credito</span> -->
+            <span class="fuvi-text-black mt-1 fw-bold fs-5"
+              >Total de filas: {{ _TablasService.total }}</span
+            >
           </div>
-        </div>
 
+          <form class="d-flex align-items-center col-4 buscador pr-0">
+            <div class="form-label-group w-100">
+              <input
+                type="email"
+                id="inputEmail"
+                class="form-control form-control-sm"
+                placeholder="Buscar"
+                (keyup)="BuscarValor()"
+                (change)="BuscarValor()"
+                [(ngModel)]="_TablasService.busqueda"
+                name="buscar"
+              />
+              <label for="inputEmail">Buscar</label>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <div class="col-md-12 d-flex justify-content-between flex-wrap">
         <p>
-          <span class="font-weight-bold d-block">Suma Recuperación : {{ totalrecuperacion5 | currency:"USD"}}</span>
-          <span class="font-weight-bold d-block">Suma Facturado: {{ totalFactura2 | currency:"USD"}}</span>
-          <span class="font-weight-bold d-block">Total: {{ total | currency:"USD"}}</span>
+          <span class="font-weight-bold d-block"
+            >Suma Recuperación :
+            {{ totalrecuperacion5 | currency : "USD" }}</span
+          >
+          <span class="font-weight-bold d-block"
+            >Suma Facturado: {{ totalFactura2 | currency : "USD" }}</span
+          >
+          <span class="font-weight-bold d-block"
+            >Deduccón: {{ deducciones | currency : "USD" }} ({{
+              deducciones_porcentaje | currency : "USD"
+            }})</span
+          >
+          <span class="font-weight-bold d-block"
+            >Total: {{ total | currency : "USD" }}</span
+          >
           <!-- <span class="font-weight-bold d-block">Monto total recibos abonos: {{ totalContado | currency:"USD"}}</span>
           <span class="font-weight-bold d-block">Monto total recibos facturas: {{ totalCredito | currency:"USD"}}</span> -->
         </p>
-        <button class="btn btn-primary align-self-center" (click)="openFiltros(contentEditar)">Filtros <i class="fas fa-filter"></i></button>
+        <button
+          class="btn btn-primary align-self-center"
+          (click)="openFiltros(contentEditar)"
+        >
+          Filtros <i class="fas fa-filter"></i>
+        </button>
       </div>
-
-
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
-      <table class="table  table-hover" >
+      <table class="table table-hover">
         <thead>
           <tr>
             <!-- <th scope="col">#</th> -->
@@ -63,29 +85,29 @@
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
           <tr *ngFor="let Incentivo of _TablasService.datosTablaStorage">
             <!-- <th scope="row">{{ Recibo.id }}</th> -->
-            <th>
-              #{{ Incentivo.idUser }}
-            </th>
+            <th>#{{ Incentivo.idUser }}</th>
             <td>
-              {{  Incentivo.nombreCompleto }}
+              {{ Incentivo.nombreCompleto }}
             </td>
             <td>
-              {{ Incentivo.totalRecuperacion | currency:"USD" }}
+              {{ Incentivo.totalRecuperacion | currency : "USD" }}
             </td>
             <td>
-              {{ Incentivo.porcentajeRecuperacion5 | currency:"USD" }}
+              {{ Incentivo.porcentajeRecuperacion5 | currency : "USD" }}
             </td>
             <td>
-              {{ Incentivo.totalFacturaVendedor | currency:"USD"}}
+              {{ Incentivo.totalFacturaVendedor | currency : "USD" }}
             </td>
           </tr>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
-          <tr >
+          <tr>
             <td colspan="9">
-              <div class="container d-flex align-items-center justify-content-center">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
                 <!-- <div class="alert alert-info w-100 text-center" > -->
-                  <h5>No existen incentivos</h5>
+                <h5>No existen incentivos</h5>
                 <!-- </div> -->
               </div>
             </td>
@@ -104,7 +126,12 @@
       </table>
 
       <div class="d-flex justify-content-between p-2">
-        <ngb-pagination [collectionSize]="_TablasService.total" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()"></ngb-pagination>
+        <ngb-pagination
+          [collectionSize]="_TablasService.total"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          (pageChange)="refreshCountries()"
+        ></ngb-pagination>
       </div>
     </div>
   </ng-container>
@@ -113,9 +140,7 @@
 <ng-template #contentEditar let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">
-        Filtros
-      </h4>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
     </div>
     <button
       type="button"
@@ -130,24 +155,39 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" value="true" [(ngModel)]="allDates">
-          <label class="form-check-label" for="flexCheckDefault">
-            Todos
-          </label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <p class=" font-weight-bold">Desde</p>
-          <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateIni" >
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
         </div>
       </div>
       <div class="col-md-6">
-        <div class="form-group" >
-          <p class=" font-weight-bold">Hasta</p>
-          <input [disabled]="allDates" type="date"  class="form-control" [(ngModel)]="dateFin" >
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
         </div>
       </div>
 
@@ -173,8 +213,8 @@
         </div>
       </div> -->
       <div class="col-md-12" *ngIf="isAdmin || isSupervisor">
-        <div class="form-group tipehead" >
-          <p class=" font-weight-bold">Supervisores</p>
+        <div class="form-group tipehead">
+          <p class="font-weight-bold">Supervisores</p>
           <!-- <input
             id="typeahead-focus"
             type="text"
@@ -190,7 +230,13 @@
           /> -->
           <select name="" id="" class="form-control" [(ngModel)]="userId">
             <!-- <option value="0">Todos los usuarios</option> -->
-            <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
+            <option
+              *ngFor="let usuario of userStore"
+              [selected]="usuario.id == userId"
+              [value]="usuario.id"
+            >
+              {{ usuario.name }} {{ usuario.apellido }}
+            </option>
           </select>
         </div>
       </div>
@@ -199,10 +245,14 @@
   <div class="modal-footer justify-content-center w-100">
     <div class="row w-100">
       <div class="col text-center">
-        <button class="btn btn-danger " (click)="limpiarFiltros()">Limpiar <i class="fas fa-eraser"></i></button>
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="aplicarFiltros(true)">Aplicar <i class="fas fa-search"></i></button>
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
       </div>
     </div>
   </div>

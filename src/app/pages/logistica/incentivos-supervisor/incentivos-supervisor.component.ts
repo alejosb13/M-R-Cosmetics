@@ -36,6 +36,8 @@ export class IncentivosSupervisorComponent implements OnInit {
   porcentaje5 = 0;
   totalContado = 0;
   totalCredito = 0;
+  deducciones = 0;
+  deducciones_porcentaje = 0;
   filtros: any = {};
   dateIni: string;
   dateFin: string;
@@ -106,7 +108,9 @@ export class IncentivosSupervisorComponent implements OnInit {
       allNumber: this.filtros.allNumber,
       // numDesde:this.filtros.numDesde,
       // numHasta:this.filtros.numHasta
-      numRecibo: Number(this.filtros.numRecibo)
+      numRecibo: Number(this.filtros.numRecibo),
+      estado:1,
+      disablePaginate:1,
     };
 
     this._LogisticaService.getIncentivoSupervisor(bodyForm).subscribe((data:any)=> {
@@ -125,6 +129,8 @@ export class IncentivosSupervisorComponent implements OnInit {
 
       this.total = data.totalFacturaVendedores2Porciento + data.totalRecuperacionVendedores
       this.totalrecuperacion5 = data.totalRecuperacionVendedores
+      this.deducciones = data.deducciones
+      this.deducciones_porcentaje = data.deducciones_porcentaje
       this.totalFactura2 = data.totalFacturaVendedores2Porciento 
 
       this.refreshCountries()

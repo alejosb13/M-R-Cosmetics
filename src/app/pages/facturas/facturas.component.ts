@@ -59,12 +59,12 @@ export class FacturasComponent implements OnInit, OnDestroy {
       this.status_pagado = params.get("status_pagado") == "pagadas" ? 1 : 0;
       this.asignarValores();
     });
-    
+    console.log("asfasfa");
     this.themeSubscription = this._CommunicationService
-    .getTheme()
-    .subscribe((color: string) => {
-      this.themeSite = color === "black" ? "dark-mode" : "light-mode";
-    });
+      .getTheme()
+      .subscribe((color: string) => {
+        this.themeSite = color === "black" ? "dark-mode" : "light-mode";
+      });
   }
 
   asignarValores() {
@@ -103,7 +103,10 @@ export class FacturasComponent implements OnInit, OnDestroy {
 
   openDevolverFactura(content: any, Factura: Factura) {
     this.Factura = Factura;
-    this.NgbModal.open(content, { ariaLabelledBy: "modal-basic-title" })
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    })
       .result.then((result) => {})
       .catch((err) => {});
   }
@@ -136,14 +139,16 @@ export class FacturasComponent implements OnInit, OnDestroy {
           customClass: {
             container: this.themeSite, // Clase para el modo oscuro
           },
-        }).fire({
-          text: "La devolución fue realizada con exito",
-          icon: "success",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            location.reload();
-          }
-        });
+        })
+          .fire({
+            text: "La devolución fue realizada con exito",
+            icon: "success",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
+          });
       });
   }
 

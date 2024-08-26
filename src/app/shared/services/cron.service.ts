@@ -29,10 +29,14 @@ export class CronService {
     roleId,
     roleName,
     userId,
+    disablePaginate,
+    estado
   }: {
     roleId: number;
     roleName: string;
     userId: number;
+    disablePaginate: number;
+    estado: number;
   }): Observable<any> {
     const URL = `${CronURL}/refresh-indice`;
     // return this.http.get<any[]>(
@@ -42,6 +46,8 @@ export class CronService {
     queryParams = queryParams.append("roleId", roleId);
     queryParams = queryParams.append("roleName", roleName);
     queryParams = queryParams.append("userId", userId);
+    queryParams = queryParams.append("disablePaginate", disablePaginate);
+    queryParams = queryParams.append("estado", estado);
 
     return this.http.get<any>(URL, { params: queryParams });
   }

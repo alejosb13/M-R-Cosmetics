@@ -77,6 +77,8 @@ export class FacturaDetalleComponent implements OnInit {
     this.themeSubscription = this._CommunicationService
       .getTheme()
       .subscribe((color: string) => {
+        console.log(color);
+        
         this.themeSite = color === "black" ? "dark-mode" : "light-mode";
       });
   }

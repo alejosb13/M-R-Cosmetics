@@ -121,6 +121,8 @@ import { TalonariosListComponent } from "@app/pages/talonarios/talonarios-list/t
 import { TalonarioFormComponent } from "@app/shared/components/forms/talonario-form/talonario-form.component";
 import { TalonarioPorLoteComponent } from "@app/shared/components/forms/talonario-por-lote/talonario-por-lote.component";
 import { FirstAndLastArrayPipe } from "@app/shared/pipes/first-and-last-array.pipe";
+import { ListadoDevolucionIncentivosSupervisorComponent } from "@app/pages/devoluciones/listado/listado-devolucion-incentivos-supervisor/listado-devolucion-incentivos-supervisor.component";
+import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from "@app/pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component";
 
 @NgModule({
   imports: [
@@ -258,7 +260,10 @@ import { FirstAndLastArrayPipe } from "@app/shared/pipes/first-and-last-array.pi
     TalonariosListComponent,
     TalonarioFormComponent,
     TalonarioPorLoteComponent,
-    FirstAndLastArrayPipe
+    FirstAndLastArrayPipe,
+
+    ListadoDevolucionIncentivosSupervisorComponent,
+    ListadoDevolucionIncentivosSupervisorAplicadosComponent
   ],
 })
 export class AdminLayoutModule {}

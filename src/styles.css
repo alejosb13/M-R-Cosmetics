@@ -181,6 +181,22 @@ body .main-panel[data-color="black"] .page-link {
   color: #151515;
 }
 
+.main-panel[data-color="black"] .background-color-important, 
+.main-panel[data-color="black"] .list-group li {
+  background-color: #212120 !important;
+  color: #e0e0e0;
+}
+.main-panel[data-color="black"] .list-group li {
+  border-color: #e0e0e0 !important;
+}
+
+.main-panel[data-color="black"] .detalle-section .detalle-container span,
+.main-panel[data-color="black"] .detalle-section .detalle-container .value,
+.main-panel[data-color="black"] .detalle-section .detalle-container .description,
+.main-panel[data-color="black"] .detalle-section .detalle-container h4{
+  color: #e0e0e0 !important;
+}
+
 /* PANEL WHITE */
 .main-panel[data-color="white"] .navbar.navbar-transparent:after {
   background-color: #ddd;
@@ -190,10 +206,12 @@ body .main-panel[data-color="black"] .page-link {
   background-color: #39474757 !important;
 }
 
-.dark-mode .swal2-popup {
+.dark-mode .swal2-popup{
   background-color: #212120;
   color: #e0e0e0;
 }
+
+
 
 .dark-mode .swal2-popup .swal2-success-circular-line-left {
   background-color: #212121 !important;
@@ -211,6 +229,7 @@ body .main-panel[data-color="black"] .page-link {
   background-color: #212120;
   color: #e0e0e0;
 }
+
 
 .dark-modal .modal-header {
   border-bottom: 1px solid #4ab3b5;
