@@ -282,6 +282,7 @@
               editarClienteForm.controls['celular'].touched,
             'is-valid': editarClienteForm.controls['celular'].valid
           }"
+          appOnlyNumbers
         />
         <ng-container
           [ngTemplateOutlet]="formError"
@@ -303,7 +304,7 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'El celular debe tener como máximo 12 numeros',
+            message: 'El celular debe tener 8 números',
             control: editarClienteForm.controls['celular']
           }"
         ></ng-container>
@@ -311,7 +312,7 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'minlength',
-            message: 'El celular debe tener como minimo 10 numeros',
+            message: 'El celular debe tener 8 números',
             control: editarClienteForm.controls['celular']
           }"
         ></ng-container>
@@ -332,6 +333,7 @@
               editarClienteForm.controls['telefono'].touched,
             'is-valid': editarClienteForm.controls['telefono'].valid
           }"
+          appOnlyNumbers
         />
         <ng-container
           [ngTemplateOutlet]="formError"
@@ -353,7 +355,7 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'maxlength',
-            message: 'El telefono debe tener como máximo 12 numeros',
+            message: 'El telefono debe tener 8 números',
             control: editarClienteForm.controls['telefono']
           }"
         ></ng-container>
@@ -361,7 +363,7 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'minlength',
-            message: 'El telefono debe tener como minimo 10 numeros',
+            message: 'El telefono debe tener 8 números',
             control: editarClienteForm.controls['telefono']
           }"
         ></ng-container>

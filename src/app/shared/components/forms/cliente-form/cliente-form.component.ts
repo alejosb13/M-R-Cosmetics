@@ -28,6 +28,7 @@ import { customValidator } from "./utils/validaciones";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Subscription } from "rxjs";
 import { Listado } from "@app/shared/services/listados.service";
+import { OnlyNumberAndPointDirective } from '../../../directives/only-number-and-point.directive';
 
 @Component({
   selector: "app-cliente-form",
@@ -167,8 +168,8 @@ export class ClienteFormComponent implements OnInit {
         Validators.compose([
           Validators.required,
           Validators.pattern(ValidFunctionsValidator.NumberRegEx),
-          Validators.maxLength(20),
-          // Validators.minLength(10),
+          Validators.maxLength(8),
+          Validators.minLength(8),
 
           // Validators.maxLength(12),
         ]),
@@ -177,7 +178,8 @@ export class ClienteFormComponent implements OnInit {
         "",
         Validators.compose([
           Validators.pattern(ValidFunctionsValidator.NumberRegEx),
-          Validators.maxLength(20),
+          Validators.maxLength(8),
+          Validators.minLength(8),
           // Validators.minLength(10),
         ]),
       ],
