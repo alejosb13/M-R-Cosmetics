@@ -9,19 +9,18 @@
   padding-left: 10px;
 }
 
-
-.badge.badge-primary{
+.badge.badge-primary {
   font-size: 14px;
 }
 
 ngb-accordion ::ng-deep .card {
   background-color: #f7f7f7;
 }
-ngb-accordion ::ng-deep .card .card-header{
+ngb-accordion ::ng-deep .card .card-header {
   padding: 0px;
 }
 
-ngb-accordion ::ng-deep .card .card-header button{
+ngb-accordion ::ng-deep .card .card-header button {
   width: 100%;
   border: none;
   padding: 20px 15px;
@@ -32,7 +31,7 @@ ngb-accordion ::ng-deep .card .card-header button{
 }
 
 ngb-accordion ::ng-deep .collapse {
-  transition: transform .6s, opacity .4s, max-height .3s ease;
+  transition: transform 0.6s, opacity 0.4s, max-height 0.3s ease;
   opacity: 0;
   max-height: 0;
   display: block !important;
@@ -45,4 +44,8 @@ ngb-accordion ::ng-deep .collapse.show {
 }
 ngb-accordion ::ng-deep .list-group > li:hover {
   background-color: #e8e8e8;
+}
+
+::ng-deep .main-panel[data-color="black"] .card-header button {
+  color: #e0e0e0 !important;
 }

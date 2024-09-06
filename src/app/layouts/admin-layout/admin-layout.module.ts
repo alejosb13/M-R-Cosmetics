@@ -123,6 +123,7 @@ import { TalonarioPorLoteComponent } from "@app/shared/components/forms/talonari
 import { FirstAndLastArrayPipe } from "@app/shared/pipes/first-and-last-array.pipe";
 import { ListadoDevolucionIncentivosSupervisorComponent } from "@app/pages/devoluciones/listado/listado-devolucion-incentivos-supervisor/listado-devolucion-incentivos-supervisor.component";
 import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from "@app/pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component";
+import { DinamicTableComponent } from "@app/shared/components/dinamic-table/dinamic-table.component";
 
 @NgModule({
   imports: [
@@ -263,7 +264,8 @@ import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from "@app/pa
     FirstAndLastArrayPipe,
 
     ListadoDevolucionIncentivosSupervisorComponent,
-    ListadoDevolucionIncentivosSupervisorAplicadosComponent
+    ListadoDevolucionIncentivosSupervisorAplicadosComponent,
+    DinamicTableComponent
   ],
 })
 export class AdminLayoutModule {}

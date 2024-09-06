@@ -167,9 +167,16 @@ body .main-panel[data-color="black"] .page-link {
   background-color: #4ab3b5;
 }
 
-.main-panel[data-color="black"] .card {
+.main-panel[data-color="black"] .card,
+.main-panel[data-color="black"] .summary,
+.main-panel[data-color="black"] .cart {
   background-color: #212120; /* Fondo de la tarjeta */
 }
+
+.main-panel[data-color="black"] .cart .main{
+  background-color: transparent !important; /* Fondo de la tarjeta */
+}
+
 .main-panel[data-color="black"] .dropdown-menu.desplegable div label  {
   color: #151515 !important;
 }
@@ -193,7 +200,8 @@ body .main-panel[data-color="black"] .page-link {
 .main-panel[data-color="black"] .detalle-section .detalle-container span,
 .main-panel[data-color="black"] .detalle-section .detalle-container .value,
 .main-panel[data-color="black"] .detalle-section .detalle-container .description,
-.main-panel[data-color="black"] .detalle-section .detalle-container h4{
+.main-panel[data-color="black"] .detalle-section .detalle-container h4
+.main-panel[data-color="black"] .summary .form-group p{
   color: #e0e0e0 !important;
 }
 

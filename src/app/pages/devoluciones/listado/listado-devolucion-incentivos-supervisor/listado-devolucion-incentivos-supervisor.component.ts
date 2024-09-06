@@ -1,8 +1,5 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { Gasto } from "@app/shared/models/Gasto.model";
-import { Talonario } from "@app/shared/models/Talonario.model";
 import { Usuario } from "@app/shared/models/Usuario.model";
-import { TalonariosService } from "@app/shared/services/talonarios.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import {
@@ -35,7 +32,7 @@ export class ListadoDevolucionIncentivosSupervisorComponent {
     // disablePaginate: "true",
   };
 
-  listadoData: ListadoModel<Talonario>;
+  listadoData: ListadoModel<any>;
   Facturas: any[];
   Factura: any;
 
@@ -48,7 +45,6 @@ export class ListadoDevolucionIncentivosSupervisorComponent {
 
   constructor(
     private _CommunicationService: CommunicationService,
-    public _TalonariosService: TalonariosService,
     public _AuthService: AuthService,
     public _ReciboService: ReciboService,
     private NgbModal: NgbModal,
@@ -79,7 +75,7 @@ export class ListadoDevolucionIncentivosSupervisorComponent {
     };
 
     this._Logistica.devolucionesSupervisor(this.listadoFilter).subscribe(
-      (paginacion: ListadoModel<Talonario>) => {
+      (paginacion: ListadoModel<any>) => {
         this.listadoData = paginacion;
         console.log(this.listadoData);
         this.Facturas = [...paginacion.data];
@@ -90,22 +86,6 @@ export class ListadoDevolucionIncentivosSupervisorComponent {
       }
     );
     this.NgbModal.dismissAll();
-  }
-
-  openFiltros(content: any, gasto: Talonario = null) {
-    // console.log(gasto);
-    // if (gasto) this.Talonario = gasto;
-    // console.log(this.Gasto);
-
-    this.listadoFilter.link = null;
-
-    this.NgbModal.open(content, {
-      ariaLabelledBy: "modal-basic-title",
-      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
-    }).result.then(
-      (result) => {},
-      (reason) => {}
-    );
   }
 
   BuscarValor() {
@@ -140,161 +120,6 @@ export class ListadoDevolucionIncentivosSupervisorComponent {
       dateFin: this.dateFin,
       allDates: this.allDates,
     };
-  }
-
-  eliminar(dataTalonario: Talonario) {
-    // console.log(data);
-    Swal.mixin({
-      customClass: {
-        container: this.themeSite, // Clase para el modo oscuro
-      },
-    })
-      .fire({
-        title: "¿Estás seguro?",
-        text: "Este talonario se eliminará y no podrás recuperarlo.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#51cbce",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Eliminar",
-        cancelButtonText: "Cancelar",
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
-            title: "Eliminando el talonario",
-            text: "Esto puede demorar un momento.",
-            timerProgressBar: true,
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            allowEnterKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          this._TalonariosService
-            .deleteTalonario(dataTalonario.id)
-            .subscribe((data) => {
-              // this.asignarValores();
-              console.log(this.Facturas);
-              console.log(dataTalonario);
-
-              // this.Facturas = this.Talonarios.filter(
-              //   (talonario) => talonario.id !== dataTalonario.id
-              // );
-              Swal.mixin({
-                customClass: {
-                  container: this.themeSite, // Clase para el modo oscuro
-                },
-              }).fire({
-                text: data.mensaje,
-                icon: "success",
-              });
-            });
-        }
-      });
-  }
-
-  asignarReciboAlta(dataTalonario: Talonario) {
-    // console.log(data);
-    Swal.mixin({
-      customClass: {
-        container: this.themeSite, // Clase para el modo oscuro
-      },
-    })
-      .fire({
-        title:
-          "¿Está seguro de que desea asignar este talonario al usuario indicado? ",
-        text: "Esta acción no puede deshacerse.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#51cbce",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Aceptar",
-        cancelButtonText: "Cancelar",
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
-            title: "Asignando el talonario",
-            text: "Esto puede demorar un momento.",
-            timerProgressBar: true,
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            allowEnterKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          let user = this.userStore.find(
-            (user) => user.id == dataTalonario.user_id
-          );
-          this._ReciboService
-            .updateRecibo(user.recibo.id, {
-              user_id: user.id,
-              recibo_cerrado: 0,
-              max: dataTalonario.max,
-              min: dataTalonario.min,
-              estado: 1,
-              talonario_id: dataTalonario.id,
-              talonario: 1,
-            })
-            .subscribe(
-              (data) => {
-                // this._TalonariosService.deleteTalonario(dataTalonario.id).subscribe((data) => {
-                // this.asignarValores();
-                // console.log(this.Talonarios);
-                console.log(dataTalonario);
-
-                // this.Talonarios = this.Talonarios.filter(
-                //   (talonario) => talonario.id !== dataTalonario.id
-                // );
-                Swal.mixin({
-                  customClass: {
-                    container: this.themeSite, // Clase para el modo oscuro
-                  },
-                }).fire({
-                  text: data.mensaje,
-                  icon: "success",
-                });
-              },
-              (HttpErrorResponse: HttpErrorResponse) => {
-                let error: string = HttpErrorResponse.error[0];
-                console.log(HttpErrorResponse);
-
-                if (Array.isArray(HttpErrorResponse.error)) {
-                  Swal.mixin({
-                    customClass: {
-                      container: this.themeSite, // Clase para el modo oscuro
-                    },
-                  }).fire({
-                    title: "Error",
-                    html: error,
-                    icon: "error",
-                  });
-                } else {
-                  Swal.mixin({
-                    customClass: {
-                      container: this.themeSite, // Clase para el modo oscuro
-                    },
-                  }).fire({
-                    title: "Error",
-                    html: HttpErrorResponse.error.mensaje,
-                    icon: "error",
-                  });
-                }
-              }
-            );
-        }
-      });
   }
 
   limpiarFiltros() {
@@ -422,6 +247,23 @@ export class ListadoDevolucionIncentivosSupervisorComponent {
             });
         }
       });
+  }
+
+  
+  openFiltros(content: any) {
+    // console.log(gasto);
+    // if (gasto) this.Talonario = gasto;
+    // console.log(this.Gasto);
+
+    this.listadoFilter.link = null;
+
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    }).result.then(
+      (result) => {},
+      (reason) => {}
+    );
   }
 
   ngOnDestroy() {

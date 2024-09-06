@@ -29,7 +29,7 @@ export class TalonariosListComponent {
   Id: number;
   dateIni: string;
   dateFin: string;
-  allDates: boolean = false;
+  allDates: boolean = true;
   asignado: number = 2;
   listadoFilter: FiltrosList = {
     link: null,

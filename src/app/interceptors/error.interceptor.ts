@@ -38,8 +38,8 @@ export class ErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    logger.log("request",request);
-    logger.log("next",next);
+    // logger.log("request",request);
+    // logger.log("next",next);
 
     return next.handle(request).pipe(
       catchError<any, any>((error: HttpErrorResponse) => {

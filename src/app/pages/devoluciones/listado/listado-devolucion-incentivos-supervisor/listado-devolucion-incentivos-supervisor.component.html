@@ -35,7 +35,7 @@
     <div class="container-fluid p-5" *ngIf="isLoad">
       <div class="d-flex justify-content-center align-content-center">
         <span>
-          Cargando Talonarios
+          Cargando devoluciones
           <i class="fas fa-circle-notch fa-spin"></i>
         </span>
       </div>
@@ -63,6 +63,7 @@
               <th scope="col">Monto</th>
               <th scope="col">Ver</th>
               <th scope="col">Fecha Creación F.</th>
+              <th scope="col">Fecha Devolución</th>
               <th scope="col">Opciones</th>
             </tr>
           </thead>
@@ -80,6 +81,9 @@
                   <a [routerLink]="['/factura', 'detalle', Factura.factura_id]"
                     >Detalle</a
                   >
+                </td>
+                <td (click)="toggleAccordion(i)">
+                  {{ Factura.devolucion_created_at | date : "dd-MM-yyyy" }}
                 </td>
                 <td (click)="toggleAccordion(i)">
                   {{ Factura.created_at | date : "dd-MM-yyyy" }}
@@ -235,20 +239,6 @@
           />
         </div>
       </div>
-      <!-- <div class="col-md-6">
-        <div class="form-group">
-          <p class="font-weight-bold">Tipo</p>
-          <select class="form-control" name="tipo" [(ngModel)]="tipoGasto">
-            <option
-              *ngFor="let valor of selectValues; let index = index"
-              [ngValue]="index"
-            >
-              {{ valor }}
-            </option>
-            <option [ngValue]="99" selected>General</option>
-          </select>
-        </div>
-      </div> -->
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">
@@ -262,58 +252,6 @@
         <button class="btn btn-primary" (click)="asignarValores()">
           Aplicar <i class="fas fa-search"></i>
         </button>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #contentTalonario let-modal>
-  <div class="modal-header">
-    <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">Agregar talonario</h4>
-    </div>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <app-talonario-form
-          (FormsValues)="FormsValuesTalonario($event)"
-        ></app-talonario-form>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #contentTalonarioLote let-modal>
-  <div class="modal-header">
-    <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">
-        Agregar lote de talonario
-      </h4>
-    </div>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <app-talonario-por-lote
-          (FormsValues)="FormsValuesTalonarioLote($event)"
-        ></app-talonario-por-lote>
       </div>
     </div>
   </div>

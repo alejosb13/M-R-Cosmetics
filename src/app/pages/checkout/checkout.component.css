@@ -151,6 +151,13 @@ a:hover {
   background-position-y: center;
 }
 
+::ng-deep .main-panel[data-color="black"] .summary p,
+::ng-deep .main-panel[data-color="black"] .summary h5,
+::ng-deep .main-panel[data-color="black"] .summary div,
+::ng-deep .main-panel[data-color="black"] .summary span {
+  color: #e0e0e0 !important;
+}
+
 ::ng-deep .summary .dropdown-menu {
   width: 100%;
   z-index: 99999;

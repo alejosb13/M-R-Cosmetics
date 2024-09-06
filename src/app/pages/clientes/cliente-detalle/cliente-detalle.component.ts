@@ -10,6 +10,7 @@ import { TablasService } from "app/shared/services/tablas.service";
 import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
+import { map, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-cliente-detalle",
@@ -27,6 +28,12 @@ export class ClienteDetalleComponent implements OnInit {
   // pageSize = 4;
   pageSize = environment.PageSize;
   collectionSize = 0;
+
+  totalAbonos = { text: "Promedio Mensual: ", value: 0 };
+  totalFacturas = { text: "Total Comprado: ", value: 0 };
+  Abonos = [];
+  Facturas = [];
+  isLoadingTableDynamic: boolean = true;
 
   themeSite: string;
   themeSubscription: Subscription;
@@ -57,11 +64,50 @@ export class ClienteDetalleComponent implements OnInit {
     this.isLoad = true;
     this._LogisticaService
       .getEstadoCuentaCliente({ cliente_id: this.ClienteId })
+      .pipe(
+        tap((data) => {
+          data.estado_cuenta.map((proceso) => {
+            if (proceso.tipo_documento == "Recibo") {
+              this.Abonos = [
+                ...this.Abonos,
+                [proceso.fecha, Number(proceso.abono)],
+              ];
+            } else {
+              this.Facturas = [
+                ...this.Facturas,
+                [proceso.fecha, Number(proceso.credito)],
+              ];
+            }
+          });
+        }),
+        tap(() => {
+          let totalAbonos = this.Abonos.reduce(
+            (acc, abono) => acc + abono[1],
+            0
+          );
+          console.log(this.Abonos.length);
+          
+          let cantidadAbonos = this.Abonos.length;
+
+          // Calcular el promedio
+          this.totalAbonos.value =
+            cantidadAbonos > 0 ? totalAbonos / cantidadAbonos : 0;
+        }),
+        tap(() => {
+          // Calcular el total de facturas y la cantidad
+          this.totalFacturas.value = this.Facturas.reduce(
+            (acc, factura) => acc + factura[1],
+            0
+          );
+        })
+      )
       .subscribe(
         (data) => {
           this.isLoad = false;
 
           this.Data = [...data.estado_cuenta];
+          console.log(this.Data);
+
           this.Cliente = { ...data.cliente };
 
           this._TablasService.datosTablaStorage = [...data.estado_cuenta];
@@ -69,9 +115,12 @@ export class ClienteDetalleComponent implements OnInit {
           this._TablasService.busqueda = "";
           this.refreshCountries();
           // console.log("[getEstadoCuenta]",data);
+
+          this.isLoadingTableDynamic = false;
         },
         (error) => {
           this.isLoad = false;
+          this.isLoadingTableDynamic = false;
         }
       );
   }
@@ -120,22 +169,6 @@ export class ClienteDetalleComponent implements OnInit {
       (this.page - 1) * this.pageSize + this.pageSize
     );
   }
-
-  // BuscarValor(){
-  //   // this._TablasService.buscar(this.Clientes)
-  //   let camposPorFiltrar:any[] = [
-  //     ['nombreCompleto'],
-  //     ['nombreEmpresa'],
-  //     ['dias_cobro'],
-  //     ['direccion_negocio'],
-  //     ['direccion_casa'],
-  //     ['id'],
-  //   ];
-
-  //   this._TablasService.buscarEnCampos(this.Clientes,camposPorFiltrar)
-  //   if(this._TablasService.busqueda ==""){this.refreshCountries()}
-
-  // }
 
   ngOnDestroy() {
     this.themeSubscription.unsubscribe();
