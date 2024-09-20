@@ -1,0 +1,53 @@
+<div [hidden]="loadInfo">
+  <br />
+  <form [formGroup]="FormTalonario" class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          name="nombre"
+          formControlName="nombre"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('nombre').invalid && getControl('nombre').touched,
+            'is-valid': getControl('nombre').valid
+          }"
+          appOnlyAlphanumeric
+        />
+        <div *ngIf="getControlError('nombre') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="ZonaErrorMessages.nombre"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr class="mt-4 mb-4" />
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        [disabled]="!isValidForm"
+        (click)="EnviarFormulario()"
+      >
+        <div *ngIf="Zona">Actualizar</div>
+        <div *ngIf="!Zona">Agregar</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando Talonario
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

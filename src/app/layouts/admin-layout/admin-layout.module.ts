@@ -124,6 +124,9 @@ import { FirstAndLastArrayPipe } from "@app/shared/pipes/first-and-last-array.pi
 import { ListadoDevolucionIncentivosSupervisorComponent } from "@app/pages/devoluciones/listado/listado-devolucion-incentivos-supervisor/listado-devolucion-incentivos-supervisor.component";
 import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from "@app/pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component";
 import { DinamicTableComponent } from "@app/shared/components/dinamic-table/dinamic-table.component";
+import { UbicacionesComponent } from "@app/pages/configuracion/ubicaciones/ubicaciones.component";
+import { ZonaFormComponent } from "@app/shared/components/forms/zona-form/zona-form.component";
+import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas.component";
 
 @NgModule({
   imports: [
@@ -265,7 +268,10 @@ import { DinamicTableComponent } from "@app/shared/components/dinamic-table/dina
 
     ListadoDevolucionIncentivosSupervisorComponent,
     ListadoDevolucionIncentivosSupervisorAplicadosComponent,
-    DinamicTableComponent
+    DinamicTableComponent,
+    UbicacionesComponent,
+    ZonaFormComponent,
+    ZonasComponent
   ],
 })
 export class AdminLayoutModule {}

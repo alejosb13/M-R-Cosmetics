@@ -105,6 +105,11 @@ export class NavbarComponent implements OnInit {
     if (titlee.includes("devolucion/listado/devolucion-incentivos")) return "Devolución incentivos";
     if (titlee.includes("devolucion/listado/deduccion-incentivos")) return "Deducciones aplicadas";
 
+    if (titlee.includes("configuracion/ubicaciones")) return "Ubicaciones";
+    if (titlee.includes("configuracion/zonas")) return "Zonas";
+    if (titlee.includes("configuracion/departamentos")) return "Departamentos";
+    if (titlee.includes("configuracion/municipios")) return "Municipios";
+
     for (var item = 0; item < this.listTitles.length; item++) {
       if (titlee.includes(this.listTitles[item].path))
         return this.listTitles[item].title;
