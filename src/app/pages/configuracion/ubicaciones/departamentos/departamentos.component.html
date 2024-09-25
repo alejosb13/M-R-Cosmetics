@@ -1,0 +1,241 @@
+<div class="bg-white container-fluid">
+  <div class="card-header border-0 pt-4 bg-white">
+    <div class="d-flex">
+      <!-- <div>
+        <button
+          class="btn btn-primary mt-0 mr-2"
+          (click)="openFiltros(contentFiltros)"
+        >
+          Filtros <i class="fas fa-filter"></i>
+        </button>
+      </div> -->
+      <div>
+        <button
+          class="btn btn-primary mt-0 mr-2"
+          (click)="openModalDepartamento(DepartamentoModal)"
+        >
+          <i class="fas fa-plus"></i> Agregar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white">
+    <div class="container-fluid p-5" *ngIf="isLoad">
+      <div class="d-flex justify-content-center align-content-center">
+        <span>
+          Cargando departamentos
+          <i class="fas fa-circle-notch fa-spin"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="card-body py-0 px-0" *ngIf="!isLoad">
+      <!-- <div class="card-header border-0 bg-white">
+        <div
+          class="d-flex card-title align-items-start flex-row flex-wrap justify-content-between w-100"
+        >
+          <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
+            >Total: <b>{{ total | currency : "USD" }}</b></span
+          >
+        </div>
+      </div> -->
+
+      <div
+        class="card-body py-3 px-6 bg-white table-responsive table-full-width"
+      >
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Zona</th>
+              <th scope="col">Fecha Creación</th>
+              <th scope="col">Opciones</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="Departamentos.length > 0">
+            <ng-container *ngFor="let Dep of Departamentos; let i = index">
+              <tr>
+                <th>{{ Dep.id }}</th>
+                <td>{{ Dep.nombre }}</td>
+                <td>{{ Dep.zona.nombre }}</td>
+                <td>{{ Dep.created_at | date : "dd-MM-yyyy" }}</td>
+                <td>
+                  <div class="d-flex align-content-center">
+                    <div class="mr-3" ngbTooltip="Eliminar">
+                      <span
+                        class="text-primary pointer"
+                        role="button"
+                        (click)="openModalDepartamento(DepartamentoModal, Dep)"
+                        ><i class="fas fa-pen"></i
+                      ></span>
+                    </div>
+                    <div class="mr-3" ngbTooltip="Eliminar">
+                      <span
+                        class="text-danger pointer"
+                        role="button"
+                        (click)="eliminar(Dep)"
+                        ><i class="fas fa-trash-alt"></i
+                      ></span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+          <tbody *ngIf="Departamentos.length == 0">
+            <tr>
+              <td colspan="10">
+                <div
+                  class="container d-flex align-items-center justify-content-center"
+                >
+                  <h5>No existen datos</h5>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between p-2">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li
+                class="page-item"
+                *ngFor="let listado of listadoData.links"
+                (click)="newPage(listado)"
+                [ngClass]="{
+                  active: listado.active,
+                  disabled: listado.url == null
+                }"
+              >
+                <span class="page-link pointer">
+                  <span aria-hidden="true" [innerHTML]="listado.label"></span>
+                </span>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #contentFiltros let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
+        </div>
+      </div>
+      <!-- <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Tipo</p>
+          <select class="form-control" name="tipo" [(ngModel)]="tipoGasto">
+            <option
+              *ngFor="let valor of selectValues; let index = index"
+              [ngValue]="index"
+            >
+              {{ valor }}
+            </option>
+            <option [ngValue]="99" selected>General</option>
+          </select>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="asignarValores()">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #DepartamentoModal let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title" *ngIf="Departamento">
+        Editar Departamento
+      </h4>
+      <h4 class="modal-title m-0" id="modal-basic-title" *ngIf="!Departamento">
+        Agregar Departamento
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="Departamento">
+      <app-departamentos-form
+        (FormsValues)="FormValuesForm($event)"
+        [Departamento]="Departamento"
+      ></app-departamentos-form>
+    </ng-container>
+    <ng-container *ngIf="!Departamento">
+      <app-departamentos-form
+        (FormsValues)="FormValuesForm($event)"
+      ></app-departamentos-form>
+    </ng-container>
+  </div>
+</ng-template>

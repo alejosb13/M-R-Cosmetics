@@ -17,6 +17,8 @@ import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ErrorInterceptor } from "./interceptors/error.interceptor";
 import { BasicAuthInterceptor } from "./interceptors/basic-auth.interceptor";
+import { MunicipiosFormComponent } from './shared/components/forms/municipios-form/municipios-form.component';
+
 
 @NgModule({
   declarations: [

@@ -1,0 +1,97 @@
+<div [hidden]="loadInfo">
+  <br />
+  <form [formGroup]="FormTalonario" class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          name="nombre"
+          formControlName="nombre"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              getControl('nombre').invalid && getControl('nombre').touched,
+            'is-valid': getControl('nombre').valid
+          }"
+          appOnlyAlphanumeric
+        />
+        <div *ngIf="getControlError('nombre') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="MunicipioErrorMessages.nombre"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Departamento</label>
+        <select
+          class="form-control"
+          name="departamento"
+          formControlName="departamento"
+          [ngClass]="{
+            'is-invalid':
+              getControl('departamento').invalid && getControl('departamento').touched,
+            'is-valid': getControl('departamento').valid
+          }"
+        >
+          <option hidden selected [ngValue]="0">Seleccione un departamento</option>
+
+          <!-- <ng-container *ngIf="Departamento">
+            <option
+              *ngFor="let valor of Zonas; let index = index"
+              [ngValue]="valor.id"
+            >
+              {{ valor.nombre }}
+            </option>
+          </ng-container> -->
+          <!-- <ng-container > -->
+            <option
+              *ngFor="let valor of Departamentos; let index = index"
+              [ngValue]="valor.id"
+            >
+              {{ valor.nombre }}
+            </option>
+          <!-- </ng-container> -->
+
+          <!-- <option [ngValue]="0">Empresa</option>
+          <option [ngValue]="1">MaRo</option>
+          <option [ngValue]="2">Adicional</option> -->
+        </select>
+        <div *ngIf="getControlError('tipo') as error">
+          <app-valid-error-messages-form
+            [errors]="error"
+            [messages]="MunicipioErrorMessages.nombre"
+          ></app-valid-error-messages-form>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr class="mt-4 mb-4" />
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round"
+        [disabled]="!isValidForm"
+        (click)="EnviarFormulario()"
+      >
+        <div *ngIf="Municipio">Actualizar</div>
+        <div *ngIf="!Municipio">Agregar</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!loadInfo" class="container-fluid p-5">
+  <div class="d-flex justify-content-center align-content-center">
+    <span>
+      Cargando Municipio
+      <i class="fas fa-circle-notch fa-spin"></i>
+    </span>
+  </div>
+</div>

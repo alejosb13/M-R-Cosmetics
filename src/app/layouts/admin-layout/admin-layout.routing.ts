@@ -85,6 +85,8 @@ import { ListadoDevolucionIncentivosSupervisorComponent } from "@app/pages/devol
 import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from '../../pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component';
 import { UbicacionesComponent } from "@app/pages/configuracion/ubicaciones/ubicaciones.component";
 import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas.component";
+import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/departamentos/departamentos.component";
+import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -276,6 +278,8 @@ export const AdminLayoutRoutes: Routes = [
       { path: "cierre", component: CierreConfigComponent },
       { path: "ubicaciones", component: UbicacionesComponent },
       { path: "zonas", component: ZonasComponent },
+      { path: "departamentos", component: DepartamentosComponent },
+      { path: "municipios", component: MunicipiosComponent },
     ],
   },
   {

@@ -127,6 +127,10 @@ import { DinamicTableComponent } from "@app/shared/components/dinamic-table/dina
 import { UbicacionesComponent } from "@app/pages/configuracion/ubicaciones/ubicaciones.component";
 import { ZonaFormComponent } from "@app/shared/components/forms/zona-form/zona-form.component";
 import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas.component";
+import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/departamentos/departamentos.component";
+import { DepartamentosFormComponent } from "@app/shared/components/forms/departamentos-form/departamentos-form.component";
+import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
+import { MunicipiosFormComponent } from "@app/shared/components/forms/municipios-form/municipios-form.component";
 
 @NgModule({
   imports: [
@@ -271,7 +275,11 @@ import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas
     DinamicTableComponent,
     UbicacionesComponent,
     ZonaFormComponent,
-    ZonasComponent
+    ZonasComponent,
+    DepartamentosComponent,
+    DepartamentosFormComponent,
+    MunicipiosComponent,
+    MunicipiosFormComponent,
   ],
 })
 export class AdminLayoutModule {}
