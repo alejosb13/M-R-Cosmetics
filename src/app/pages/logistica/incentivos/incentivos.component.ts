@@ -42,6 +42,7 @@ export class IncentivosComponent implements OnInit {
   porcentaje20 = 0;
   totalContado = 0;
   totalCredito = 0;
+  porcentaje_asignado = 0;
   filtros: any = {};
   dateIni: string;
   dateFin: string;
@@ -139,6 +140,7 @@ export class IncentivosComponent implements OnInit {
         this.totalCredito = data.total_credito;
         this.total = data.total;
         this.porcentaje20 = data.porcentaje20;
+        this.porcentaje_asignado = data.porcentaje_asignado;
 
         this.refreshCountries();
         this.isLoad = false;

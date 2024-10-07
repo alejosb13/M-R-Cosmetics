@@ -53,7 +53,7 @@
               *ngFor="let valor of Departamentos; let index = index"
               [ngValue]="valor.id"
             >
-              {{ valor.nombre }}
+              {{ valor.nombre }} - {{ valor.zona.nombre }} 
             </option>
           <!-- </ng-container> -->
 

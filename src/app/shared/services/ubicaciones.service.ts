@@ -22,12 +22,18 @@ export class UbicacionesService {
   }
 
   zonas(options: any): Observable<any> {
+
+    let URL = `${ConfiguracionURL}/zonas`;
+    if (options.link) {
+      URL = options.link;
+    }
+
     let params = new HttpParams();
     for (const key in options) {
       params = params.append(key, options[key]);
     }
 
-    return this.http.get<any>(`${ConfiguracionURL}/zonas`, {
+    return this.http.get<any>(URL, {
       params,
       headers: this.headerJson_Token(),
       responseType: "json",
@@ -56,12 +62,17 @@ export class UbicacionesService {
   }
 
   departamentos(options: any): Observable<any> {
+    let URL = `${ConfiguracionURL}/departamentos`;
+    if (options.link) {
+      URL = options.link;
+    }
+
     let params = new HttpParams();
     for (const key in options) {
       params = params.append(key, options[key]);
     }
 
-    return this.http.get<any>(`${ConfiguracionURL}/departamentos`, {
+    return this.http.get<any>(URL, {
       params,
       headers: this.headerJson_Token(),
       responseType: "json",
@@ -90,12 +101,17 @@ export class UbicacionesService {
   }
 
   municipios(options: any): Observable<any> {
+    let URL = `${ConfiguracionURL}/municipios`;
+    if (options.link) {
+      URL = options.link;
+    }
+
     let params = new HttpParams();
     for (const key in options) {
       params = params.append(key, options[key]);
     }
 
-    return this.http.get<any>(`${ConfiguracionURL}/municipios`, {
+    return this.http.get<any>(URL, {
       params,
       headers: this.headerJson_Token(),
       responseType: "json",
