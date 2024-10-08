@@ -28,7 +28,7 @@ import { customValidator } from "./utils/validaciones";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Subscription } from "rxjs";
 import { Listado } from "@app/shared/services/listados.service";
-import { OnlyNumberAndPointDirective } from '../../../directives/only-number-and-point.directive';
+import { UbicacionesService } from "@app/shared/services/ubicaciones.service";
 
 @Component({
   selector: "app-cliente-form",
@@ -52,6 +52,12 @@ export class ClienteFormComponent implements OnInit {
   IsVendedor: boolean = false;
   editar: boolean = false;
 
+  Zonas: any[] = [];
+  Departamentos: any[] = [];
+  DepartamentosFiltrados: any[] = [];
+  Municipios: any[] = [];
+  MunicipiosFiltrados: any[] = [];
+
   @ViewChild("diasCobro") diasCobroInput: ElementRef;
   @Input() clienteId?: number;
   @Output() FormsValues = new EventEmitter<Cliente>();
@@ -66,11 +72,16 @@ export class ClienteFormComponent implements OnInit {
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,
     private _AuthService: AuthService,
-    private _Listado: Listado
+    private _Listado: Listado,
+    private _UbicacionesService: UbicacionesService
   ) {}
 
   ngOnInit(): void {
     // console.log(this.Categorias);
+    this.getDepartamentos();
+    this.getZona();
+    this.getMunicipios();
+
     this._Listado
       .CategoriaList({
         estado: 1,
@@ -105,6 +116,8 @@ export class ClienteFormComponent implements OnInit {
       .subscribe((color: string) => {
         this.themeSite = color === "black" ? "dark-mode" : "light-mode";
       });
+
+    this.validarUbicaciones();
   }
 
   isClienteEditando() {
@@ -195,6 +208,30 @@ export class ClienteFormComponent implements OnInit {
         ]),
       ],
       dias_cobro: this.fb.array([], [Validators.required]),
+      zona_id: [
+        0,
+        Validators.compose([
+          Validators.required,
+          this.diferenteDeCero(),
+          Validators.maxLength(180),
+        ]),
+      ],
+      departamento_id: [
+        0,
+        Validators.compose([
+          Validators.required,
+          this.diferenteDeCero(),
+          Validators.maxLength(180),
+        ]),
+      ],
+      municipio_id: [
+        0,
+        Validators.compose([
+          Validators.required,
+          this.diferenteDeCero(),
+          Validators.maxLength(180),
+        ]),
+      ],
     });
   }
 
@@ -310,6 +347,9 @@ export class ClienteFormComponent implements OnInit {
       cliente.user_id = Number(this.formularioControls.user_id.value);
       cliente.categoria_id = Number(this.formularioControls.categoria_id.value);
       cliente.cedula = this.formularioControls.cedula.value;
+      cliente.zona_id = this.formularioControls.zona_id.value;
+      cliente.departamento_id = this.formularioControls.departamento_id.value;
+      cliente.municipio_id = this.formularioControls.municipio_id.value;
       cliente.celular = Number(this.formularioControls.celular.value);
       cliente.dias_cobro = this._HelpersService.daysOfTheWeekToString(
         this.formularioControls.dias_cobro.value
@@ -333,6 +373,67 @@ export class ClienteFormComponent implements OnInit {
         icon: "warning",
       });
     }
+  }
+
+  getDepartamentos() {
+    this._UbicacionesService
+      .departamentos({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Departamentos = data;
+      });
+  }
+
+  getZona() {
+    this._UbicacionesService
+      .zonas({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Zonas = data;
+      });
+  }
+
+  getMunicipios() {
+    this._UbicacionesService
+      .municipios({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Municipios = data;
+      });
+  }
+
+  validarUbicaciones() {
+    this.editarClienteForm
+      .get("zona_id")
+      .valueChanges.subscribe((zona_id: number) => {
+        console.log("zona_id", zona_id);
+        this.DepartamentosFiltrados = this.Departamentos.filter(
+          (dep) => dep.zona.id == zona_id
+        );
+        this.editarClienteForm.patchValue({ departamento_id: 0 });
+      });
+    this.editarClienteForm
+      .get("departamento_id")
+      .valueChanges.subscribe((departamento_id: number) => {
+        console.log("departamento_id", departamento_id);
+        this.MunicipiosFiltrados = this.Municipios.filter(
+          (muni) => muni.departamento.id == departamento_id
+        );
+        this.editarClienteForm.patchValue({ municipio_id: 0 });
+      });
+  }
+
+  diferenteDeCero() {
+    return (control: any) => {
+      const value = control.value;
+      return value !== 0 ? null : { diferenteDeCero: true };
+    };
   }
 
   ngOnDestroy() {

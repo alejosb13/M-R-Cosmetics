@@ -19,6 +19,9 @@ export interface Cliente {
     dias_cobro: string;
     dias_cobro_original?: string[];
     fecha_vencimiento: string;
+    zona_id?: number;
+    departamento_id?: number;
+    municipio_id?: number;
     saldo?: string;
     frecuencia?: Frecuencia;
     categoria?: Categoria;

@@ -261,7 +261,8 @@
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
             validation: 'customError',
-            message: 'Los primeros 13 caracteres deben ser números y el 14º debe ser una letra en mayúscula.',
+            message:
+              'Los primeros 13 caracteres deben ser números y el 14º debe ser una letra en mayúscula.',
             control: editarClienteForm.controls['cedula']
           }"
         ></ng-container>
@@ -490,6 +491,129 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Zona</label>
+        <select
+          class="form-control"
+          name="zona_id"
+          formControlName="zona_id"
+          [ngClass]="{
+            'is-invalid':
+              editarClienteForm.controls['zona_id'].invalid &&
+              editarClienteForm.controls['zona_id'].touched,
+            'is-valid': editarClienteForm.controls['zona_id'].valid
+          }"
+        >
+          <option hidden selected [ngValue]="0">Seleccione una zona</option>
+          <option
+            *ngFor="let valor of Zonas; let index = index"
+            [ngValue]="valor.id"
+          >
+            {{ valor.nombre }}
+          </option>
+        </select>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'diferenteDeCero',
+            message: 'La Zona es requerida',
+            control: editarClienteForm.controls['zona_id']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La dirección del salon debe tener como máximo 180 letras',
+            control: editarClienteForm.controls['zona_id']
+          }"
+        ></ng-container>
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="DepartamentosFiltrados.length > 0">
+      <div class="form-group">
+        <label>Departamento</label>
+        <select
+          class="form-control"
+          name="departamento_id"
+          formControlName="departamento_id"
+          [ngClass]="{
+            'is-invalid':
+              editarClienteForm.controls['departamento_id'].invalid &&
+              editarClienteForm.controls['departamento_id'].touched,
+            'is-valid': editarClienteForm.controls['departamento_id'].valid
+          }"
+        >
+          <option hidden selected [ngValue]="0">
+            Seleccione un departamento
+          </option>
+          <option
+            *ngFor="let valor of DepartamentosFiltrados; let index = index"
+            [ngValue]="valor.id"
+          >
+            {{ valor.nombre }} - {{ valor.zona.nombre }}
+          </option>
+        </select>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'diferenteDeCero',
+            message: 'El departamento es requerido',
+            control: editarClienteForm.controls['departamento_id']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La dirección del salon debe tener como máximo 180 letras',
+            control: editarClienteForm.controls['departamento_id']
+          }"
+        ></ng-container>
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="MunicipiosFiltrados.length > 0">
+      <div class="form-group">
+        <label>Municipio</label>
+        <select
+          class="form-control"
+          name="municipio_id"
+          formControlName="municipio_id"
+          [ngClass]="{
+            'is-invalid':
+              editarClienteForm.controls['municipio_id'].invalid &&
+              editarClienteForm.controls['municipio_id'].touched,
+            'is-valid': editarClienteForm.controls['municipio_id'].valid
+          }"
+        >
+          <option hidden selected [ngValue]="0">Seleccione un municipio</option>
+          <option
+            *ngFor="let valor of MunicipiosFiltrados; let index = index"
+            [ngValue]="valor.id"
+          >
+            {{ valor.nombre }} - {{ valor.departamento.nombre }}
+          </option>
+        </select>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'diferenteDeCero',
+            message: 'El municipio es requerido',
+            control: editarClienteForm.controls['municipio_id']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message: 'La dirección del salon debe tener como máximo 180 letras',
+            control: editarClienteForm.controls['municipio_id']
+          }"
+        ></ng-container>
       </div>
     </div>
 

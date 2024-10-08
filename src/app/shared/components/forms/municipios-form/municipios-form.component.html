@@ -39,27 +39,12 @@
           }"
         >
           <option hidden selected [ngValue]="0">Seleccione un departamento</option>
-
-          <!-- <ng-container *ngIf="Departamento">
-            <option
-              *ngFor="let valor of Zonas; let index = index"
-              [ngValue]="valor.id"
-            >
-              {{ valor.nombre }}
-            </option>
-          </ng-container> -->
-          <!-- <ng-container > -->
             <option
               *ngFor="let valor of Departamentos; let index = index"
               [ngValue]="valor.id"
             >
               {{ valor.nombre }} - {{ valor.zona.nombre }} 
             </option>
-          <!-- </ng-container> -->
-
-          <!-- <option [ngValue]="0">Empresa</option>
-          <option [ngValue]="1">MaRo</option>
-          <option [ngValue]="2">Adicional</option> -->
         </select>
         <div *ngIf="getControlError('tipo') as error">
           <app-valid-error-messages-form
