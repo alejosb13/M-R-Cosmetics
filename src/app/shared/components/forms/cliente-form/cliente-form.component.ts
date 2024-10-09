@@ -53,6 +53,7 @@ export class ClienteFormComponent implements OnInit {
   editar: boolean = false;
 
   Zonas: any[] = [];
+  ZonaFiltrada: number = 0;
   Departamentos: any[] = [];
   DepartamentosFiltrados: any[] = [];
   Municipios: any[] = [];
@@ -209,7 +210,7 @@ export class ClienteFormComponent implements OnInit {
       ],
       dias_cobro: this.fb.array([], [Validators.required]),
       zona_id: [
-        0,
+        { value: 0, disabled: true },
         Validators.compose([
           Validators.required,
           this.diferenteDeCero(),
@@ -255,12 +256,16 @@ export class ClienteFormComponent implements OnInit {
       estado: estado,
     });
   }
+  buscarValorZonaUsuario(usuario: number) {
+    return this.Usuarios.find((user) => user.id == usuario);
+  }
 
   setFormValues() {
     this.loadInfo = true;
     this._ClientesService
       .getClienteById(this.clienteId)
       .subscribe((cliente: Cliente) => {
+        let datausuario = this.buscarValorZonaUsuario(cliente.user_id);
         this.editarClienteForm.patchValue({
           categoria_id: cliente.categoria_id,
           // "frecuencia_id" : cliente.frecuencia_id,
@@ -272,6 +277,11 @@ export class ClienteFormComponent implements OnInit {
           telefono: cliente.telefono,
           direccion_casa: cliente.direccion_casa,
           direccion_negocio: cliente.direccion_negocio,
+          zona_id: datausuario.zona_id,
+          departamento_id: cliente.departamento_id
+            ? cliente.departamento_id
+            : 0,
+          municipio_id: cliente.municipio_id ? cliente.municipio_id : 0,
           // "dias_cobro" : [],
           // "estado" : cliente.estado,
         });

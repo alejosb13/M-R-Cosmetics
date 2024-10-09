@@ -352,6 +352,45 @@
           <option value="1">No eliminados</option>
         </select>
       </div>
+      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+        <p class="font-weight-bold">Zonas</p>
+        <select
+          class="form-control"
+          [(ngModel)]="ZonaSeleccionada"
+          (change)="validarDepartamentos($event.target)"
+        >
+          <option value="0">Todas las zonas</option>
+
+          <option *ngFor="let zona of Zonas" [value]="zona.id">
+            {{ zona.nombre }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+        <p class="font-weight-bold">Departamentos</p>
+        <select
+          class="form-control"
+          [(ngModel)]="DepartamentoSeleccionado"
+          (change)="validarMunicipios($event.target)"
+        >
+          <option value="0">Todos los departamentos</option>
+          <option
+            *ngFor="let departamento of DepartamentosFiltrados"
+            [value]="departamento.id"
+          >
+            {{ departamento.nombre }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+        <p class="font-weight-bold">Municipio</p>
+        <select class="form-control" [(ngModel)]="MunicipiosSeleccionado">
+          <option value="0">Todos los municipios</option>
+          <option *ngFor="let municipio of MunicipiosFiltrados" [value]="municipio.id">
+            {{ municipio.nombre }}
+          </option>
+        </select>
+      </div>
       <div class="col-md-6 mt-3">
         <p class="font-weight-bold">Días de cobro</p>
         <div class="d-flex flex-wrap" id="diasCobrosElement">
@@ -407,19 +446,16 @@
         <label class="d-block"
           >Días de cobro <span class="text-danger">(*)</span></label
         >
-        <div class="list-group list-group-light flex-row flex-wrap" >
+        <div class="list-group list-group-light flex-row flex-wrap">
           <div class="list-group-item border-0">
             <input
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="1"
-
               [id]="'diaCobro1'"
-              (click)="ChangediaCobro(1,$event.target)"
+              (click)="ChangediaCobro(1, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro1'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro1' }}"
               >Lunes</label
             >
           </div>
@@ -428,13 +464,10 @@
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="2"
-
               [id]="'diaCobro2'"
-              (click)="ChangediaCobro(2,$event.target)"
+              (click)="ChangediaCobro(2, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro2'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro2' }}"
               >Martes</label
             >
           </div>
@@ -443,13 +476,10 @@
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="1"
-   
               [id]="'diaCobro3'"
-              (click)="ChangediaCobro(3,$event.target)"
+              (click)="ChangediaCobro(3, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro3'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro3' }}"
               >Miércoles</label
             >
           </div>
@@ -458,13 +488,10 @@
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="1"
-
               [id]="'diaCobro4'"
-              (click)="ChangediaCobro(4,$event.target)"
+              (click)="ChangediaCobro(4, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro4'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro4' }}"
               >Jueves</label
             >
           </div>
@@ -473,13 +500,10 @@
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="1"
-
               [id]="'diaCobro5'"
-              (click)="ChangediaCobro(5,$event.target)"
+              (click)="ChangediaCobro(5, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro5'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro5' }}"
               >Viernes</label
             >
           </div>
@@ -488,13 +512,10 @@
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="6"
-
               [id]="'diaCobro6'"
-              (click)="ChangediaCobro(6,$event.target)"
+              (click)="ChangediaCobro(6, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro6'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro6' }}"
               >Sábado</label
             >
           </div>
@@ -503,17 +524,14 @@
               class="form-check-input me-1 pointer"
               type="checkbox"
               [value]="0"
-
               [id]="'diaCobro0'"
-              (click)="ChangediaCobro(0,$event.target)"
+              (click)="ChangediaCobro(0, $event.target)"
             />
-            <label
-              class="form-check-label pointer"
-              for="{{ 'diaCobro0'  }}"
+            <label class="form-check-label pointer" for="{{ 'diaCobro0' }}"
               >Domingo</label
             >
           </div>
-          
+
           <!-- <ng-container *ngFor="let day of daysOfWeek; let i = index" >
             <div class="list-group-item border-0">
               <input
@@ -539,10 +557,10 @@
     <div class="row w-100">
       <div class="col text-center">
         <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">
-          Cancelar 
+          Cancelar
         </button>
         <button class="btn btn-primary" (click)="modificarDiasdeCobro()">
-          Modificar 
+          Modificar
         </button>
       </div>
     </div>

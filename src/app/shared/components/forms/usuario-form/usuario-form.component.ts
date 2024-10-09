@@ -5,6 +5,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { UbicacionesService } from "@app/shared/services/ubicaciones.service";
 import { Role } from "app/shared/models/Role.model";
 import { Usuario, UsuarioServ } from "app/shared/models/Usuario.model";
 import { HelpersService } from "app/shared/services/helpers.service";
@@ -24,6 +25,7 @@ export class UsuarioFormComponent implements OnInit {
   PasswordGroup: UntypedFormGroup;
   EstadoForm: UntypedFormGroup;
 
+  Zonas: any[] = [];
   Roles: Role[];
   loadInfo: boolean = false;
 
@@ -38,7 +40,8 @@ export class UsuarioFormComponent implements OnInit {
     private _RolesService: RolesService,
     public _UsuariosService: UsuariosService,
     public _HelpersService: HelpersService,
-    private _CommunicationService: CommunicationService
+    private _CommunicationService: CommunicationService,
+    private _UbicacionesService: UbicacionesService
   ) {
     this._RolesService
       .getRole()
@@ -48,8 +51,8 @@ export class UsuarioFormComponent implements OnInit {
   ngOnInit(): void {
     this.definirValidaciones();
     this.definirValidacionesEstado();
-
     if (this.Id) this.setFormValues();
+    this.getZona();
 
     this.themeSubscription = this._CommunicationService
       .getTheme()
@@ -112,6 +115,10 @@ export class UsuarioFormComponent implements OnInit {
             Validators.maxLength(20),
           ]),
         ],
+        zona_id: [
+          0,
+          Validators.compose([Validators.required, this.diferenteDeCero()]),
+        ],
         domicilio: [
           "",
           Validators.compose([Validators.required, Validators.maxLength(180)]),
@@ -165,6 +172,7 @@ export class UsuarioFormComponent implements OnInit {
           cedula: usuario.cedula,
           celular: usuario.celular,
           domicilio: usuario.domicilio,
+          zona_id: usuario.zona_id ? usuario.zona_id : 0,
           // "estado" : usuario.estado,
         });
 
@@ -216,6 +224,17 @@ export class UsuarioFormComponent implements OnInit {
     return this.PasswordGroup.controls;
   }
 
+  getZona() {
+    this._UbicacionesService
+      .zonas({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Zonas = data;
+      });
+  }
+
   EnviarFormulario() {
     // console.log(this.PasswordGroup.getRawValue());
 
@@ -241,6 +260,9 @@ export class UsuarioFormComponent implements OnInit {
 
       usuarioService.role = Number(this.formularioControls.role.value);
       usuarioService.estado = Number(this.formularioStadoControls.estado.value);
+      usuarioService.zona_id = Number(
+        this.formularioControls.zona_id.value
+      );
 
       this.FormsValues.emit(usuarioService);
     } else {
@@ -253,5 +275,11 @@ export class UsuarioFormComponent implements OnInit {
         icon: "warning",
       });
     }
+  }
+  diferenteDeCero() {
+    return (control: any) => {
+      const value = control.value;
+      return value !== 0 ? null : { diferenteDeCero: true };
+    };
   }
 }

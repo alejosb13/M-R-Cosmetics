@@ -19,6 +19,7 @@ import { Cliente } from "app/shared/models/Cliente.model";
 import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { UbicacionesService } from "@app/shared/services/ubicaciones.service";
 
 @Component({
   selector: "app-clientes",
@@ -64,16 +65,25 @@ export class ClientesComponent implements OnInit {
   themeSite: string;
   themeSubscription: Subscription;
 
+  Zonas: any[] = [];
+  ZonaSeleccionada: number = 0;
+  Departamentos: any[] = [];
+  DepartamentoSeleccionado: number = 0;
+  DepartamentosFiltrados: any[] = [];
+  Municipios: any[] = [];
+  MunicipiosSeleccionado: number = 0;
+  MunicipiosFiltrados: any[] = [];
+
+
   constructor(
     private _CommunicationService: CommunicationService,
     private _Listado: Listado,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
-    private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
     private _ClientesService: ClientesService,
-    private _CategoriaService: CategoriaService
+    private _UbicacionesService: UbicacionesService
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +93,9 @@ export class ClientesComponent implements OnInit {
 
     this.daysOfWeek = this._HelpersService.DaysOfTheWeek;
 
+    this.getZona();
+    this.getDepartamentos();
+    this.getMunicipios();
     this.setCurrentDate();
     this.getUsers();
     this.getCategoria();
@@ -236,6 +249,9 @@ export class ClientesComponent implements OnInit {
       ...this.listadoFilter,
       roleName: this.roleName,
       estado: this.estado,
+      zona_id:this.ZonaSeleccionada,
+      departamento_id:this.DepartamentoSeleccionado,
+      municipio_id:this.MunicipiosSeleccionado,
       diasCobros: this.diasCobros,
     };
 
@@ -329,6 +345,9 @@ export class ClientesComponent implements OnInit {
   limpiarFiltros() {
     this.setCurrentDate();
     this.clearDiasCobros();
+    this.ZonaSeleccionada = 0,
+    this.DepartamentoSeleccionado = 0,
+    this.MunicipiosSeleccionado = 0,
     // this.allDates = false;
     this.diasCobros = [];
     (this.estado = 1),
@@ -547,6 +566,51 @@ export class ClientesComponent implements OnInit {
             // if (result.isConfirmed) window.location.reload();
           });
       });
+  }
+
+  getDepartamentos() {
+    this._UbicacionesService
+      .departamentos({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Departamentos = data;
+      });
+  }
+
+  getZona() {
+    this._UbicacionesService
+      .zonas({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Zonas = data;
+      });
+  }
+
+  getMunicipios() {
+    this._UbicacionesService
+      .municipios({
+        estado: 1,
+        disablePaginate: 1,
+      })
+      .subscribe((data: any) => {
+        this.Municipios = data;
+      });
+  }
+
+  validarDepartamentos(element:HTMLInputElement) {
+    this.DepartamentosFiltrados = this.Departamentos.filter(
+      (dep) => dep.zona.id == element.value
+    );
+  }
+
+  validarMunicipios(element:HTMLInputElement) {
+    this.MunicipiosFiltrados = this.Municipios.filter(
+      (muni) => muni.departamento.id == element.value
+    );
   }
 
   ngOnDestroy() {

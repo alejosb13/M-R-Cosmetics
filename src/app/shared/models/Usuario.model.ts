@@ -12,6 +12,7 @@ export interface Usuario {
   email: string;
   email_verified_at?: Date;
   estado: number;
+  zona_id: number;
   cedula:string
   celular:string
   domicilio:string
@@ -40,6 +41,7 @@ export interface UsuarioServ { // se usa para insertar o modificar
   cedula:string
   celular:string
   domicilio:string
+  zona_id: number;
   fecha_nacimiento:string
   fecha_ingreso:string
 }

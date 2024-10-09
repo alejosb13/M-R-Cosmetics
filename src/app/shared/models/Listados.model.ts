@@ -39,6 +39,9 @@ export interface FiltrosList {
   disablePaginate?: number|string;
   diasCobros?: any;
   despachado?: number;
+  zona_id?: number;
+  departamento_id?: number;
+  municipio_id?: number;
   status_entrega?: number;
   created_at?: string;
   clienteId?:string | number
