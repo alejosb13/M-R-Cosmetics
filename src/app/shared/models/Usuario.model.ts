@@ -21,6 +21,7 @@ export interface Usuario {
   factura: Factura[];
   recibo?: Recibo;
   meta?: Meta;
+  zonas?: any;
   ultimo_recibo?: ReciboHistorial;
   clientes?: Cliente[];
   role_id?: number;
@@ -41,7 +42,7 @@ export interface UsuarioServ { // se usa para insertar o modificar
   cedula:string
   celular:string
   domicilio:string
-  zona_id: number;
+  zona_id: any;
   fecha_nacimiento:string
   fecha_ingreso:string
 }

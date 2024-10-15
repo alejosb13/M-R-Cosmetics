@@ -131,6 +131,7 @@ import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/dep
 import { DepartamentosFormComponent } from "@app/shared/components/forms/departamentos-form/departamentos-form.component";
 import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
 import { MunicipiosFormComponent } from "@app/shared/components/forms/municipios-form/municipios-form.component";
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   imports: [
@@ -140,6 +141,7 @@ import { MunicipiosFormComponent } from "@app/shared/components/forms/municipios
     NgbModule,
     ReactiveFormsModule,
     DirectivesModule,
+    NgMultiSelectDropDownModule
   ],
   declarations: [
     DashboardComponent,

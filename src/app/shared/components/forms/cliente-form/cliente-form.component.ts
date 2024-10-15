@@ -210,7 +210,8 @@ export class ClienteFormComponent implements OnInit {
       ],
       dias_cobro: this.fb.array([], [Validators.required]),
       zona_id: [
-        { value: 0, disabled: true },
+        // { value: 0, disabled: true },
+        0,
         Validators.compose([
           Validators.required,
           this.diferenteDeCero(),
@@ -256,6 +257,7 @@ export class ClienteFormComponent implements OnInit {
       estado: estado,
     });
   }
+
   buscarValorZonaUsuario(usuario: number) {
     return this.Usuarios.find((user) => user.id == usuario);
   }
@@ -265,7 +267,7 @@ export class ClienteFormComponent implements OnInit {
     this._ClientesService
       .getClienteById(this.clienteId)
       .subscribe((cliente: Cliente) => {
-        let datausuario = this.buscarValorZonaUsuario(cliente.user_id);
+        // let datausuario = this.buscarValorZonaUsuario(cliente.user_id);
         this.editarClienteForm.patchValue({
           categoria_id: cliente.categoria_id,
           // "frecuencia_id" : cliente.frecuencia_id,
@@ -277,7 +279,8 @@ export class ClienteFormComponent implements OnInit {
           telefono: cliente.telefono,
           direccion_casa: cliente.direccion_casa,
           direccion_negocio: cliente.direccion_negocio,
-          zona_id: datausuario.zona_id,
+          // zona_id: datausuario.zona_id ? datausuario.zona_id : 0,
+          zona_id:0,
           departamento_id: cliente.departamento_id
             ? cliente.departamento_id
             : 0,

@@ -5,3 +5,7 @@ select{
 option{
     text-transform: capitalize;
 }
+
+::ng-deep .multiselect-dropdown .dropdown-btn{
+    min-height: 38px;
+}

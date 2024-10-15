@@ -14,6 +14,7 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
+import { IDropdownSettings } from "ng-multiselect-dropdown";
 
 @Component({
   selector: "app-usuario-form",
@@ -34,6 +35,7 @@ export class UsuarioFormComponent implements OnInit {
 
   themeSite: string;
   themeSubscription: Subscription;
+  dropdownSettings: IDropdownSettings = {};
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -49,6 +51,16 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: "id",
+      textField: "nombre",
+      selectAllText: "Seleccionar todo",
+      unSelectAllText: "Quitar todo",
+      itemsShowLimit: 3,
+      allowSearchFilter: false,
+    };
+
     this.definirValidaciones();
     this.definirValidacionesEstado();
     if (this.Id) this.setFormValues();
@@ -116,7 +128,7 @@ export class UsuarioFormComponent implements OnInit {
           ]),
         ],
         zona_id: [
-          0,
+          null,
           Validators.compose([Validators.required, this.diferenteDeCero()]),
         ],
         domicilio: [
@@ -172,7 +184,13 @@ export class UsuarioFormComponent implements OnInit {
           cedula: usuario.cedula,
           celular: usuario.celular,
           domicilio: usuario.domicilio,
-          zona_id: usuario.zona_id ? usuario.zona_id : 0,
+          zona_id:
+            usuario.zonas && usuario.zonas.length > 0
+              ? usuario.zonas.map((usuario) => ({
+                  id: usuario.id,
+                  nombre: usuario.nombre,
+                }))
+              : [],
           // "estado" : usuario.estado,
         });
 
@@ -260,9 +278,12 @@ export class UsuarioFormComponent implements OnInit {
 
       usuarioService.role = Number(this.formularioControls.role.value);
       usuarioService.estado = Number(this.formularioStadoControls.estado.value);
-      usuarioService.zona_id = Number(
-        this.formularioControls.zona_id.value
-      );
+      (usuarioService.zona_id =
+        this.formularioControls.zona_id.value &&
+        this.formularioControls.zona_id.value.length > 0
+          ? this.formularioControls.zona_id.value.map((usuario) => usuario.id)
+          : []),
+        this.formularioControls.zona_id.value;
 
       this.FormsValues.emit(usuarioService);
     } else {
@@ -276,6 +297,15 @@ export class UsuarioFormComponent implements OnInit {
       });
     }
   }
+
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+
+  onSelectAll(items: any) {
+    console.log(items);
+  }
+
   diferenteDeCero() {
     return (control: any) => {
       const value = control.value;

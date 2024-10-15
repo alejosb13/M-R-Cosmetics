@@ -449,46 +449,7 @@
         ></ng-container>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="form-group">
-        <label>Zona</label>
-        <select
-          class="form-control"
-          name="zona_id"
-          formControlName="zona_id"
-          [ngClass]="{
-            'is-invalid':
-            editarUsuarioForm.controls['zona_id'].invalid &&
-            editarUsuarioForm.controls['zona_id'].touched,
-            'is-valid': editarUsuarioForm.controls['zona_id'].valid
-          }"
-        >
-          <option hidden selected [ngValue]="0">Seleccione una zona</option>
-          <option
-            *ngFor="let valor of Zonas; let index = index"
-            [ngValue]="valor.id"
-          >
-            {{ valor.nombre }}
-          </option>
-        </select>
-        <ng-container
-          [ngTemplateOutlet]="formError"
-          [ngTemplateOutletContext]="{
-            validation: 'diferenteDeCero',
-            message: 'La Zona es requerida',
-            control: editarUsuarioForm.controls['zona_id']
-          }"
-        ></ng-container>
-        <ng-container
-          [ngTemplateOutlet]="formError"
-          [ngTemplateOutletContext]="{
-            validation: 'maxlength',
-            message: 'La dirección del salon debe tener como máximo 180 letras',
-            control: editarUsuarioForm.controls['zona_id']
-          }"
-        ></ng-container>
-      </div>
-    </div>
+
     <div class="col-md-4">
       <div class="form-group">
         <label>Cargo<span class="text-danger">(*)</span></label>
@@ -529,6 +490,21 @@
             control: editarUsuarioForm.controls['cargo']
           }"
         ></ng-container>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Zona</label>
+        <ng-multiselect-dropdown
+          [placeholder]="'Seleccione una zona'"
+          [settings]="dropdownSettings"
+          [data]="Zonas"
+          (onSelect)="onItemSelect($event)"
+          (onSelectAll)="onSelectAll($event)"
+          name="zona_id"
+          formControlName="zona_id"
+        >
+        </ng-multiselect-dropdown>
       </div>
     </div>
     <div class="col-md-4" [formGroup]="EstadoForm" *ngIf="Id">
