@@ -510,7 +510,7 @@
         >
           <option hidden selected [ngValue]="0">Seleccione una zona</option>
           <option
-            *ngFor="let valor of Zonas; let index = index"
+            *ngFor="let valor of ZonasFiltradas; let index = index"
             [ngValue]="valor.id"
           >
             {{ valor.nombre }}

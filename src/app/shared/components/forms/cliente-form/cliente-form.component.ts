@@ -53,6 +53,7 @@ export class ClienteFormComponent implements OnInit {
   editar: boolean = false;
 
   Zonas: any[] = [];
+  ZonasFiltradas: any[] = [];
   ZonaFiltrada: number = 0;
   Departamentos: any[] = [];
   DepartamentosFiltrados: any[] = [];
@@ -267,7 +268,15 @@ export class ClienteFormComponent implements OnInit {
     this._ClientesService
       .getClienteById(this.clienteId)
       .subscribe((cliente: Cliente) => {
-        // let datausuario = this.buscarValorZonaUsuario(cliente.user_id);
+        let dataUsuario = this.buscarValorZonaUsuario(cliente.user_id);
+        // let user =  datausuario ? datausuario : null
+        if (dataUsuario) {
+          let zonasId = dataUsuario.zonas.map((zona) => zona.id);
+          this.ZonasFiltradas = this.Zonas.filter((zona) =>
+            zonasId.includes(zona.id)
+          );
+        }
+
         this.editarClienteForm.patchValue({
           categoria_id: cliente.categoria_id,
           // "frecuencia_id" : cliente.frecuencia_id,
@@ -280,7 +289,7 @@ export class ClienteFormComponent implements OnInit {
           direccion_casa: cliente.direccion_casa,
           direccion_negocio: cliente.direccion_negocio,
           // zona_id: datausuario.zona_id ? datausuario.zona_id : 0,
-          zona_id:0,
+          // zona_id:0,
           departamento_id: cliente.departamento_id
             ? cliente.departamento_id
             : 0,
