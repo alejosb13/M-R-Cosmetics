@@ -38,6 +38,7 @@ export interface FiltrosList {
   asignado?: number;
   disablePaginate?: number|string;
   diasCobros?: any;
+  autorizacion?: any;
   despachado?: number;
   zona_id?: number;
   departamento_id?: number;

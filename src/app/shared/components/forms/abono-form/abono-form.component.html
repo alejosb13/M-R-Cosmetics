@@ -57,7 +57,6 @@
             formControlName="cliente_id"
             type="text"
             class="form-control mr-3 mb-0"
-
             [ngbTypeahead]="search2"
             [placement]="['top-left']"
             (focus)="focus$.next($any($event).target.value)"
@@ -188,7 +187,64 @@
           [ngTemplateOutletContext]="{
             validation: 'maxlength',
             message: 'El detalle de pago tiene un limite de 120 caracteres.',
-            control: AbonoForm.controls['detalle_pago']
+            control: AbonoForm.controls['autorizacion']
+          }"
+        ></ng-container>
+      </div>
+    </div>
+    <div
+      class="col-md-6"
+      *ngIf="
+        AbonoForm.controls['metodo_pago'].value == 2 ||
+        AbonoForm.controls['metodo_pago'].value == 3
+      "
+    >
+      <div class="form-group">
+        <label>Autorización</label>
+        <input
+          type="text"
+          class="form-control"
+          name="autorizacion"
+          formControlName="autorizacion"
+          autocomplete="off"
+          appOnlyAlphanumeric
+          [ngClass]="{
+            'is-invalid':
+              AbonoForm.controls['autorizacion'].invalid &&
+              AbonoForm.controls['autorizacion'].touched,
+            'is-valid': AbonoForm.controls['autorizacion'].valid
+          }"
+        />
+
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'maxlength',
+            message:
+              AbonoForm.controls['metodo_pago'].value == 2
+                ? 'La autorización de transferencias debe tener máximo 20 letras'
+                : 'La autorización de tarjetas debe tener máximo 20 letras',
+            control: AbonoForm.controls['autorizacion']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'required',
+            message: 'El campo es requerido para transferencias y tarjetas',
+            control: AbonoForm.controls['autorizacion']
+          }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+            validation: 'minlength',
+            message:
+              AbonoForm.controls['metodo_pago'].value == 2
+                ? 'La autorización de transferencias debe tener mínimo 9 letras'
+                : 'La autorización de tarjetas debe tener mínimo 7 letras',
+
+            control: AbonoForm.controls['autorizacion']
           }"
         ></ng-container>
       </div>

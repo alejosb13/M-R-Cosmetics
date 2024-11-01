@@ -26,9 +26,10 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import { AuthService } from "../../../../auth/login/service/auth.service";
 import { customValidator } from "./utils/validaciones";
 import { CommunicationService } from "@app/shared/services/communication.service";
-import { Subscription } from "rxjs";
+import { iif, of, Subscription } from "rxjs";
 import { Listado } from "@app/shared/services/listados.service";
 import { UbicacionesService } from "@app/shared/services/ubicaciones.service";
+import { concatMap } from "rxjs/operators";
 
 @Component({
   selector: "app-cliente-form",
@@ -96,9 +97,6 @@ export class ClienteFormComponent implements OnInit {
         this.setearData();
       });
     // this._FrecuenciaService.getFrecuencia().subscribe((data:Frecuencia[]) => this.Frecuencias = [...data]);
-    this._UsuariosService
-      .getUsuario()
-      .subscribe((usaurios: Usuario[]) => (this.Usuarios = [...usaurios]));
 
     this.daysOfWeek = this._HelpersService.DaysOfTheWeek;
 
@@ -109,7 +107,7 @@ export class ClienteFormComponent implements OnInit {
     this.definirValidaciones();
     this.definirValidacionesEstado();
 
-    if (this.clienteId) this.setFormValues();
+    this.setFormValues();
 
     this.isClienteEditando();
 
@@ -260,21 +258,41 @@ export class ClienteFormComponent implements OnInit {
   }
 
   buscarValorZonaUsuario(usuario: number) {
+    console.log(usuario);
+
     return this.Usuarios.find((user) => user.id == usuario);
   }
 
   setFormValues() {
     this.loadInfo = true;
-    this._ClientesService
-      .getClienteById(this.clienteId)
-      .subscribe((cliente: Cliente) => {
-        let dataUsuario = this.buscarValorZonaUsuario(cliente.user_id);
-        // let user =  datausuario ? datausuario : null
+
+    this._UsuariosService
+      .getUsuario()
+      .pipe(
+        concatMap((usaurios: Usuario[]) => {
+          this.Usuarios = [...usaurios];
+          return iif(
+            () => !!this.clienteId, // Condición: si `clienteId` es true
+            this._ClientesService.getClienteById(this.clienteId), // Observable a ejecutar si es true
+            of(null) // Observable vacío si es false
+          );
+        })
+      )
+      .subscribe((cliente: Cliente | null) => {
+        // Verificamos si `cliente` es null para no continuar con la lógica
+
+        let userId = !cliente ? this.userId : cliente.user_id; // cuando cliente es false quiere decir que esta agregando cliente
+        let dataUsuario = this.buscarValorZonaUsuario(userId);
         if (dataUsuario) {
           let zonasId = dataUsuario.zonas.map((zona) => zona.id);
           this.ZonasFiltradas = this.Zonas.filter((zona) =>
             zonasId.includes(zona.id)
           );
+        }
+
+        if (!cliente) {
+          this.loadInfo = false;
+          return;
         }
 
         this.editarClienteForm.patchValue({
@@ -290,13 +308,21 @@ export class ClienteFormComponent implements OnInit {
           direccion_negocio: cliente.direccion_negocio,
           // zona_id: datausuario.zona_id ? datausuario.zona_id : 0,
           // zona_id:0,
-          departamento_id: cliente.departamento_id
-            ? cliente.departamento_id
-            : 0,
-          municipio_id: cliente.municipio_id ? cliente.municipio_id : 0,
+          // departamento_id: cliente.departamento_id
+          //   ? cliente.departamento_id
+          //   : 0,
+          // municipio_id: cliente.municipio_id ? cliente.municipio_id : 0,
           // "dias_cobro" : [],
           // "estado" : cliente.estado,
         });
+
+        if (cliente.zona_id && cliente.zona_id != 0) {
+          this.editarClienteForm.patchValue({
+            zona_id: cliente.zona_id,
+            departamento_id: cliente.departamento_id,
+            municipio_id: cliente.municipio_id,
+          });
+        }
 
         this.setEstadoValues(cliente.estado);
 

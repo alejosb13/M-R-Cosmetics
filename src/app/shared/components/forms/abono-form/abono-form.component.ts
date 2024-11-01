@@ -126,6 +126,8 @@ export class AbonoFormComponent implements OnInit {
       .subscribe((color: string) => {
         this.themeSite = color === "black" ? "dark-mode" : "light-mode";
       });
+
+    this.changeMetodoPago();
   }
 
   ValidacionBotonAgregar() {
@@ -158,6 +160,7 @@ export class AbonoFormComponent implements OnInit {
       ],
       metodo_pago: ["", Validators.compose([Validators.required])],
       detalle_pago: ["", Validators.compose([Validators.maxLength(120)])],
+      autorizacion: ["", Validators.compose([Validators.required])],
       recibo: [
         { value: "", disabled: true },
         Validators.compose([Validators.required]),
@@ -347,11 +350,12 @@ export class AbonoFormComponent implements OnInit {
           abono.rango = `${this.recibo.min}-${this.recibo.max}`;
           abono.metodo_pago = Number(this.formularioControls.metodo_pago.value);
           abono.detalle_pago = this.formularioControls.detalle_pago.value;
+          abono.autorizacion = this.formularioControls.autorizacion.value;
 
           // console.log(abono);
 
-          this.FormsValues.emit(abono);
-          this._CommunicationService.BottonAgregarAbonoActive.emit(true);
+            this.FormsValues.emit(abono);
+            this._CommunicationService.BottonAgregarAbonoActive.emit(true);
         }
       } else {
         // console.log("[form]",this.AbonoForm);
@@ -486,6 +490,35 @@ export class AbonoFormComponent implements OnInit {
   eventInputTypeHead(event: { item: string }) {
     // console.log("test ~ event:", event)
     this.showDelete = true;
+  }
+
+  changeMetodoPago() {
+    this.AbonoForm.get("metodo_pago").valueChanges.subscribe((value) => {
+      console.log(value);
+      let campo = this.AbonoForm.get("autorizacion");
+      campo.patchValue("")
+
+      if (value == 2) {
+        campo.setValidators([
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.minLength(9),
+        ]);
+      }
+
+      if (value == 3) {
+        campo.setValidators([
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.minLength(7),
+        ]);
+      }
+
+      if (value != 3 && value != 2) {
+        campo.setValidators([]);
+      }
+      campo.updateValueAndValidity();
+    });
   }
 
   eliminarCliente() {

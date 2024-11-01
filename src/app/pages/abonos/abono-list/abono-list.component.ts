@@ -10,7 +10,6 @@ import {
   Link,
   ListadoModel,
 } from "app/shared/models/Listados.model";
-import { ReciboHistorial } from "app/shared/models/ReciboHistorial.model";
 import { Usuario } from "app/shared/models/Usuario.model";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
 import { UsuariosService } from "app/shared/services/usuarios.service";
@@ -35,6 +34,10 @@ export class AbonoListComponent implements OnInit {
 
   metodoPagoEditar: number;
   detallePagoEditar: string = "";
+
+  autorizacion: string = "";
+  maxLength: number = 10; // Valor inicial por defecto
+
   editarAbonoId: number;
 
   isLoad: boolean;
@@ -115,6 +118,7 @@ export class AbonoListComponent implements OnInit {
     this.listadoFilter = {
       ...this.listadoFilter,
       roleName: this.roleName,
+      disablePaginate:0
     };
 
     let Subscription = this._Listado.abonoList(this.listadoFilter).subscribe(
@@ -190,6 +194,7 @@ export class AbonoListComponent implements OnInit {
 
     this.allDates = false;
     this.numeroRecibo = "";
+    this.listadoFilter.autorizacion = "";
 
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
@@ -286,6 +291,7 @@ export class AbonoListComponent implements OnInit {
     this.metodoPagoEditar = abono.metodo_pago.tipo;
     this.detallePagoEditar = abono.metodo_pago.detalle;
     this.editarAbonoId = abono.id;
+    this.autorizacion = abono.metodo_pago.autorizacion;
 
     logger.log(abono);
 
@@ -298,15 +304,44 @@ export class AbonoListComponent implements OnInit {
   }
 
   editarAbonoEnviar() {
+    this.autorizacion = this.autorizacion?this.autorizacion:"";
+    
     logger.log({
       metodoPagoEditar: this.metodoPagoEditar,
       detallePagoEditar: this.detallePagoEditar,
+      autorizacion: this.autorizacion
     });
+    
     if (this.metodoPagoEditar && this.detallePagoEditar) {
+      if (this.metodoPagoEditar == 2 && (this.autorizacion.length <= 8 || this.autorizacion.length >= 21 )) {
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
+          text: "La autorización de transferencia debe llevar mínimo 9 valores y máximo 20",
+          icon: "warning",
+        });
+        return false;
+      }
+
+      if (this.metodoPagoEditar == 3 &&(this.autorizacion.length <= 6 || this.autorizacion.length >= 21 )) {
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        }).fire({
+          text: "La autorización de transferencia debe llevar mínimo 7 valores y máximo 20",
+          icon: "warning",
+        });
+        return false;
+      }
+
       this._AbonoService
         .updateAbono(this.editarAbonoId, {
           metodoPagoEditar: this.metodoPagoEditar,
           detallePagoEditar: this.detallePagoEditar,
+          autorizacion: this.autorizacion,
         })
         .subscribe(
           (data) => {
@@ -392,6 +427,22 @@ export class AbonoListComponent implements OnInit {
             });
         }
       });
+  }
+
+  descargarAbonosExcell() {
+    this._AbonoService.AbonosExcell({
+      ...this.listadoFilter,
+      disablePaginate: 1,
+    });
+  }
+
+  updateMaxLengthAutorizacion(element: any) {
+    if (element.value == "2") {
+      this.maxLength = 9;
+    }
+    if (element.value == "3") {
+      this.maxLength = 7;
+    }
   }
 
   ngOnDestroy() {

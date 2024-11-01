@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { Abono } from '../models/Abono.model';
 
@@ -70,5 +70,24 @@ export class AbonoService {
     return this.http.delete(
       URL, {headers: this.headerJson_Token()}
     );
+  }
+
+
+  AbonosExcell(options: any) {
+    let URL = `${environment.urlAPI}xlsx/abonos`;
+  
+    // Construye los parámetros utilizando HttpParams
+    let params = new HttpParams();
+    for (const key in options) {
+      if (options.hasOwnProperty(key)) {
+        params = params.append(key, options[key]);
+      }
+    }
+  
+    // Convierte los parámetros en una cadena de consulta
+    const queryString = params.toString();
+  
+    // Abre la nueva ventana con la URL completa
+    window.open(`${URL}?${queryString}`, "_blank");
   }
 }
