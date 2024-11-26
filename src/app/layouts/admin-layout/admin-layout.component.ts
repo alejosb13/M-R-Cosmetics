@@ -3,8 +3,7 @@ import { CommunicationService } from "@app/shared/services/communication.service
 import { AuthService } from "app/auth/login/service/auth.service";
 import { CronService } from "app/shared/services/cron.service";
 import logger from "app/shared/utils/logger";
-import { environment } from "environments/environment";
-import { interval, Observable, Subject, Subscription } from "rxjs";
+import { interval, Subject, Subscription } from "rxjs";
 import { catchError, exhaustMap, takeUntil } from "rxjs/operators";
 
 @Component({

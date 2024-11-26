@@ -78,7 +78,7 @@ export class FacturaDetalleComponent implements OnInit {
       .getTheme()
       .subscribe((color: string) => {
         console.log(color);
-        
+
         this.themeSite = color === "black" ? "dark-mode" : "light-mode";
       });
   }
@@ -158,8 +158,31 @@ export class FacturaDetalleComponent implements OnInit {
     //   abonado:this.Pagado,
     //   diferencia:this.Diferencia
     // }
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
+      title: "Descargando archivo.",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this._FacturasService.FacturaPDF(this.FacturaId).subscribe((data) => {
       console.log(data);
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
+        text: "Archivo descargado con éxito.",
+        icon: "success",
+      });
       this._HelpersService.downloadFile(
         data,
         `Detalle_Factura_${this.FacturaId}`

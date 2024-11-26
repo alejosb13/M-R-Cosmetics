@@ -68,8 +68,9 @@
             <th scope="col">Vendedor</th>
             <th scope="col">Saldo</th>
             <th scope="col">Método de pago</th>
+            <th scope="col">Autorización</th>
             <th scope="col">Monto</th>
-            <th scope="col">Monto  C$</th>
+            <th scope="col">Monto C$</th>
             <th scope="col">Fecha</th>
           </tr>
         </thead>
@@ -108,6 +109,16 @@
               </div>
             </td>
             <td>
+              <div *ngIf="Recibo.factura_historial_id">
+                {{
+                  Recibo.factura_historial.metodo_pago &&
+                  Recibo.factura_historial.metodo_pago.autorizacion
+                    ? Recibo.factura_historial.metodo_pago.autorizacion
+                    : "--"
+                }}
+              </div>
+            </td>
+            <td>
               <!-- {{ Recibo.factura_historial_id? Recibo.factura_historial.precio: Recibo.factura.monto }} -->
               <span *ngIf="Recibo.factura_historial_id">
                 {{ Recibo.factura_historial.precio | currency : "USD" }}</span
@@ -118,7 +129,9 @@
             </td>
             <td>
               <span *ngIf="Recibo.factura_historial_id">
-                {{ Recibo.factura_historial.precio_cambio | currency : "C$" }}</span
+                {{
+                  Recibo.factura_historial.precio_cambio | currency : "C$"
+                }}</span
               >
             </td>
             <td>{{ Recibo.created_at | date : "dd-MM-yyyy" }}</td>

@@ -67,6 +67,7 @@
             <th scope="col">Cedula</th>
             <th scope="col">Días cobro</th>
             <th scope="col">Observación</th>
+            <th scope="col">Ubicaciones</th>
             <th scope="col">Dirección de casa</th>
             <th scope="col">Dirección de negocio</th>
             <th scope="col">Facturas</th>
@@ -147,6 +148,10 @@
                   </option>
                 </select>
               </div>
+            </td>
+            <td>
+              {{ Cliente.nombre_departamento | capitalize }} -
+              {{ Cliente.nombre_municipio | capitalize }}
             </td>
             <td>
               {{ Cliente.direccion_casa }}

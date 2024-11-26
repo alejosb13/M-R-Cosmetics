@@ -202,10 +202,7 @@ export class ClienteFormComponent implements OnInit {
       ],
       direccion_negocio: [
         "",
-        Validators.compose([
-          // Validators.required,
-          Validators.maxLength(180),
-        ]),
+        Validators.compose([Validators.required, Validators.maxLength(180)]),
       ],
       dias_cobro: this.fb.array([], [Validators.required]),
       zona_id: [

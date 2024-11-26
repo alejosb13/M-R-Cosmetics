@@ -132,6 +132,7 @@ import { DepartamentosFormComponent } from "@app/shared/components/forms/departa
 import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
 import { MunicipiosFormComponent } from "@app/shared/components/forms/municipios-form/municipios-form.component";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
 
 @NgModule({
   imports: [
@@ -282,6 +283,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     DepartamentosFormComponent,
     MunicipiosComponent,
     MunicipiosFormComponent,
+
+    CapitalizePipe
   ],
 })
 export class AdminLayoutModule {}

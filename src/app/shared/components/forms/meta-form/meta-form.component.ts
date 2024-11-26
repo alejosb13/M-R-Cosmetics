@@ -50,7 +50,7 @@ export class MetaFormComponent implements OnInit {
         Validators.compose([
           Validators.required,
           Validators.maxLength(20),
-          Validators.min(1),
+          Validators.min(0),
           Validators.pattern(ValidFunctionsValidator.NumberRegEx),
         ]),
       ],

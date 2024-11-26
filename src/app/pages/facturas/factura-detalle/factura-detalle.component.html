@@ -10,20 +10,25 @@
 
   <div class="container-fluid" *ngIf="!isLoad">
     <div class="row">
-      <div class="col-md-12 d-flex" >
+      <div class="col-md-12 d-flex">
         <button class="mt-3 btn btn-primary mr-3" (click)="descargarPDF()">
           <i class="fas fa-file-download fa-lg"></i> Descargar
         </button>
         <div *ngIf="!isLoadtazaMonto">
-          <button *ngIf="existTaza" class="mt-3 btn btn-primary mr-3" (click)="openModal(contentEditarTaza)">
-            <i class="fas fa-pencil-alt "></i
-              > Editar Cotizacion
+          <button
+            *ngIf="existTaza"
+            class="mt-3 btn btn-primary mr-3"
+            (click)="openModal(contentEditarTaza)"
+          >
+            <i class="fas fa-pencil-alt"></i> Editar Cotizacion
           </button>
-          <button *ngIf="!existTaza" class="mt-3 btn btn-primary mr-3" (click)="openModal(contentEditarTaza)">
-            <i class="fas fa-pencil-alt "></i
-              > Agregar Cotizacion
+          <button
+            *ngIf="!existTaza"
+            class="mt-3 btn btn-primary mr-3"
+            (click)="openModal(contentEditarTaza)"
+          >
+            <i class="fas fa-pencil-alt"></i> Agregar Cotizacion
           </button>
-
         </div>
         <button
           *ngIf="Factura.despachado == 1"
@@ -67,7 +72,11 @@
               <span>Dirección</span>
             </div>
             <div class="value">
-              <span>{{ Factura.cliente.direccion_casa }}</span>
+              <span
+                >{{ Factura.cliente?.departamento?.nombre | capitalize }} -
+                {{ Factura.cliente?.municipio?.nombre | capitalize }} -
+                {{ Factura.cliente.direccion_casa }}</span
+              >
             </div>
           </div>
           <div class="detalle">
@@ -75,7 +84,11 @@
               <span>Dirección salon</span>
             </div>
             <div class="value">
-              <span>{{ Factura.cliente.direccion_negocio }}</span>
+              <span
+                >{{ Factura.cliente?.departamento?.nombre | capitalize }} -
+                {{ Factura.cliente?.municipio?.nombre | capitalize }} -
+                {{ Factura.cliente.direccion_negocio }}</span
+              >
             </div>
           </div>
           <div class="detalle">
@@ -88,7 +101,7 @@
           </div>
           <div class="detalle">
             <div class="description">
-              <span>Teléfono salon</span>
+              <span>Teléfono salón</span>
             </div>
             <div class="value">
               <span>{{ Factura.cliente.telefono }}</span>
@@ -112,7 +125,7 @@
               <span>Fecha</span>
             </div>
             <div class="value">
-              <span>{{ Factura.created_at | date: "dd-MM-yyyy" }}</span>
+              <span>{{ Factura.created_at | date : "dd-MM-yyyy" }}</span>
             </div>
           </div>
           <div class="detalle">
@@ -120,7 +133,7 @@
               <span>Fecha vencimiento</span>
             </div>
             <div class="value">
-              <span>{{ Factura.fecha_vencimiento | date: "dd-MM-yyyy" }}</span>
+              <span>{{ Factura.fecha_vencimiento | date : "dd-MM-yyyy" }}</span>
             </div>
           </div>
           <div class="detalle">
@@ -169,7 +182,7 @@
     </div>
 
     <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
-      <table class="table  table-hover" >
+      <table class="table table-hover">
         <thead class="border-bottom border-1">
           <tr>
             <th scope="col">Descripcion</th>
@@ -180,68 +193,85 @@
             <th *ngIf="isAdmin" scope="col">Editar</th>
           </tr>
         </thead>
-        <tbody >
+        <tbody>
           <tr *ngFor="let producto of Factura.factura_detalle">
             <td>{{ producto.descripcion }}</td>
             <td>
-              <span *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
-              <span *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
+              <span *ngIf="producto.cantidad > 1"
+                >{{ producto.cantidad }} Uds</span
+              >
+              <span *ngIf="producto.cantidad == 1"
+                >{{ producto.cantidad }} Ud</span
+              >
             </td>
-            <td>{{ producto.precio_unidad | currency: "USD" }}</td>
-            <td>{{ producto.precio | currency: "USD" }}</td>
+            <td>{{ producto.precio_unidad | currency : "USD" }}</td>
+            <td>{{ producto.precio | currency : "USD" }}</td>
             <td>
               <span
-              class="texto-precio"
-              *ngIf="isAdmin"
-              role="button"
-              (click)="openDevolverProducto(contentDevolver, producto)"
-              ><i class="fas fa-undo"></i></span>
-            </td>
-            <td>
-              <span
-              class="texto-precio"
-              *ngIf="isAdmin"
-              role="button"
-              (click)="openEditFactura(contentEditar, producto)"
-              ><i class="fas fa-pencil-alt text-warning"></i
+                class="texto-precio"
+                *ngIf="isAdmin"
+                role="button"
+                (click)="openDevolverProducto(contentDevolver, producto)"
+                ><i class="fas fa-undo"></i
               ></span>
             </td>
-
+            <td>
+              <span
+                class="texto-precio"
+                *ngIf="isAdmin"
+                role="button"
+                (click)="openEditFactura(contentEditar, producto)"
+                ><i class="fas fa-pencil-alt text-warning"></i
+              ></span>
+            </td>
           </tr>
           <tr *ngFor="let regalo of Regalos">
             <td>{{ regalo.detalle_regalo.descripcion }}</td>
             <td>
-              <span *ngIf="regalo.cantidad_regalada > 1">{{ regalo.cantidad_regalada }} Uds</span>
-              <span *ngIf="regalo.cantidad_regalada == 1">{{ regalo.cantidad_regalada }} Ud</span>
+              <span *ngIf="regalo.cantidad_regalada > 1"
+                >{{ regalo.cantidad_regalada }} Uds</span
+              >
+              <span *ngIf="regalo.cantidad_regalada == 1"
+                >{{ regalo.cantidad_regalada }} Ud</span
+              >
             </td>
 
             <td colspan="4">
-              <span
-              class="texto-precio "
-              *ngIf="isAdmin"
-              role="button"
-              ><i class="fas fa-gift fa-lg text-danger"></i> Regalo</span>
-              </td>
-
-
+              <span class="texto-precio" *ngIf="isAdmin" role="button"
+                ><i class="fas fa-gift fa-lg text-danger"></i> Regalo</span
+              >
+            </td>
           </tr>
         </tbody>
-        <tfoot class="border border-1" >
-          <tr *ngIf="Factura.tipo_venta == 1" class="background-color-important border-bottom border-1">
-            <td [attr.colspan]="(isAdmin)?5:3" >Abonado</td>
-            <td><b>{{ Factura.monto - Factura.saldo_restante | currency: "USD" }}</b></td>
+        <tfoot class="border border-1">
+          <tr
+            *ngIf="Factura.tipo_venta == 1"
+            class="background-color-important border-bottom border-1"
+          >
+            <td [attr.colspan]="isAdmin ? 5 : 3">Abonado</td>
+            <td>
+              <b>{{
+                Factura.monto - Factura.saldo_restante | currency : "USD"
+              }}</b>
+            </td>
           </tr>
-          <tr *ngIf="Factura.tipo_venta == 1" class="background-color-important border-bottom border-1">
-            <td [attr.colspan]="(isAdmin)?5:3" >Por Abonar</td>
-            <td><b>{{ Factura.saldo_restante | currency: "USD" }}</b></td>
+          <tr
+            *ngIf="Factura.tipo_venta == 1"
+            class="background-color-important border-bottom border-1"
+          >
+            <td [attr.colspan]="isAdmin ? 5 : 3">Por Abonar</td>
+            <td>
+              <b>{{ Factura.saldo_restante | currency : "USD" }}</b>
+            </td>
           </tr>
-          <tr class="background-color-important ">
-            <td [attr.colspan]="(isAdmin)?5:3 "  >Total</td>
-            <td><b>{{ Factura.monto | currency: "USD" }}</b></td>
+          <tr class="background-color-important">
+            <td [attr.colspan]="isAdmin ? 5 : 3">Total</td>
+            <td>
+              <b>{{ Factura.monto | currency : "USD" }}</b>
+            </td>
           </tr>
         </tfoot>
       </table>
-
     </div>
   </div>
 </div>
@@ -281,7 +311,8 @@
         >
           <div>
             <small
-              >Fecha: {{ itemHistorial.updated_at | date: "dd-MM-yyyy" }}</small
+              >Fecha:
+              {{ itemHistorial.updated_at | date : "dd-MM-yyyy" }}</small
             >
             <p class="mb-1"><b>Pagó</b></p>
             <a
@@ -292,7 +323,7 @@
           </div>
           <div>
             <span
-              ><b>{{ itemHistorial.precio | currency: "USD" }}</b></span
+              ><b>{{ itemHistorial.precio | currency : "USD" }}</b></span
             >
           </div>
         </div>
@@ -317,7 +348,7 @@
           </div>
           <div>
             <span
-              ><b>{{ Pagado | currency: "USD" }}</b></span
+              ><b>{{ Pagado | currency : "USD" }}</b></span
             >
           </div>
         </div>
@@ -406,23 +437,19 @@
   <div class="modal-body">
     <div class="row justify-content-center">
       <div class="col-md-6">
-
         <p class="font-weight-bold">Taza de factura actual</p>
         <div class="input-group">
-          
           <span class="input-group-text">1$ =</span>
           <input
-          type="text"
-          class="form-control text-right"
-          [(ngModel)]="tazaMonto"
-          appOnlyNumberAndPoint
-          appBlockCopyPaste
+            type="text"
+            class="form-control text-right"
+            [(ngModel)]="tazaMonto"
+            appOnlyNumberAndPoint
+            appBlockCopyPaste
           />
           <span class="input-group-text">C$</span>
         </div>
-        <div class="form-group">
-  
-        </div>
+        <div class="form-group"></div>
       </div>
     </div>
   </div>
@@ -430,10 +457,18 @@
   <div class="modal-footer justify-content-center w-100">
     <div class="row w-100">
       <div class="col text-center">
-        <button *ngIf="existTaza"  class="btn btn-primary" (click)="actualizarTaza()">
+        <button
+          *ngIf="existTaza"
+          class="btn btn-primary"
+          (click)="actualizarTaza()"
+        >
           Actualizar
         </button>
-        <button *ngIf="!existTaza"  class="btn btn-primary" (click)="agregarTaza()">
+        <button
+          *ngIf="!existTaza"
+          class="btn btn-primary"
+          (click)="agregarTaza()"
+        >
           Agregar
         </button>
       </div>
@@ -442,30 +477,31 @@
 </ng-template>
 
 <ng-template #condicionRegalo let-producto>
-<tr>
-  <td>{{ producto.descripcion }}</td>
-  <td>
-    <span *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
-    <span *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
-  </td>
-  <td>{{ producto.precio_unidad | currency: "USD" }}</td>
-  <td>{{ producto.precio | currency: "USD" }}</td>
-  <td>
-    <span
-    class="texto-precio"
-    *ngIf="isAdmin"
-    role="button"
-    (click)="openDevolverProducto(contentDevolver, producto)"
-    ><i class="fas fa-undo"></i></span>
-  </td>
-  <td>
-    <span
-    class="texto-precio"
-    *ngIf="isAdmin"
-    role="button"
-    (click)="openEditFactura(contentEditar, producto)"
-    ><i class="fas fa-pencil-alt text-warning"></i
-    ></span>
-  </td>
-</tr>
+  <tr>
+    <td>{{ producto.descripcion }}</td>
+    <td>
+      <span *ngIf="producto.cantidad > 1">{{ producto.cantidad }} Uds</span>
+      <span *ngIf="producto.cantidad == 1">{{ producto.cantidad }} Ud</span>
+    </td>
+    <td>{{ producto.precio_unidad | currency : "USD" }}</td>
+    <td>{{ producto.precio | currency : "USD" }}</td>
+    <td>
+      <span
+        class="texto-precio"
+        *ngIf="isAdmin"
+        role="button"
+        (click)="openDevolverProducto(contentDevolver, producto)"
+        ><i class="fas fa-undo"></i
+      ></span>
+    </td>
+    <td>
+      <span
+        class="texto-precio"
+        *ngIf="isAdmin"
+        role="button"
+        (click)="openEditFactura(contentEditar, producto)"
+        ><i class="fas fa-pencil-alt text-warning"></i
+      ></span>
+    </td>
+  </tr>
 </ng-template>

@@ -74,7 +74,6 @@ export class ClientesComponent implements OnInit {
   MunicipiosSeleccionado: number = 0;
   MunicipiosFiltrados: any[] = [];
 
-
   constructor(
     private _CommunicationService: CommunicationService,
     private _Listado: Listado,
@@ -249,9 +248,9 @@ export class ClientesComponent implements OnInit {
       ...this.listadoFilter,
       roleName: this.roleName,
       estado: this.estado,
-      zona_id:this.ZonaSeleccionada,
-      departamento_id:this.DepartamentoSeleccionado,
-      municipio_id:this.MunicipiosSeleccionado,
+      zona_id: this.ZonaSeleccionada,
+      departamento_id: this.DepartamentoSeleccionado,
+      municipio_id: this.MunicipiosSeleccionado,
       diasCobros: this.diasCobros,
     };
 
@@ -282,6 +281,24 @@ export class ClientesComponent implements OnInit {
 
   BuscarValor() {
     this.listadoFilter.link = null;
+
+    this.listadoFilter = {
+      ...this.listadoFilter,
+      dateIni: this.dateIni,
+      dateFin: this.dateFin,
+      userId: this.userId,
+      categoriaId: this.categoriaId,
+      allDates: this.allDates,
+      diasCobros: this.diasCobros,
+
+    };
+    if( this.listadoFilter.filter){
+      this.listadoFilter.filter = this.listadoFilter.filter
+    }
+    this._RememberFiltersService.setFilterStorage(this.FilterSection, {
+      ...this.listadoFilter,
+    });
+
     this.asignarValores();
   }
 
@@ -345,13 +362,18 @@ export class ClientesComponent implements OnInit {
   limpiarFiltros() {
     this.setCurrentDate();
     this.clearDiasCobros();
-    this.ZonaSeleccionada = 0,
-    this.DepartamentoSeleccionado = 0,
-    this.MunicipiosSeleccionado = 0,
-    // this.allDates = false;
-    this.diasCobros = [];
-    (this.estado = 1),
-      this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
+    (this.ZonaSeleccionada = 0),
+      (this.DepartamentoSeleccionado = 0),
+      (this.MunicipiosSeleccionado = 0),
+      // this.allDates = false;
+      (this.diasCobros = []);
+    (this.estado = 1)
+    
+    if(this.listadoFilter.filter){
+      delete this.listadoFilter.filter;
+    }
+
+    this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
 
     // console.log(this.filtros);
@@ -390,46 +412,50 @@ export class ClientesComponent implements OnInit {
   }
 
   aplicarFiltros(submit: boolean = false) {
-    // console.log(this.allDates);
     let filtrosStorage = this._RememberFiltersService.getFilterStorage();
 
-    // if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
-    //   // solo al iniciar con datos en storage
-    //   this.listadoFilter = { ...filtrosStorage[this.FilterSection] };
-    //   this.userId = Number(this.listadoFilter.userId);
-    //   this.categoriaId = Number(this.listadoFilter.categoriaId);
-    //   this.dateIni = this.listadoFilter.dateIni;
-    //   this.dateFin = this.listadoFilter.dateFin;
-    //   this.allDates = this.listadoFilter.allDates;
-    //   this.diasCobros = this.listadoFilter.diasCobros;
-    // } else {
-    if (!submit) {
-      // console.log(this.userId);
+    if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
+      // solo al iniciar con datos en storage
+      this.listadoFilter = { ...filtrosStorage[this.FilterSection] };
+      this.userId = Number(this.listadoFilter.userId);
+      this.categoriaId = Number(this.listadoFilter.categoriaId);
+      this.dateIni = this.listadoFilter.dateIni;
+      this.dateFin = this.listadoFilter.dateFin;
+      this.allDates = this.listadoFilter.allDates;
+      this.diasCobros = this.listadoFilter.diasCobros;
+    } else {
+      // if (!submit) {
+      //   // console.log(this.userId);
 
-      this.userId = Number(this._AuthService.dataStorage.user.userId);
-      // this.userId = 0;
-      this.categoriaId = 0;
-    }
+      //   this.userId = Number(this._AuthService.dataStorage.user.userId);
+      //   // this.userId = 0;
+      //   this.categoriaId = 0;
+      // }
 
-    if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
+      if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
 
-    if (
-      this._HelpersService.siUnaFechaEsIgualOAnterior(
-        this.dateIni,
-        this.dateFin
+      if (
+        this._HelpersService.siUnaFechaEsIgualOAnterior(
+          this.dateIni,
+          this.dateFin
+        )
       )
-    )
-      this.setCurrentDate(); // si las fecha inicial es mayor a la final, se setean las fechas mes actual
-    this.listadoFilter = {
-      ...this.listadoFilter,
-      dateIni: this.dateIni,
-      dateFin: this.dateFin,
-      userId: this.userId,
-      categoriaId: this.categoriaId,
-      allDates: this.allDates,
-    };
-    // }
+        this.setCurrentDate(); // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+      this.listadoFilter = {
+        ...this.listadoFilter,
+        dateIni: this.dateIni,
+        dateFin: this.dateFin,
+        userId: this.userId,
+        categoriaId: this.categoriaId,
+        allDates: this.allDates,
+        diasCobros: this.diasCobros,
+      };
 
+      if(this.listadoFilter.filter){
+        this.listadoFilter.filter= this.listadoFilter.filter
+      }
+    }
+    console.log(this.listadoFilter);
     this._RememberFiltersService.setFilterStorage(this.FilterSection, {
       ...this.listadoFilter,
     });
@@ -601,13 +627,13 @@ export class ClientesComponent implements OnInit {
       });
   }
 
-  validarDepartamentos(element:HTMLInputElement) {
+  validarDepartamentos(element: HTMLInputElement) {
     this.DepartamentosFiltrados = this.Departamentos.filter(
       (dep) => dep.zona.id == element.value
     );
   }
 
-  validarMunicipios(element:HTMLInputElement) {
+  validarMunicipios(element: HTMLInputElement) {
     this.MunicipiosFiltrados = this.Municipios.filter(
       (muni) => muni.departamento.id == element.value
     );

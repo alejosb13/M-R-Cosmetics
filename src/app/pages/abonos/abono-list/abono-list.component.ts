@@ -313,13 +313,13 @@ export class AbonoListComponent implements OnInit {
     });
     
     if (this.metodoPagoEditar && this.detallePagoEditar) {
-      if (this.metodoPagoEditar == 2 && (this.autorizacion.length <= 8 || this.autorizacion.length >= 21 )) {
+      if (this.metodoPagoEditar == 2 && (this.autorizacion.length <= 7 || this.autorizacion.length >= 21 )) {
         Swal.mixin({
           customClass: {
             container: this.themeSite, // Clase para el modo oscuro
           },
         }).fire({
-          text: "La autorización de transferencia debe llevar mínimo 9 valores y máximo 20",
+          text: "La autorización de transferencia debe llevar mínimo 8 valores y máximo 20",
           icon: "warning",
         });
         return false;
@@ -438,7 +438,7 @@ export class AbonoListComponent implements OnInit {
 
   updateMaxLengthAutorizacion(element: any) {
     if (element.value == "2") {
-      this.maxLength = 9;
+      this.maxLength = 8;
     }
     if (element.value == "3") {
       this.maxLength = 7;

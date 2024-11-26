@@ -79,6 +79,7 @@
             <th scope="col">Nombre</th>
             <th scope="col">Empresa</th>
             <th scope="col">Días de cobro</th>
+            <th scope="col">Ubicaciones</th>
             <th scope="col">Dirección de negocio</th>
             <th scope="col">Categoría</th>
             <!-- <th scope="col">Frecuencia</th> -->
@@ -106,6 +107,10 @@
               >
                 <span [innerHTML]="cliente.dias_cobro"></span>
               </div>
+            </td>
+            <td>
+              {{ cliente.departamento?.nombre | capitalize }} -
+              {{ cliente.municipio?.nombre | capitalize }}
             </td>
             <td>{{ cliente.direccion_negocio }}</td>
             <td>
@@ -137,16 +142,10 @@
               <span>{{ cliente.saldo | currency : "USD" }}</span>
             </td>
             <td>
-              <a
-                target="_blank"
-                [routerLink]="['/cliente', 'productos', cliente.id]"
-                >Ver</a
-              >
+              <a [routerLink]="['/cliente', 'productos', cliente.id]">Ver</a>
             </td>
             <td>
-              <a
-                target="_blank"
-                [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
+              <a [routerLink]="['/cliente', 'estado-cuenta', cliente.id]"
                 >Ver detalle</a
               >
             </td>
@@ -386,7 +385,10 @@
         <p class="font-weight-bold">Municipio</p>
         <select class="form-control" [(ngModel)]="MunicipiosSeleccionado">
           <option value="0">Todos los municipios</option>
-          <option *ngFor="let municipio of MunicipiosFiltrados" [value]="municipio.id">
+          <option
+            *ngFor="let municipio of MunicipiosFiltrados"
+            [value]="municipio.id"
+          >
             {{ municipio.nombre }}
           </option>
         </select>

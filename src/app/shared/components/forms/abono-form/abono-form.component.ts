@@ -502,7 +502,7 @@ export class AbonoFormComponent implements OnInit {
         campo.setValidators([
           Validators.required,
           Validators.maxLength(20),
-          Validators.minLength(9),
+          Validators.minLength(8),
         ]);
       }
 
