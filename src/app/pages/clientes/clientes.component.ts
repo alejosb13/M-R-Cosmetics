@@ -86,6 +86,7 @@ export class ClientesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // this.listadoFilter.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
@@ -368,6 +369,8 @@ export class ClientesComponent implements OnInit {
       // this.allDates = false;
       (this.diasCobros = []);
     (this.estado = 1)
+    this.listadoFilter.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.userId = Number(this._AuthService.dataStorage.user.userId);
     
     if(this.listadoFilter.filter){
       delete this.listadoFilter.filter;
@@ -424,13 +427,13 @@ export class ClientesComponent implements OnInit {
       this.allDates = this.listadoFilter.allDates;
       this.diasCobros = this.listadoFilter.diasCobros;
     } else {
-      // if (!submit) {
-      //   // console.log(this.userId);
+      if (!submit) {
+        // console.log(this.userId);
 
-      //   this.userId = Number(this._AuthService.dataStorage.user.userId);
-      //   // this.userId = 0;
-      //   this.categoriaId = 0;
-      // }
+        this.userId = Number(this._AuthService.dataStorage.user.userId);
+        // this.userId = 0;
+        // this.categoriaId = 0;
+      }
 
       if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
 
