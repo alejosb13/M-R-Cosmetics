@@ -19,6 +19,7 @@ import { Subscription, throwError } from "rxjs";
 import { ReciboService } from "@app/shared/services/recibo.service";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Listado } from "@app/shared/services/listados.service";
+import logger from "@app/shared/utils/logger";
 
 @Component({
   selector: "app-talonarios-list",
@@ -241,8 +242,9 @@ export class TalonariosListComponent {
           let user = this.userStore.find(
             (user) => user.id == dataTalonario.user_id
           );
+          // logger.log('user', user);
           this._ReciboService
-            .updateRecibo(user.recibo.id, {
+            .updateRecibo(user?.recibo?.id, {
               user_id: user.id,
               recibo_cerrado: 0,
               max: dataTalonario.max,
