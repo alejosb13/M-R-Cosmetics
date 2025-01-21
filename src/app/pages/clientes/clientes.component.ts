@@ -35,11 +35,12 @@ export class ClientesComponent implements OnInit {
   isSupervisor: boolean;
   userId: number;
   estado: number = 1;
+  saldoFil: number = 2;
 
   idUsuario: number;
 
   categorias: Categoria[];
-  categoriaId: number = 0;
+  categoriaId: number = 2;
 
   userIdString: string;
   userStore: Usuario[];
@@ -366,6 +367,7 @@ export class ClientesComponent implements OnInit {
     (this.ZonaSeleccionada = 0),
       (this.DepartamentoSeleccionado = 0),
       (this.MunicipiosSeleccionado = 0),
+      (this.saldoFil = 2),
       // this.allDates = false;
       (this.diasCobros = []);
     (this.estado = 1)
@@ -426,6 +428,7 @@ export class ClientesComponent implements OnInit {
       this.dateFin = this.listadoFilter.dateFin;
       this.allDates = this.listadoFilter.allDates;
       this.diasCobros = this.listadoFilter.diasCobros;
+      this.saldoFil = this.listadoFilter.saldoFil;
     } else {
       if (!submit) {
         // console.log(this.userId);
@@ -452,6 +455,7 @@ export class ClientesComponent implements OnInit {
         categoriaId: this.categoriaId,
         allDates: this.allDates,
         diasCobros: this.diasCobros,
+        saldoFil: this.saldoFil,
       };
 
       if(this.listadoFilter.filter){

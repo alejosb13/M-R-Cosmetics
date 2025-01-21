@@ -351,6 +351,16 @@
           <option value="1">No eliminados</option>
         </select>
       </div>
+
+      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+        <p class="font-weight-bold">Saldo</p>
+        <select name="" id="" class="form-control" [(ngModel)]="saldoFil">
+          <option [ngValue]="2">Todos</option>
+          <option [ngValue]="0">Sin saldo</option>
+          <option [ngValue]="1">Con saldo</option>
+        </select>
+      </div>
+
       <div class="col-md-6 mt-3" *ngIf="isAdmin">
         <p class="font-weight-bold">Zonas</p>
         <select

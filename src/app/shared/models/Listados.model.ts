@@ -50,4 +50,5 @@ export interface FiltrosList {
   allNumber?:boolean
   saldo?:boolean
   import?:string | number
+  saldoFil?: number
 }
