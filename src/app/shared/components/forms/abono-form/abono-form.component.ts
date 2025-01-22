@@ -10,7 +10,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from "@angular/forms";
-import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Abono } from "app/shared/models/Abono.model";
 import { Cliente } from "app/shared/models/Cliente.model";
@@ -46,6 +46,7 @@ import { AbonoService } from "../../../services/abono.service";
 import { Listado } from "app/shared/services/listados.service";
 import { FiltrosList } from "app/shared/models/Listados.model";
 import { catchError, tap } from "rxjs/operators";
+import { LogisticaService } from "@app/shared/services/logistica.service";
 
 type FacturaReciboHistorial = Abono & ReciboHistorial;
 
@@ -79,6 +80,9 @@ export class AbonoFormComponent implements OnInit {
 
   ClientesNames: string[] = [];
 
+  informacionCliente: any = null;
+  LoadingInformacionCliente: boolean = false;
+
   clienteId: number;
   userId: number;
   recibo: Recibo;
@@ -103,7 +107,9 @@ export class AbonoFormComponent implements OnInit {
     private _UsuariosService: UsuariosService,
     private _HelpersService: HelpersService,
     public _AbonoService: AbonoService,
+    public NgbModal: NgbModal,
     private _CommunicationService: CommunicationService,
+    private _LogisticaService: LogisticaService,
     private _Listado: Listado
   ) {}
 
@@ -238,6 +244,7 @@ export class AbonoFormComponent implements OnInit {
   }
 
   getClientesObserbable() {
+    this.LoadingInformacionCliente = false;
     this._ClientesService
       .getClienteCalculoAbono(this.clienteId)
       .subscribe((dataAbono) => {
@@ -253,6 +260,14 @@ export class AbonoFormComponent implements OnInit {
         // }else{
         //   this.bloqueo = false
         // }
+      });
+
+    this._LogisticaService
+      .getEstadoCuentaCliente({ cliente_id: this.clienteId })
+      .subscribe((data) => {
+        this.LoadingInformacionCliente = true;
+        this.informacionCliente = data;
+        
       });
   }
 
@@ -306,6 +321,8 @@ export class AbonoFormComponent implements OnInit {
     this.facturaId = 0;
     this.bloqueo = false;
     this.diferencia = 0;
+
+    this.LoadingInformacionCliente= false;
   }
 
   get formularioControls() {
@@ -354,8 +371,8 @@ export class AbonoFormComponent implements OnInit {
 
           // console.log(abono);
 
-            this.FormsValues.emit(abono);
-            this._CommunicationService.BottonAgregarAbonoActive.emit(true);
+          this.FormsValues.emit(abono);
+          this._CommunicationService.BottonAgregarAbonoActive.emit(true);
         }
       } else {
         // console.log("[form]",this.AbonoForm);
@@ -496,7 +513,7 @@ export class AbonoFormComponent implements OnInit {
     this.AbonoForm.get("metodo_pago").valueChanges.subscribe((value) => {
       console.log(value);
       let campo = this.AbonoForm.get("autorizacion");
-      campo.patchValue("")
+      campo.patchValue("");
 
       if (value == 2) {
         campo.setValidators([
@@ -525,6 +542,17 @@ export class AbonoFormComponent implements OnInit {
     // this.model = ""
     this.AbonoForm.get("cliente_id").setValue("");
     this.showDelete = false;
+  }
+
+  openModal(content: any) {
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      size: "xl",
+    }).result.then(
+      (result) => {},
+      (reason) => {}
+    );
   }
 
   ngOnDestroy() {

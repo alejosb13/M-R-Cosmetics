@@ -252,7 +252,12 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <!-- <p>Cálculo: <b>{{ diferencia | currency: 'USD' }}</b> </p> -->
+      <div *ngIf="LoadingInformacionCliente" class="d-flex">
+        Detalle:
+        <p class="pointer ml-2" (click)="openModal(ModalEstadoCuentaCliente)">
+          <i class="far fa-eye text-primary"></i>
+        </p>
+      </div>
       <p>
         Por Abonar: <b>{{ diferencia | currency : "USD" }}</b>
       </p>
@@ -302,3 +307,33 @@
     </span>
   </div>
 </div>
+
+<ng-template #ModalEstadoCuentaCliente let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Estado cuenta</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-abono-historial-insert
+      [datosTablaStorage]="informacionCliente"
+    ></app-abono-historial-insert>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="modal.dismiss('Cross click')">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

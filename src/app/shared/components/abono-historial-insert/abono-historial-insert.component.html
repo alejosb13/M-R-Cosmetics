@@ -1,0 +1,34 @@
+<div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+  <table class="table table-hover">
+    <thead class="border-bottom border-1">
+      <tr>
+        <th scope="col">No.Doc</th>
+        <th scope="col">Tipo Documento</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Fecha Vencimiento</th>
+        <th scope="col">Credito</th>
+        <th scope="col">Abono</th>
+        <th scope="col">Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let EstadoCuenta of _TablasService.datosTablaStorage">
+        <td>{{ EstadoCuenta.numero_documento }}</td>
+        <td>{{ EstadoCuenta.tipo_documento }}</td>
+        <td>{{ EstadoCuenta.fecha | date : "dd-MM-yyyy" }}</td>
+        <td>{{ EstadoCuenta.f_vencimiento | date : "dd-MM-yyyy" }}</td>
+        <td>{{ EstadoCuenta.credito | currency : "USD" }}</td>
+        <td>{{ EstadoCuenta.abono | currency : "USD" }}</td>
+        <td>{{ EstadoCuenta.saldo | currency : "USD" }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+    [collectionSize]="_TablasService.total"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    (pageChange)="refreshCountries()"
+  ></ngb-pagination>
+  </div>
+</div>

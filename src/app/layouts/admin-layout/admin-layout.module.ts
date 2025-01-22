@@ -133,6 +133,7 @@ import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/munici
 import { MunicipiosFormComponent } from "@app/shared/components/forms/municipios-form/municipios-form.component";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
+import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-historial-insert/abono-historial-insert.component";
 
 @NgModule({
   imports: [
@@ -284,7 +285,9 @@ import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
     MunicipiosComponent,
     MunicipiosFormComponent,
 
-    CapitalizePipe
+    CapitalizePipe,
+
+    AbonoHistorialInsertComponent
   ],
 })
 export class AdminLayoutModule {}
