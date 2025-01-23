@@ -92,8 +92,9 @@
             <th scope="col">Tipo Documento</th>
             <th scope="col">Fecha</th>
             <th scope="col">Fecha Vencimiento</th>
-            <th scope="col">Credito</th>
+            <th scope="col">Crédito</th>
             <th scope="col">Abono</th>
+            <th scope="col">Autorización</th>
             <th scope="col">Saldo</th>
           </tr>
         </thead>
@@ -105,6 +106,7 @@
             <td>{{ EstadoCuenta.f_vencimiento | date : "dd-MM-yyyy" }}</td>
             <td>{{ EstadoCuenta.credito | currency : "USD" }}</td>
             <td>{{ EstadoCuenta.abono | currency : "USD" }}</td>
+            <td>{{ EstadoCuenta.autorizacion | uppercase }}</td>
             <td>{{ EstadoCuenta.saldo | currency : "USD" }}</td>
           </tr>
         </tbody>
