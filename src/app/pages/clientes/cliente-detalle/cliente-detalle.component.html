@@ -133,6 +133,7 @@
         [total]="totalAbonos"
         [headers]="['Período', 'Monto']"
         [loading]="isLoadingTableDynamic"
+        [tableVersion]= "'version1'"
       ></app-dinamic-table>
     </div>
 
@@ -149,6 +150,25 @@
         [total]="totalFacturas"
         [headers]="['Período', 'Monto']"
         [loading]="isLoadingTableDynamic"
+        [tableVersion]= "'version1'"
+      ></app-dinamic-table>
+    </div>
+
+    <br />
+
+    <!-- <hr> -->
+    <h4 class="pl-4 pt-4">Promedio de Pago (Facturas)</h4>
+    <div class="jumbotron" *ngIf="Facturas_Promedios.length == 0">
+      <h6 class="pl-4 pt-1 text-center">No hay facturas o aun no completo alguna</h6>
+    </div>
+    <div class="container-fluid" *ngIf="Facturas_Promedios.length > 0">
+      
+      <app-dinamic-table
+        [data]="Facturas_Promedios"
+        [total]="{text:'Promedio',value:Facturas_Promedios_total}"
+        [headers]="['No.Doc', 'Fecha', 'Fecha pago', 'Días para cierre']"
+        [loading]="isLoadingTableDynamic"
+        [tableVersion]= "'version2'"
       ></app-dinamic-table>
     </div>
   </div>

@@ -33,6 +33,8 @@ export class ClienteDetalleComponent implements OnInit {
   totalFacturas = { text: "Total Comprado: ", value: 0 };
   Abonos = [];
   Facturas = [];
+  Facturas_Promedios = [];
+  Facturas_Promedios_total = 0;
   isLoadingTableDynamic: boolean = true;
 
   themeSite: string;
@@ -109,12 +111,15 @@ export class ClienteDetalleComponent implements OnInit {
           console.log(this.Data);
 
           this.Cliente = { ...data.cliente };
-
+          
           this._TablasService.datosTablaStorage = [...data.estado_cuenta];
           this._TablasService.total = data.estado_cuenta.length;
           this._TablasService.busqueda = "";
           this.refreshCountries();
           // console.log("[getEstadoCuenta]",data);
+          
+          this.Facturas_Promedios = [ ...data.diasFacturas ];
+          this.Facturas_Promedios_total = data.diasPromedio ;
 
           this.isLoadingTableDynamic = false;
         },

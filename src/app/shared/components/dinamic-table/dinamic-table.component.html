@@ -6,18 +6,38 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of paginatedData">
-        <td>{{ row[0] | date: "dd-MM-yyyy" }}</td>
-        <td>{{ row[1]  | currency : "USD"}}</td>
-      </tr>
-      <tr class="table-info">
-        <td class="text-right font-weight-bold">
-          {{ total.text }}
-        </td>
-        <td class="font-weight-bold">
-          {{ total.value | currency : "USD" }}
-        </td>
-      </tr>
+      <ng-template [ngIf]="tableVersion == 'version1'">
+        <tr *ngFor="let row of paginatedData">
+          <td>{{ row[0] | date: "dd-MM-yyyy" }}</td>
+          <td>{{ row[1]  | currency : "USD"}}</td>
+        </tr>
+        <tr class="table-info">
+          <td class="text-right font-weight-bold">
+            {{ total.text }}
+          </td>
+          <td class="font-weight-bold">
+            {{ total.value | currency : "USD" }}
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Template 2: Alternative version -->
+      <ng-template [ngIf]="tableVersion == 'version2'">
+        <tr *ngFor="let row of paginatedData">
+          <td>{{ row.numero_documento  }}</td>
+          <td>{{ row.fecha | date: "dd-MM-yyyy" }}</td> <!-- Usando EUR en lugar de USD -->
+          <td>{{ row.fecha_cierre | date: "dd-MM-yyyy" }}</td> <!-- Usando EUR en lugar de USD -->
+          <td>{{ row.dias_para_pago }} días</td> <!-- Agregando otra columna -->
+        </tr>
+        <tr class="table-info">
+          <td class="text-right font-weight-bold" colspan="3">
+            {{ total.text }}
+          </td>
+          <td class="font-weight-bold">
+            {{ total.value }} días
+          </td>
+        </tr>
+      </ng-template>
     </tbody>
   </table>
   <div class="d-flex justify-content-end mt-4">

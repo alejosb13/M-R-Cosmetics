@@ -10,6 +10,7 @@ export class DinamicTableComponent {
   @Input() total: any;
   @Input() headers: any[];
   @Input() loading: boolean;
+  @Input() tableVersion!: string ; // Puedes cambiarlo dinámicamente
 
   // Configuración de paginación
   currentPage: number = 0;
@@ -17,9 +18,14 @@ export class DinamicTableComponent {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.data);
+    console.log(this.tableVersion);
+    
+  }
   ngOnChanges(changes): void {
     console.log(this.data);
+    console.log(this.tableVersion);
     
     
   }
