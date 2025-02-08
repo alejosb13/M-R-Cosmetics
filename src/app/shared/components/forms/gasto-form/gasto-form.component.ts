@@ -124,6 +124,6 @@ export class GastoFormComponent {
   }
 
   ngOnDestroy() {
-    this.themeSubscription.unsubscribe();
+    if (this.themeSubscription) this.themeSubscription.unsubscribe();
   }
 }

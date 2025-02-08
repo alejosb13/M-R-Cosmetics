@@ -212,6 +212,6 @@ export class ImportacionFormComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.themeSubscription.unsubscribe();
+    if (this.themeSubscription) this.themeSubscription.unsubscribe();
   }
 }

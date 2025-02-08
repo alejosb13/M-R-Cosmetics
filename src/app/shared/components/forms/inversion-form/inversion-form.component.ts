@@ -258,16 +258,16 @@ export class InversionFormComponent {
             c_u_distribuido: row.c_u_distribuido,
             costo_total: row.costo_total,
             subida_ganancia: row.subida_ganancia,
-            precio_venta:  row.precio_venta,
+            precio_venta: row.precio_venta,
             margen_ganancia: row.margen_ganancia,
             venta: row.venta,
             venta_total: row.venta_total,
             costo_real: row.costo_real,
             ganancia_bruta: row.ganancia_bruta,
             comision_vendedor: row.comision_vendedor,
-            isNew:row.isNew == 1?true:false,
-            modelo:row.marca,
-            linea:row.linea,
+            isNew: row.isNew == 1 ? true : false,
+            modelo: row.marca,
+            linea: row.linea,
           };
           controlInversion[index].patchValue(patchValue);
         });
@@ -319,10 +319,10 @@ export class InversionFormComponent {
     ) as FormArray;
     if (!this.isValidForm) {
       Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Asegurese de completar todos los campos editables de los productos existentes",
         icon: "warning",
       });
@@ -363,10 +363,10 @@ export class InversionFormComponent {
       this.FormsValues.emit(response);
     } else {
       Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "Complete todos los campos obligatorios",
         icon: "warning",
       });
@@ -432,10 +432,10 @@ export class InversionFormComponent {
     const control = <FormArray>this.FormInversion.controls["inversion"];
     if (control.length == 0) {
       Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
         text: "El mínimo de productos es de 1",
         icon: "warning",
       });
@@ -461,44 +461,49 @@ export class InversionFormComponent {
   agregarAlInventario(data: number) {
     // console.log(this.InversionData.inversion_detalle[data]);
     Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
-      title: "¿Deseas cargar este producto al inventario?",
-      text: "Una vez cargado se actualizara el stock y el precio del producto. Esta accion no podras revertirla luego de aceptar.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#51cbce",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Aceptar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._FinanzasService
-          .insertProducto({
-            producto_insertado: 1,
-            id_inversion: this.InversionData.id,
-            id_inversion_detail: this.InversionData.inversion_detalle[data].id,
-          })
-          .subscribe((data) => {
-            // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
-            Swal.mixin({
-            customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
-            },
-          }).fire({
-              text: data[0],
-              icon: "success",
-            }).then(() => {
-              window.location.reload();
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    })
+      .fire({
+        title: "¿Deseas cargar este producto al inventario?",
+        text: "Una vez cargado se actualizara el stock y el precio del producto. Esta accion no podras revertirla luego de aceptar.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Aceptar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._FinanzasService
+            .insertProducto({
+              producto_insertado: 1,
+              id_inversion: this.InversionData.id,
+              id_inversion_detail:
+                this.InversionData.inversion_detalle[data].id,
+            })
+            .subscribe((data) => {
+              // this.Frecuencias = this.Frecuencias.filter(categoria => categoria.id != id)
+              Swal.mixin({
+                customClass: {
+                  container: this.themeSite, // Clase para el modo oscuro
+                },
+              })
+                .fire({
+                  text: data[0],
+                  icon: "success",
+                })
+                .then(() => {
+                  window.location.reload();
+                });
             });
-          });
-      }
-    });
+        }
+      });
   }
 
   ngOnDestroy() {
-    this.themeSubscription.unsubscribe();
+    if (this.themeSubscription) this.themeSubscription.unsubscribe();
   }
 }
