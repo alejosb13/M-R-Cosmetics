@@ -317,7 +317,7 @@
           />
         </div>
       </div> -->
-      <div class="col-md-6">
+      <div class="col-md-6 mb-3">
         <p class="font-weight-bold">Categorías</p>
         <select name="" id="" class="form-control" [(ngModel)]="categoriaId">
           <option value="0">Todas las categorías</option>
@@ -330,7 +330,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
+      <div class="col-md-6 mb-3" *ngIf="isAdmin || isSupervisor">
         <p class="font-weight-bold">Usuarios</p>
         <select name="" id="" class="form-control" [(ngModel)]="userId">
           <option value="0">Todos los usuarios</option>
@@ -343,7 +343,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+      <div class="col-md-6 mb-3" *ngIf="isAdmin">
         <p class="font-weight-bold">Estado</p>
         <select name="" id="" class="form-control" [(ngModel)]="estado">
           <option value="2">Todos</option>
@@ -352,7 +352,7 @@
         </select>
       </div>
 
-      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+      <div class="col-md-6 mb-3" >
         <p class="font-weight-bold">Saldo</p>
         <select name="" id="" class="form-control" [(ngModel)]="saldoFil">
           <option [ngValue]="2">Todos</option>
@@ -361,7 +361,7 @@
         </select>
       </div>
 
-      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+      <div class="col-md-6 mb-3" *ngIf="isAdmin">
         <p class="font-weight-bold">Zonas</p>
         <select
           class="form-control"
@@ -375,7 +375,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+      <div class="col-md-6 mb-3" *ngIf="isAdmin">
         <p class="font-weight-bold">Departamentos</p>
         <select
           class="form-control"
@@ -391,7 +391,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6 mt-3" *ngIf="isAdmin">
+      <div class="col-md-6 mb-3" *ngIf="isAdmin">
         <p class="font-weight-bold">Municipio</p>
         <select class="form-control" [(ngModel)]="MunicipiosSeleccionado">
           <option value="0">Todos los municipios</option>
@@ -403,7 +403,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md-6 mt-3">
+      <div class="col-md-6 mb-3">
         <p class="font-weight-bold">Días de cobro</p>
         <div class="d-flex flex-wrap" id="diasCobrosElement">
           <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3">

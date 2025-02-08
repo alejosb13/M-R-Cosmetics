@@ -40,7 +40,7 @@ export class ClientesComponent implements OnInit {
   idUsuario: number;
 
   categorias: Categoria[];
-  categoriaId: number = 2;
+  categoriaId: number = 0;
 
   userIdString: string;
   userStore: Usuario[];
