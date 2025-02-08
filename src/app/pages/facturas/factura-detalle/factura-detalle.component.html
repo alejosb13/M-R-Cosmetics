@@ -20,14 +20,15 @@
             class="mt-3 btn btn-primary mr-3"
             (click)="openModal(contentEditarTaza)"
           >
-            <i class="fas fa-pencil-alt"></i> Editar Cotizacion
+            <i class="fas fa-pencil-alt"></i> Editar Cotización
           </button>
           <button
-            *ngIf="!existTaza"
+            *ngIf="!existTaza && isAdmin"
+            
             class="mt-3 btn btn-primary mr-3"
             (click)="openModal(contentEditarTaza)"
           >
-            <i class="fas fa-pencil-alt"></i> Agregar Cotizacion
+            <i class="fas fa-pencil-alt"></i> Agregar Cotización
           </button>
         </div>
         <button
