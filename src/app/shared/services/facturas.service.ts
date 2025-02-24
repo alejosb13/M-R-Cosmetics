@@ -79,6 +79,19 @@ export class FacturasService {
     // );
   }
 
+  FacturaPDFDolar(id:number): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.http.get(`${environment.urlAPI}pdf/factura_detalle/dolar/${id}`, { headers: headers, responseType: 'blob' });
+
+    // return this.http.get<any>(
+    //   // `${FacturaURL}/pdf`,
+    //   `http://127.0.0.1:8000/api/pdf/1`,
+    //   // data,
+    //   {headers: this.headerJson_Token(), }
+    // );
+  }
+
   updateFactura(Id:number,data:Factura): Observable<any> {
     const URL = `${FacturaURL}/${Id}`
 

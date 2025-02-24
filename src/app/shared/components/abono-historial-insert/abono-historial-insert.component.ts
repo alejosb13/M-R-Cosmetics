@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Factura } from '@app/shared/models/Factura.model';
 import { TablasService } from '@app/shared/services/tablas.service';
 import logger from '@app/shared/utils/logger';
 import { environment } from '@environment/environment';
@@ -9,7 +10,7 @@ import { environment } from '@environment/environment';
   styleUrls: ['./abono-historial-insert.component.scss']
 })
 export class AbonoHistorialInsertComponent {
-  @Input() datosTablaStorage: any;
+  @Input() datosTablaStorage: Factura[];
 constructor(
   public _TablasService: TablasService,
 ) { }
@@ -23,8 +24,8 @@ constructor(
     // this.informacion = this.datosTablaStorage.estado_cuenta
 
     
-    this._TablasService.datosTablaStorage = [...this.datosTablaStorage.estado_cuenta];
-    this._TablasService.total = this.datosTablaStorage.estado_cuenta.length;
+    this._TablasService.datosTablaStorage = [...this.datosTablaStorage];
+    this._TablasService.total = this.datosTablaStorage.length;
     this._TablasService.busqueda = "";
     this.refreshCountries();
   }
@@ -32,7 +33,7 @@ constructor(
   refreshCountries() {
     logger.log('this.page', this.page);
     logger.log('this.pageSize', this.pageSize);
-    this._TablasService.datosTablaStorage = [...this.datosTablaStorage.estado_cuenta].slice(
+    this._TablasService.datosTablaStorage = [...this.datosTablaStorage].slice(
       (this.page - 1) * this.pageSize,
       (this.page - 1) * this.pageSize + this.pageSize
     );

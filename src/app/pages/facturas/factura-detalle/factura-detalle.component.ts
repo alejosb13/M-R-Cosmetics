@@ -190,6 +190,44 @@ export class FacturaDetalleComponent implements OnInit {
     });
   }
 
+  descargarPDFDolar() {
+    // let data = {
+    //   factura: this.Factura,
+    //   abonado:this.Pagado,
+    //   diferencia:this.Diferencia
+    // }
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
+      title: "Descargando archivo.",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this._FacturasService.FacturaPDFDolar(this.FacturaId).subscribe((data) => {
+      console.log(data);
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite, // Clase para el modo oscuro
+        },
+      }).fire({
+        text: "Archivo descargado con éxito.",
+        icon: "success",
+      });
+      this._HelpersService.downloadFile(
+        data,
+        `Detalle_Factura_${this.FacturaId}`
+      );
+    });
+  }
+
   actualizarTaza() {
     this._ConfiguracionService
       .updateTazaFactura(Number(this.tazaMonto), this.FacturaId)

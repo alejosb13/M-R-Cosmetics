@@ -80,7 +80,7 @@ export class AbonoFormComponent implements OnInit {
 
   ClientesNames: string[] = [];
 
-  informacionCliente: any = null;
+  informacionCliente: Factura[] = [];
   LoadingInformacionCliente: boolean = false;
 
   clienteId: number;
@@ -262,13 +262,26 @@ export class AbonoFormComponent implements OnInit {
         // }
       });
 
-    this._LogisticaService
-      .getEstadoCuentaCliente({ cliente_id: this.clienteId })
-      .subscribe((data) => {
+    this._Listado
+      .getFacturas({
+        link: null,
+        disablePaginate: "1",
+        clienteId: this.clienteId,
+        status_pagado: 0,
+      estado:1
+      })
+      .subscribe((data:any) => {
         this.LoadingInformacionCliente = true;
         this.informacionCliente = data;
-        
       });
+
+    // this._LogisticaService
+    //   .getEstadoCuentaCliente({ cliente_id: this.clienteId })
+    //   .subscribe((data) => {
+    //     this.LoadingInformacionCliente = true;
+    //     this.informacionCliente = data;
+
+    //   });
   }
 
   generarCalculo(cliente: Cliente) {
@@ -322,7 +335,7 @@ export class AbonoFormComponent implements OnInit {
     this.bloqueo = false;
     this.diferencia = 0;
 
-    this.LoadingInformacionCliente= false;
+    this.LoadingInformacionCliente = false;
   }
 
   get formularioControls() {
