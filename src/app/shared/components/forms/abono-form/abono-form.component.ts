@@ -268,9 +268,9 @@ export class AbonoFormComponent implements OnInit {
         disablePaginate: "1",
         clienteId: this.clienteId,
         status_pagado: 0,
-      estado:1
+        estado: 1,
       })
-      .subscribe((data:any) => {
+      .subscribe((data: any) => {
         this.LoadingInformacionCliente = true;
         this.informacionCliente = data;
       });
