@@ -24,6 +24,7 @@ export class CostosListComponent {
   costoTotal: number;
   cantidadTotal: number;
   producto_id: number;
+  Producto: any;
   dateIni: string;
   dateFin: string;
   allDates: boolean = false;
@@ -259,19 +260,21 @@ export class CostosListComponent {
         },
       });
 
-    this._FinanzasService.insertCostoVenta(costosVenta).subscribe((data) => {
+    this._FinanzasService.insertCostoVenta({...costosVenta,dateIni:this.dateIni}).subscribe((data) => {
       console.log("[response]", data);
       this.Productos_Vendidos = this.Productos_Vendidos.map((pv) => {
         if (pv.id == costosVenta.producto_id) {
+          this.costoTotal = Number(this.costoTotal) + Number(data.costo_ventas_detalles.costo * pv.cantidad);
           return {
             ...pv,
-            costo_opcional: { costo: costosVenta.costo, id: data.id },
+            costo_opcional: { costo: costosVenta.costo, id: data.id,costo_ventas_detalles: [data.costo_ventas_detalles] },
           };
         }
         return pv;
       });
       // this.Productos_Vendidos.filter((pv)=>pv.id !== costosVenta.producto_id)
-      this.costoTotal = Number(this.costoTotal) + Number(costosVenta.costo);
+      // this.Productos_Vendidos.find((data)=>data.)
+      // this.costoTotal = Number(this.costoTotal) + Number(data.costo_ventas_detalles.costo);
       Swal.mixin({
         customClass: {
           container: this.themeSite, // Clase para el modo oscuro
@@ -310,16 +313,24 @@ export class CostosListComponent {
     });
 
     this._FinanzasService
-      .editarCostoVenta(costosVenta, this.Id)
+      .editarCostoVenta(
+        { ...costosVenta, dateIni: this.dateIni, dateFin: this.dateFin },
+        this.Id
+      )
       .subscribe((data) => {
         console.log("[response]", data);
         this.Productos_Vendidos = this.Productos_Vendidos.map((pv) => {
           if (pv.id == costosVenta.producto_id) {
+            // this.costoTotal = Number(this.costoTotal) + Number(costosVenta.costo * pv.cantidad);
             return {
               ...pv,
               costo_opcional: {
                 ...pv.costo_opcional,
                 costo: costosVenta.costo,
+                costo_ventas_detalles: [{
+                  ...pv.costo_opcional.costo_ventas_detalles,
+                  costo: costosVenta.costo
+                }]
               },
             };
           }

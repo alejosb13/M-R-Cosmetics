@@ -108,9 +108,10 @@ export class CostosVentasFormComponent {
       console.log(this.FormCostoVenta.getRawValue());
       const DATA_FORM = this.FormCostoVenta.getRawValue();
 
-      let importacion: CostoVenta = {
+      let importacion: any = {
         costo: DATA_FORM.costo,
         producto_id: DATA_FORM.producto_id,
+
       };
       console.log(importacion);
       // frecuencia.descripcion = this.formularioControls.descripcion.value;

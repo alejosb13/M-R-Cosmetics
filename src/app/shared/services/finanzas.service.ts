@@ -11,6 +11,7 @@ import { FiltrosList } from "../models/Listados.model";
 import { Importacion } from "../models/Importacion.model";
 import { CostoVenta } from "../models/CostosVentas.model";
 import { Gasto } from "../models/Gasto.model";
+import logger from "../utils/logger";
 
 const FinanzasURL = `${environment.urlAPI}finanzas`;
 
@@ -256,7 +257,7 @@ export class FinanzasService {
     });
   }
 
-  insertCostoVenta(data: CostoVenta): Observable<any> {
+  insertCostoVenta(data: any): Observable<any> {
     return this.http.post(
       `${FinanzasURL}/productos-vendidos`,
       { ...data },
@@ -289,7 +290,8 @@ export class FinanzasService {
     );
   }
 
-  editarCostoVenta(data: CostoVenta, Id: number): Observable<any> {
+  editarCostoVenta(data: any, Id: number): Observable<any> {
+    logger.log('envio',data );
     return this.http.put(
       `${FinanzasURL}/productos-vendidos/${Id}`,
       { ...data },

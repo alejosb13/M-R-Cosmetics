@@ -34,7 +34,7 @@
       <div class="card-header border-0 bg-white">
         <div class="">
           <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
-            >Total productos: <b>{{ cantidadTotal  }}</b></span
+            >Total productos: <b>{{ cantidadTotal }}</b></span
           ><br />
           <span class="fuvi-text-black mt-1 fw-bold fs-5" *ngIf="!isLoad"
             >Total Costo total: <b>{{ costoTotal | currency : "USD" }}</b></span
@@ -73,19 +73,25 @@
                 </div>
                 <div *ngIf="!pv.inversion">
                   <div *ngIf="pv.costo_opcional">
-                    {{ pv.costo_opcional.costo | currency : "USD" }}
+                    {{
+                      pv.costo_opcional?.costo_ventas_detalles[0].costo
+                        | currency : "USD"
+                    }}
                   </div>
                   <div *ngIf="!pv.costo_opcional">--</div>
                 </div>
               </td>
               <td>
                 <div *ngIf="pv.inversion">
-                  {{ pv.inversion.costo_total * pv.cantidad | currency : "USD" }}
+                  {{
+                    pv.inversion.costo_total * pv.cantidad | currency : "USD"
+                  }}
                 </div>
                 <div *ngIf="!pv.inversion">
                   <div *ngIf="pv.costo_opcional">
                     {{
-                      pv.costo_opcional.costo * pv.cantidad | currency : "USD"
+                      pv.costo_opcional?.costo_ventas_detalles[0].costo *
+                        pv.cantidad | currency : "USD"
                     }}
                   </div>
                   <div *ngIf="!pv.costo_opcional">--</div>
@@ -107,7 +113,11 @@
                   </div>
                 </div>
                 <div
-                  *ngIf="!pv.inversion && pv.costo_opcional"
+                  *ngIf="
+                    !pv.inversion &&
+                    (pv.costo_opcional ||
+                      pv.costo_opcional?.costo_ventas_detalles.length > 0)
+                  "
                   class="d-flex flex-direction"
                 >
                   <div
@@ -181,7 +191,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-md-6">
         <div class="form-check">
           <input
@@ -195,7 +205,7 @@
           <label class="form-check-label" for="flexCheckDefault"> Todos </label>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
