@@ -15,7 +15,12 @@
           }"
         >
           <option hidden>Seleccione una condición</option>
-          <option *ngFor="let valor of selectValues;let index = index" [ngValue]="index">{{valor}}</option>
+          <option
+            *ngFor="let valor of selectValues; let index = index"
+            [ngValue]="index"
+          >
+            {{ valor }}
+          </option>
 
           <!-- <option [ngValue]="0">Empresa</option>
           <option [ngValue]="1">MaRo</option>
@@ -86,12 +91,18 @@
           formControlName="tipo_pago"
           [ngClass]="{
             'is-invalid':
-              getControl('tipo_pago').invalid && getControl('tipo_pago').touched,
+              getControl('tipo_pago').invalid &&
+              getControl('tipo_pago').touched,
             'is-valid': getControl('tipo_pago').valid
           }"
         >
           <option hidden>Seleccione un método de pago</option>
-          <option *ngFor="let valor of selectValuesPago;let index = index" [ngValue]="index">{{valor}}</option>
+          <option
+            *ngFor="let valor of selectValuesPago; let index = index"
+            [ngValue]="index"
+          >
+            {{ valor }}
+          </option>
         </select>
         <div *ngIf="getControlError('tipo_pago') as error">
           <app-valid-error-messages-form
@@ -126,9 +137,17 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group">
-        <label>Conceptualización</label>
-        <input
+      <div class="form-group desplegable">
+        <div class="d-flex">
+          <label for="conceptualizacionlabel" class="mr-1">Conceptualización</label>
+          <small
+            *ngIf="LoadingSearchConceptualizacion"
+            class="form-text text-muted"
+          >
+            <i class="fas fa-circle-notch fa-spin fa-lg"></i
+          ></small>
+        </div>
+        <!-- <input
           type="text"
           class="form-control"
           name="conceptualizacion"
@@ -140,7 +159,19 @@
               getControl('conceptualizacion').touched,
             'is-valid': getControl('conceptualizacion').valid
           }"
+        /> -->
+
+        <input
+          class="form-control"
+          id="conceptualizacionlabel"
+          formControlName="conceptualizacion"
+          type="text"
+          [ngbTypeahead]="searchClient"
+          [resultTemplate]="CLientTypeaHead"
+          [inputFormatter]="formatterValue"
+          (selectItem)="eventInputTypeHead($event.item)"
         />
+
         <div *ngIf="getControlError('conceptualizacion') as error">
           <app-valid-error-messages-form
             [errors]="error"
@@ -200,3 +231,7 @@
     </span>
   </div>
 </div>
+
+<ng-template #CLientTypeaHead let-resultado="result" let-resaltado="term">
+  <ngb-highlight [result]="resultado" [term]="resaltado"></ngb-highlight>
+</ng-template>

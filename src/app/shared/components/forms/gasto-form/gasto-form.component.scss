@@ -1,0 +1,32 @@
+::ng-deep {
+  .desplegable {
+    .dropdown-menu {
+      // .dropdown-item {
+      width: 100%;
+      z-index: 99999;
+      min-height: 41px;
+      max-height: 330px;
+      z-index: 99999;
+      overflow-x: hidden;
+      // }
+
+      .dropdown-item {
+        padding-left: 7px;
+        padding-right: 7px;
+
+        ngb-highlight {
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
+          // display: flex;
+          // flex-wrap: wrap;
+          // width: 100%;
+
+          // .ngb-highlight{
+          //   // margin: 0px 5px;
+          // }
+        }
+      }
+    }
+  }
+}

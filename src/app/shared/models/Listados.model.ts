@@ -51,4 +51,5 @@ export interface FiltrosList {
   saldo?:boolean
   import?:string | number
   saldoFil?: number
+  conceptualizacion?: number|string
 }

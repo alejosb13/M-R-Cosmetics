@@ -1,7 +1,14 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 
-import { map } from "rxjs/operators";
+import {
+  map,
+  tap,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  catchError,
+} from "rxjs/operators";
 import Swal from "sweetalert2";
 import { Listado } from "@app/shared/services/listados.service";
 import { FinanzasService } from "@app/shared/services/finanzas.service";
@@ -10,7 +17,10 @@ import { Gasto } from "@app/shared/models/Gasto.model";
 import { GastoFormBuilder, GastosForm } from "./utils/form";
 import { GastoErrorMessages } from "./utils/valid-messages";
 import { CommunicationService } from "@app/shared/services/communication.service";
-import { Subscription } from "rxjs";
+import { Observable, of, OperatorFunction, Subscription } from "rxjs";
+import { FiltrosList } from "@app/shared/models/Listados.model";
+import { ProductosService } from "@app/shared/services/productos.service";
+import logger from "@app/shared/utils/logger";
 export const TIPOS_GASTOS: string[] = ["Empresa", "MaRo", "Adicional"];
 
 @Component({
@@ -35,11 +45,14 @@ export class GastoFormComponent {
   themeSite: string;
   themeSubscription: Subscription;
 
+  LoadingSearchConceptualizacion: boolean = false;
+
   constructor(
     private _CommunicationService: CommunicationService,
     public _Listado: Listado,
     public _FinanzasService: FinanzasService,
-    public _HelpersService: HelpersService
+    public _HelpersService: HelpersService,
+    public _ProductosService: ProductosService
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +104,46 @@ export class GastoFormComponent {
 
   getControl(name: string): FormControl {
     return this.FormGastos.get(name) as FormControl;
+  }
+
+  formatterValue = (x: { marca: string } | string) =>
+    typeof x === "string" ? x : x.marca;
+
+  searchClient: OperatorFunction<string, readonly string[]> = (
+    text$: Observable<string>
+  ) =>
+    text$.pipe(
+      tap(() => (this.LoadingSearchConceptualizacion = true)),
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap((valorInput) => {
+        let listadoFilter: FiltrosList = {
+          link: null,
+          estado: 1,
+          disablePaginate: 1,
+          conceptualizacion: valorInput,
+        };
+        // logger.log('aa', valorInput);
+        return this._FinanzasService.getGastos(listadoFilter).pipe(
+          catchError(() => {
+            this.LoadingSearchConceptualizacion = true;
+            return of([]);
+          }),
+
+          map((value) => {
+            this.LoadingSearchConceptualizacion = false;
+
+            logger.log("value", value);
+
+            return value;
+          })
+        );
+      })
+    );
+
+  eventInputTypeHead(event: any) {
+    logger.log("event", event);
+    
   }
 
   EnviarFormulario() {
