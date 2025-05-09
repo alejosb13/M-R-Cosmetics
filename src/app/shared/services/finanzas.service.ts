@@ -30,12 +30,20 @@ export class FinanzasService {
   }
 
   getInversiones(param: FiltrosList): Observable<any> {
-    const URL = `${FinanzasURL}/inversion`;
+    let URL = `${FinanzasURL}/inversion`;
     console.log(param);
+    if (param.link) {
+      URL = param.link;
+    }
 
     let params = new HttpParams();
     for (const key in param) {
-      params = params.append(key, param[key]);
+      let indice = key;
+      let valor = param[key];
+
+      if (indice == "link") continue;
+
+      params = params.append(key, valor);
     }
 
     return this.http.get<Factura>(URL, {
@@ -147,12 +155,21 @@ export class FinanzasService {
   }
 
   getImportacion(param: FiltrosList): Observable<any> {
-    const URL = `${FinanzasURL}/importacion`;
+    let URL = `${FinanzasURL}/importacion`;
     console.log(param);
+    console.log(param);
+    if (param.link) {
+      URL = param.link;
+    }
 
     let params = new HttpParams();
     for (const key in param) {
-      params = params.append(key, param[key]);
+      let indice = key;
+      let valor = param[key];
+
+      if (indice == "link") continue;
+
+      params = params.append(key, valor);
     }
 
     return this.http.get(URL, {
@@ -278,7 +295,7 @@ export class FinanzasService {
       }
     );
   }
-  
+
   insertGasto(data: Gasto): Observable<any> {
     return this.http.post(
       `${FinanzasURL}/gastos`,
@@ -291,7 +308,7 @@ export class FinanzasService {
   }
 
   editarCostoVenta(data: any, Id: number): Observable<any> {
-    logger.log('envio',data );
+    logger.log("envio", data);
     return this.http.put(
       `${FinanzasURL}/productos-vendidos/${Id}`,
       { ...data },
@@ -301,12 +318,15 @@ export class FinanzasService {
       }
     );
   }
-  
-  getEstadoFinanzaPDF(options:any): Observable<any> {
+
+  getEstadoFinanzaPDF(options: any): Observable<any> {
     let URL = `${environment.urlAPI}pdf/finanza/estado`;
     let headers = new HttpHeaders();
-    headers = headers.set('Accept', 'application/pdf');
+    headers = headers.set("Accept", "application/pdf");
 
-    return this.http.post(`${URL}`,options, { headers: headers, responseType: 'blob' });
+    return this.http.post(`${URL}`, options, {
+      headers: headers,
+      responseType: "blob",
+    });
   }
 }
