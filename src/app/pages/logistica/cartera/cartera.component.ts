@@ -245,7 +245,7 @@ export class CarteraComponent implements OnInit {
     this.NotaModal = "";
 
     this.FacturaModal = factura;
-    if(factura.nota_cartera){
+    if(factura && factura.nota_cartera){
       this.NotaModal = factura.nota_cartera.nota;
     }
     this.NgbModal.open(content, {
