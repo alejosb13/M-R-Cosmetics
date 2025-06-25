@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Listado } from "@app/shared/services/listados.service";
+import logger from "@app/shared/utils/logger";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
@@ -23,12 +25,9 @@ import {
   OperatorFunction,
   Subject,
   Subscription,
+  throwError,
 } from "rxjs";
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-} from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import Swal from "sweetalert2";
 
 @Component({
@@ -52,8 +51,11 @@ export class CarteraComponent implements OnInit {
   dateFin: string;
   tipoVenta = 1; //credito
   status_pagado = 0; // por pagar
-  allDates: boolean = false;
+  allDates: boolean = true;
   // user:number
+
+  FacturaModal:any=null
+  NotaModal:any=""
 
   @ViewChild("instance", { static: true }) instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -157,14 +159,15 @@ export class CarteraComponent implements OnInit {
         // factura: 1,
         // recibo: 1,
         // recibosRangosSinTerminar: 1,
-      }).subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
 
-      // this.resetUser()
-    });
+        // this.resetUser()
+      });
   }
 
   setCurrentDate() {
@@ -237,7 +240,14 @@ export class CarteraComponent implements OnInit {
     });
   }
 
-  openFiltros(content: any) {
+  openFiltros(content: any,factura?:any) {
+    this.FacturaModal = null;
+    this.NotaModal = "";
+
+    this.FacturaModal = factura;
+    if(factura.nota_cartera){
+      this.NotaModal = factura.nota_cartera.nota;
+    }
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
       windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
@@ -254,6 +264,68 @@ export class CarteraComponent implements OnInit {
         this.userIdString = `${usuario.id} - ${usuario.name} ${usuario.apellido}`;
       }
     });
+  }
+
+  guardarNota() {
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite, // Clase para el modo oscuro
+      },
+    }).fire({
+      title: "Agregando Nota",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this._LogisticaService
+      .insertNotaCartera(this.FacturaModal.id, this.NotaModal)
+      .pipe(
+        catchError((http: HttpErrorResponse) => {
+          // console.log(http);
+          let error = http.error as { mensaje: string };
+          if (error.mensaje) {
+            Swal.mixin({
+              customClass: {
+                container: this.themeSite, // Clase para el modo oscuro
+              },
+            })
+              .fire({
+                text: error.mensaje,
+                icon: "warning",
+              })
+              .then((result) => {
+                // this.NgbModal.dismissAll();
+              });
+          }
+
+          return throwError(http);
+        })
+      )
+      .subscribe((data) => {
+        console.log("[response]", data);
+
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite, // Clase para el modo oscuro
+          },
+        })
+          .fire({
+            text: "Nota cargada con éxito",
+            icon: "success",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.NgbModal.dismissAll();
+              location.reload();
+            }
+          });
+      });
   }
 
   limpiarFiltros() {

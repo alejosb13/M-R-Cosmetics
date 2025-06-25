@@ -102,10 +102,8 @@ export class LogisticaService {
   }
 
   deleteDeduccionesSupervisor(id: any): Observable<any> {
-    const URL = `${Supervisor}/deducciones/${id}`
-    return this.http.delete(
-      URL, {headers: this.headerJson_Token()}
-    );
+    const URL = `${Supervisor}/deducciones/${id}`;
+    return this.http.delete(URL, { headers: this.headerJson_Token() });
   }
 
   crearDevolucionesSupervisor(data: any): Observable<any> {
@@ -247,6 +245,17 @@ export class LogisticaService {
       headers: this.headerJson_Token(),
       responseType: "json",
     });
+  }
+
+  insertNotaCartera(factura_id: number, nota: string): Observable<any> {
+    return this.http.post<any>(
+      `${Logistica}/cartera-note`,
+      { factura_id, nota },
+      {
+        headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
   }
 
   getVentasMes(bodyform: CarteraDateBodyForm): Observable<any> {

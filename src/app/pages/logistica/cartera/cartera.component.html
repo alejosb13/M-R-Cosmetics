@@ -74,8 +74,9 @@
             <th scope="col" *ngIf="filtros.tipo_venta == 1">Saldo</th>
             <!-- <th scope="col">Tipo de Cambio</th> -->
             <!-- <th scope="col">IVA</th> -->
-            <th scope="col">Operación</th>
+            <!-- <th scope="col">Operación</th> -->
             <th scope="col">Vendedor</th>
+            <th scope="col">Nota</th>
             <!-- <th scope="col">Estado</th> -->
             <th scope="col">Ver</th>
             <th scope="col">Fecha de Vencimiento</th>
@@ -102,25 +103,51 @@
             </td>
             <!-- <td>{{ factura.tcambio }}</td> -->
             <!-- <td>{{ factura.iva }}%</td> -->
-            <td>
+            <!-- <td>
               <span *ngIf="factura.tipo_venta == 2">Contado</span>
               <span *ngIf="factura.tipo_venta == 1">Credito</span>
-            </td>
+            </td> -->
             <td>{{ factura.user.name }} {{ factura.user.apellido }}</td>
+            <td>
+              <div
+                class="pointer"
+                (click)="openFiltros(contentNota, factura)"
+                *ngIf="!factura.nota_cartera"
+              >
+                <i class="fas fa-pencil-alt text-warning"></i>
+              </div>
+              <div
+                class="pointer"
+                (click)="openFiltros(contentNota, factura)"
+                *ngIf="factura.nota_cartera"
+              >
+                {{ factura.nota_cartera.nota }}
+              </div>
+            </td>
             <td>
               <a [routerLink]="['/factura', 'detalle', factura.id]">Detalle</a>
             </td>
             <td>{{ factura.fecha_vencimiento | date : "dd-MM-yyyy" }}</td>
             <td>
-              <span *ngIf="factura.cliente.factura_historial">
-                {{
-                  factura.cliente.factura_historial.created_at
-                    | date : "dd-MM-yyyy"
-                }}
-              </span>
-              <span *ngIf="!factura.cliente.factura_historial">
-                No posee pagos</span
+              <ng-container
+                *ngIf="
+                  factura.factura_con_pago_en_proceso;
+                  else UltimoPagoTemplate
+                "
               >
+                <span
+                  *ngIf="
+                    factura.cliente.factura_historial;
+                    else UltimoPagoTemplate
+                  "
+                >
+                  {{
+                    factura.cliente.factura_historial.created_at
+                      | date : "dd-MM-yyyy"
+                  }}
+                </span>
+              </ng-container>
+              <ng-template #UltimoPagoTemplate> -- </ng-template>
             </td>
           </tr>
         </tbody>
@@ -267,6 +294,53 @@
       <div class="col text-center">
         <button class="btn btn-primary" (click)="aplicarFiltros(true)">
           Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentNota let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Nota</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <div class="form-group">
+          <!-- <p class="font-weight-bold">Desde</p> -->
+            <textarea
+              class="form-control mx-auto"
+              [(ngModel)]="NotaModal"
+              cols="30"
+              rows="3"
+              style="width: 235px; height: 41px"
+            ></textarea>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">
+          Cancelar
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="guardarNota()">
+          Guardar
         </button>
       </div>
     </div>
