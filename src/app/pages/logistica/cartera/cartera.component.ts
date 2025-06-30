@@ -27,7 +27,12 @@ import {
   Subscription,
   throwError,
 } from "rxjs";
-import { debounceTime, distinctUntilChanged, map, catchError } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  catchError,
+} from "rxjs/operators";
 import Swal from "sweetalert2";
 
 @Component({
@@ -54,8 +59,8 @@ export class CarteraComponent implements OnInit {
   allDates: boolean = true;
   // user:number
 
-  FacturaModal:any=null
-  NotaModal:any=""
+  FacturaModal: any = null;
+  NotaModal: any = "";
 
   @ViewChild("instance", { static: true }) instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -70,13 +75,16 @@ export class CarteraComponent implements OnInit {
   themeSite: string;
   themeSubscription: Subscription;
 
+  diasCobros: string[] = [];
+  daysOfWeek: string[];
+
   constructor(
     private _CommunicationService: CommunicationService,
     private _TablasService: TablasService,
     private _AuthService: AuthService,
     private _LogisticaService: LogisticaService,
     private NgbModal: NgbModal,
-    private _HelpersService: HelpersService,
+    public _HelpersService: HelpersService,
     private _Listado: Listado,
     private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService
@@ -97,6 +105,8 @@ export class CarteraComponent implements OnInit {
       .subscribe((color: string) => {
         this.themeSite = color === "black" ? "dark-mode" : "light-mode";
       });
+
+    this.daysOfWeek = this._HelpersService.DaysOfTheWeek;
   }
 
   asignarValores() {
@@ -108,6 +118,7 @@ export class CarteraComponent implements OnInit {
       tipo_venta: this.filtros.tipo_venta,
       status_pagado: this.filtros.status_pagado,
       allDates: this.filtros.allDates,
+      diasCobros: this.diasCobros,
     };
 
     this._LogisticaService.getCarteraForDate(bodyForm).subscribe(
@@ -240,12 +251,12 @@ export class CarteraComponent implements OnInit {
     });
   }
 
-  openFiltros(content: any,factura?:any) {
+  openFiltros(content: any, factura?: any) {
     this.FacturaModal = null;
     this.NotaModal = "";
 
     this.FacturaModal = factura;
-    if(factura && factura.nota_cartera){
+    if (factura && factura.nota_cartera) {
       this.NotaModal = factura.nota_cartera.nota;
     }
     this.NgbModal.open(content, {
@@ -328,11 +339,24 @@ export class CarteraComponent implements OnInit {
       });
   }
 
+  cortarLetrasYMayuscula(
+    palabra: string,
+    posicionIni: number,
+    posicionfin: number
+  ) {
+    let texto = palabra.slice(posicionIni, posicionfin);
+
+    return `${texto.charAt(posicionIni).toUpperCase()}${texto.slice(1)}`;
+  }
+
   limpiarFiltros() {
     this.setCurrentDate();
+
+    this.clearDiasCobros();
     this.tipoVenta = 1;
     this.status_pagado = 0; // por pagar
     this.allDates = false;
+    this.diasCobros = [];
 
     if (this.isAdmin || this.isSupervisor) this.resetUser();
 
@@ -356,6 +380,7 @@ export class CarteraComponent implements OnInit {
       this.allDates = this.filtros.allDates;
       this.tipoVenta = this.filtros.tipo_venta;
       this.status_pagado = this.filtros.status_pagado;
+      this.diasCobros = this.filtros.diasCobros;
     } else {
       if (!submit) {
         this.userId = Number(this._AuthService.dataStorage.user.userId);
@@ -378,6 +403,7 @@ export class CarteraComponent implements OnInit {
         tipo_venta: this.tipoVenta,
         status_pagado: this.status_pagado,
         allDates: this.allDates,
+        diasCobros: this.diasCobros,
       };
     }
 
@@ -408,6 +434,28 @@ export class CarteraComponent implements OnInit {
       )
     );
   };
+
+  changeDiasCobros(event: HTMLInputElement) {
+    // console.log(this.diasCobros);
+    if (event.checked) {
+      this.diasCobros = [...this.diasCobros, event.value];
+    } else {
+      this.diasCobros = this.diasCobros.filter((dia) => dia != event.value);
+    }
+    // console.log(this.diasCobros);
+  }
+
+  existeDiaDeCobroEnFiltro(dia: string) {
+    return this.diasCobros.some((diaCobro) => diaCobro == dia);
+  }
+
+  clearDiasCobros() {
+    let element = document.getElementById("diasCobrosElement") as HTMLElement;
+    let lisInputs = element.getElementsByTagName("input");
+    Array.from(lisInputs).map((input: HTMLInputElement) => {
+      input.checked = false;
+    });
+  }
 
   dataChangedUser(element: string) {
     // console.log(element);

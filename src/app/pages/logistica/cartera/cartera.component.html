@@ -231,6 +231,21 @@
           />
         </div>
       </div>
+      <div class="col-md-6 mb-3">
+        <p class="font-weight-bold">Días de cobro</p>
+        <div class="d-flex flex-wrap" id="diasCobrosElement">
+          <div *ngFor="let day of _HelpersService.DaysOfTheWeek" class="mr-3">
+            <input
+              type="checkbox"
+              [value]="day"
+              class="mr-1"
+              (change)="changeDiasCobros($event.target)"
+              [checked]="existeDiaDeCobroEnFiltro(day)"
+            />
+            <label [innerHTML]="cortarLetrasYMayuscula(day, 0, 3)"></label>
+          </div>
+        </div>
+      </div>
       <!-- <div class="col-md-6" *ngIf="isAdmin">
         <div class="form-group tipehead" >
           <p class=" font-weight-bold">Usuario</p>
@@ -319,14 +334,13 @@
       <div class="col-md-6 mx-auto">
         <div class="form-group">
           <!-- <p class="font-weight-bold">Desde</p> -->
-            <textarea
-              class="form-control mx-auto"
-              [(ngModel)]="NotaModal"
-              cols="30"
-              rows="3"
-              style="width: 235px; height: 41px"
-            ></textarea>
-
+          <textarea
+            class="form-control mx-auto"
+            [(ngModel)]="NotaModal"
+            cols="30"
+            rows="3"
+            style="width: 235px; height: 41px"
+          ></textarea>
         </div>
       </div>
     </div>
@@ -339,9 +353,7 @@
         </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="guardarNota()">
-          Guardar
-        </button>
+        <button class="btn btn-primary" (click)="guardarNota()">Guardar</button>
       </div>
     </div>
   </div>
