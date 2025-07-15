@@ -56,9 +56,17 @@ export class ImportacionListComponent {
       });
   }
 
-  asignarValores() {
+  asignarValores(isBtnFilter: boolean = false) {
     this.isLoad = true;
 
+    if(isBtnFilter){
+        this.listadoFilter = {
+          ...this.listadoFilter,
+            dateIni: this.dateIni,
+            dateFin: this.dateFin,
+            allDates: this.allDates,
+        }
+    }
     this._FinanzasService.getImportacion(this.listadoFilter).subscribe(
       (Paginacion: ListadoModel<ImportacionResponse>) => {
         console.log(Paginacion);
@@ -210,8 +218,8 @@ export class ImportacionListComponent {
   }
 
   limpiarFiltros() {
-    this.setCurrentDate();
     this.allDates = true;
+    this.setCurrentDate();
 
     this.asignarValores();
     this.NgbModal.dismissAll();
@@ -225,6 +233,7 @@ export class ImportacionListComponent {
 
     this.asignarValores();
   }
+
   ngOnDestroy() {
     this.themeSubscription.unsubscribe();
   }

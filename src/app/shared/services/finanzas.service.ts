@@ -157,7 +157,7 @@ export class FinanzasService {
   getImportacion(param: FiltrosList): Observable<any> {
     let URL = `${FinanzasURL}/importacion`;
     console.log(param);
-    console.log(param);
+    // console.log(param);
     if (param.link) {
       URL = param.link;
     }
