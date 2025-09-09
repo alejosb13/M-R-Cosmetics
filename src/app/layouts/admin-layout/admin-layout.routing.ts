@@ -82,7 +82,7 @@ import { GastosListComponent } from "@app/pages/finanzas/gastos/gastos-list/gast
 import { EstadosComponent } from "@app/pages/finanzas/estados/estados.component";
 import { TalonariosListComponent } from "@app/pages/talonarios/talonarios-list/talonarios-list.component";
 import { ListadoDevolucionIncentivosSupervisorComponent } from "@app/pages/devoluciones/listado/listado-devolucion-incentivos-supervisor/listado-devolucion-incentivos-supervisor.component";
-import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from '../../pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component';
+import { ListadoDevolucionIncentivosSupervisorAplicadosComponent } from "../../pages/devoluciones/listado/listado-incentivos-supervisor-aplicados/listado-devolucion-incentivos-supervisor-aplicados.component";
 import { UbicacionesComponent } from "@app/pages/configuracion/ubicaciones/ubicaciones.component";
 import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas.component";
 import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/departamentos/departamentos.component";
@@ -151,7 +151,7 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "producto",
     canActivate: [AuthGuard],
-    data: { role: [ADMINISTRADOR] },
+    data: { role: [ADMINISTRADOR, SUPERVISOR] },
     children: [
       { path: "", component: ProductosComponent },
       { path: "agregar", component: ProductoInsertarComponent },

@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "@app/auth/login/service/auth.service";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Producto } from "app/shared/models/Producto.model";
 import { ClientesService } from "app/shared/services/clientes.service";
@@ -18,19 +19,27 @@ export class ProductoEditarComponent implements OnInit {
   productoId: number;
   themeSite: string;
   themeSubscription: Subscription;
-
+  isAdmin : boolean = false;
   constructor(
     private _CommunicationService: CommunicationService,
     route: ActivatedRoute,
     private _ProductosService: ProductosService,
     // private fb: FormBuilder,
     // private _FrecuenciaService: FrecuenciaService,
-    private _HelpersService: HelpersService
+    private _HelpersService: HelpersService,
+        private router: Router,
+    private _AuthService: AuthService
+
   ) {
     this.productoId = Number(route.snapshot.params.id);
   }
 
   ngOnInit(): void {
+
+        this.isAdmin = this._AuthService.isAdmin();
+    
+    if(!this.isAdmin) this.router.navigate(['/inicio']);
+
     this.themeSubscription = this._CommunicationService
       .getTheme()
       .subscribe((color: string) => {
