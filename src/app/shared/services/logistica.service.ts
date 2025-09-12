@@ -233,6 +233,13 @@ export class LogisticaService {
     });
   }
 
+  getMetaForAnyDates(bodyform: CarteraDateBodyForm): Observable<any> {
+    return this.http.post<any>(`${Logistica}/ventas-anual`, bodyform, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   getProductosVendedidos(bodyform: CarteraDateBodyForm): Observable<any> {
     return this.http.post<any>(`${Logistica}/productos-vendidos`, bodyform, {
       headers: this.headerJson_Token(),

@@ -87,6 +87,7 @@ export class NavbarComponent implements OnInit {
       return "Incentivos de Supervisor";
     if (titlee.includes("logistica/incentivo")) return "Incentivos";
     if (titlee.includes("logistica/ventas")) return "Ventas";
+    if (titlee.includes("logistica/ventas-anual")) return "Ventas Anuales";
     if (titlee.includes("logistica/clientes-inactivos"))
       return "Clientes Inactivos";
     if (titlee.includes("logistica/productos-vendedores"))

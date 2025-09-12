@@ -131,9 +131,10 @@ import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/dep
 import { DepartamentosFormComponent } from "@app/shared/components/forms/departamentos-form/departamentos-form.component";
 import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
 import { MunicipiosFormComponent } from "@app/shared/components/forms/municipios-form/municipios-form.component";
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
 import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-historial-insert/abono-historial-insert.component";
+import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-anual.component";
 
 @NgModule({
   imports: [
@@ -143,7 +144,7 @@ import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-hist
     NgbModule,
     ReactiveFormsModule,
     DirectivesModule,
-    NgMultiSelectDropDownModule
+    NgMultiSelectDropDownModule,
   ],
   declarations: [
     DashboardComponent,
@@ -249,20 +250,20 @@ import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-hist
     VentasMensualComponent,
     FinanzasSeccionesComponent,
     ValidErrorMessagesFormComponent,
-    
+
     GastosListComponent,
     GastosInsertarComponent,
     GastoFormComponent,
-    
+
     CostosListComponent,
     CostosInsertarComponent,
     CostosVentasFormComponent,
-    
+
     ImportacionListComponent,
     ImportacionInsertarComponent,
     ImportacionFormComponent,
     ImportacionEditarComponent,
-    
+
     InversionListComponent,
     InversionFormComponent,
     InversionInsertarComponent,
@@ -287,7 +288,8 @@ import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-hist
 
     CapitalizePipe,
 
-    AbonoHistorialInsertComponent
+    AbonoHistorialInsertComponent,
+    VentasAnualComponent,
   ],
 })
 export class AdminLayoutModule {}

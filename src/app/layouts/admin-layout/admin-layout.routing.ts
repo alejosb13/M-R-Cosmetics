@@ -87,6 +87,7 @@ import { UbicacionesComponent } from "@app/pages/configuracion/ubicaciones/ubica
 import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas.component";
 import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/departamentos/departamentos.component";
 import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
+import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-anual.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -126,6 +127,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "mora60-90", component: Mora60A90Component },
       { path: "clientes-nuevos", component: ClientesNuevosComponent },
       { path: "incentivos", component: IncentivosComponent },
+      { path: "ventas-anual", component: VentasAnualComponent },
       {
         path: "incentivos-supervisor",
         component: IncentivosSupervisorComponent,
