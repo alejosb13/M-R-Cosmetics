@@ -250,3 +250,8 @@ body .main-panel[data-color="black"] .page-link {
 .modal-backdrop ~ .modal.dark-modal {
   background-color: #39474757; /* Cambia esto según el estilo que desees aplicar */
 }
+
+
+ngb-modal-window.d-block.modal.white-modal.fade.show {
+    z-index: 9999;
+}

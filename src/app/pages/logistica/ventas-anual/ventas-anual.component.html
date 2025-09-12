@@ -70,7 +70,11 @@
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.usuarios.length > 0">
-          <tr *ngFor="let Recuperacion of _TablasService.datosTablaStorage.usuarios">
+          <tr
+            *ngFor="
+              let Recuperacion of _TablasService.datosTablaStorage.usuarios
+            "
+          >
             <th>
               {{ Recuperacion.user_id }}
             </th>
@@ -107,6 +111,31 @@
           (pageChange)="refreshCountries()"
         ></ngb-pagination>
       </div> -->
+      <br />
+      <br />
+      <div class="chart-block">
+        <h4>Metas por usuario</h4>
+        <canvas
+          baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [legend]="barChartLegend"
+          [chartType]="barChartType"
+        >
+        </canvas>
+        <br><br>
+        <h4>% Cumplimiento</h4>
+        <canvas
+          baseChart
+          [datasets]="porcentajeData"
+          [labels]="porcentajeLabels"
+          [options]="porcentajeOptions"
+          [legend]="porcentajeLegend"
+          [chartType]="porcentajeType"
+        >
+        </canvas>
+      </div>
     </div>
   </ng-container>
 </div>

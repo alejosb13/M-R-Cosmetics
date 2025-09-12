@@ -135,6 +135,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
 import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-historial-insert/abono-historial-insert.component";
 import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-anual.component";
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -145,6 +146,7 @@ import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-a
     ReactiveFormsModule,
     DirectivesModule,
     NgMultiSelectDropDownModule,
+    ChartsModule
   ],
   declarations: [
     DashboardComponent,

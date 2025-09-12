@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Listado } from "@app/shared/services/listados.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -14,6 +14,8 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
+import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
+import { BaseChartDirective, Label } from "ng2-charts";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -25,11 +27,10 @@ type Recuperacion = {
   user: Usuario;
 };
 
-
 @Component({
-  selector: 'app-ventas-anual',
-  templateUrl: './ventas-anual.component.html',
-  styleUrls: ['./ventas-anual.component.scss']
+  selector: "app-ventas-anual",
+  templateUrl: "./ventas-anual.component.html",
+  styleUrls: ["./ventas-anual.component.scss"],
 })
 export class VentasAnualComponent {
   page = 1;
@@ -61,6 +62,64 @@ export class VentasAnualComponent {
   themeSite: string;
   themeSubscription: Subscription;
 
+  public barChartLabels: string[] = [];
+  public barChartData: any[] = [];
+  public barChartOptions: any = {
+    responsive: true,
+    scales: {
+      xAxes: [
+        {
+          stacked: false,
+        },
+      ],
+      yAxes: [
+        {
+          stacked: false,
+          ticks: {
+            beginAtZero: true,
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "Monto",
+          },
+        },
+      ],
+    },
+  };
+
+  public barChartType = "bar";
+  public barChartLegend = true;
+
+  // Procentaje chart
+  public porcentajeLabels: string[] = [];
+  public porcentajeData: any[] = [];
+  public porcentajeOptions: any = {
+    responsive: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+            // 👈 sin max fijo, se autoescala si hay >100%
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "Porcentaje (%)",
+          },
+        },
+      ],
+    },
+    plugins: {
+      datalabels: {
+        anchor: "end",
+        align: "top",
+        formatter: (value: number) => value.toFixed(2) + "%",
+      },
+    },
+  };
+  public porcentajeType = "bar";
+  public porcentajeLegend = false;
+
   constructor(
     private _CommunicationService: CommunicationService,
     private _TablasService: TablasService,
@@ -70,7 +129,7 @@ export class VentasAnualComponent {
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService,
-    private _Listado: Listado,
+    private _Listado: Listado
   ) {}
 
   ngOnInit(): void {
@@ -103,14 +162,15 @@ export class VentasAnualComponent {
         // factura: 1,
         // recibo: 1,
         // recibosRangosSinTerminar: 1,
-      }).subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
 
-      // this.resetUser()
-    });
+        // this.resetUser()
+      });
   }
 
   aplicarFiltros(submit: boolean = false) {
@@ -222,11 +282,63 @@ export class VentasAnualComponent {
           this.totalAbonos = recuperacion.totalVentas;
           this.totalMetas = recuperacion.totalMetas;
           this.recuperacionPorcentaje = recuperacion.porcentaje;
+          this.generarGraficoVentasMetas(recuperacion.usuarios);
+          this.generarGraficoPorcentaje(recuperacion.usuarios);
         },
         (error) => {
           this.isLoad = false;
         }
       );
+  }
+
+  generarGraficoVentasMetas(dataApi: any) {
+    // Etiquetas = nombres de usuario
+    this.barChartLabels = dataApi.map((d) => d.name);
+
+    // Dataset Ventas
+    const ventasData = dataApi.map((d) => Number(d.totalVentas) || 0);
+    // Dataset Metas
+    const metasData = dataApi.map((d) => Number(d.totalMetas) || 0);
+
+    this.barChartData = [
+      {
+        label: "Ventas",
+        data: ventasData,
+        backgroundColor: "rgba(54,162,235,0.6)", // azul
+        borderColor: "rgba(54,162,235,1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Metas",
+        data: metasData,
+        backgroundColor: "rgba(75,192,192,0.6)", // verde
+        borderColor: "rgba(75,192,192,1)",
+        borderWidth: 1,
+      },
+    ];
+  }
+
+  generarGraficoPorcentaje(dataApi: any) {
+    // Etiquetas = usuarios
+    this.porcentajeLabels = dataApi.map((d) => d.name);
+
+    // Datos = porcentaje
+    const porcentajeArray = dataApi.map((d) => Number(d.porcentaje) || 0);
+
+    this.porcentajeData = [
+      {
+        label: "% Cumplimiento",
+        data: porcentajeArray,
+        backgroundColor: "rgba(54,162,235,0.6)",
+        borderColor: "rgba(54,162,235,1)",
+        borderWidth: 1,
+      },
+    ];
+
+    // Calcular max dinámico (si hay >100%)
+    const maxPorcentaje = Math.max(...porcentajeArray);
+    this.porcentajeOptions.scales.yAxes[0].ticks.max =
+      Math.ceil(maxPorcentaje / 10) * 10; // redondea a decenas
   }
 
   BuscarValor() {
@@ -286,6 +398,47 @@ export class VentasAnualComponent {
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
     // console.log(this.filtros);
+  }
+
+  // Color determinístico por nombre (para que meta/venta de mismo usuario guarden relación)
+  colorForString(name: string, alpha = 0.6) {
+    let hash = 0;
+    for (let i = 0; i < (name || "").length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const r = Math.abs(hash) % 256;
+    const g = Math.abs(hash >> 8) % 256;
+    const b = Math.abs(hash >> 16) % 256;
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  // Obtener todas las etiquetas (meses) únicas y ordenadas (p. ej. "2025-09")
+  extractLabels(recuperacion: any[]) {
+    const set = new Set<string>();
+    recuperacion.forEach((u) => {
+      (u.meses || []).forEach((m: any) => {
+        const label = m.label ?? m.mes;
+        if (label) set.add(label);
+      });
+    });
+    // orden lexicográfico funciona para YYYY-MM
+    return Array.from(set).sort();
+  }
+
+  // Obtener valor seguro por usuario y etiqueta (maneja meta, totalVentas, porcentaje)
+  getMonthValue(
+    usuario: any,
+    label: string,
+    key: "meta" | "totalVentas" | "porcentaje"
+  ) {
+    const mesObj = (usuario.meses || []).find(
+      (m: any) => (m.label ?? m.mes) === label
+    );
+    if (!mesObj) return 0;
+    if (key === "porcentaje") {
+      return Number(mesObj.raw?.porcentaje ?? mesObj.porcentaje ?? 0);
+    }
+    return Number(mesObj[key] ?? 0);
   }
 
   ngOnDestroy() {
