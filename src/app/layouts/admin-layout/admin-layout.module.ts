@@ -136,6 +136,7 @@ import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
 import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-historial-insert/abono-historial-insert.component";
 import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-anual.component";
 import { ChartsModule } from 'ng2-charts';
+import { RecuperacionAnualComponent } from "@app/pages/logistica/recuperacion-anual/recuperacion-anual.component";
 
 @NgModule({
   imports: [
@@ -146,7 +147,7 @@ import { ChartsModule } from 'ng2-charts';
     ReactiveFormsModule,
     DirectivesModule,
     NgMultiSelectDropDownModule,
-    ChartsModule
+    ChartsModule,
   ],
   declarations: [
     DashboardComponent,
@@ -292,6 +293,7 @@ import { ChartsModule } from 'ng2-charts';
 
     AbonoHistorialInsertComponent,
     VentasAnualComponent,
+    RecuperacionAnualComponent
   ],
 })
 export class AdminLayoutModule {}

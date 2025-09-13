@@ -88,6 +88,7 @@ import { ZonasComponent } from "@app/pages/configuracion/ubicaciones/zonas/zonas
 import { DepartamentosComponent } from "@app/pages/configuracion/ubicaciones/departamentos/departamentos.component";
 import { MunicipiosComponent } from "@app/pages/configuracion/ubicaciones/municipios/municipios.component";
 import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-anual.component";
+import { RecuperacionAnualComponent } from "@app/pages/logistica/recuperacion-anual/recuperacion-anual.component";
 
 const ADMINISTRADOR = "administrador";
 const VENDEDOR = "vendedor";
@@ -128,6 +129,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "clientes-nuevos", component: ClientesNuevosComponent },
       { path: "incentivos", component: IncentivosComponent },
       { path: "ventas-anual", component: VentasAnualComponent },
+      { path: "recuperacion-anual", component: RecuperacionAnualComponent },
       {
         path: "incentivos-supervisor",
         component: IncentivosSupervisorComponent,

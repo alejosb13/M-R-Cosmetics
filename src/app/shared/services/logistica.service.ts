@@ -240,6 +240,13 @@ export class LogisticaService {
     });
   }
 
+  getRecuperacionForAnyDates(bodyform: CarteraDateBodyForm): Observable<any> {
+    return this.http.post<any>(`${Logistica}/recuperacion-anual`, bodyform, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   getProductosVendedidos(bodyform: CarteraDateBodyForm): Observable<any> {
     return this.http.post<any>(`${Logistica}/productos-vendidos`, bodyform, {
       headers: this.headerJson_Token(),
