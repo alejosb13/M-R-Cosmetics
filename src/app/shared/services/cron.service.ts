@@ -17,7 +17,7 @@ export class CronService {
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
 
     let config = {
-      'Content-Type': "application/json",
+      "Content-Type": "application/json",
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
 
@@ -30,7 +30,7 @@ export class CronService {
     roleName,
     userId,
     disablePaginate,
-    estado
+    estado,
   }: {
     roleId: number;
     roleName: string;
@@ -50,5 +50,16 @@ export class CronService {
     queryParams = queryParams.append("estado", estado);
 
     return this.http.get<any>(URL, { params: queryParams });
+  }
+
+  save_Ventas_Recuperacion_anual(bodyform: any): Observable<any> {
+    return this.http.post<any>(
+      `${CronURL}/generar-ventas-y-recuperacion-anuales`,
+      bodyform,
+      {
+        // headers: this.headerJson_Token(),
+        responseType: "json",
+      }
+    );
   }
 }

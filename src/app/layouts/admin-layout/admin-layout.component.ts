@@ -3,6 +3,7 @@ import { CommunicationService } from "@app/shared/services/communication.service
 import { AuthService } from "app/auth/login/service/auth.service";
 import { CronService } from "app/shared/services/cron.service";
 import logger from "app/shared/utils/logger";
+import * as moment from "moment";
 import { interval, Subject, Subscription } from "rxjs";
 import { catchError, exhaustMap, takeUntil } from "rxjs/operators";
 
@@ -24,6 +25,7 @@ export class AdminLayoutComponent implements OnInit {
 
   ngOnInit() {
     this.refreshIndices();
+    this.refreshIndicesVentasRecuperacion();
     this.themeSubscription = this._CommunicationService
       .getTheme()
       .subscribe((color: string) => {
@@ -43,6 +45,28 @@ export class AdminLayoutComponent implements OnInit {
             userId,
             disablePaginate: 1,
             estado: 1,
+          })
+        ),
+        takeUntil(this.ngUnsubscribe),
+        catchError((e, caught) => caught)
+      );
+      // if(environment.production)
+      refreshIndices.subscribe((result) => {
+        logger.log(result);
+      });
+      // }
+    }
+  }
+
+  private refreshIndicesVentasRecuperacion() {
+    if (this._AuthService.isLogin) {
+      // const { roleId, roleName, userId } = this._AuthService.dataStorage.user;
+      // let refreshIndices = interval(40000).pipe(
+      let refreshIndices = interval(120000).pipe(
+        exhaustMap(() =>
+          this._CronService.save_Ventas_Recuperacion_anual({
+            dateIni: moment().subtract(1, "year").format("YYYY-MM-DD"),
+            dateFin: moment().format("YYYY-MM-DD"),
           })
         ),
         takeUntil(this.ngUnsubscribe),
