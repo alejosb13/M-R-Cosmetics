@@ -107,6 +107,51 @@
           (pageChange)="refreshCountries()"
         ></ngb-pagination>
       </div>
+      <br />
+      <br />
+
+      <!-- Gráficos -->
+      <div class="row px-4" *ngIf="isAdmin || isSupervisor">
+        <!-- Gráfico Ventas vs Metas -->
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Ventas vs Metas</h5>
+            </div>
+            <div class="card-body">
+              <canvas
+                baseChart
+                [datasets]="barChartData"
+                [labels]="barChartLabels"
+                [options]="barChartOptions"
+                [chartType]="barChartType"
+                [legend]="barChartLegend"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico Porcentaje de Cumplimiento -->
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Porcentaje de Cumplimiento</h5>
+            </div>
+            <div class="card-body">
+              <canvas
+                baseChart
+                [datasets]="porcentajeData"
+                [labels]="porcentajeLabels"
+                [options]="porcentajeOptions"
+                [chartType]="porcentajeType"
+                [legend]="porcentajeLegend"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </ng-container>
 </div>

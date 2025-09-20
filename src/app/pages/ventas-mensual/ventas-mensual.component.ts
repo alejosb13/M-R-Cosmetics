@@ -14,6 +14,8 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/shared/utils/logger";
 import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
+import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
+import { BaseChartDirective, Label } from "ng2-charts";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -23,6 +25,9 @@ type Recuperacion = {
   recuperacionTotal: number;
   user_id: number;
   user: Usuario;
+  totalVentas: number;
+  meta: number;
+  porcentaje: number;
 };
 
 @Component({
@@ -60,6 +65,64 @@ export class VentasMensualComponent {
   themeSite: string;
   themeSubscription: Subscription;
 
+  // Propiedades para gráficos
+  public barChartLabels: string[] = [];
+  public barChartData: any[] = [];
+  public barChartOptions: any = {
+    responsive: true,
+    scales: {
+      xAxes: [
+        {
+          stacked: false,
+        },
+      ],
+      yAxes: [
+        {
+          stacked: false,
+          ticks: {
+            beginAtZero: true,
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "Monto",
+          },
+        },
+      ],
+    },
+  };
+
+  public barChartType = "bar";
+  public barChartLegend = true;
+
+  // Porcentaje chart
+  public porcentajeLabels: string[] = [];
+  public porcentajeData: any[] = [];
+  public porcentajeOptions: any = {
+    responsive: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "Porcentaje (%)",
+          },
+        },
+      ],
+    },
+    plugins: {
+      datalabels: {
+        anchor: "end",
+        align: "top",
+        formatter: (value: number) => value.toFixed(2) + "%",
+      },
+    },
+  };
+  public porcentajeType = "bar";
+  public porcentajeLegend = false;
+
   constructor(
     private _CommunicationService: CommunicationService,
     private _TablasService: TablasService,
@@ -69,7 +132,7 @@ export class VentasMensualComponent {
     private _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService,
-    private _Listado: Listado,
+    private _Listado: Listado
   ) {}
 
   ngOnInit(): void {
@@ -102,14 +165,15 @@ export class VentasMensualComponent {
         // factura: 1,
         // recibo: 1,
         // recibosRangosSinTerminar: 1,
-      }).subscribe((usuarios: Usuario[]) => {
-      this.userStore = usuarios;
-      this.USersNames = usuarios.map(
-        (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
-      );
+      })
+      .subscribe((usuarios: Usuario[]) => {
+        this.userStore = usuarios;
+        this.USersNames = usuarios.map(
+          (usuario) => `${usuario.id} - ${usuario.name} ${usuario.apellido}`
+        );
 
-      // this.resetUser()
-    });
+        // this.resetUser()
+      });
   }
 
   aplicarFiltros(submit: boolean = false) {
@@ -221,6 +285,10 @@ export class VentasMensualComponent {
           this.totalAbonos = recuperacion.totalVentas;
           this.totalMetas = recuperacion.totalMetas;
           this.recuperacionPorcentaje = recuperacion.porcentaje;
+
+          // Generar gráficos
+          this.generarGraficoVentasMetas();
+          this.generarGraficoPorcentaje();
         },
         (error) => {
           this.isLoad = false;
@@ -285,6 +353,70 @@ export class VentasMensualComponent {
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
     // console.log(this.filtros);
+  }
+
+  generarGraficoVentasMetas() {
+    // Para ventas mensual, mostramos gráfico por usuario
+    if (!this.Data || this.Data.length === 0) return;
+
+    // Etiquetas = nombres de usuario
+    this.barChartLabels = this.Data.map(
+      (d) => `${d.user.name} ${d.user.apellido}`
+    );
+
+    // Dataset Ventas
+    const ventasData = this.Data.map((d) => Number(d.totalVentas) || 0);
+    // Dataset Metas
+    const metasData = this.Data.map((d) => Number(d.meta) || 0);
+
+    this.barChartData = [
+      {
+        label: "Ventas",
+        data: ventasData,
+        backgroundColor: "rgba(54,162,235,0.6)", // azul
+        borderColor: "rgba(54,162,235,1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Metas",
+        data: metasData,
+        backgroundColor: "rgba(75,192,192,0.6)", // verde
+        borderColor: "rgba(75,192,192,1)",
+        borderWidth: 1,
+      },
+    ];
+  }
+
+  generarGraficoPorcentaje() {
+    // Para ventas mensual, mostramos el porcentaje por usuario
+    if (!this.Data || this.Data.length === 0) return;
+
+    // Etiquetas = nombres de usuario
+    this.porcentajeLabels = this.Data.map(
+      (d) => `${d.user.name} ${d.user.apellido}`
+    );
+
+    // Datos = porcentaje de cada usuario
+    const porcentajeArray = this.Data.map((d) => Number(d.porcentaje) || 0);
+
+    this.porcentajeData = [
+      {
+        label: "% Cumplimiento",
+        data: porcentajeArray,
+        backgroundColor: porcentajeArray.map((p) =>
+          p >= 100 ? "rgba(75,192,192,0.6)" : "rgba(255,206,86,0.6)"
+        ),
+        borderColor: porcentajeArray.map((p) =>
+          p >= 100 ? "rgba(75,192,192,1)" : "rgba(255,206,86,1)"
+        ),
+        borderWidth: 1,
+      },
+    ];
+
+    // Calcular max dinámico (si hay >100%)
+    const maxPorcentaje = Math.max(...porcentajeArray);
+    this.porcentajeOptions.scales.yAxes[0].ticks.max =
+      Math.ceil(maxPorcentaje / 10) * 10;
   }
 
   ngOnDestroy() {
