@@ -19,7 +19,7 @@ export class MetaService {
     // const DataUSerStorage = this.authService.getAuthFromLocalStorage()
 
     let config = {
-      'Content-Type': "application/json",
+      "Content-Type": "application/json",
       // 'Authorization' : `bearer ${DataUSerStorage? DataUSerStorage?.access_token: "" }`
     };
 
@@ -29,7 +29,7 @@ export class MetaService {
   // public methods
   getMeta(): Observable<Meta> {
     return this.http.get<Meta>(MetaURL, {
-      headers: this.headerJson_Token(),
+      // headers: this.headerJson_Token(),
       responseType: "json",
     });
   }

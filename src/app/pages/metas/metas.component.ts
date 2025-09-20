@@ -38,6 +38,7 @@ export class MetasComponent implements OnInit {
 
   meta: Meta;
   idUsuario: number;
+  MetaDefecto: Meta;
 
   userIdString: string;
   userStore: Usuario[];
@@ -84,6 +85,7 @@ export class MetasComponent implements OnInit {
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
     this.setCurrentDate();
     this.getUsers();
+    this.getMetas();
     this.aplicarFiltros();
 
     this.themeSubscription = this._CommunicationService
@@ -91,6 +93,13 @@ export class MetasComponent implements OnInit {
       .subscribe((color: string) => {
         this.themeSite = color === "black" ? "dark-mode" : "light-mode";
       });
+  }
+
+  getMetas() {
+    this._MetaService.getMeta().subscribe((meta) => {
+      logger.log("Metas User Predefinidas", meta);
+      this.MetaDefecto = meta;
+    });
   }
 
   getUsers() {
@@ -421,6 +430,7 @@ export class MetasComponent implements OnInit {
     if (this.meta) {
       this._MetaService.updateMeta(this.meta.id, meta).subscribe(
         (userResp) => {
+          this.NgbModal.dismissAll();
           this.userStore = this.userStore.map((usuario) => {
             if (usuario.id == userResp.user_id) usuario.meta = userResp;
 
@@ -437,8 +447,8 @@ export class MetasComponent implements OnInit {
           });
         },
         (HttpErrorResponse: HttpErrorResponse) => {
+          this.NgbModal.dismissAll();
           let error: string = HttpErrorResponse.error[0];
-
           Swal.mixin({
             customClass: {
               container: this.themeSite, // Clase para el modo oscuro
@@ -453,6 +463,7 @@ export class MetasComponent implements OnInit {
     } else {
       this._MetaService.insertMeta(meta).subscribe(
         (userResp) => {
+          this.NgbModal.dismissAll();
           this.userStore = this.userStore.map((usuario) => {
             if (usuario.id == userResp.user_id) usuario.meta = userResp;
 
@@ -473,6 +484,7 @@ export class MetasComponent implements OnInit {
         },
         (HttpErrorResponse: HttpErrorResponse) => {
           // let error:string =  HttpErrorResponse.error[0]
+          this.NgbModal.dismissAll();
           let error: string =
             this._HelpersService.errorResponse(HttpErrorResponse);
 

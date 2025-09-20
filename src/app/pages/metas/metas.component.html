@@ -10,7 +10,9 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <div class="d-flex flex-row justify-content-between mt-3 flex-wrap justify-content-sm-start">
+      <div
+        class="d-flex flex-row justify-content-between mt-3 flex-wrap justify-content-sm-start"
+      >
         <div
           class="d-flex card-title align-items-start flex-row justify-content-between flex-wrap justify-content-sm-around"
         >
@@ -44,9 +46,7 @@
           </div>
         </div>
 
-        <form
-          class="d-flex align-items-center justify-content-end buscador"
-        >
+        <form class="d-flex align-items-center justify-content-end buscador">
           <div class="form-label-group input-group">
             <input
               type="text"
@@ -178,7 +178,6 @@
           />
         </div>
       </div>
-
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">
@@ -371,24 +370,24 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let usuario of userStore">
-              <th scope="row">{{ usuario.id }}</th>
-              <td>{{ usuario.name }} {{ usuario.apellido }}</td>
-              <td>{{ usuario.cargo }}</td>
-              <td>{{ usuario.email }}</td>
+            <tr *ngFor="let user of MetaDefecto">
+              <th scope="row">{{ user.id }}</th>
+              <td>{{ user.name }} {{ user.apellido }}</td>
+              <td>{{ user.cargo }}</td>
+              <td>{{ user.email }}</td>
               <td>
                 <div
+                  *ngIf="user.meta"
                   class="font-weight-bold"
-                  *ngIf="usuario.meta"
-                  (click)="modificarMeta(modalMeta, usuario.meta)"
+                  (click)="modificarMeta(modalMeta, user)"
                   role="button"
                 >
-                  {{ usuario.meta.monto | currency : "USD" }}
+                  {{ user.meta.monto | currency : "USD" }}
                 </div>
                 <div
                   class="text-danger"
-                  *ngIf="!usuario.meta"
-                  (click)="agregarMeta(modalMeta, usuario.id)"
+                  *ngIf="!user.meta"
+                  (click)="agregarMeta(modalMeta, user.id)"
                   role="button"
                 >
                   <i class="fas fa-dollar-sign text-danger"></i> Agregar
