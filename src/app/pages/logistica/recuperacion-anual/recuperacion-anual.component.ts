@@ -14,6 +14,7 @@ import { UsuariosService } from "app/shared/services/usuarios.service";
 import logger from "app/shared/utils/logger";
 import { ChartType } from "chart.js";
 import { environment } from "environments/environment";
+import * as moment from "moment";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 type Recuperacion = {
@@ -52,7 +53,7 @@ export class RecuperacionAnualComponent {
 
   Data: Recuperacion[];
 
-  FilterSection: TypesFiltersForm = "recuperacionMensualFilter";
+  FilterSection: TypesFiltersForm = "recuperacionAnualFilter";
 
   totalAbonos: number;
   totalMetas: number;
@@ -174,25 +175,25 @@ export class RecuperacionAnualComponent {
   }
 
   setCurrentDate() {
-    let current = this._HelpersService.changeformatDate(
-      this._HelpersService.currentDay(),
-      "MM/DD/YYYY",
-      "YYYY-MM-DD"
-    );
-    let month = this._HelpersService.changeformatDate(
-      this._HelpersService.currentDay(),
-      "MM/DD/YYYY",
-      "MM"
-    );
-    let year = this._HelpersService.changeformatDate(
-      this._HelpersService.currentDay(),
-      "MM/DD/YYYY",
-      "YYYY"
-    );
-    let rangoMonth = this._HelpersService.InicioYFinDeMes(current);
+    // let current = this._HelpersService.changeformatDate(
+    //   this._HelpersService.currentDay(),
+    //   "MM/DD/YYYY",
+    //   "YYYY-MM-DD"
+    // );
+    // let month = this._HelpersService.changeformatDate(
+    //   this._HelpersService.currentDay(),
+    //   "MM/DD/YYYY",
+    //   "MM"
+    // );
+    // let year = this._HelpersService.changeformatDate(
+    //   this._HelpersService.currentDay(),
+    //   "MM/DD/YYYY",
+    //   "YYYY"
+    // );
+    // let rangoMonth = this._HelpersService.InicioYFinDeMes(current);
 
-    this.dateIni = `${year}-${month}-01`;
-    this.dateFin = `${year}-${month}-${rangoMonth.ultimoDiaDelMes}`;
+    this.dateIni = moment().subtract(1, "year").format("YYYY-MM-DD");
+    this.dateFin = moment().format("YYYY-MM-DD");
 
     this.filtros = {
       dateIni: this.dateIni,
@@ -332,7 +333,7 @@ export class RecuperacionAnualComponent {
         backgroundColor: "rgba(75,192,192,0.6)",
       },
     ];
-    logger.log('    this.barChartData',    this.barChartData );
+    logger.log("    this.barChartData", this.barChartData);
   }
 
   generarGraficoPorcentajeRecuperacion(dataApi: any) {

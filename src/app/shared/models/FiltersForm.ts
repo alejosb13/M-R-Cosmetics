@@ -1,9 +1,9 @@
-import { CarteraDateBodyForm } from "./Logistica.model"
+import { CarteraDateBodyForm } from "./Logistica.model";
 
-export interface FiltersForm{
-  carteraFilter:CarteraDateBodyForm,
-  recuperacionFilter:CarteraDateBodyForm,
-  mora30_60Filter:CarteraDateBodyForm,
+export interface FiltersForm {
+  carteraFilter: CarteraDateBodyForm;
+  recuperacionFilter: CarteraDateBodyForm;
+  mora30_60Filter: CarteraDateBodyForm;
 }
 
 enum TypesForm {
@@ -22,9 +22,11 @@ enum TypesForm {
   recibosHistorialFilter = "recibosHistorialFilter",
   abonosHistorialFilter = "abonosHistorialFilter",
   clientesHistorialFilter = "clientesHistorialFilter",
-  productosClientesFilter = "clientesHistorialFilter",
+  productosClientesFilter = "productosClientesFilter",
+  ventasAnualFilter = "ventasAnualFilter",
+  recuperacionAnualFilter = "recuperacionAnualFilter",
 }
 
-export type TypesFiltersForm =  keyof typeof TypesForm
+export type TypesFiltersForm = keyof typeof TypesForm;
 
-export type CreateFiltersForm = Partial<FiltersForm>
+export type CreateFiltersForm = Partial<FiltersForm>;

@@ -21,7 +21,12 @@
               "sweetalert2",
               "moment"
             ],
-            "assets": ["src/assets", "src/favicon.ico"],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/web.config",
+              "src/.htaccess"
+            ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/assets/scss/paper-dashboard.scss",

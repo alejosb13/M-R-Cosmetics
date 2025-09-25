@@ -39,8 +39,6 @@ ngb-pagination .pagination {
   scrollbar-track-color: #171717;
   scrollbar-arrow-color: #171717;
   scrollbar-shadow-color: #6f6f6e;
-
-
 }
 
 [data-color="black"] ::-webkit-scrollbar {
@@ -67,7 +65,6 @@ ngb-pagination .pagination {
 [data-color="black"] ::-webkit-resizer {
   background-color: #666;
 }
-
 
 /* SIDEBAR DARK */
 .sidebar[data-color="black"]:after,
@@ -173,11 +170,11 @@ body .main-panel[data-color="black"] .page-link {
   background-color: #212120; /* Fondo de la tarjeta */
 }
 
-.main-panel[data-color="black"] .cart .main{
+.main-panel[data-color="black"] .cart .main {
   background-color: transparent !important; /* Fondo de la tarjeta */
 }
 
-.main-panel[data-color="black"] .dropdown-menu.desplegable div label  {
+.main-panel[data-color="black"] .dropdown-menu.desplegable div label {
   color: #151515 !important;
 }
 
@@ -188,7 +185,7 @@ body .main-panel[data-color="black"] .page-link {
   color: #151515;
 }
 
-.main-panel[data-color="black"] .background-color-important, 
+.main-panel[data-color="black"] .background-color-important,
 .main-panel[data-color="black"] .list-group li {
   background-color: #212120 !important;
   color: #e0e0e0;
@@ -199,9 +196,18 @@ body .main-panel[data-color="black"] .page-link {
 
 .main-panel[data-color="black"] .detalle-section .detalle-container span,
 .main-panel[data-color="black"] .detalle-section .detalle-container .value,
-.main-panel[data-color="black"] .detalle-section .detalle-container .description,
-.main-panel[data-color="black"] .detalle-section .detalle-container h4
-.main-panel[data-color="black"] .summary .form-group p{
+.main-panel[data-color="black"]
+  .detalle-section
+  .detalle-container
+  .description,
+.main-panel[data-color="black"]
+  .detalle-section
+  .detalle-container
+  h4
+  .main-panel[data-color="black"]
+  .summary
+  .form-group
+  p {
   color: #e0e0e0 !important;
 }
 
@@ -210,16 +216,14 @@ body .main-panel[data-color="black"] .page-link {
   background-color: #ddd;
 }
 
-.dark-mode  {
+.dark-mode {
   background-color: #39474757 !important;
 }
 
-.dark-mode .swal2-popup{
+.dark-mode .swal2-popup {
   background-color: #212120;
   color: #e0e0e0;
 }
-
-
 
 .dark-mode .swal2-popup .swal2-success-circular-line-left {
   background-color: #212121 !important;
@@ -238,7 +242,6 @@ body .main-panel[data-color="black"] .page-link {
   color: #e0e0e0;
 }
 
-
 .dark-modal .modal-header {
   border-bottom: 1px solid #4ab3b5;
 }
@@ -251,7 +254,15 @@ body .main-panel[data-color="black"] .page-link {
   background-color: #39474757; /* Cambia esto según el estilo que desees aplicar */
 }
 
-
+/* Nueva version de bootstrap */
 ngb-modal-window.d-block.modal.white-modal.fade.show {
-    z-index: 9999;
+  z-index: 9999;
+}
+
+.pagination span.visually-hidden {
+  display: none;
+}
+
+div:where(.swal2-container) {
+  z-index: 9999 !important;
 }

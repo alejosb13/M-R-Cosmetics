@@ -16,6 +16,7 @@ import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
+import * as moment from "moment";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -53,7 +54,7 @@ export class VentasAnualComponent {
 
   Data: Recuperacion[];
 
-  FilterSection: TypesFiltersForm = "recuperacionMensualFilter";
+  FilterSection: TypesFiltersForm = "ventasAnualFilter";
 
   totalAbonos: number;
   totalMetas: number;
@@ -212,25 +213,25 @@ export class VentasAnualComponent {
   }
 
   setCurrentDate() {
-    let current = this._HelpersService.changeformatDate(
-      this._HelpersService.currentDay(),
-      "MM/DD/YYYY",
-      "YYYY-MM-DD"
-    );
-    let month = this._HelpersService.changeformatDate(
-      this._HelpersService.currentDay(),
-      "MM/DD/YYYY",
-      "MM"
-    );
-    let year = this._HelpersService.changeformatDate(
-      this._HelpersService.currentDay(),
-      "MM/DD/YYYY",
-      "YYYY"
-    );
-    let rangoMonth = this._HelpersService.InicioYFinDeMes(current);
+    // let current = this._HelpersService.changeformatDate(
+    //   this._HelpersService.currentDay(),
+    //   "MM/DD/YYYY",
+    //   "YYYY-MM-DD"
+    // );
+    // let month = this._HelpersService.changeformatDate(
+    //   this._HelpersService.currentDay(),
+    //   "MM/DD/YYYY",
+    //   "MM"
+    // );
+    // let year = this._HelpersService.changeformatDate(
+    //   this._HelpersService.currentDay(),
+    //   "MM/DD/YYYY",
+    //   "YYYY"
+    // );
+    // let rangoMonth = this._HelpersService.InicioYFinDeMes(current);
 
-    this.dateIni = `${year}-${month}-01`;
-    this.dateFin = `${year}-${month}-${rangoMonth.ultimoDiaDelMes}`;
+    this.dateIni = moment().subtract(1, "year").format("YYYY-MM-DD");
+    this.dateFin = moment().format("YYYY-MM-DD");
 
     this.filtros = {
       dateIni: this.dateIni,
