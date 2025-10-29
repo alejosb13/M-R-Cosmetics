@@ -308,8 +308,8 @@ export class RecuperacionAnualComponent {
 
   generarGraficoRecuperacionPorUsuario(dataApi: any) {
     // Etiquetas = nombres de usuario
-    this.barChartLabels = dataApi.map(
-      (d) => `${d.user.name} ${d.user.apellido}`
+    this.barChartLabels = dataApi.map((d) =>
+      abreviarNombre(`${d.user.name} ${d.user.apellido}`)
     );
 
     // Dataset Abonos (Ventas)
