@@ -17,6 +17,7 @@ import { Subscription } from "rxjs";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 import * as moment from "moment";
+import { abreviarNombre } from "@app/shared/utils/helpers";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -321,7 +322,9 @@ export class VentasAnualComponent {
 
   generarGraficoPorcentaje(dataApi: any) {
     // Etiquetas = usuarios
-    this.porcentajeLabels = dataApi.map((d) => d.name);
+    console.log("dataApi", dataApi);
+
+    this.porcentajeLabels = dataApi.map((d) => abreviarNombre(`${d.name}`));
 
     // Datos = porcentaje
     const porcentajeArray = dataApi.map((d) => Number(d.porcentaje) || 0);

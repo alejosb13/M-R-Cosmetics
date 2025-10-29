@@ -17,6 +17,7 @@ import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
+import { abreviarNombre } from "@app/shared/utils/helpers";
 type Recuperacion = {
   facturasTotal: number;
   abonosTotal: number;
@@ -380,10 +381,11 @@ export class Recuperacion85Component implements OnInit {
   generarGraficoVentasMetas() {
     // Para recuperacion85, mostramos gráfico por usuario
     if (!this.Data || this.Data.length === 0) return;
+    console.log(" generarGraficoVentasMetas", this.Data);
 
     // Etiquetas = nombres de usuario
-    this.barChartLabels = this.Data.map(
-      (d) => `${d.user.name} ${d.user.apellido}`
+    this.barChartLabels = this.Data.map((d) =>
+      abreviarNombre(`${d.user.name} ${d.user.apellido}`)
     );
 
     // Dataset Ventas (abonosTotalLastMount)
@@ -416,8 +418,8 @@ export class Recuperacion85Component implements OnInit {
     if (!this.Data || this.Data.length === 0) return;
 
     // Etiquetas = nombres de usuario
-    this.porcentajeLabels = this.Data.map(
-      (d) => `${d.user.name} ${d.user.apellido}`
+    this.porcentajeLabels = this.Data.map((d) =>
+      abreviarNombre(`${d.user.name} ${d.user.apellido}`)
     );
 
     // Datos = porcentaje de cada usuario (recuperacionPorcentaje)

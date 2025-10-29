@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Listado } from "@app/shared/services/listados.service";
+import { abreviarNombre } from "@app/shared/utils/helpers";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
@@ -337,8 +338,8 @@ export class RecuperacionAnualComponent {
   }
 
   generarGraficoPorcentajeRecuperacion(dataApi: any) {
-    this.porcentajeLabels = dataApi.map(
-      (d) => `${d.user.name} ${d.user.apellido}`
+    this.porcentajeLabels = dataApi.map((d) =>
+      abreviarNombre(`${d.user.name} ${d.user.apellido}`)
     );
 
     const porcentajeArray = dataApi.map(

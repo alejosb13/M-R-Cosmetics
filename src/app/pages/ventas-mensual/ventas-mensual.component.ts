@@ -16,6 +16,7 @@ import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
+import { abreviarNombre } from "@app/shared/utils/helpers";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -360,8 +361,8 @@ export class VentasMensualComponent {
     if (!this.Data || this.Data.length === 0) return;
 
     // Etiquetas = nombres de usuario
-    this.barChartLabels = this.Data.map(
-      (d) => `${d.user.name} ${d.user.apellido}`
+    this.barChartLabels = this.Data.map((d) =>
+      abreviarNombre(`${d.user.name} ${d.user.apellido}`)
     );
 
     // Dataset Ventas
@@ -392,8 +393,8 @@ export class VentasMensualComponent {
     if (!this.Data || this.Data.length === 0) return;
 
     // Etiquetas = nombres de usuario
-    this.porcentajeLabels = this.Data.map(
-      (d) => `${d.user.name} ${d.user.apellido}`
+    this.porcentajeLabels = this.Data.map((d) =>
+      abreviarNombre(`${d.user.name} ${d.user.apellido}`)
     );
 
     // Datos = porcentaje de cada usuario
