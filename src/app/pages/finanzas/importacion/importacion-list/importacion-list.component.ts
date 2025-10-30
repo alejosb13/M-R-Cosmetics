@@ -59,13 +59,13 @@ export class ImportacionListComponent {
   asignarValores(isBtnFilter: boolean = false) {
     this.isLoad = true;
 
-    if(isBtnFilter){
-        this.listadoFilter = {
-          ...this.listadoFilter,
-            dateIni: this.dateIni,
-            dateFin: this.dateFin,
-            allDates: this.allDates,
-        }
+    if (isBtnFilter) {
+      this.listadoFilter = {
+        ...this.listadoFilter,
+        dateIni: this.dateIni,
+        dateFin: this.dateFin,
+        allDates: this.allDates,
+      };
     }
     this._FinanzasService.getImportacion(this.listadoFilter).subscribe(
       (Paginacion: ListadoModel<ImportacionResponse>) => {

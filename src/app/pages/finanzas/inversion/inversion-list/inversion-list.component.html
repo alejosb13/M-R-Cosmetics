@@ -76,7 +76,8 @@
           <thead>
             <tr>
               <th scope="col">N. Inversión</th>
-              <th scope="col">ultima modificación</th>
+              <th scope="col">Última modificación</th>
+              <th scope="col">Creación de inversión</th>
               <th scope="col">Opciones</th>
             </tr>
           </thead>
@@ -85,6 +86,9 @@
               <th scope="row"># {{ Inversion.numero_seguimiento }}</th>
               <td scope="row">
                 {{ Inversion.updated_at | date : "dd-MM-yyyy h:mm a" }}
+              </td>
+              <td scope="row">
+                {{ Inversion.created_at | date : "dd-MM-yyyy h:mm a" }}
               </td>
               <td>
                 <div class="d-flex flex-direction">

@@ -46,8 +46,12 @@
           <span class="font-weight-bold d-block"
             >Monto total recibos: {{ total | currency : "USD" }}</span
           >
-          <!-- <span class="font-weight-bold d-block">Monto total recibos abonos: {{ totalContado | currency:"USD"}}</span>
-          <span class="font-weight-bold d-block">Monto total recibos facturas: {{ totalCredito | currency:"USD"}}</span> -->
+          <ng-container *ngFor="let metodo of TiposMetodos">
+            <span class="font-weight-bold d-block">
+              Total {{ metodo.nombre }}:
+              {{ totalesPorMetodo[metodo.nombre] | currency : "USD" }}
+            </span>
+          </ng-container>
         </p>
         <button
           class="btn btn-primary align-self-center"
