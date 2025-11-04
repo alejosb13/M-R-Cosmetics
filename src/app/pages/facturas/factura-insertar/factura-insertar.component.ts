@@ -33,6 +33,7 @@ export class FacturaInsertarComponent implements OnInit {
   // Usuarios:Usuario[]
   ClienteId: number = 0;
   UsuarioId: number = 0;
+  Stock: number = 1;
 
   themeSite: string;
   themeSubscription: Subscription;
@@ -63,13 +64,18 @@ export class FacturaInsertarComponent implements OnInit {
       });
   }
 
+  cambiarFiltroStock(event: any): void {
+    this.Stock = event ? 1 : 0;
+    this.loadProduct();
+  }
+
   loadProduct(): void {
     this.isLoad = true;
     let productosStorage: FacturaDetalle[] =
       this._CheckoutService.getProductCheckout();
 
     this._ProductosService
-      .getProducto()
+      .getProducto({ stock: this.Stock })
       .pipe(
         map((productos: Producto[]) =>
           productos.map((producto) => {
