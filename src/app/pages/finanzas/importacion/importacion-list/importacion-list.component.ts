@@ -8,6 +8,7 @@ import {
   ListadoModel,
 } from "app/shared/models/Listados.model";
 import { FinanzasService } from "app/shared/services/finanzas.service";
+import { ImportacionNotaService } from "@app/shared/services/importacion-nota.service";
 import { HelpersService } from "app/shared/services/helpers.service";
 import Swal from "sweetalert2";
 import { ImportacionResponse } from "app/shared/models/Importacion.model";
@@ -32,6 +33,10 @@ export class ImportacionListComponent {
   listadoData: ListadoModel<ImportacionResponse>;
   Importaciones: ImportacionResponse[];
 
+  // Nota modal
+  notaValue: number = null;
+  selectedImportacionId: number = null;
+
   isLoad: boolean;
 
   themeSite: string;
@@ -42,7 +47,8 @@ export class ImportacionListComponent {
     public _FinanzasService: FinanzasService,
     public _AuthService: AuthService,
     private NgbModal: NgbModal,
-    private _HelpersService: HelpersService
+    private _HelpersService: HelpersService,
+    private _ImportacionNotaService: ImportacionNotaService
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +98,73 @@ export class ImportacionListComponent {
       (result) => {},
       (reason) => {}
     );
+  }
+
+  openNotaModal(importacion: any, content: any) {
+    // Guardamos la importación seleccionada y el valor actual si lo tiene
+    this.selectedImportacionId = importacion.id;
+    // Soportar distintos shapes: nota puede ser number o objeto { valor }
+    if (importacion.nota != null) {
+      this.notaValue = importacion.nota.monto;
+    } else {
+      this.notaValue = null;
+    }
+
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    }).result.then(
+      (result) => {},
+      (reason) => {}
+    );
+  }
+
+  guardarNota(modal: any) {
+    if (this.selectedImportacionId == null) return;
+
+    if (this.notaValue == null || isNaN(this.notaValue)) {
+      Swal.fire({
+        text: "Ingrese un valor numérico válido para la nota.",
+        icon: "warning",
+      });
+      return;
+    }
+
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite,
+      },
+    }).fire({
+      title: "Guardando nota",
+      text: "Espere por favor…",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this._ImportacionNotaService
+      .createNota(this.selectedImportacionId, this.notaValue)
+      .subscribe(
+        (res) => {
+          modal.close();
+          this.asignarValores();
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite,
+            },
+          }).fire({
+            text: Array.isArray(res) ? res[0] : "Nota creada",
+            icon: "success",
+          });
+        },
+        (err) => {
+          Swal.fire({ text: "Error al guardar la nota.", icon: "error" });
+        }
+      );
   }
 
   BuscarValor() {

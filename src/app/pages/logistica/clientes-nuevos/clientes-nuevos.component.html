@@ -60,6 +60,7 @@
             <th scope="col">Dirección de casa</th>
             <th scope="col">Categoría</th>
             <th scope="col">Frecuencia</th>
+            <th scope="col">Monto</th>
             <th scope="col">Facturas</th>
             <th scope="col">Fecha</th>
           </tr>
@@ -123,6 +124,12 @@
                   </div>
                 </div>
               </div>
+            </td>
+            <td>
+              {{
+                cliente.facturas[0].monto
+                  | currency : "USD" : "symbol" : "1.2-2"
+              }}
             </td>
             <td>
               <div class="d-flex flex-direction">
