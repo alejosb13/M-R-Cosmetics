@@ -63,6 +63,7 @@ import { MigrarInformacionVendedorComponent } from "@app/pages/configuracion/mig
 import { ProductosVendedorComponent } from "@app/pages/logistica/productos-vendedor/productos-vendedor.component";
 import { TazaCotizacionComponent } from "@app/pages/configuracion/taza-cotizacion/taza-cotizacion.component";
 import { IncentivosSupervisorComponent } from "@app/pages/logistica/incentivos-supervisor/incentivos-supervisor.component";
+import { MetricasSupervisorComponent } from "@app/pages/metricas-supervisor/metricas-supervisor.component";
 import { MetasComponent } from "@app/pages/metas/metas.component";
 import { FrecuenciaFacturaListadoComponent } from "@app/pages/frecuencia-facturas/frecuencia-factura-listado/frecuencia-factura-listado.component";
 import { FrecuenciaFacturaInsertarComponent } from "@app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component";
@@ -134,6 +135,7 @@ export const AdminLayoutRoutes: Routes = [
         path: "incentivos-supervisor",
         component: IncentivosSupervisorComponent,
       },
+      { path: "metricas-supervisor", component: MetricasSupervisorComponent },
       { path: "clientes-inactivos", component: ClienteInactivosComponent },
       { path: "clientes-reactivados", component: ClientesReactivadosComponent },
       { path: "ventas", component: VentasComponent },

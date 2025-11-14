@@ -92,6 +92,7 @@ import { RegaloProductoFormComponent } from "@app/shared/components/forms/regalo
 import { RegalosListComponent } from "@app/pages/regalos/regalos-list/regalos-list.component";
 import { CargarRegaloComponent } from "@app/shared/components/forms/cargar-regalo/cargar-regalo.component";
 import { IncentivosSupervisorComponent } from "@app/pages/logistica/incentivos-supervisor/incentivos-supervisor.component";
+import { MetricasSupervisorComponent } from "@app/pages/metricas-supervisor/metricas-supervisor.component";
 import { MetasComponent } from "@app/pages/metas/metas.component";
 import { FrecuenciaFacturaListadoComponent } from "@app/pages/frecuencia-facturas/frecuencia-factura-listado/frecuencia-factura-listado.component";
 import { FrecuenciaFacturaInsertarComponent } from "@app/pages/frecuencia-facturas/frecuencia-factura-insertar/frecuencia-factura-insertar.component";
@@ -135,7 +136,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { CapitalizePipe } from "@app/shared/pipes/capitalize.pipe";
 import { AbonoHistorialInsertComponent } from "@app/shared/components/abono-historial-insert/abono-historial-insert.component";
 import { VentasAnualComponent } from "@app/pages/logistica/ventas-anual/ventas-anual.component";
-import { ChartsModule } from 'ng2-charts';
+import { ChartsModule } from "ng2-charts";
 import { RecuperacionAnualComponent } from "@app/pages/logistica/recuperacion-anual/recuperacion-anual.component";
 
 @NgModule({
@@ -227,6 +228,7 @@ import { RecuperacionAnualComponent } from "@app/pages/logistica/recuperacion-an
     ClientesNuevosComponent,
     IncentivosComponent,
     IncentivosSupervisorComponent,
+    MetricasSupervisorComponent,
     ClienteInactivosComponent,
     ClienteDetalleComponent,
     ClientesReactivadosComponent,
@@ -293,7 +295,7 @@ import { RecuperacionAnualComponent } from "@app/pages/logistica/recuperacion-an
 
     AbonoHistorialInsertComponent,
     VentasAnualComponent,
-    RecuperacionAnualComponent
+    RecuperacionAnualComponent,
   ],
 })
 export class AdminLayoutModule {}

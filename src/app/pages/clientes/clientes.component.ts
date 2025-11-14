@@ -174,7 +174,52 @@ export class ClientesComponent implements OnInit {
   }
 
   descargarCSV() {
-    this._Listado.registerClientesCSV(this.listadoFilter);
+    Swal.mixin({
+      customClass: {
+        container: this.themeSite,
+      },
+    }).fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this._Listado.registerClientesCSV(this.listadoFilter).subscribe(
+      (data: Blob) => {
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `Clientes_CSV_${this._HelpersService.currentFullDay()}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite,
+          },
+        }).fire("", "Descarga Completada", "success");
+      },
+      (error) => {
+        console.error("Error descargando archivo:", error);
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite,
+          },
+        }).fire({
+          title: "Error",
+          text: "No se pudo descargar el archivo. Verifica que aún tengas sesión activa.",
+          icon: "error",
+        });
+      }
+    );
   }
 
   changeDiasCobros(event: HTMLInputElement) {
@@ -292,10 +337,9 @@ export class ClientesComponent implements OnInit {
       categoriaId: this.categoriaId,
       allDates: this.allDates,
       diasCobros: this.diasCobros,
-
     };
-    if( this.listadoFilter.filter){
-      this.listadoFilter.filter = this.listadoFilter.filter
+    if (this.listadoFilter.filter) {
+      this.listadoFilter.filter = this.listadoFilter.filter;
     }
     this._RememberFiltersService.setFilterStorage(this.FilterSection, {
       ...this.listadoFilter,
@@ -370,11 +414,13 @@ export class ClientesComponent implements OnInit {
       (this.saldoFil = 2),
       // this.allDates = false;
       (this.diasCobros = []);
-    (this.estado = 1)
-    this.listadoFilter.userId = Number(this._AuthService.dataStorage.user.userId);
+    this.estado = 1;
+    this.listadoFilter.userId = Number(
+      this._AuthService.dataStorage.user.userId
+    );
     this.userId = Number(this._AuthService.dataStorage.user.userId);
-    
-    if(this.listadoFilter.filter){
+
+    if (this.listadoFilter.filter) {
       delete this.listadoFilter.filter;
     }
 
@@ -458,8 +504,8 @@ export class ClientesComponent implements OnInit {
         saldoFil: this.saldoFil,
       };
 
-      if(this.listadoFilter.filter){
-        this.listadoFilter.filter= this.listadoFilter.filter
+      if (this.listadoFilter.filter) {
+        this.listadoFilter.filter = this.listadoFilter.filter;
       }
     }
     console.log(this.listadoFilter);

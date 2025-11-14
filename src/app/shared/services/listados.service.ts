@@ -267,35 +267,45 @@ export class Listado {
     });
   }
 
-  registerClientesPDF(options: any) {
+  registerClientesPDF(options: any): Observable<Blob> {
     // console.log("FiltrosList", options);
     let URL = `${environment.urlAPI}pdf/registroclientes`;
+    let params = new HttpParams();
 
     if (Object.keys(options).length > 0) {
-      // let URLOptions = `${ListadoURL}/facturas?`
-      // options.alldate = options.allDates
-      // delete options.allDates;
-      URL = this.urlParams(URL, options);
-
-      // URL = URLOptions
+      for (const key in options) {
+        if (key != "link") {
+          params = params.append(key, options[key]);
+        }
+      }
     }
-
-    // console.log(URL);
 
     let headers = new HttpHeaders();
     headers = headers.set("Accept", "application/pdf");
 
-    return this.http.get(`${URL}`, { headers: headers, responseType: "blob" });
+    return this.http.get<Blob>(`${URL}`, {
+      params: params,
+      headers: headers,
+      responseType: "blob" as "json",
+    });
   }
 
-  registerClientesCSV(options: any) {
+  registerClientesCSV(options: any): Observable<Blob> {
     let URL = `${environment.urlAPI}xlsx/registroclientes`;
-    // let URL = `${environment.urlAPI}csv/registroclientes`;
+    let params = new HttpParams();
 
     if (Object.keys(options).length > 0) {
-      URL = this.urlParams(URL, options);
+      for (const key in options) {
+        if (key != "link") {
+          params = params.append(key, options[key]);
+        }
+      }
     }
 
-    window.open(`${URL}`, "_blank");
+    return this.http.get<Blob>(`${URL}`, {
+      params: params,
+      headers: this.headerJson_Token(),
+      responseType: "blob" as "json",
+    });
   }
 }

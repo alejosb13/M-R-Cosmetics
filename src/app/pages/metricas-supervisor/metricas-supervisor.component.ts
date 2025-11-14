@@ -21,14 +21,15 @@ import { AbonoService } from "app/shared/services/abono.service";
 import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { MetricaSupervisorService } from "@app/shared/services/metrica-supervisor.service";
 
 @Component({
-  selector: "app-abono-list",
-  templateUrl: "./abono-list.component.html",
-  styleUrls: ["./abono-list.component.css"],
+  selector: "app-metricas-supervisor",
+  templateUrl: "./metricas-supervisor.component.html",
+  styleUrls: ["./metricas-supervisor.component.css"],
 })
-export class AbonoListComponent implements OnInit {
-  Abonos: Abono[];
+export class MetricasSupervisorComponent implements OnInit {
+  Metricas: Abono[];
   TiposMetodos = TiposMetodos;
   numeroRecibo: string = "";
 
@@ -38,7 +39,7 @@ export class AbonoListComponent implements OnInit {
   autorizacion: string = "";
   maxLength: number = 10; // Valor inicial por defecto
 
-  editarAbonoId: number;
+  editarMetricaId: number;
 
   isLoad: boolean;
   isAdmin: boolean;
@@ -76,7 +77,8 @@ export class AbonoListComponent implements OnInit {
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
     private _AbonoService: AbonoService,
-    private _ReciboService: ReciboService
+    private _ReciboService: ReciboService,
+    private _MetricaSupervisorService: MetricaSupervisorService
   ) {}
 
   ngOnInit(): void {
@@ -100,9 +102,6 @@ export class AbonoListComponent implements OnInit {
       .UsuariosList({
         disablePaginate: 1,
         estado: 1,
-        // factura: 1,
-        // recibo: 1,
-        // recibosRangosSinTerminar: 1,
       })
       .subscribe((usuarios: Usuario[]) => {
         this.userStore = usuarios;
@@ -124,7 +123,7 @@ export class AbonoListComponent implements OnInit {
     let Subscription = this._Listado.abonoList(this.listadoFilter).subscribe(
       (Paginacion) => {
         this.listadoData = { ...Paginacion };
-        this.Abonos = [...Paginacion.data];
+        this.Metricas = [...Paginacion.data];
         this.isLoad = false;
       },
       (error) => {
@@ -140,7 +139,6 @@ export class AbonoListComponent implements OnInit {
   }
 
   openFiltros(content: any) {
-    // console.log(this.mesNewMeta);
     this.listadoFilter.link = null;
 
     this.NgbModal.open(content, {
@@ -154,7 +152,6 @@ export class AbonoListComponent implements OnInit {
 
   newPage(link: Link) {
     if (link.url == null) return;
-    // console.log(link);
 
     this.listadoFilter.link = link.url;
 
@@ -198,16 +195,12 @@ export class AbonoListComponent implements OnInit {
 
     this._RememberFiltersService.deleteFilterStorage(this.FilterSection);
     this.aplicarFiltros();
-
-    // console.log(this.filtros);
   }
 
   aplicarFiltros(submit: boolean = false) {
-    // console.log(this.allDates);
     let filtrosStorage = this._RememberFiltersService.getFilterStorage();
 
     if (filtrosStorage.hasOwnProperty(this.FilterSection) && !submit) {
-      // solo al iniciar con datos en storage
       this.listadoFilter = { ...filtrosStorage[this.FilterSection] };
       this.userId = Number(this.listadoFilter.userId);
       this.dateIni = this.listadoFilter.dateIni;
@@ -225,7 +218,7 @@ export class AbonoListComponent implements OnInit {
         }
       }
 
-      if (!this.dateIni || !this.dateFin) this.setCurrentDate(); // si las fechas estan vacias, se setean las fechas men actual
+      if (!this.dateIni || !this.dateFin) this.setCurrentDate();
 
       if (
         this._HelpersService.siUnaFechaEsIgualOAnterior(
@@ -233,7 +226,7 @@ export class AbonoListComponent implements OnInit {
           this.dateFin
         )
       )
-        this.setCurrentDate(); // si las fecha inicial es mayor a la final, se setean las fechas mes actual
+        this.setCurrentDate();
       this.listadoFilter = {
         ...this.listadoFilter,
         dateIni: this.dateIni,
@@ -253,15 +246,14 @@ export class AbonoListComponent implements OnInit {
   }
 
   eliminar({ id }: Abono) {
-    // console.log(id);
     Swal.mixin({
       customClass: {
-        container: this.themeSite, // Clase para el modo oscuro
+        container: this.themeSite,
       },
     })
       .fire({
         title: "¿Estás seguro?",
-        text: "Este abono se eliminará y no podrás recuperarlo.",
+        text: "Esta métrica se eliminará y no podrás recuperarla.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#51cbce",
@@ -272,11 +264,11 @@ export class AbonoListComponent implements OnInit {
       .then((result) => {
         if (result.isConfirmed) {
           this._AbonoService.deleteAbono(id).subscribe((data) => {
-            this.Abonos = this.Abonos.filter((abono) => abono.id != id);
+            this.Metricas = this.Metricas.filter((metrica) => metrica.id != id);
 
             Swal.mixin({
               customClass: {
-                container: this.themeSite, // Clase para el modo oscuro
+                container: this.themeSite,
               },
             }).fire({
               text: data[0],
@@ -287,13 +279,13 @@ export class AbonoListComponent implements OnInit {
       });
   }
 
-  editarAbono(content: any, abono: Abono) {
-    this.metodoPagoEditar = abono.metodo_pago.tipo;
-    this.detallePagoEditar = abono.metodo_pago.detalle;
-    this.editarAbonoId = abono.id;
-    this.autorizacion = abono.metodo_pago.autorizacion;
+  editarMetrica(content: any, metrica: Abono) {
+    this.metodoPagoEditar = metrica.metodo_pago.tipo;
+    this.detallePagoEditar = metrica.metodo_pago.detalle;
+    this.editarMetricaId = metrica.id;
+    this.autorizacion = metrica.metodo_pago.autorizacion;
 
-    logger.log(abono);
+    logger.log(metrica);
 
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
@@ -303,7 +295,7 @@ export class AbonoListComponent implements OnInit {
       .catch((err) => {});
   }
 
-  editarAbonoEnviar() {
+  editarMetricaEnviar() {
     this.autorizacion = this.autorizacion ? this.autorizacion : "";
 
     logger.log({
@@ -319,7 +311,7 @@ export class AbonoListComponent implements OnInit {
       ) {
         Swal.mixin({
           customClass: {
-            container: this.themeSite, // Clase para el modo oscuro
+            container: this.themeSite,
           },
         }).fire({
           text: "La autorización de transferencia debe llevar mínimo 8 valores y máximo 20",
@@ -334,7 +326,7 @@ export class AbonoListComponent implements OnInit {
       ) {
         Swal.mixin({
           customClass: {
-            container: this.themeSite, // Clase para el modo oscuro
+            container: this.themeSite,
           },
         }).fire({
           text: "La autorización de transferencia debe llevar mínimo 7 valores y máximo 20",
@@ -344,7 +336,7 @@ export class AbonoListComponent implements OnInit {
       }
 
       this._AbonoService
-        .updateAbono(this.editarAbonoId, {
+        .updateAbono(this.editarMetricaId, {
           metodoPagoEditar: this.metodoPagoEditar,
           detallePagoEditar: this.detallePagoEditar,
           autorizacion: this.autorizacion,
@@ -353,11 +345,11 @@ export class AbonoListComponent implements OnInit {
           (data) => {
             Swal.mixin({
               customClass: {
-                container: this.themeSite, // Clase para el modo oscuro
+                container: this.themeSite,
               },
             })
               .fire({
-                text: "Abono modificado con exito",
+                text: "Métrica modificada con exito",
                 icon: "success",
               })
               .then((result) => {
@@ -371,7 +363,7 @@ export class AbonoListComponent implements OnInit {
     } else {
       Swal.mixin({
         customClass: {
-          container: this.themeSite, // Clase para el modo oscuro
+          container: this.themeSite,
         },
       }).fire({
         text: "Complete todos los campos",
@@ -380,16 +372,16 @@ export class AbonoListComponent implements OnInit {
     }
   }
 
-  eliminarRecibo(reciboEliminar: Abono) {
-    console.log(reciboEliminar);
+  eliminarRecibo(metricaEliminar: Abono) {
+    console.log(metricaEliminar);
     Swal.mixin({
       customClass: {
-        container: this.themeSite, // Clase para el modo oscuro
+        container: this.themeSite,
       },
     })
       .fire({
         title: "¿Estás seguro?",
-        text: "Al eliminar este abono se eliminará también el recibo asociado a él y no podrás recuperarlo.",
+        text: "Al eliminar esta métrica se eliminará también el recibo asociado a él y no podrás recuperarlo.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#51cbce",
@@ -401,10 +393,10 @@ export class AbonoListComponent implements OnInit {
         if (result.isConfirmed) {
           Swal.mixin({
             customClass: {
-              container: this.themeSite, // Clase para el modo oscuro
+              container: this.themeSite,
             },
           }).fire({
-            title: "Anulando el recibo",
+            title: "Anulando la métrica",
             text: "Esto puede demorar un momento.",
             timerProgressBar: true,
             allowEscapeKey: false,
@@ -415,16 +407,16 @@ export class AbonoListComponent implements OnInit {
             },
           });
           this._ReciboService
-            .deleteReciboHistorialCredito(reciboEliminar.recibo_historial.id)
+            .deleteReciboHistorialCredito(metricaEliminar.recibo_historial.id)
             .subscribe((data) => {
-              this.Abonos = this.Abonos.filter(
-                (abono) =>
-                  abono.recibo_historial.id !=
-                  reciboEliminar.recibo_historial.id
+              this.Metricas = this.Metricas.filter(
+                (metrica) =>
+                  metrica.recibo_historial.id !==
+                  metricaEliminar.recibo_historial.id
               );
               Swal.mixin({
                 customClass: {
-                  container: this.themeSite, // Clase para el modo oscuro
+                  container: this.themeSite,
                 },
               }).fire({
                 text: data[0],
@@ -435,57 +427,11 @@ export class AbonoListComponent implements OnInit {
       });
   }
 
-  descargarAbonosExcell() {
-    Swal.mixin({
-      customClass: {
-        container: this.themeSite,
-      },
-    }).fire({
-      title: "Descargando el archivo",
-      text: "Esto puede demorar un momento.",
-      timerProgressBar: true,
-      allowEscapeKey: false,
-      allowOutsideClick: false,
-      allowEnterKey: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
+  descargarMetricasExcell() {
+    this._AbonoService.AbonosExcell({
+      ...this.listadoFilter,
+      disablePaginate: 1,
     });
-    this._AbonoService
-      .AbonosExcell({
-        ...this.listadoFilter,
-        disablePaginate: 1,
-      })
-      .subscribe(
-        (data: Blob) => {
-          // Descarga el archivo directamente
-          const url = window.URL.createObjectURL(data);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = `abonos_${this._HelpersService.currentFullDay()}.xlsx`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-          Swal.mixin({
-            customClass: {
-              container: this.themeSite,
-            },
-          }).fire("", "Descarga Completada", "success");
-        },
-        (error) => {
-          console.error("Error descargando archivo:", error);
-          Swal.mixin({
-            customClass: {
-              container: this.themeSite,
-            },
-          }).fire({
-            title: "Error",
-            text: "No se pudo descargar el archivo. Verifica que aún tengas sesión activa.",
-            icon: "error",
-          });
-        }
-      );
   }
 
   updateMaxLengthAutorizacion(element: any) {
