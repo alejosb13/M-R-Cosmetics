@@ -9,6 +9,34 @@
   </div>
 
   <ng-container *ngIf="!isLoad">
+    <div class="container-lg pt-5">
+      <h4>Productos vendidos</h4>
+      <ul class="list-group">
+        <li
+          *ngFor="let USUARIO of ProductosVendidos?.usuarios"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ USUARIO.nombre }}
+          {{ USUARIO.apellido }}
+          <span class="badge badge-primary badge-pill">{{
+            USUARIO?.clientes_nuevos
+          }}</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center list-group-item-primary"
+        >
+          TOTAL
+          <span class="badge badge-primary badge-pill">{{
+            ProductosVendidos?.total_clientes_nuevos
+          }}</span>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+  <br />
+  <br />
+  <br />
+  <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
       <div>
         <div class="d-flex justify-content-start flex-wrap">

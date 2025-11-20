@@ -135,7 +135,6 @@ export const AdminLayoutRoutes: Routes = [
         path: "incentivos-supervisor",
         component: IncentivosSupervisorComponent,
       },
-      { path: "metricas-supervisor", component: MetricasSupervisorComponent },
       { path: "clientes-inactivos", component: ClienteInactivosComponent },
       { path: "clientes-reactivados", component: ClientesReactivadosComponent },
       { path: "ventas", component: VentasComponent },
@@ -295,6 +294,12 @@ export const AdminLayoutRoutes: Routes = [
     children: [{ path: "", component: TalonariosListComponent }],
   },
   {
+    path: "metricas-supervisor",
+    canActivate: [AuthGuard],
+    data: { role: [ADMINISTRADOR] },
+    children: [{ path: "", component: MetricasSupervisorComponent }],
+  },
+  {
     path: "finanzas",
     canActivate: [AuthGuard],
     data: { role: [ADMINISTRADOR] },
@@ -338,12 +343,12 @@ export const AdminLayoutRoutes: Routes = [
     children: [{ path: "", component: MetasComponent }],
   },
 
-  { path: "user", component: UserComponent },
-  { path: "table", component: TableComponent },
-  { path: "typography", component: TypographyComponent },
-  { path: "icons", component: IconsComponent },
-  { path: "maps", component: MapsComponent },
-  { path: "notifications", component: NotificationsComponent },
+  // { path: "user", component: UserComponent },
+  // { path: "table", component: TableComponent },
+  // { path: "typography", component: TypographyComponent },
+  // { path: "icons", component: IconsComponent },
+  // { path: "maps", component: MapsComponent },
+  // { path: "notifications", component: NotificationsComponent },
   // { path: 'upgrade',        component: UpgradeComponent }
   // {
   //     path: '',

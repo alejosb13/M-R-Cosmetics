@@ -28,7 +28,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/frecuencia-factura',         title: 'Frecuencia Factura',   icon:'fas fa-business-time',            class: '' , access: 'administrador,supervisor'},
   { path: '/configuracion',              title: 'Configuración',        icon:'fas fa-cog',                      class: '' , access: 'administrador'},
   { path: '/finanzas',                   title: 'finanzas',             icon:'fas fa-dollar-sign',              class: '' , access: 'administrador'},
-  { path: '/talonarios',                 title: 'Talonarios',           icon:'fas fa-ticket-alt',  class: '' , access: 'administrador'},
+  { path: '/talonarios',                 title: 'Talonarios',           icon:'fas fa-ticket-alt',               class: '' , access: 'administrador'},
+  { path: '/metricas-supervisor',        title: 'Supervisor',           icon:'fas fa-toolbox',               class: '' , access: 'administrador'},
   // { path: '/icons',         title: 'Icons',             icon:'nc-diamond',    class: '' },<i class="fas fa-undo"></i>
   // { path: '/maps',          title: 'Maps',              icon:'nc-pin-3',      class: '' },
   // { path: '/notifications', title: 'Notifications',     icon:'nc-bell-55',    class: '' },

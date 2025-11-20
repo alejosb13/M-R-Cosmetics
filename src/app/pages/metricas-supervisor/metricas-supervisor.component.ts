@@ -68,6 +68,8 @@ export class MetricasSupervisorComponent implements OnInit {
   themeSite: string;
   themeSubscription: Subscription;
 
+  ProductosVendidos: any;
+
   constructor(
     private _CommunicationService: CommunicationService,
     private _Listado: Listado,
@@ -89,6 +91,7 @@ export class MetricasSupervisorComponent implements OnInit {
     this.setCurrentDate();
     this.getUsers();
     this.aplicarFiltros();
+    this.getVentasSupervisor();
 
     this.themeSubscription = this._CommunicationService
       .getTheme()
@@ -97,6 +100,14 @@ export class MetricasSupervisorComponent implements OnInit {
       });
   }
 
+  getVentasSupervisor() {
+    this._MetricaSupervisorService
+      .getVentasSupervisor()
+      .subscribe((data: any) => {
+        console.log("getVentasSupervisor", data);
+        this.ProductosVendidos = data;
+      });
+  }
   getUsers() {
     this._Listado
       .UsuariosList({
