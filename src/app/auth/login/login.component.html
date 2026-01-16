@@ -114,6 +114,34 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-md-12">
+              <div class="form-label-group">
+                <select
+                  id="inputLinea"
+                  class="form-control"
+                  formControlName="linea"
+                  [ngClass]="{
+                    'is-invalid':
+                      editarUsuarioForm.controls['linea'].invalid &&
+                      editarUsuarioForm.controls['linea'].touched
+                  }"
+                >
+
+                  <option value="linea1">MyR Profesional</option>
+                  <option value="linea2">K She</option>
+                </select>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'La línea de negocio es requerida',
+                    control: editarUsuarioForm.controls['linea']
+                  }"
+                ></ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-md-12" >
               <button
                 class="btn btn-primary btn-block"

@@ -56,6 +56,12 @@ export class LoginComponent implements OnInit {
           // Validators.maxLength(12),
         ]),
       ],
+      linea: [
+        "linea1",
+        Validators.compose([
+          Validators.required,
+        ]),
+      ],
     });
   }
 
@@ -76,9 +82,10 @@ export class LoginComponent implements OnInit {
     if (this.editarUsuarioForm.valid) {
       let email = String(this.formularioControls.email.value);
       let password = String(this.formularioControls.password.value);
+      let linea = String(this.formularioControls.linea.value);
       this.loadInfo = true;
 
-      this._AuthService.login(email, password).subscribe(
+      this._AuthService.login(email, password, linea).subscribe(
         (data) => {
           
           // console.log(data);

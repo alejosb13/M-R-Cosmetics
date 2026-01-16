@@ -43,11 +43,12 @@ export class AuthService {
     return this.dataStorage.token != ""? true : false;
   }
 
-  login(email:string,password:string): Observable<any> {
+  login(email:string,password:string,linea:string): Observable<any> {
     const URL = `${environment.urlAPI}signin`
     let data = {
       email,
-      password
+      password,
+      linea
     }
 
     return this.http.post(
