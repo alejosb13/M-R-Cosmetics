@@ -13,6 +13,7 @@ export interface UserAuth {
 }
 
 export interface Auth {
+    linea:string
     token:string
     user: UserAuth
 }

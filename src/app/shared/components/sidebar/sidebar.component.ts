@@ -56,4 +56,12 @@ export class SidebarComponent implements OnInit {
     this.menuItems = ROUTES.filter(menuItem => this._AuthService.validarRol(menuItem.access));
     // console.log(this.menuItems);
   }
+
+  getLogoImage(): string {
+    const authData = this._AuthService.dataStorage;
+    if (authData && authData.linea === 'linea2') {
+      return 'assets/img/logos/kshe_logo.png';
+    }
+    return 'assets/img/logos/logo-t.png';
+  }
 }

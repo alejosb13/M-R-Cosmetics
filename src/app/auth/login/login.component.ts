@@ -35,6 +35,51 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.definirValidaciones();
+    // Suscribirse a cambios en el campo línea para actualizar favicon e imagen
+    this.editarUsuarioForm.get('linea').valueChanges.subscribe(linea => {
+      this.updateFavicon(linea);
+    });
+    // Establecer favicon inicial
+    this.updateFavicon('linea1');
+  }
+
+  getLogoImage(): string {
+    const linea = this.editarUsuarioForm?.get('linea')?.value;
+    if (linea === 'linea2') {
+      return 'assets/img/logos/kshe_logo.png';
+    }
+    return 'assets/img/logos/logo-t.png';
+  }
+
+  updateFavicon(linea: string): void {
+    const isLinea2 = linea === 'linea2';
+    const favicon = isLinea2 ? 'assets/img/logos/kshe_logo.png' : 'assets/img/logos/logo-t.png';
+    const title = isLinea2 ? 'K She' : 'M&R Profesional';
+    
+    // Actualizar título
+    document.title = title;
+    
+    // Remover todos los iconos existentes
+    const oldIcons = document.querySelectorAll("link[rel*='icon']");
+    oldIcons.forEach(icon => icon.remove());
+    
+    const oldApple = document.querySelectorAll("link[rel='apple-touch-icon']");
+    oldApple.forEach(icon => icon.remove());
+    
+    // Crear nuevo favicon con timestamp para forzar recarga
+    const linkIcon = document.createElement('link');
+    linkIcon.rel = 'icon';
+    linkIcon.type = 'image/png';
+    linkIcon.setAttribute('sizes', '96x96');
+    linkIcon.href = favicon + '?v=' + new Date().getTime();
+    document.getElementsByTagName('head')[0].appendChild(linkIcon);
+    
+    // Crear nuevo apple-touch-icon
+    const linkApple = document.createElement('link');
+    linkApple.rel = 'apple-touch-icon';
+    linkApple.setAttribute('sizes', '76x76');
+    linkApple.href = favicon + '?v=' + new Date().getTime();
+    document.getElementsByTagName('head')[0].appendChild(linkApple);
   }
 
   definirValidaciones() {
