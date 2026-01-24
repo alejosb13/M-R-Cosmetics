@@ -2,97 +2,57 @@
   <div *ngIf="isLoad" class="container-fluid p-5">
     <div class="d-flex justify-content-center align-content-center">
       <span>
-        Cargando métricas
+        Cargando usuarios
         <i class="fas fa-circle-notch fa-spin"></i>
       </span>
     </div>
   </div>
 
   <ng-container *ngIf="!isLoad">
-    <div class="container-lg pt-5">
-      <h4>Productos vendidos</h4>
-      <ul class="list-group">
-        <li
-          *ngFor="let USUARIO of ProductosVendidos?.usuarios"
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          {{ USUARIO.nombre }}
-          {{ USUARIO.apellido }}
-          <span class="badge badge-primary badge-pill">{{
-            USUARIO?.clientes_nuevos
-          }}</span>
-        </li>
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center list-group-item-primary"
-        >
-          TOTAL
-          <span class="badge badge-primary badge-pill">{{
-            ProductosVendidos?.total_clientes_nuevos
-          }}</span>
-        </li>
-      </ul>
-    </div>
-  </ng-container>
-  <br />
-  <br />
-  <br />
-  <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <div>
-        <div class="d-flex justify-content-start flex-wrap">
+      <!-- <a class="btn btn-primary" routerLink="/devolucion/agregar/producto">
+        <i class="fas fa-plus"></i>
+        Agregar
+      </a> -->
+      <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-between mt-3">
           <button
-            class="btn btn-primary mr-2"
+            class="btn btn-primary align-self-center mt-0"
             (click)="openFiltros(contentEditar)"
           >
             Filtros <i class="fas fa-filter"></i>
           </button>
-          <a
-            class="btn btn-primary"
-            routerLink="/metricas-supervisor/agregar"
-            *ngIf="!isSupervisor"
-          >
-            <i class="fas fa-plus"></i>
-            Agregar
-          </a>
-          <button
-            class="btn btn-primary ml-2"
-            (click)="descargarMetricasExcell()"
-            *ngIf="isAdmin"
-          >
-            Excell <i class="fas fa-file-excel fa-lg"></i>
-          </button>
+          <!-- <form class="d-flex align-items-center col-4 buscador pr-0">
+            <div class="form-label-group w-100">
+              <input
+                type="email"
+                id="inputEmail"
+                class="form-control form-control-sm"
+                placeholder="Buscar"
+                (keyup)="BuscarValor()"
+                (change)="BuscarValor()"
+                [(ngModel)]="Data.busqueda"
+                name="buscar"
+              />
+              <label for="inputEmail">Buscar</label>
+            </div>
+          </form> -->
         </div>
       </div>
-      <div class="d-flex flex-row justify-content-between mt-3">
-        <div class="card-title align-items-start flex-column">
-          <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"
-            >Métricas</span
-          >
-          <span class="fuvi-text-black mt-1 fw-bold fs-5"
-            >Total: {{ listadoData.total }}</span
-          >
-        </div>
 
-        <form class="d-flex align-items-center justify-content-end buscador">
-          <div class="form-label-group input-group">
-            <input
-              type="text"
-              id="inputEmail"
-              class="form-control form-control-sm pt-1"
-              placeholder="Buscar"
-              name="buscar"
-              [(ngModel)]="listadoFilter.filter"
-            />
-            <button
-              class="btn btn-primary my-0"
-              (click)="BuscarValor()"
-              type="button"
-              id="button-addon2"
-            >
-              Buscar
-            </button>
-          </div>
-        </form>
+      <div
+        class="card-title align-items-start flex-column col"
+        *ngIf="isAdmin || isSupervisor"
+      >
+        <span class="fuvi-text-black mt-1 fw-bold fs-5"
+          >Mes: <b>{{ obtenerNombreMes() }}</b></span
+        ><br />
+        <span class="fuvi-text-black mt-1 fw-bold fs-5"
+          >Monto Reactivación: 
+          <b class="cursor-pointer text-primary" (click)="openMontoReactivacion(contentMontoReactivacion)">
+            <u>{{ montoReactivacion | currency : "USD" }}</u>
+          </b>
+        </span>
       </div>
     </div>
 
@@ -101,109 +61,129 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Recibo</th>
-            <th scope="col">Monto</th>
-            <th scope="col">Método Pago</th>
-            <th scope="col">Detalle Pago</th>
-            <th scope="col">Autorización</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Opciones</th>
+            <th scope="col">Vendedor</th>
+            <!-- <th scope="col">Total Facturas</th> -->
+            <!-- <th scope="col">Total Abonos</th> -->
+            <th scope="col">Monto Cumplimiento</th>
+            <th scope="col">Monto Meta</th>
+            <th scope="col">Porcentaje %</th>
+            <th scope="col">Clientes Nuevos</th>
+            <th scope="col">Clientes Reactivados</th>
+            <th scope="col">Clientes Global</th>
+            <th scope="col">Clientes Meta</th>
+            <th scope="col">Porcentaje</th>
           </tr>
         </thead>
-        <tbody *ngIf="Metricas.length > 0">
-          <tr *ngFor="let metrica of Metricas; let i = index">
-            <th scope="row">{{ metrica.id }}</th>
+        <tbody *ngIf="Data.length > 0">
+          <tr *ngFor="let Recuperacion of Data">
+            <th>
+              {{ Recuperacion.user_id }}
+            </th>
             <td>
-              <div class="mr-3" ngbTooltip="Factura">
-                #{{ metrica.recibo_historial.numero }}
-              </div>
-            </td>
-            <td>
-              {{ metrica.precio | currency : "USD" }}
-            </td>
-            <td>
-              {{ metrica.metodo_pago ? metrica.metodo_pago.tipoPago : "--" }}
-            </td>
-            <td>
-              {{ metrica.metodo_pago ? metrica.metodo_pago.detalle : "--" }}
+              {{ Recuperacion.recuperacion_mensual.user.name }}
+              <!-- {{ Recuperacion.recuperacion_mensual.user.apellido }} -->
             </td>
             <td>
               {{
-                metrica.metodo_pago.autorizacion
-                  ? metrica.metodo_pago.autorizacion
-                  : "--"
+                Recuperacion.recuperacion_mensual.abonosTotalLastMount
+                  | currency: "USD"
               }}
             </td>
-            <td>{{ metrica.created_at | date : "dd-MM-yyyy hh:mm a" }}</td>
             <td>
-              <a
-                class="text-dark"
-                [routerLink]="['/cliente', 'editar', metrica.cliente_id]"
-                >{{ metrica.cliente.nombreCompleto }}</a
-              >
+              {{
+                Recuperacion.recuperacion_mensual.recuperacionTotal
+                  | currency: "USD"
+              }}
             </td>
             <td>
-              <a
-                class="text-dark"
-                [routerLink]="['/usuario', 'editar', metrica.cliente_id]"
-                >{{ metrica.usuario.name }} {{ metrica.usuario.apellido }}</a
-              >
+              {{
+                calcularPorcentaje(
+                  Recuperacion.recuperacion_mensual.abonosTotalLastMount,
+                  Recuperacion.recuperacion_mensual.recuperacionTotal,
+                  2
+                )
+              }}%
             </td>
             <td>
-              <div class="d-flex flex-direction">
-                <div
-                  class="mr-3 text-warning"
-                  ngbTooltip="Editar"
-                  (click)="editarMetrica(contentMetricaEditar, metrica)"
-                >
-                  <i class="fas fa-pencil-alt"></i>
-                </div>
-                <div
-                  class="mr-3 text-warning pointer"
-                  ngbTooltip="Eliminar"
-                  (click)="eliminarRecibo(metrica)"
-                  *ngIf="isAdmin || isSupervisor"
-                >
-                  <i class="text-danger far fa-trash-alt"></i>
-                </div>
-              </div>
+              {{ Recuperacion.clientes_nuevos }}
+            </td>
+            <td>
+              {{ Recuperacion.clientes_reactivados.length }}
+            </td>
+            <td>
+              {{
+                Recuperacion.clientes_nuevos +
+                  Recuperacion.clientes_reactivados.length
+              }}
+            </td>
+            <td class="cursor-pointer text-primary" (click)="openEditarMeta(contentEditarMeta, Recuperacion)">
+              <u>{{ Recuperacion.cliente_meta || 0 }}</u>
+            </td>
+            <td>
+              {{
+                calcularPorcentaje(
+                  Recuperacion.clientes_nuevos +
+                    Recuperacion.clientes_reactivados.length,
+                  Recuperacion.cliente_meta || 0,
+                  2
+                )
+              }}%
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="Metricas.length == 0">
+        <tfoot *ngIf="Data.length > 0">
+          <tr class="table-info font-weight-bold">
+            <td colspan="2" class="text-center"><strong>TOTALES:</strong></td>
+            <td>
+              <strong>{{ totalMontoCumplimiento | currency: "USD" }}</strong>
+            </td>
+            <td>
+              <strong>{{ totalMontoMeta | currency: "USD" }}</strong>
+            </td>
+            <td>
+              <strong>{{
+                calcularPorcentaje(
+                  totalMontoCumplimiento,
+                  totalMontoMeta,
+                  2
+                )
+              }}%</strong>
+            </td>
+            <td>
+              <strong>{{ totalClientesNuevos }}</strong>
+            </td>
+            <td>
+              <strong>{{ totalClientesReactivados }}</strong>
+            </td>
+            <td>
+              <strong>{{ totalClientesGlobal }}</strong>
+            </td>
+            <td>
+              <strong>{{ totalClientesMeta }}</strong>
+            </td>
+            <td>
+              <strong>{{
+                calcularPorcentaje(
+                  totalClientesGlobal,
+                  totalClientesMeta,
+                  2
+                )
+              }}%</strong>
+            </td>
+          </tr>
+        </tfoot>
+        <tbody *ngIf="Data.length == 0">
           <tr>
-            <td colspan="8">
+            <td colspan="11">
               <div
                 class="container d-flex align-items-center justify-content-center"
               >
-                <h5>No existen Métricas</h5>
+                <!-- <h5>No existen clientes inactivos</h5> -->
               </div>
             </td>
           </tr>
         </tbody>
       </table>
-
-      <div class="d-flex justify-content-between p-2">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li
-              class="page-item"
-              *ngFor="let listado of listadoData.links"
-              (click)="newPage(listado)"
-              [ngClass]="{
-                active: listado.active,
-                disabled: listado.url == null
-              }"
-            >
-              <span class="page-link pointer">
-                <span aria-hidden="true" [innerHTML]="listado.label"></span>
-              </span>
-            </li>
-          </ul>
-        </nav>
-      </div>
     </div>
   </ng-container>
 </div>
@@ -223,21 +203,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            value="true"
-            [(ngModel)]="allDates"
-          />
-          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
-        </div>
-      </div>
-    </div>
+    <div class="row"></div>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -261,43 +227,16 @@
           />
         </div>
       </div>
-      <div class="col-md-6" *ngIf="isAdmin">
-        <div class="form-group tipehead">
-          <p class="font-weight-bold">Número de recibo</p>
-          <input
-            id="typeahead-focus"
-            type="text"
-            class="form-control"
-            name="recibo"
-            [(ngModel)]="numeroRecibo"
-          />
+
+      <!-- <div class="col-md-12" *ngIf="isAdmin">
+        <div class="form-group tipehead" >
+          <p class=" font-weight-bold">Usuario</p>
+          <select name="" id="" class="form-control" [(ngModel)]="userId">
+            <option [selected]="userId == 0" value="0">Todos los usuarios</option>
+            <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
+          </select>
         </div>
-      </div>
-      <div class="col-md-6" *ngIf="isAdmin">
-        <div class="form-group tipehead">
-          <p class="font-weight-bold">Autorización</p>
-          <input
-            id="typeahead-focus"
-            type="text"
-            class="form-control"
-            name="recibo"
-            [(ngModel)]="listadoFilter.autorizacion"
-          />
-        </div>
-      </div>
-      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
-        <p class="font-weight-bold">Usuarios</p>
-        <select name="" id="" class="form-control" [(ngModel)]="userId">
-          <option value="0">Todos los usuarios</option>
-          <option
-            *ngFor="let usuario of userStore"
-            [selected]="usuario.id == userId"
-            [value]="usuario.id"
-          >
-            {{ usuario.name }} {{ usuario.apellido }}
-          </option>
-        </select>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">
@@ -316,10 +255,10 @@
   </div>
 </ng-template>
 
-<ng-template #contentMetricaEditar let-modal>
+<ng-template #contentEditarMeta let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-basic-title">Editar</h4>
+      <h4 class="modal-title m-0" id="modal-meta-title">Editar Meta de Clientes</h4>
     </div>
     <button
       type="button"
@@ -332,48 +271,28 @@
   </div>
   <div class="modal-body">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="form-group">
-          <p class="font-weight-bold">Metodos de pago</p>
-          <select
-            id="my-select-pago"
-            class="form-control"
-            [(ngModel)]="metodoPagoEditar"
-            (ngModelChange)="updateMaxLengthAutorizacion($event)"
-            #MetodoPagoEditarValue
-          >
-            <option selected value="" hidden>
-              Seleccione el metodo de pago
-            </option>
-            <option
-              *ngFor="let TipoMetodo of TiposMetodos"
-              [value]="TipoMetodo.id"
-            >
-              {{ TipoMetodo.nombre }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <p class="font-weight-bold">Detalle de pago</p>
+          <label class="font-weight-bold">Vendedor</label>
           <input
             type="text"
-            class="form-control"
-            [(ngModel)]="detallePagoEditar"
+            class="form-control bg-light"
+            [value]="usuarioSeleccionado?.recuperacion_mensual?.user?.name || ''"
+            disabled
+            readonly
           />
         </div>
       </div>
-      <div class="col-md-6" *ngIf="MetodoPagoEditarValue.value != 1">
+      <div class="col-md-12">
         <div class="form-group">
-          <p class="font-weight-bold">Autorización</p>
+          <label class="font-weight-bold">Meta de Clientes <span class="text-danger">*</span></label>
           <input
-            type="text"
-            [readOnly]="!isAdmin"
+            type="number"
             class="form-control"
-            [(ngModel)]="autorizacion"
-            appOnlyAlphanumeric
-            [attr.minLength]="maxLength"
+            [(ngModel)]="metaClienteEditando"
+            min="0"
+            step="1"
+            placeholder="Ingrese la meta de clientes"
           />
         </div>
       </div>
@@ -382,13 +301,60 @@
   <div class="modal-footer justify-content-center w-100">
     <div class="row w-100">
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="modal.dismiss('Cross click')">
-          Cancelar
+        <button class="btn btn-danger" (click)="modal.dismiss('Cancel')">
+          Cancelar 
         </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="editarMetricaEnviar()">
-          Editar
+        <button class="btn btn-primary" (click)="guardarMetaCliente()" [disabled]="!metaClienteEditando || metaClienteEditando < 0">
+          Guardar 
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentMontoReactivacion let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-reactivacion-title">Monto de Reactivación de Clientes</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="font-weight-bold">Monto de Reactivación <span class="text-danger">*</span></label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="montoReactivacion"
+            min="0"
+            step="0.01"
+            placeholder="Ingrese el monto de reactivación"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-secondary" (click)="modal.dismiss('Cancel')">
+          Cancelar <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="guardarMontoReactivacion()" [disabled]="!montoReactivacion || montoReactivacion < 0">
+          Guardar <i class="fas fa-save"></i>
         </button>
       </div>
     </div>

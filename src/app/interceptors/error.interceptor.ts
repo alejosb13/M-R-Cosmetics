@@ -48,7 +48,8 @@ export class ErrorInterceptor implements HttpInterceptor {
 
         if (
           (error.status == 401 && error.error.message === "Unauthorized") ||
-          (error.status == 401 && error.error.message === "Unauthenticated.")
+          (error.status == 401 && error.error.message === "Unauthenticated.") ||
+          (error.status == 401 && error.error.mensaje === "No autenticado.")
         ) {
           Swal.mixin({
             customClass: {
