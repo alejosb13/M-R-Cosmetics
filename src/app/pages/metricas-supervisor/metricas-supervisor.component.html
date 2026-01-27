@@ -48,9 +48,12 @@
           >Mes: <b>{{ obtenerNombreMes() }}</b></span
         ><br />
         <span class="fuvi-text-black mt-1 fw-bold fs-5"
-          >Monto Reactivación: 
-          <b class="cursor-pointer text-primary" (click)="openMontoReactivacion(contentMontoReactivacion)">
-            <u>{{ montoReactivacion | currency : "USD" }}</u>
+          >Monto Reactivación:
+          <b
+            class="cursor-pointer text-primary"
+            (click)="openMontoReactivacion(contentMontoReactivacion)"
+          >
+            <u>{{ montoReactivacion | currency: "USD" }}</u>
           </b>
         </span>
       </div>
@@ -116,7 +119,10 @@
                   Recuperacion.clientes_reactivados.length
               }}
             </td>
-            <td class="cursor-pointer text-primary" (click)="openEditarMeta(contentEditarMeta, Recuperacion)">
+            <td
+              class="cursor-pointer text-primary"
+              (click)="openEditarMeta(contentEditarMeta, Recuperacion)"
+            >
               <u>{{ Recuperacion.cliente_meta || 0 }}</u>
             </td>
             <td>
@@ -141,13 +147,11 @@
               <strong>{{ totalMontoMeta | currency: "USD" }}</strong>
             </td>
             <td>
-              <strong>{{
-                calcularPorcentaje(
-                  totalMontoCumplimiento,
-                  totalMontoMeta,
-                  2
-                )
-              }}%</strong>
+              <strong
+                >{{
+                  calcularPorcentaje(totalMontoCumplimiento, totalMontoMeta, 2)
+                }}%</strong
+              >
             </td>
             <td>
               <strong>{{ totalClientesNuevos }}</strong>
@@ -162,14 +166,37 @@
               <strong>{{ totalClientesMeta }}</strong>
             </td>
             <td>
-              <strong>{{
-                calcularPorcentaje(
-                  totalClientesGlobal,
-                  totalClientesMeta,
-                  2
-                )
-              }}%</strong>
+              <strong
+                >{{
+                  calcularPorcentaje(totalClientesGlobal, totalClientesMeta, 2)
+                }}%</strong
+              >
             </td>
+          </tr>
+          <tr class="table-warning font-weight-bold">
+            <td colspan="2" class="text-center">
+              <strong>PROMEDIO DE PORCENTAJES:</strong>
+            </td>
+            <td colspan="3" class="text-center">
+              <strong
+                >{{
+                  (
+                    (calcularPorcentaje(
+                      totalMontoCumplimiento,
+                      totalMontoMeta,
+                      2
+                    ) +
+                      calcularPorcentaje(
+                        totalClientesGlobal,
+                        totalClientesMeta,
+                        2
+                      )) /
+                    2
+                  ).toFixed(2)
+                }}%</strong
+              >
+            </td>
+            <td colspan="5"></td>
           </tr>
         </tfoot>
         <tbody *ngIf="Data.length == 0">
@@ -258,7 +285,9 @@
 <ng-template #contentEditarMeta let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-meta-title">Editar Meta de Clientes</h4>
+      <h4 class="modal-title m-0" id="modal-meta-title">
+        Editar Meta de Clientes
+      </h4>
     </div>
     <button
       type="button"
@@ -277,7 +306,9 @@
           <input
             type="text"
             class="form-control bg-light"
-            [value]="usuarioSeleccionado?.recuperacion_mensual?.user?.name || ''"
+            [value]="
+              usuarioSeleccionado?.recuperacion_mensual?.user?.name || ''
+            "
             disabled
             readonly
           />
@@ -285,7 +316,9 @@
       </div>
       <div class="col-md-12">
         <div class="form-group">
-          <label class="font-weight-bold">Meta de Clientes <span class="text-danger">*</span></label>
+          <label class="font-weight-bold"
+            >Meta de Clientes <span class="text-danger">*</span></label
+          >
           <input
             type="number"
             class="form-control"
@@ -302,12 +335,16 @@
     <div class="row w-100">
       <div class="col text-center">
         <button class="btn btn-danger" (click)="modal.dismiss('Cancel')">
-          Cancelar 
+          Cancelar
         </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="guardarMetaCliente()" [disabled]="!metaClienteEditando || metaClienteEditando < 0">
-          Guardar 
+        <button
+          class="btn btn-primary"
+          (click)="guardarMetaCliente()"
+          [disabled]="!metaClienteEditando || metaClienteEditando < 0"
+        >
+          Guardar
         </button>
       </div>
     </div>
@@ -317,7 +354,9 @@
 <ng-template #contentMontoReactivacion let-modal>
   <div class="modal-header">
     <div>
-      <h4 class="modal-title m-0" id="modal-reactivacion-title">Monto de Reactivación de Clientes</h4>
+      <h4 class="modal-title m-0" id="modal-reactivacion-title">
+        Monto de Reactivación de Clientes
+      </h4>
     </div>
     <button
       type="button"
@@ -332,7 +371,9 @@
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
-          <label class="font-weight-bold">Monto de Reactivación <span class="text-danger">*</span></label>
+          <label class="font-weight-bold"
+            >Monto de Reactivación <span class="text-danger">*</span></label
+          >
           <input
             type="number"
             class="form-control"
@@ -353,7 +394,11 @@
         </button>
       </div>
       <div class="col text-center">
-        <button class="btn btn-primary" (click)="guardarMontoReactivacion()" [disabled]="!montoReactivacion || montoReactivacion < 0">
+        <button
+          class="btn btn-primary"
+          (click)="guardarMontoReactivacion()"
+          [disabled]="!montoReactivacion || montoReactivacion < 0"
+        >
           Guardar <i class="fas fa-save"></i>
         </button>
       </div>

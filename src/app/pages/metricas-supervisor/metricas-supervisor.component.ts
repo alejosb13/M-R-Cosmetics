@@ -216,6 +216,23 @@ export class MetricasSupervisorComponent {
       numRecibo: Number(this.filtros.numRecibo),
     };
 
+    
+
+    this._MetricaSupervisorService.indicemesMesClientesReactivasoSupervisos(bodyForm).subscribe(
+      (metricas) => {
+        logger.log(metricas);
+        if(metricas.data){
+          this.montoReactivacion = metricas.data.monto;
+        }else{
+          this.montoReactivacion = 0;
+        }
+
+      },
+      (error) => {
+        this.isLoad = false;
+      },
+    );
+
     this._MetricaSupervisorService.getMetricaSupervisor(bodyForm).subscribe(
       (metricas) => {
         logger.log(metricas);

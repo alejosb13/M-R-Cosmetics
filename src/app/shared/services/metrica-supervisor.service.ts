@@ -26,4 +26,8 @@ export class MetricaSupervisorService {
   updateMontoReactivacion(data: { monto: number; fecha: string }): Observable<any> {
     return this.http.post(`${environment.urlAPI}supervisor/monto-condicion-reactivados`, data);
   }
+
+  indicemesMesClientesReactivasoSupervisos(data: { dateIni: string; dateFin: string }): Observable<any> {
+    return this.http.post(`${environment.urlAPI}supervisor/indice-mes`, data);
+  }
 }
