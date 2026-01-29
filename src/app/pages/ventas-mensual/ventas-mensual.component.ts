@@ -16,7 +16,7 @@ import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
-import { abreviarNombre } from "@app/shared/utils/helpers";
+import { abreviarNombre, formatearMonto } from "@app/shared/utils/helpers";
 
 type Recuperacion = {
   facturasTotal: number;
@@ -82,6 +82,7 @@ export class VentasMensualComponent {
           stacked: false,
           ticks: {
             beginAtZero: true,
+            callback: (value: number) => formatearMonto(value)
           },
           scaleLabel: {
             display: true,
@@ -90,6 +91,15 @@ export class VentasMensualComponent {
         },
       ],
     },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem: any, data: any) => {
+          const label = data.datasets[tooltipItem.datasetIndex].label || '';
+          const value = tooltipItem.yLabel;
+          return label + ': ' + formatearMonto(value);
+        }
+      }
+    }
   };
 
   public barChartType = "bar";

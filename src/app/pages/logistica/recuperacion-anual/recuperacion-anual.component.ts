@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { Listado } from "@app/shared/services/listados.service";
-import { abreviarNombre } from "@app/shared/utils/helpers";
+import { abreviarNombre, formatearMonto } from "@app/shared/utils/helpers";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { TypesFiltersForm } from "app/shared/models/FiltersForm";
@@ -68,9 +68,23 @@ export class RecuperacionAnualComponent {
   public barChartOptions: any = {
     responsive: true,
     scales: {
-      yAxes: [{ ticks: { beginAtZero: true } }],
+      yAxes: [{ 
+        ticks: { 
+          beginAtZero: true,
+          callback: (value: number) => formatearMonto(value)
+        } 
+      }],
     },
     legend: { display: true },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem: any, data: any) => {
+          const label = data.datasets[tooltipItem.datasetIndex].label || '';
+          const value = tooltipItem.yLabel;
+          return label + ': ' + formatearMonto(value);
+        }
+      }
+    }
   };
 
   public porcentajeLabels: string[] = [];
@@ -193,8 +207,9 @@ export class RecuperacionAnualComponent {
     // );
     // let rangoMonth = this._HelpersService.InicioYFinDeMes(current);
 
-    this.dateIni = moment().subtract(1, "year").format("YYYY-MM-DD");
-    this.dateFin = moment().format("YYYY-MM-DD");
+
+    this.dateIni = moment().startOf("year").format("YYYY-MM-DD");
+    this.dateFin = moment().endOf("year").format("YYYY-MM-DD");
 
     this.filtros = {
       dateIni: this.dateIni,

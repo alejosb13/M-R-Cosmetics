@@ -25,7 +25,9 @@ export class AdminLayoutComponent implements OnInit {
 
   ngOnInit() {
     this.refreshIndices();
-    this.refreshIndicesVentasRecuperacion();
+    if (this._AuthService.isAdmin() || this._AuthService.isSupervisor()) {
+      this.refreshIndicesVentasRecuperacion();
+    }
     this.themeSubscription = this._CommunicationService
       .getTheme()
       .subscribe((color: string) => {
@@ -65,8 +67,8 @@ export class AdminLayoutComponent implements OnInit {
       let refreshIndices = interval(120000).pipe(
         exhaustMap(() =>
           this._CronService.save_Ventas_Recuperacion_anual({
-            dateIni: moment().subtract(1, "year").format("YYYY-MM-DD"),
-            dateFin: moment().format("YYYY-MM-DD"),
+          dateIni: moment().startOf("year").format("YYYY-MM-DD"),
+          dateFin: moment().endOf("year").format("YYYY-MM-DD"),
           })
         ),
         takeUntil(this.ngUnsubscribe),

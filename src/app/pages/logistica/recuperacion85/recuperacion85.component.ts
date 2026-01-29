@@ -17,7 +17,7 @@ import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
-import { abreviarNombre } from "@app/shared/utils/helpers";
+import { abreviarNombre, formatearMonto } from "@app/shared/utils/helpers";
 type Recuperacion = {
   facturasTotal: number;
   abonosTotal: number;
@@ -78,6 +78,7 @@ export class Recuperacion85Component implements OnInit {
           stacked: false,
           ticks: {
             beginAtZero: true,
+            callback: (value: number) => formatearMonto(value)
           },
           scaleLabel: {
             display: true,
@@ -86,6 +87,15 @@ export class Recuperacion85Component implements OnInit {
         },
       ],
     },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem: any, data: any) => {
+          const label = data.datasets[tooltipItem.datasetIndex].label || '';
+          const value = tooltipItem.yLabel;
+          return label + ': ' + formatearMonto(value);
+        }
+      }
+    }
   };
 
   public barChartType = "bar";
@@ -116,6 +126,15 @@ export class Recuperacion85Component implements OnInit {
         formatter: (value: number) => value.toFixed(2) + "%",
       },
     },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem: any, data: any) => {
+          const label = data.datasets[tooltipItem.datasetIndex].label || '';
+          const value = tooltipItem.yLabel;
+          return label + ': ' + value.toFixed(2) + '%';
+        }
+      }
+    }
   };
   public porcentajeType = "bar";
   public porcentajeLegend = false;
