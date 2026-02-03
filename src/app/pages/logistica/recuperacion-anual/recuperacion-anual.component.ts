@@ -18,6 +18,7 @@ import { environment } from "environments/environment";
 import * as moment from "moment";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
+import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 type Recuperacion = {
   facturasTotal: number;
   abonosTotal: number;
@@ -84,8 +85,21 @@ export class RecuperacionAnualComponent {
           return label + ': ' + formatearMonto(value);
         }
       }
+    },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'top',
+        formatter: (value: number) => formatearMonto(value),
+        color: '#444',
+        font: {
+          weight: 'bold',
+          size: 10
+        }
+      }
     }
   };
+  public barChartPlugins = [pluginDataLabels];
 
   public porcentajeLabels: string[] = [];
   public porcentajeData: any[] = [];
@@ -96,7 +110,20 @@ export class RecuperacionAnualComponent {
       yAxes: [{ ticks: { beginAtZero: true } }],
     },
     legend: { display: true },
+    plugins: {
+      datalabels: {
+        anchor: "end",
+        align: "top",
+        formatter: (value: number) => value.toFixed(2) + "%",
+        color: '#444',
+        font: {
+          weight: 'bold',
+          size: 11
+        }
+      }
+    }
   };
+  public porcentajePlugins = [pluginDataLabels];
 
   constructor(
     private _CommunicationService: CommunicationService,

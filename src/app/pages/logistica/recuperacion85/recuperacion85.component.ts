@@ -18,6 +18,7 @@ import { map } from "rxjs/operators";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { BaseChartDirective, Label } from "ng2-charts";
 import { abreviarNombre, formatearMonto } from "@app/shared/utils/helpers";
+import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 type Recuperacion = {
   facturasTotal: number;
   abonosTotal: number;
@@ -95,11 +96,24 @@ export class Recuperacion85Component implements OnInit {
           return label + ': ' + formatearMonto(value);
         }
       }
+    },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'top',
+        formatter: (value: number) => formatearMonto(value),
+        color: '#444',
+        font: {
+          weight: 'bold',
+          size: 10
+        }
+      }
     }
   };
 
   public barChartType = "bar";
   public barChartLegend = true;
+  public barChartPlugins = [pluginDataLabels];
 
   // Porcentaje chart
   public porcentajeLabels: string[] = [];
@@ -124,6 +138,11 @@ export class Recuperacion85Component implements OnInit {
         anchor: "end",
         align: "top",
         formatter: (value: number) => value.toFixed(2) + "%",
+        color: '#444',
+        font: {
+          weight: 'bold',
+          size: 11
+        }
       },
     },
     tooltips: {
@@ -138,6 +157,7 @@ export class Recuperacion85Component implements OnInit {
   };
   public porcentajeType = "bar";
   public porcentajeLegend = false;
+  public porcentajePlugins = [pluginDataLabels];
 
   constructor(
     private _CommunicationService: CommunicationService,
