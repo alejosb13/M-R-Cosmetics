@@ -11,4 +11,5 @@ export interface Producto {
     estado: number;
     created_at?: Date;
     updated_at?: Date;
+    cantidadBonificacion?: number; // Para controlar cantidad en modal de bonificación
 }

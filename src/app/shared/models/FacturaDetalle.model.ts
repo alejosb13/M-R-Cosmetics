@@ -19,4 +19,5 @@ export interface FacturaDetalle {
     producto?: Producto;
     regalo_facturado?: RegaloFacturado[];
     factura?: Factura;
+    cantidadBonificacion?: number; // Para controlar cantidad en modal de bonificación
 }

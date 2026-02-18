@@ -1,8 +1,8 @@
 import { Location } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { Router } from "@angular/router";
-import { NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
+import { NgbTypeahead, NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 import { UserAuth } from "app/auth/login/models/auth.model";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Cliente } from "app/shared/models/Cliente.model";
@@ -10,8 +10,10 @@ import { FacturaCheckout } from "app/shared/models/FacturaCheckout.model";
 import { FacturaDetalle } from "app/shared/models/FacturaDetalle.model";
 import { FrecuenciaFactura } from "app/shared/models/FrecuenciaFactura.model";
 import { FiltrosList } from "app/shared/models/Listados.model";
+import { Producto } from "app/shared/models/Producto.model";
 import { Recibo } from "app/shared/models/Recibo.model";
 import { CheckoutService } from "app/shared/services/checkout.service";
+import { ProductosService } from "app/shared/services/productos.service";
 import { ClientesService } from "app/shared/services/clientes.service";
 import { FrecuenciaFacturaService } from "app/shared/services/frecuenciaFactura.service";
 import { HelpersService } from "app/shared/services/helpers.service";
@@ -70,11 +72,28 @@ export class CheckoutComponent implements OnInit {
   isSupervisor: boolean;
 
   @ViewChild("instance", { static: true }) instance: NgbTypeahead;
+  @ViewChild("modalBonificacion") modalBonificacion: ElementRef<any>;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
 
   themeSite: string;
   themeSubscription: Subscription;
+
+  // Variables para bonificación
+  productosBonificacion: FacturaDetalle[] = [];
+  bonificacionTotal: number = 0;
+  bonificacionUsada: number = 0;
+  modalOptions: NgbModalOptions;
+  productosInventarioBonificacion: Producto[] = [];
+  productosFiltradosBonificacion: Producto[] = [];
+  isLoadingProductosBonificacion: boolean = false;
+  Stock: number = 1;
+  
+  // Paginación y búsqueda para modal bonificación
+  pageBonificacion = 1;
+  pageSizeBonificacion = 5;
+  collectionSizeBonificacion = 0;
+  busquedaBonificacion: string = "";
 
   constructor(
     private _CommunicationService: CommunicationService,
@@ -87,7 +106,9 @@ export class CheckoutComponent implements OnInit {
     private _AuthService: AuthService,
     private _FrecuenciaFacturaService: FrecuenciaFacturaService,
     private router: Router,
-    private _Listado: Listado
+    private _Listado: Listado,
+    private modalService: NgbModal,
+    private _ProductosService: ProductosService
   ) {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
@@ -446,6 +467,9 @@ export class CheckoutComponent implements OnInit {
         numero: this.numeroRecibo,
         recibo_id: this.recibo.id,
         rango: `${this.recibo.min}-${this.recibo.max}`,
+        productosBonificacion: this.productosBonificacion, // Incluir productos de bonificación
+        bonificacionTotal: this.getBonificacionTotal(),
+        bonificacionUsada: this.bonificacionUsada,
       };
 
       console.log("[facturaRecibo]", facturaRecibo);
@@ -454,6 +478,10 @@ export class CheckoutComponent implements OnInit {
         (data) => {
           this.isLoad = false;
           this._CheckoutService.vaciarCheckout();
+          
+          // Limpiar productos de bonificación
+          this.productosBonificacion = [];
+          this.bonificacionUsada = 0;
 
           if (data.status) {
             Swal.mixin({
@@ -539,6 +567,220 @@ export class CheckoutComponent implements OnInit {
     }
 
     return error;
+  }
+
+  // Calcular bonificación disponible
+  getBonificacionTotal(): number {
+    if (this.factura && this.factura.monto >= 100) {
+      return this.factura.monto * 0.15;
+    }
+    return 0;
+  }
+
+  getBonificacionDisponible(): number {
+    return this.getBonificacionTotal() - this.bonificacionUsada;
+  }
+
+  // Abrir modal de bonificación
+  openModalBonificacion() {
+    this.cargarProductosParaBonificacion();
+    this.modalService
+      .open(this.modalBonificacion, {
+        ariaLabelledBy: "modal-basic-title",
+        size: "lg",
+        windowClass:
+          this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+      })
+      .result.then(
+        () => {},
+        (reason) => {
+          // console.log(reason);
+        }
+      );
+  }
+
+  // Cargar productos del inventario para bonificación
+  cargarProductosParaBonificacion() {
+    this.isLoadingProductosBonificacion = true;
+    const bonificacionDisponible = this.getBonificacionDisponible();
+    let productosStorage: FacturaDetalle[] = this._CheckoutService.getProductCheckout();
+
+    this._ProductosService
+      .getProducto({ stock: this.Stock })
+      .pipe(
+        map((productos: Producto[]) =>
+          productos
+            .map((producto) => {
+              // Restar del stock los productos que ya están en el carrito
+              let productoS: FacturaDetalle = productosStorage.find(
+                (productoStorage) => productoStorage.producto_id === producto.id
+              );
+              if (productoS) producto.stock = producto.stock - productoS.cantidad;
+              return producto;
+            })
+            .filter((producto) => {
+              // Filtrar solo productos con stock > 0 y precio <= bonificación disponible
+              return producto.stock > 0 && producto.precio <= bonificacionDisponible;
+            })
+        )
+      )
+      .subscribe(
+        (productos: Producto[]) => {
+          this.productosInventarioBonificacion = [...productos];
+          this.collectionSizeBonificacion = productos.length;
+          this.busquedaBonificacion = ""; // Reset búsqueda
+          this.pageBonificacion = 1; // Reset página
+          this.filtrarProductosBonificacion();
+          this.isLoadingProductosBonificacion = false;
+        },
+        (error) => {
+          this.isLoadingProductosBonificacion = false;
+          console.error('Error cargando productos:', error);
+        }
+      );
+  }
+
+  // Filtrar productos de bonificación por búsqueda
+  filtrarProductosBonificacion() {
+    let productosFiltrados = [...this.productosInventarioBonificacion];
+
+    // Aplicar búsqueda
+    if (this.busquedaBonificacion && this.busquedaBonificacion.trim() !== "") {
+      const termino = this.busquedaBonificacion.toLowerCase().trim();
+      productosFiltrados = productosFiltrados.filter((producto) => {
+        return (
+          producto.descripcion.toLowerCase().includes(termino) ||
+          producto.marca.toLowerCase().includes(termino) ||
+          producto.modelo.toLowerCase().includes(termino)
+        );
+      });
+    }
+
+    this.collectionSizeBonificacion = productosFiltrados.length;
+
+    // Aplicar paginación
+    const startIndex = (this.pageBonificacion - 1) * this.pageSizeBonificacion;
+    const endIndex = startIndex + this.pageSizeBonificacion;
+    this.productosFiltradosBonificacion = productosFiltrados.slice(startIndex, endIndex);
+  }
+
+  // Cambiar página de bonificación
+  cambiarPaginaBonificacion() {
+    this.filtrarProductosBonificacion();
+  }
+
+  // Buscar en productos de bonificación
+  buscarProductoBonificacion() {
+    this.pageBonificacion = 1; // Reset a primera página al buscar
+    this.filtrarProductosBonificacion();
+  }
+
+  // Agregar producto de bonificación
+  agregarProductoBonificacion(producto: FacturaDetalle) {
+    const costoTotal = producto.precio * producto.cantidad;
+    const disponible = this.getBonificacionDisponible();
+
+    if (costoTotal <= disponible) {
+      this.productosBonificacion.push(producto);
+      this.bonificacionUsada += costoTotal;
+      this.getcheckout();
+    } else {
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite,
+        },
+      }).fire({
+        title: "Bonificación insuficiente",
+        text: `Solo tiene disponible ${disponible.toFixed(2)} USD en bonificación`,
+        icon: "warning",
+        confirmButtonColor: "#34b5b8",
+      });
+    }
+  }
+
+  // Agregar producto desde el modal
+  agregarProductoDesdeModal(producto: Producto) {
+    if (!producto.cantidadBonificacion || producto.cantidadBonificacion < 1) {
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite,
+        },
+      }).fire({
+        title: "Cantidad inválida",
+        text: "Debe ingresar una cantidad válida",
+        icon: "warning",
+        confirmButtonColor: "#34b5b8",
+      });
+      return;
+    }
+
+    const cantidadSolicitada = Number(producto.cantidadBonificacion);
+    if (cantidadSolicitada > producto.stock) {
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite,
+        },
+      }).fire({
+        title: "Cantidad excedida",
+        text: `Solo hay ${producto.stock} unidades disponibles`,
+        icon: "warning",
+        confirmButtonColor: "#34b5b8",
+      });
+      return;
+    }
+
+    const costoTotal = producto.precio * cantidadSolicitada;
+    const disponible = this.getBonificacionDisponible();
+
+    if (costoTotal <= disponible) {
+      const productoBonificacion: FacturaDetalle = {
+        producto_id: producto.id,
+        cantidad: cantidadSolicitada,
+        precio: producto.precio * cantidadSolicitada,
+        precio_unidad: producto.precio,
+        porcentaje: 0,
+        nombre: producto.descripcion,
+        descripcion: `${producto.marca} - ${producto.modelo}`,
+        estado: 1,
+      };
+      this.productosBonificacion.push(productoBonificacion);
+      this.bonificacionUsada += costoTotal;
+      producto.cantidadBonificacion = undefined; // Reset input
+      
+      // Recargar productos para actualizar los disponibles
+      this.cargarProductosParaBonificacion();
+      
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite,
+        },
+      }).fire({
+        title: "Producto agregado",
+        text: "El producto se agregó a la bonificación",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } else {
+      Swal.mixin({
+        customClass: {
+          container: this.themeSite,
+        },
+      }).fire({
+        title: "Bonificación insuficiente",
+        text: `Solo tiene disponible ${disponible.toFixed(2)} USD en bonificación. El producto cuesta ${costoTotal.toFixed(2)} USD`,
+        icon: "warning",
+        confirmButtonColor: "#34b5b8",
+      });
+    }
+  }
+
+  // Eliminar producto de bonificación
+  eliminarProductoBonificacion(index: number) {
+    const producto = this.productosBonificacion[index];
+    this.bonificacionUsada -= producto.precio;
+    this.productosBonificacion.splice(index, 1);
+    this.getcheckout();
   }
 
   ngOnDestroy() {
