@@ -304,7 +304,7 @@
             <div class="d-flex align-items-center">
               <input
                 type="number"
-                class="form-control form-control-sm mr-2"
+                class="form-control form-control-sm mr-2 my-0"
                 style="width: 80px;"
                 min="1"
                 [max]="producto.stock"
@@ -312,7 +312,7 @@
                 placeholder="Cant."
               />
               <button
-                class="btn btn-success btn-sm"
+                class="btn btn-success btn-sm my-0"
                 (click)="agregarProductoDesdeModal(producto)"
                 [disabled]="!producto.cantidadBonificacion || producto.cantidadBonificacion < 1">
                 <i class="fas fa-plus"></i> Agregar
