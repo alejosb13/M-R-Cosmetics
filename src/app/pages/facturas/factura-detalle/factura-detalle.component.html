@@ -229,6 +229,53 @@
               ></span>
             </td>
           </tr>
+          <tr *ngFor="let bonificacion of Factura.factura_bonificacion">
+            <td>{{ bonificacion.producto.descripcion }}</td>
+            <td>
+              <span *ngIf="bonificacion.cantidad > 1"
+                >{{ bonificacion.cantidad }} Uds</span
+              >
+              <span *ngIf="bonificacion.cantidad == 1"
+                >{{ bonificacion.cantidad }} Ud</span
+              >
+            </td>
+            <td>
+              <span 
+                class="text-success" 
+                ngbTooltip="Precio x Unidad: {{ bonificacion.precio_unidad | currency : 'USD' }}"
+                placement="top"
+              >
+                <i class="fas fa-percent"></i> Bonificación
+              </span>
+            </td>
+            <td>
+              <span 
+                class="text-success" 
+                ngbTooltip="Precio Total: {{ bonificacion.precio | currency : 'USD' }}"
+                placement="top"
+              >
+                <i class="fas fa-percent"></i> Bonificación
+              </span>
+            </td>
+            <td>
+              <span
+                class="texto-precio"
+                *ngIf="isAdmin"
+                role="button"
+                (click)="openDevolverProducto(contentDevolver, bonificacion)"
+                ><i class="fas fa-undo"></i
+              ></span>
+            </td>
+            <td>
+              <span
+                class="texto-precio"
+                *ngIf="isAdmin"
+                role="button"
+                (click)="openEditFactura(contentEditar, bonificacion)"
+                ><i class="fas fa-pencil-alt text-warning"></i
+              ></span>
+            </td>
+          </tr>
           <tr *ngFor="let regalo of Regalos">
             <td>{{ regalo.detalle_regalo.descripcion }}</td>
             <td>

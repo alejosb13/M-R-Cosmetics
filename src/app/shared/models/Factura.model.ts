@@ -3,6 +3,7 @@ import { FacturaDetalle } from "./FacturaDetalle.model";
 import { FacturaHistorial } from "./FacturaHistorial.model";
 import { Regalo } from "./Regalo";
 import { Usuario } from "./Usuario.model";
+import { FacturaBonificacion } from "./FacturaBonificacion.model";
 
 export interface Factura {
     id?: number;
@@ -22,6 +23,7 @@ export interface Factura {
     regalos?: Regalo[];
     // factura_historial?: FacturaHistorial[];
     factura_detalle?: FacturaDetalle[];
+    factura_bonificacion?: FacturaBonificacion[];
     created_at?: Date;
     updated_at?: Date;
 }
