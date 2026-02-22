@@ -24,6 +24,9 @@ export interface Factura {
     // factura_historial?: FacturaHistorial[];
     factura_detalle?: FacturaDetalle[];
     factura_bonificacion?: FacturaBonificacion[];
+    bonificacionTotal?: number;
+    bonificacionAplicada?: number;
+    bonificacionSobrante?: number;
     created_at?: Date;
     updated_at?: Date;
 }

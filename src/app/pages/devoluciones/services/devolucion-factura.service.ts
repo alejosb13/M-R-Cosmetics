@@ -80,6 +80,13 @@ export class DevolucionFacturaService {
     );
   }
 
-
+  insertDevolucionBonificacion(data: any): Observable<any> {
+    const URL = `${environment.urlAPI}devoluciones-bonificacion`;
+    return this.http.post<any>(
+      URL,
+      data,
+      {headers: this.headerJson_Token(), responseType: "json" }
+    );
+  }
 
 }

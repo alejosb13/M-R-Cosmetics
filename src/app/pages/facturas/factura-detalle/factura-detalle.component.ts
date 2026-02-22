@@ -8,6 +8,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { DevolucionProductoService } from "app/pages/devoluciones/services/devolucion-producto.service";
+import { DevolucionFacturaService } from "app/pages/devoluciones/services/devolucion-factura.service";
 import { DevolucionProducto } from "app/shared/models/DevolucionProducto.model";
 import { Factura } from "app/shared/models/Factura.model";
 import { FacturaDetalle } from "app/shared/models/FacturaDetalle.model";
@@ -51,6 +52,8 @@ export class FacturaDetalleComponent implements OnInit {
 
   Regalos: RegaloFacturado[] = [];
 
+  isBonificacionExpanded: boolean = false;
+
   themeSite: string;
   themeSubscription: Subscription;
 
@@ -62,10 +65,11 @@ export class FacturaDetalleComponent implements OnInit {
     private _FacturaDetalleService: FacturaDetalleService,
     private _ClientesService: ClientesService,
     private _DevolucionProductoService: DevolucionProductoService,
+    private _DevolucionFacturaService: DevolucionFacturaService,
     private _AuthService: AuthService,
     private NgbModal: NgbModal,
     private _ConfiguracionService: ConfiguracionService,
-    private _RegaloService: RegaloService
+    private _RegaloService: RegaloService,
   ) {}
 
   ngOnInit(): void {
@@ -130,12 +134,13 @@ export class FacturaDetalleComponent implements OnInit {
           this.Factura = factura;
 
           let idsDetalles: number[] = this.Factura.factura_detalle.map(
-            (detalle) => detalle.id
+            (detalle) => detalle.id,
           );
           // console.log(idsDetalles);
 
           this.ValidarRegalos(idsDetalles);
           this.Validar_si_se_le_debe_al_cliente(factura.cliente_id);
+          this.validarBonificacion(factura);
           // if(factura.factura_historial.length > 0 && factura.tipo_venta == 1){
           //   let abonos:any =  factura.factura_historial.map(itemHistorial =>{ if(itemHistorial.estado == 1) return itemHistorial.precio   })
           //   let abonosStatusActive = abonos.filter((abono:any) => abono != undefined );
@@ -148,8 +153,34 @@ export class FacturaDetalleComponent implements OnInit {
 
           this.isLoad = false;
         },
-        () => (this.isLoad = false)
+        () => (this.isLoad = false),
       );
+  }
+
+  validarBonificacion(factura: Factura) {
+    if (
+      factura.factura_bonificacion &&
+      factura.factura_bonificacion.length > 0
+    ) {
+      const totalProductosBonificados = factura.factura_bonificacion.reduce(
+        (total, bonificacion) => total + bonificacion.precio,
+        0,
+      );
+
+      const bonificacionTotal = factura.bonificacionTotal || 0;
+
+      if (totalProductosBonificados > bonificacionTotal) {
+        Swal.mixin({
+          customClass: {
+            container: this.themeSite,
+          },
+        }).fire({
+          title: "Advertencia de Bonificación",
+          html: `El precio total de los productos bonificados (<b>$${totalProductosBonificados.toFixed(2)}</b>) es mayor al monto de bonificación disponible (<b>$${bonificacionTotal.toFixed(2)}</b>).<br><br>La factura no califica para bonificación o la bonificación es insuficiente.`,
+          icon: "warning",
+        });
+      }
+    }
   }
 
   descargarPDF() {
@@ -185,7 +216,7 @@ export class FacturaDetalleComponent implements OnInit {
       });
       this._HelpersService.downloadFile(
         data,
-        `Detalle_Factura_${this.FacturaId}`
+        `Detalle_Factura_${this.FacturaId}`,
       );
     });
   }
@@ -223,7 +254,7 @@ export class FacturaDetalleComponent implements OnInit {
       });
       this._HelpersService.downloadFile(
         data,
-        `Detalle_Factura_${this.FacturaId}`
+        `Detalle_Factura_${this.FacturaId}`,
       );
     });
   }
@@ -255,7 +286,7 @@ export class FacturaDetalleComponent implements OnInit {
       },
       (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
+      },
     );
   }
 
@@ -270,7 +301,7 @@ export class FacturaDetalleComponent implements OnInit {
       },
       (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
+      },
     );
   }
 
@@ -286,7 +317,7 @@ export class FacturaDetalleComponent implements OnInit {
         },
         (reason) => {
           this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
+        },
       )
       .catch((err) => {});
   }
@@ -345,8 +376,8 @@ export class FacturaDetalleComponent implements OnInit {
       },
     });
 
-    this._DevolucionProductoService
-      .insertDevolucion(DevolucionProducto)
+    this._DevolucionFacturaService
+      .insertDevolucionBonificacion(DevolucionProducto)
       .subscribe((data) => {
         console.log("[response]", data);
 
@@ -362,6 +393,8 @@ export class FacturaDetalleComponent implements OnInit {
           .then((result) => {
             if (result.isConfirmed) {
               location.reload();
+              // this.NgbModal.dismissAll();
+              // this.facturaById(this.FacturaId);
             }
           });
       });
@@ -426,7 +459,7 @@ export class FacturaDetalleComponent implements OnInit {
       },
       () => {
         this.isLoadtazaMonto = false;
-      }
+      },
     );
   }
 
