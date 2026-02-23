@@ -214,7 +214,7 @@
                 class="texto-precio"
                 *ngIf="isAdmin"
                 role="button"
-                (click)="openDevolverProducto(contentDevolver, producto)"
+                (click)="openDevolverProducto(contentDevolver, producto, false)"
                 ><i class="fas fa-undo"></i
               ></span>
             </td>
@@ -265,7 +265,7 @@
                 class="texto-precio"
                 *ngIf="isAdmin"
                 role="button"
-                (click)="openDevolverProducto(contentDevolver, bonificacion)"
+                (click)="openDevolverProducto(contentDevolver, bonificacion, true)"
                 ><i class="fas fa-undo"></i
               ></span>
             </td>

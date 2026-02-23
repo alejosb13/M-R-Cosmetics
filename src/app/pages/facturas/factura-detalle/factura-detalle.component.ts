@@ -43,6 +43,7 @@ export class FacturaDetalleComponent implements OnInit {
   expandedIndex: number = -1;
 
   ProductoDetalle: Producto;
+  isBonificacion: boolean = false;
 
   isAdmin: boolean;
 
@@ -305,8 +306,9 @@ export class FacturaDetalleComponent implements OnInit {
     );
   }
 
-  openDevolverProducto(content: any, producto: Producto) {
+  openDevolverProducto(content: any, producto: Producto, isBonificacion: boolean = false) {
     this.ProductoDetalle = producto;
+    this.isBonificacion = isBonificacion;
     this.NgbModal.open(content, {
       ariaLabelledBy: "modal-basic-title",
       windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
@@ -376,8 +378,11 @@ export class FacturaDetalleComponent implements OnInit {
       },
     });
 
-    this._DevolucionFacturaService
-      .insertDevolucionBonificacion(DevolucionProducto)
+    const devolucionObservable = this.isBonificacion
+      ? this._DevolucionFacturaService.insertDevolucionBonificacion(DevolucionProducto)
+      : this._DevolucionProductoService.insertDevolucion(DevolucionProducto);
+
+    devolucionObservable
       .subscribe((data) => {
         console.log("[response]", data);
 

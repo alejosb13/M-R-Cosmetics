@@ -44,7 +44,7 @@ export class DevolucionProductoFormComponent implements OnInit {
   constructor(
     private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
-    private _AuthService: AuthService
+    private _AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -102,10 +102,11 @@ export class DevolucionProductoFormComponent implements OnInit {
     if (this.DevolucionProductoForm.valid) {
       let userId = Number(this._AuthService.dataStorage.user.userId);
 
-      let devolucion:any = {} ;
+      let devolucion: any = {};
       devolucion.cantidad = Number(this.formularioControls.cantidad.value);
       devolucion.descripcion = this.formularioControls.descripcion.value;
       devolucion.factura_bonificacion_id = this.producto.id;
+      devolucion.factura_detalle_id = this.producto.id;
       devolucion.estado = 1;
       devolucion.user_id = userId;
 
