@@ -31,7 +31,14 @@
             (click)="descargarAbonosExcell()"
             *ngIf="isAdmin"
           >
-            Excell <i class="fas fa-file-excel fa-lg"></i> 
+            Excell <i class="fas fa-file-excel fa-lg"></i>
+          </button>
+          <button
+            class="btn btn-primary ml-2"
+            (click)="openValidar(contentValidar)"
+            *ngIf="isAdmin"
+          >
+            Validar <i class="fas fa-check-circle fa-lg"></i>
           </button>
         </div>
       </div>
@@ -94,7 +101,7 @@
               </div>
             </td>
             <td>
-              {{ abono.precio | currency : "USD" }}
+              {{ abono.precio | currency: "USD" }}
             </td>
             <td>{{ abono.metodo_pago ? abono.metodo_pago.tipoPago : "--" }}</td>
             <td>{{ abono.metodo_pago ? abono.metodo_pago.detalle : "--" }}</td>
@@ -105,7 +112,7 @@
                   : "--"
               }}
             </td>
-            <td>{{ abono.created_at | date : "dd-MM-yyyy hh:mm a" }}</td>
+            <td>{{ abono.created_at | date: "dd-MM-yyyy hh:mm a" }}</td>
             <td>
               <a
                 class="text-dark"
@@ -165,7 +172,7 @@
               (click)="newPage(listado)"
               [ngClass]="{
                 active: listado.active,
-                disabled: listado.url == null
+                disabled: listado.url == null,
               }"
             >
               <span class="page-link pointer">
@@ -287,6 +294,281 @@
   </div>
 </ng-template>
 
+<ng-template #contentValidar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">
+        Validar Pagos con Excel
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click'); resetValidarModal()"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-center align-content-center">
+      <div class="col-11 mb-3">
+        <p class="font-weight-bold mb-1">
+          Selecciona el archivo Excel con los pagos a validar:
+        </p>
+        <div class="custom-file">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="excelValidarInput"
+            accept=".xlsx,.xls"
+            (change)="onExcelFileChange($event)"
+          />
+          <label class="custom-file-label" for="excelValidarInput">
+            {{ excelFileName || "Seleccionar archivo..." }}
+          </label>
+        </div>
+        <small class="text-muted">Solo se aceptan archivos .xlsx o .xls</small>
+      </div>
+
+      <div class="col-12" *ngIf="excelError">
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i> {{ excelError }}
+        </div>
+      </div>
+
+      <div class="col-12" *ngIf="excelData.length > 0">
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i>
+          Archivo cargado correctamente:
+          <strong>{{ excelData.length }} registros</strong> encontrados.
+        </div>
+        <div
+          class="table-responsive"
+          style="max-height: 250px; overflow-y: auto"
+        >
+          <table class="table table-sm table-bordered table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th *ngFor="let col of excelColumns">{{ col }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of excelData">
+                <td *ngFor="let col of excelColumns">{{ row[col] }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <small class="text-muted" >{{ excelData.length }} registros extraídos.</small> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button
+          class="btn btn-danger"
+          (click)="modal.dismiss('Cross click'); resetValidarModal()"
+        >
+          Cancelar <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button
+          class="btn btn-primary"
+          (click)="confirmarValidar(modal)"
+          [disabled]="excelData.length === 0 || isValidating"
+        >
+          <span *ngIf="isValidating"
+            ><i class="fas fa-circle-notch fa-spin"></i> Enviando...</span
+          >
+          <span *ngIf="!isValidating"
+            >Validar <i class="fas fa-check"></i
+          ></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentResultadoValidar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-resultado-title">
+        Resultado de Validación
+        <span class="badge badge-secondary ml-2" *ngIf="validarResultado">
+          {{ validarResultado.total_procesados }} procesados &nbsp;|&nbsp; Tasa:
+          {{ validarResultado.tasa_cambio_aplicada }}
+        </span>
+      </h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="validarResultado">
+    <!-- Leyenda de colores -->
+    <div class="d-flex flex-wrap mb-3 align-items-center" style="gap: 10px">
+      <strong class="mr-2">Leyenda:</strong>
+      <span
+        class="badge p-2"
+        style="
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+        "
+      >
+        <i class="fas fa-check-circle mr-1"></i> Encontrado y monto coincide
+      </span>
+      <span
+        class="badge p-2"
+        style="
+          background-color: #fff3cd;
+          color: #856404;
+          border: 1px solid #ffeeba;
+        "
+      >
+        <i class="fas fa-exclamation-triangle mr-1"></i> Encontrado pero monto
+        no coincide
+      </span>
+      <span
+        class="badge p-2"
+        style="
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        "
+      >
+        <i class="fas fa-times-circle mr-1"></i> Referencia no encontrada
+      </span>
+    </div>
+
+    <!-- Resumen contador -->
+    <div
+      class="d-flex flex-wrap mb-3"
+      style="gap: 8px"
+      *ngIf="validarResultado.pagos"
+    >
+      <span class="badge badge-success p-2">
+        <i class="fas fa-check mr-1"></i>
+        Coinciden: {{ contarEstado("ok") }}
+      </span>
+      <span class="badge badge-warning p-2" style="color: #856404">
+        <i class="fas fa-exclamation mr-1"></i>
+        Monto diferente: {{ contarEstado("menor") }}
+      </span>
+      <span class="badge badge-danger p-2">
+        <i class="fas fa-times mr-1"></i>
+        No encontrados: {{ contarEstado("no_encontrado") }}
+      </span>
+    </div>
+
+    <!-- Tabla de resultados -->
+    <div class="table-responsive" style="max-height: 450px; overflow-y: auto">
+      <table class="table table-sm table-bordered">
+        <thead class="thead-dark" style="position: sticky; top: 0; z-index: 1">
+          <tr>
+            <th>#</th>
+            <th>Referencia</th>
+            <th>Entrada (Bs)</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Monto Registrado ($)</th>
+            <th>Monto Convertido ($)</th>
+            <th>Fecha Registro</th>
+            <th>Mensaje</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let pago of validarResultado.pagos; let i = index"
+            [ngClass]="{
+              'table-success': pago.estado_validacion === 'ok',
+              'table-warning': pago.estado_validacion === 'menor',
+              'table-danger': pago.estado_validacion === 'no_encontrado',
+            }"
+          >
+            <td>{{ i + 1 }}</td>
+            <td>
+              <strong>{{ pago.Referencia }}</strong>
+            </td>
+            <td>{{ pago.Entrada }}</td>
+            <td>{{ pago.Fecha }}</td>
+            <td>
+              <span
+                *ngIf="pago.estado_validacion === 'ok'"
+                class="badge badge-success"
+                >Coincide</span
+              >
+              <span
+                *ngIf="pago.estado_validacion === 'menor'"
+                class="badge badge-warning"
+                style="color: #856404"
+                >Monto menor</span
+              >
+              <span
+                *ngIf="pago.estado_validacion === 'no_encontrado'"
+                class="badge badge-danger"
+                >No encontrado</span
+              >
+            </td>
+            <td>
+              {{
+                pago.monto_registrado !== null
+                  ? (pago.monto_registrado | currency: "USD")
+                  : "--"
+              }}
+            </td>
+            <td>
+              {{
+                pago.monto_convertido !== null
+                  ? (pago.monto_convertido | currency: "USD")
+                  : "--"
+              }}
+            </td>
+            <td>
+              {{
+                pago.fecha_registro
+                  ? (pago.fecha_registro | date: "dd-MM-yyyy")
+                  : "--"
+              }}
+            </td>
+            <td style="font-size: 0.82rem">{{ pago.mensaje }}</td>
+            <td class="text-center">
+              <button
+                *ngIf="pago.estado_validacion === 'menor'"
+                class="btn btn-sm btn-success"
+                ngbTooltip="Marcar como validado"
+                [disabled]="pago._cargando"
+                (click)="marcarValidado(pago)"
+              >
+                <span *ngIf="pago._cargando"
+                  ><i class="fas fa-circle-notch fa-spin"></i
+                ></span>
+                <span *ngIf="!pago._cargando"
+                  ><i class="fas fa-check"></i> Validar</span
+                >
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <button class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+      Cerrar <i class="fas fa-times"></i>
+    </button>
+  </div>
+</ng-template>
+
 <ng-template #contentAbonoEditar let-modal>
   <div class="modal-header">
     <div>
@@ -335,7 +617,7 @@
           />
         </div>
       </div>
-      <div class="col-md-6" *ngIf="MetodoPagoEditarValue.value != 1  ">
+      <div class="col-md-6" *ngIf="MetodoPagoEditarValue.value != 1">
         <div class="form-group">
           <p class="font-weight-bold">Autorización</p>
           <input

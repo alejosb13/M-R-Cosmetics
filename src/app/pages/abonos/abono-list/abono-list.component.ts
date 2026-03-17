@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Factura } from "app/shared/models/Factura.model";
@@ -21,6 +21,7 @@ import { AbonoService } from "app/shared/services/abono.service";
 import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import * as XLSX from "xlsx";
 
 @Component({
   selector: "app-abono-list",
@@ -66,6 +67,17 @@ export class AbonoListComponent implements OnInit {
 
   themeSite: string;
   themeSubscription: Subscription;
+
+  // Excel validar
+  excelData: any[] = [];
+  excelColumns: string[] = [];
+  excelFileName: string = "";
+  excelError: string = "";
+  isValidating: boolean = false;
+
+  // Resultado validación
+  validarResultado: any = null;
+  @ViewChild('contentResultadoValidar') contentResultadoValidar: any;
 
   constructor(
     private _CommunicationService: CommunicationService,
@@ -150,6 +162,147 @@ export class AbonoListComponent implements OnInit {
       (result) => {},
       (reason) => {}
     );
+  }
+
+  openValidar(content: any) {
+    this.resetValidarModal();
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-basic-title",
+      size: "lg",
+      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+    }).result.then(
+      (result) => {},
+      (reason) => {}
+    );
+  }
+
+  onExcelFileChange(event: any) {
+    this.excelError = "";
+    this.excelData = [];
+    this.excelColumns = [];
+
+    const file: File = event.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = [
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.ms-excel",
+    ];
+    const allowedExtensions = [".xlsx", ".xls"];
+    const ext = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+
+    if (!allowedExtensions.includes(ext) && !allowedTypes.includes(file.type)) {
+      this.excelError = "El archivo no es un Excel válido. Solo se aceptan archivos .xlsx o .xls";
+      this.excelFileName = "";
+      event.target.value = "";
+      return;
+    }
+
+    this.excelFileName = file.name;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array", cellDates: true });
+      const firstSheet = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheet];
+      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+      if (jsonData.length === 0) {
+        this.excelError = "El archivo Excel está vacío o no tiene datos en la primera hoja.";
+        return;
+      }
+      console.log("excellData", jsonData);
+      
+      // Formatear fechas a DD-MM-YYYY
+      const formattedData = jsonData.map((row: any) => {
+        const newRow: any = {};
+        for (const key of Object.keys(row)) {
+          const val = row[key];
+          if (val instanceof Date) {
+            const dd = String(val.getDate()).padStart(2, "0");
+            const mm = String(val.getMonth() + 1).padStart(2, "0");
+            const yyyy = val.getFullYear();
+            newRow[key] = `${dd}-${mm}-${yyyy}`;
+          } else {
+            newRow[key] = val;
+          }
+        }
+        return newRow;
+      });
+
+      this.excelColumns = Object.keys(formattedData[0]);
+      this.excelData = formattedData;
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  confirmarValidar(modal: any) {
+    if (this.excelData.length === 0) return;
+
+    this.isValidating = true;
+    this._AbonoService.validarPagosExcel(this.excelData).subscribe(
+      (res) => {
+        this.isValidating = false;
+        this.validarResultado = res;
+        modal.close("confirm");
+        this.resetValidarModal();
+        // Abrir modal de resultados
+        setTimeout(() => {
+          this.NgbModal.open(this.contentResultadoValidar, {
+            ariaLabelledBy: "modal-resultado-title",
+            size: "xl",
+            windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
+          });
+        }, 150);
+      },
+      (err) => {
+        this.isValidating = false;
+        Swal.fire({
+          icon: "error",
+          title: "Error al validar",
+          text: err?.error?.message || "Ocurrió un error al enviar los datos. Intente nuevamente.",
+        });
+      }
+    );
+  }
+
+  getRowClass(estado: string): string {
+    if (estado === "ok") return "table-success";
+    if (estado === "no_encontrado") return "table-danger";
+    return "table-warning";
+  }
+
+  contarEstado(estado: string): number {
+    if (!this.validarResultado?.pagos) return 0;
+    return this.validarResultado.pagos.filter((p: any) => p.estado_validacion === estado).length;
+  }
+
+  marcarValidado(pago: any) {
+    pago._cargando = true;
+    this._AbonoService.checkValidReferencia(pago.Referencia).subscribe(
+      (res) => {
+        pago._cargando = false;
+        pago.mensaje = res.mensaje;
+        pago.estado_validacion = res.estado_validacion;
+      },
+      (err) => {
+        pago._cargando = false;
+        Swal.fire({
+          icon: "error",
+          title: "Error al marcar",
+          text: err?.error?.message || "No se pudo marcar la referencia como validada.",
+        });
+      }
+    );
+  }
+
+  resetValidarModal() {
+    this.excelData = [];
+    this.excelColumns = [];
+    this.excelFileName = "";
+    this.excelError = "";
+    this.isValidating = false;
   }
 
   newPage(link: Link) {

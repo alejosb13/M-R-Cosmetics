@@ -81,4 +81,20 @@ export class AbonoService {
       headers: this.headerJson_Token(),
     });
   }
+
+  validarPagosExcel(data: any[]): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/validar-excel`;
+    return this.http.post<any>(URL, { pagos: data }, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  checkValidReferencia(referencia: number | string): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/check-valid-referencia`;
+    return this.http.post<any>(URL, { referencia }, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
 }
