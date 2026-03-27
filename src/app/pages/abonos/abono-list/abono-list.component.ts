@@ -58,6 +58,7 @@ export class AbonoListComponent implements OnInit {
   dateFin: string;
   allDates: boolean = false;
   metodoPago: number = 0;
+  estadoValidacion: string = ""; // '' = todos | 'validado' = con validacion ok | 'sin_validar' = sin validacion
 
   // Resumen bancario modal (admin)
   resumenBancarioSeleccionado: any = null;
@@ -363,6 +364,7 @@ export class AbonoListComponent implements OnInit {
 
     this.allDates = false;
     this.metodoPago = 0;
+    this.estadoValidacion = "";
     this.numeroRecibo = "";
     this.listadoFilter.autorizacion = "";
 
@@ -385,6 +387,7 @@ export class AbonoListComponent implements OnInit {
       this.allDates = this.listadoFilter.allDates;
       this.numeroRecibo = this.listadoFilter.numeroRecibo;
       this.metodoPago = Number(this.listadoFilter.metodoPago) || 0;
+      this.estadoValidacion = (this.listadoFilter as any).estadoValidacion || "";
     } else {
       if (!submit) {
         console.log(this.userId);
@@ -413,6 +416,7 @@ export class AbonoListComponent implements OnInit {
         allDates: this.allDates,
         numeroRecibo: this.numeroRecibo,
         metodoPago: this.metodoPago,
+        estadoValidacion: this.estadoValidacion,
       };
     }
 

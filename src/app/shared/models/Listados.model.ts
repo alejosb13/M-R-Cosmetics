@@ -27,6 +27,7 @@ export interface FiltrosList {
   userId?: number;
   tipoGasto?: number;
   metodoPago?: number;
+  estadoValidacion?: string;
   filter?: string;
   estado?: string | number;
   status_pagado?: string | number;

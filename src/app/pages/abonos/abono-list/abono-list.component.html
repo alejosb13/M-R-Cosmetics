@@ -311,6 +311,16 @@
           </select>
         </div>
       </div>
+      <div class="col-md-6" *ngIf="isAdmin">
+        <div class="form-group">
+          <p class="font-weight-bold">Estado Validación</p>
+          <select class="form-control" [(ngModel)]="estadoValidacion">
+            <option value="">Todos</option>
+            <option value="validado">Validados</option>
+            <option value="sin_validar">Sin validar</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">
