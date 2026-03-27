@@ -100,12 +100,20 @@
                 <ng-container *ngIf="isAdmin">
                   <span
                     [ngClass]="{
-                      'text-success font-weight-bold': abono.metodo_pago_validacion?.estado_validacion === 'ok',
-                      'text-danger font-weight-bold': abono.metodo_pago_validacion && abono.metodo_pago_validacion.estado_validacion !== 'ok'
+                      'text-success font-weight-bold':
+                        abono.metodo_pago_validacion?.estado_validacion ===
+                        'ok',
                     }"
-                    [style.cursor]="abono.metodo_pago_validacion ? 'pointer' : 'default'"
-                    (click)="abono.metodo_pago_validacion && openResumenBancario(contentResumenBancario, abono)"
-                    [ngbTooltip]="abono.metodo_pago_validacion ? 'Ver resumen bancario' : ''"
+                    [style.cursor]="
+                      abono.metodo_pago_validacion ? 'pointer' : 'default'
+                    "
+                    (click)="
+                      abono.metodo_pago_validacion &&
+                        openResumenBancario(contentResumenBancario, abono)
+                    "
+                    [ngbTooltip]="
+                      abono.metodo_pago_validacion ? 'Ver resumen bancario' : ''
+                    "
                   >
                     #{{ abono.recibo_historial.numero }}
                   </span>
@@ -297,7 +305,9 @@
           <p class="font-weight-bold">Método de Pago</p>
           <select class="form-control" [(ngModel)]="metodoPago">
             <option [value]="0">Todos</option>
-            <option *ngFor="let tipo of TiposMetodos" [value]="tipo.id">{{ tipo.nombre }}</option>
+            <option *ngFor="let tipo of TiposMetodos" [value]="tipo.id">
+              {{ tipo.nombre }}
+            </option>
           </select>
         </div>
       </div>
@@ -334,7 +344,7 @@
       </div>
       <div class="col-md-6 mb-3">
         <p class="font-weight-bold mb-1">Monto</p>
-        <span>{{ resumenBancarioSeleccionado.monto | number:'1.2-2' }}</span>
+        <span>{{ resumenBancarioSeleccionado.monto | number: "1.2-2" }}</span>
       </div>
       <div class="col-md-6 mb-3">
         <p class="font-weight-bold mb-1">Fecha Operación</p>
@@ -346,22 +356,32 @@
       </div>
       <div class="col-md-6 mb-3">
         <p class="font-weight-bold mb-1">Estado Conciliación</p>
-        <span class="badge" [ngClass]="{
-          'badge-success': resumenBancarioSeleccionado.estado_conciliacion === 'validado',
-          'badge-danger':  resumenBancarioSeleccionado.estado_conciliacion === 'error',
-          'badge-warning': resumenBancarioSeleccionado.estado_conciliacion === 'pendiente'
-        }">
+        <span
+          class="badge"
+          [ngClass]="{
+            'badge-success':
+              resumenBancarioSeleccionado.estado_conciliacion === 'validado',
+            'badge-danger':
+              resumenBancarioSeleccionado.estado_conciliacion === 'error',
+            'badge-warning':
+              resumenBancarioSeleccionado.estado_conciliacion === 'pendiente',
+          }"
+        >
           {{ resumenBancarioSeleccionado.estado_conciliacion }}
         </span>
       </div>
       <div class="col-12 mb-3" *ngIf="resumenBancarioSeleccionado.mensaje">
         <p class="font-weight-bold mb-1">Mensaje</p>
-        <span class="text-muted small">{{ resumenBancarioSeleccionado.mensaje }}</span>
+        <span class="text-muted small">{{
+          resumenBancarioSeleccionado.mensaje
+        }}</span>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cerrar</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+      Cerrar
+    </button>
   </div>
 </ng-template>
 

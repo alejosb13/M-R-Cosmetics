@@ -104,6 +104,8 @@ export class NavbarComponent implements OnInit {
     if (titlee.includes("finanzas/estados")) return "Estados";
     if (titlee.includes("factura/entrega/0")) return "Factura Por Entregar";
     
+    if (titlee.includes("abono/validacion")) return "Validacion de abonos";
+    
     if (titlee.includes("devolucion/listado/devolucion-incentivos")) return "Devolución incentivos";
     if (titlee.includes("devolucion/listado/deduccion-incentivos")) return "Deducciones aplicadas";
 
