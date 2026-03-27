@@ -46,6 +46,7 @@ import { AbonoEditarComponent } from "@app/pages/abonos/abono-editar/abono-edita
 import { AbonoFormComponent } from "app/shared/components/forms/abono-form/abono-form.component";
 import { AbonoFacturaComponent } from "@app/pages/abonos/abono-factura/abono-factura.component";
 import { AbonoListComponent } from "@app/pages/abonos/abono-list/abono-list.component";
+import { AbonoValidacionComponent } from "@app/pages/abonos/abono-validacion/abono-validacion.component";
 
 import { CategoriaListComponent } from "@app/pages/categorias/categoria-list/categoria-list.component";
 import { CategoriaInsertarComponent } from "@app/pages/categorias/categoria-insertar/categoria-insertar.component";
@@ -196,6 +197,7 @@ import { RecuperacionAnualComponent } from "@app/pages/logistica/recuperacion-an
     AbonoEditarComponent,
     AbonoFormComponent,
     AbonoListComponent,
+    AbonoValidacionComponent,
     AbonoFacturaComponent,
 
     CategoriaListComponent,

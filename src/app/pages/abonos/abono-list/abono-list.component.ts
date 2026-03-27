@@ -21,6 +21,7 @@ import { AbonoService } from "app/shared/services/abono.service";
 import logger from "app/shared/utils/logger";
 import { TiposMetodos } from "app/shared/models/MetodoPago.model";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { Router } from "@angular/router";
 import * as XLSX from "xlsx";
 
 @Component({
@@ -56,6 +57,10 @@ export class AbonoListComponent implements OnInit {
   dateIni: string;
   dateFin: string;
   allDates: boolean = false;
+  metodoPago: number = 0;
+
+  // Resumen bancario modal (admin)
+  resumenBancarioSeleccionado: any = null;
 
   roleName: string;
   listadoData: ListadoModel<Abono>;
@@ -88,7 +93,8 @@ export class AbonoListComponent implements OnInit {
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
     private _AbonoService: AbonoService,
-    private _ReciboService: ReciboService
+    private _ReciboService: ReciboService,
+    private _Router: Router
   ) {}
 
   ngOnInit(): void {
@@ -164,16 +170,26 @@ export class AbonoListComponent implements OnInit {
     );
   }
 
-  openValidar(content: any) {
-    this.resetValidarModal();
+  openValidar() {
+    this._Router.navigate(["/abono/validacion"]);
+  }
+
+  openResumenBancario(content: any, abono: any) {
+    const validacion = abono?.metodo_pago_validacion;
+    if (!validacion) return;
+    // Preferir datos del resumen_bancario si ya están cargados; si no, armar desde la validación
+    this.resumenBancarioSeleccionado = validacion.resumen_bancario ?? {
+      referencia:           validacion.referencia,
+      monto:                validacion.entrada,
+      fecha_operacion:      validacion.fecha_excel,
+      moneda:               null,
+      estado_conciliacion:  validacion.estado_validacion === 'ok' ? 'validado' : validacion.estado_validacion,
+      mensaje:              validacion.mensaje,
+    };
     this.NgbModal.open(content, {
-      ariaLabelledBy: "modal-basic-title",
-      size: "lg",
-      windowClass: this.themeSite == "dark-mode" ? "dark-modal" : "white-modal",
-    }).result.then(
-      (result) => {},
-      (reason) => {}
-    );
+      ariaLabelledBy: 'modal-resumen-title',
+      windowClass: this.themeSite === 'dark-mode' ? 'dark-modal' : 'white-modal',
+    });
   }
 
   onExcelFileChange(event: any) {
@@ -346,6 +362,7 @@ export class AbonoListComponent implements OnInit {
     this.setCurrentDate();
 
     this.allDates = false;
+    this.metodoPago = 0;
     this.numeroRecibo = "";
     this.listadoFilter.autorizacion = "";
 
@@ -367,6 +384,7 @@ export class AbonoListComponent implements OnInit {
       this.dateFin = this.listadoFilter.dateFin;
       this.allDates = this.listadoFilter.allDates;
       this.numeroRecibo = this.listadoFilter.numeroRecibo;
+      this.metodoPago = Number(this.listadoFilter.metodoPago) || 0;
     } else {
       if (!submit) {
         console.log(this.userId);
@@ -394,6 +412,7 @@ export class AbonoListComponent implements OnInit {
         userId: this.userId,
         allDates: this.allDates,
         numeroRecibo: this.numeroRecibo,
+        metodoPago: this.metodoPago,
       };
     }
 

@@ -35,7 +35,7 @@
           </button>
           <button
             class="btn btn-primary ml-2"
-            (click)="openValidar(contentValidar)"
+            (click)="openValidar()"
             *ngIf="isAdmin"
           >
             Validar <i class="fas fa-check-circle fa-lg"></i>
@@ -95,9 +95,25 @@
           <tr *ngFor="let abono of Abonos; let i = index">
             <th scope="row">{{ abono.id }}</th>
             <td>
-              <div class="mr-3" ngbTooltip="Factura">
-                <!-- <a [routerLink]="[ '/factura','detalle',abono.factura.id]"><i class="fas text-primary fa-receipt"></i> #{{ abono.factura.id }}</a> -->
-                #{{ abono.recibo_historial.numero }}
+              <div class="mr-3">
+                <!-- Admin: color según estado conciliación + click para ver resumen -->
+                <ng-container *ngIf="isAdmin">
+                  <span
+                    [ngClass]="{
+                      'text-success font-weight-bold': abono.metodo_pago_validacion?.estado_validacion === 'ok',
+                      'text-danger font-weight-bold': abono.metodo_pago_validacion && abono.metodo_pago_validacion.estado_validacion !== 'ok'
+                    }"
+                    [style.cursor]="abono.metodo_pago_validacion ? 'pointer' : 'default'"
+                    (click)="abono.metodo_pago_validacion && openResumenBancario(contentResumenBancario, abono)"
+                    [ngbTooltip]="abono.metodo_pago_validacion ? 'Ver resumen bancario' : ''"
+                  >
+                    #{{ abono.recibo_historial.numero }}
+                  </span>
+                </ng-container>
+                <!-- No admin: texto plano -->
+                <ng-container *ngIf="!isAdmin">
+                  #{{ abono.recibo_historial.numero }}
+                </ng-container>
               </div>
             </td>
             <td>
@@ -276,6 +292,15 @@
           </option>
         </select>
       </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Método de Pago</p>
+          <select class="form-control" [(ngModel)]="metodoPago">
+            <option [value]="0">Todos</option>
+            <option *ngFor="let tipo of TiposMetodos" [value]="tipo.id">{{ tipo.nombre }}</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">
@@ -291,6 +316,52 @@
         </button>
       </div>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #contentResumenBancario let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title m-0" id="modal-resumen-title">Resumen Bancario</h4>
+    <button type="button" class="btn-close" (click)="modal.dismiss()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="resumenBancarioSeleccionado">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <p class="font-weight-bold mb-1">Referencia</p>
+        <span>{{ resumenBancarioSeleccionado.referencia }}</span>
+      </div>
+      <div class="col-md-6 mb-3">
+        <p class="font-weight-bold mb-1">Monto</p>
+        <span>{{ resumenBancarioSeleccionado.monto | number:'1.2-2' }}</span>
+      </div>
+      <div class="col-md-6 mb-3">
+        <p class="font-weight-bold mb-1">Fecha Operación</p>
+        <span>{{ resumenBancarioSeleccionado.fecha_operacion }}</span>
+      </div>
+      <div class="col-md-6 mb-3">
+        <p class="font-weight-bold mb-1">Moneda</p>
+        <span>{{ resumenBancarioSeleccionado.moneda }}</span>
+      </div>
+      <div class="col-md-6 mb-3">
+        <p class="font-weight-bold mb-1">Estado Conciliación</p>
+        <span class="badge" [ngClass]="{
+          'badge-success': resumenBancarioSeleccionado.estado_conciliacion === 'validado',
+          'badge-danger':  resumenBancarioSeleccionado.estado_conciliacion === 'error',
+          'badge-warning': resumenBancarioSeleccionado.estado_conciliacion === 'pendiente'
+        }">
+          {{ resumenBancarioSeleccionado.estado_conciliacion }}
+        </span>
+      </div>
+      <div class="col-12 mb-3" *ngIf="resumenBancarioSeleccionado.mensaje">
+        <p class="font-weight-bold mb-1">Mensaje</p>
+        <span class="text-muted small">{{ resumenBancarioSeleccionado.mensaje }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cerrar</button>
   </div>
 </ng-template>
 
@@ -479,6 +550,7 @@
             <th>Entrada (Bs)</th>
             <th>Fecha</th>
             <th>Estado</th>
+            <th>Moneda</th>
             <th>Monto Registrado ($)</th>
             <th>Monto Convertido ($)</th>
             <th>Fecha Registro</th>
@@ -518,6 +590,9 @@
                 class="badge badge-danger"
                 >No encontrado</span
               >
+            </td>
+            <td>
+              {{ pago.Moneda }}
             </td>
             <td>
               {{

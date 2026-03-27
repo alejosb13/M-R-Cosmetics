@@ -267,6 +267,21 @@ export class Listado {
     });
   }
 
+  resumenBancarioList(options: any): Observable<any> {
+    let params = new HttpParams();
+    for (const key in options) {
+      if (options[key] !== null && options[key] !== undefined && options[key] !== "") {
+        params = params.append(key, options[key]);
+      }
+    }
+
+    return this.http.get<any>(`${ListadoURL}/resumen-bancario`, {
+      params,
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   registerClientesPDF(options: any): Observable<Blob> {
     // console.log("FiltrosList", options);
     let URL = `${environment.urlAPI}pdf/registroclientes`;

@@ -32,6 +32,7 @@ import { CheckoutComponent } from "@app/pages/checkout/checkout.component";
 import { AbonoInsertarComponent } from "@app/pages/abonos/abono-insertar/abono-insertar.component";
 import { AbonoEditarComponent } from "@app/pages/abonos/abono-editar/abono-editar.component";
 import { AbonoListComponent } from "@app/pages/abonos/abono-list/abono-list.component";
+import { AbonoValidacionComponent } from "@app/pages/abonos/abono-validacion/abono-validacion.component";
 
 import { CategoriaListComponent } from "@app/pages/categorias/categoria-list/categoria-list.component";
 import { CategoriaInsertarComponent } from "@app/pages/categorias/categoria-insertar/categoria-insertar.component";
@@ -237,6 +238,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: "agregar", component: AbonoInsertarComponent },
       { path: "editar/:id", component: AbonoEditarComponent },
       { path: "list/:facturaId", component: AbonoListComponent },
+      { path: "validacion", component: AbonoValidacionComponent },
     ],
   },
   {

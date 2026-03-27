@@ -97,4 +97,20 @@ export class AbonoService {
       responseType: "json",
     });
   }
+
+  cargarResumenBancario(pagos: any[]): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/cargar-resumen-bancario`;
+    return this.http.post<any>(URL, { pagos }, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  validarResumenBancario(data: { fechaInicio: string; fechaFin: string; moneda: string }): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/validar-excel`;
+    return this.http.post<any>(URL, data, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
 }

@@ -1,0 +1,289 @@
+<div class="bg-white">
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>Cargando registros <i class="fas fa-circle-notch fa-spin"></i></span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
+      <div>
+        <div class="d-flex justify-content-start flex-wrap gap-2">
+          <button class="btn btn-primary mr-2" (click)="openFiltros(contentFiltros)">
+            Filtros <i class="fas fa-filter"></i>
+          </button>
+          <button class="btn btn-success mr-2" (click)="openAgregar(contentAgregar)">
+            <i class="fas fa-plus"></i> Agregar resumen
+          </button>
+          <button class="btn btn-info" (click)="openValidar(contentValidar)">
+            <i class="fas fa-check-circle"></i> Validar abonos
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex flex-row justify-content-between mt-3">
+        <div class="card-title align-items-start flex-column">
+          <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1">Resumen Bancario</span>
+          <span class="fuvi-text-black mt-1 fw-bold fs-5">Total: {{ listadoData?.total ?? resumenBancarios.length }}</span>
+        </div>
+
+        <form class="d-flex align-items-center justify-content-end buscador">
+          <div class="form-label-group input-group">
+            <input
+              type="text"
+              class="form-control form-control-sm pt-1"
+              placeholder="Buscar referencia / monto"
+              name="buscar"
+              [(ngModel)]="filter"
+            />
+            <button class="btn btn-primary my-0" (click)="BuscarValor()" type="button">
+              Buscar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>N° Recibo</th>
+            <th>Referencia</th>
+            <th>Monto</th>
+            <th>Monto USD</th>
+            <th>Fecha Operación</th>
+            <th>Moneda</th>
+            <th>Estado</th>
+            <th>Mensaje</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="resumenBancarios.length > 0">
+          <tr *ngFor="let item of resumenBancarios" [ngClass]="getRowClass(item.estado_conciliacion)">
+            <td>{{ item.id }}</td>
+            <td>{{ item.numero_recibo ?? '-' }}</td>
+            <td>{{ item.referencia }}</td>
+            <td>{{ item.monto | number:'1.2-2' }}</td>
+            <td>{{ item.monto_usd === '--' ? '--' : (item.monto_usd | number:'1.2-2') }}</td>
+            <td>{{ item.fecha_operacion }}</td>
+            <td>{{ item.moneda }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'badge-success': item.estado_conciliacion === 'validado',
+                  'badge-danger':  item.estado_conciliacion === 'error',
+                  'badge-warning': item.estado_conciliacion === 'pendiente'
+                }"
+              >
+                {{ item.estado_conciliacion }}
+              </span>
+            </td>
+            <td>{{ item.mensaje ?? '-' }}</td>
+
+          </tr>
+        </tbody>
+        <tbody *ngIf="resumenBancarios.length === 0">
+          <tr>
+            <td colspan="9" class="text-center text-muted py-4">No hay registros para mostrar.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="d-flex justify-content-center mt-3" *ngIf="listadoData?.links">
+      <ul class="pagination">
+        <li
+          class="page-item"
+          *ngFor="let link of listadoData.links"
+          [ngClass]="{ active: link.active, disabled: !link.url }"
+        >
+          <button class="page-link" (click)="newPage(link)" [innerHTML]="link.label"></button>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+</div>
+
+<!-- ── Modal Filtros ───────────────────────────────────── -->
+<ng-template #contentFiltros let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-filtros-title">Filtros</h5>
+    <button type="button" class="close" (click)="modal.dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group mb-3">
+      <div class="custom-control custom-switch">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="allDatesSwitch"
+          [(ngModel)]="allDates"
+        />
+        <label class="custom-control-label" for="allDatesSwitch">
+          Mostrar todas las fechas
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group" [class.text-muted]="allDates">
+          <label>Fecha Inicio</label>
+          <input type="date" class="form-control" [(ngModel)]="dateIni" [disabled]="allDates" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group" [class.text-muted]="allDates">
+          <label>Fecha Fin</label>
+          <input type="date" class="form-control" [(ngModel)]="dateFin" [disabled]="allDates" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Moneda</label>
+          <select class="form-control" [(ngModel)]="monedaFiltro">
+            <option value="">Todas</option>
+            <option value="Cordoba">Córdoba</option>
+            <option value="Dolar">Dólar</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Estado Conciliación</label>
+          <select class="form-control" [(ngModel)]="estadoConciliacion">
+            <option value="">Todos</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="validado">Validado</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary mr-3" (click)="limpiarFiltros()">Limpiar</button>
+    <button type="button" class="btn btn-primary" (click)="aplicarFiltros()">Aplicar</button>
+  </div>
+</ng-template>
+
+<!-- ── Modal Agregar (cargar Excel) ───────────────────── -->
+<ng-template #contentAgregar let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-agregar-title">
+      Cargar Resumen Bancario <small class="text-muted">(Excel)</small>
+    </h5>
+    <button type="button" class="close" (click)="modal.dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="text-muted small">
+      Sube el archivo Excel del banco. Las columnas esperadas son:
+      <strong>Entrada, Referencia, Fecha, Moneda</strong>.
+    </p>
+
+    <div class="form-group">
+      <label class="d-block">Archivo Excel</label>
+      <label for="excelFileInput" class="btn btn-outline-secondary mb-0" style="cursor:pointer;">
+        <i class="fas fa-file-excel mr-1 text-success"></i>
+        {{ excelFileName ? excelFileName : 'Seleccionar archivo...' }}
+      </label>
+      <input
+        type="file"
+        id="excelFileInput"
+        class="d-none"
+        accept=".xlsx,.xls"
+        (change)="onExcelFileChange($event)"
+      />
+      <small *ngIf="excelError" class="text-danger d-block mt-1">{{ excelError }}</small>
+    </div>
+
+    <div *ngIf="excelData.length > 0" class="table-responsive mt-3" style="max-height:300px; overflow-y:auto;">
+      <p class="text-muted small">{{ excelData.length }} filas detectadas:</p>
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+            <th *ngFor="let col of excelColumns">{{ col }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of excelData | slice:0:20">
+            <td *ngFor="let col of excelColumns">{{ row[col] }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="excelData.length > 20" class="text-muted small text-center">
+        ... y {{ excelData.length - 20 }} filas más.
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-success"
+      [disabled]="excelData.length === 0 || isCargando"
+      (click)="confirmarAgregar(modal)"
+    >
+      <span *ngIf="!isCargando"><i class="fas fa-upload"></i> Cargar</span>
+      <span *ngIf="isCargando"><i class="fas fa-circle-notch fa-spin"></i> Cargando...</span>
+    </button>
+  </div>
+</ng-template>
+
+<!-- ── Modal Validar ───────────────────────────────────── -->
+<ng-template #contentValidar let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-validar-title">Validar Abonos</h5>
+    <button type="button" class="close" (click)="modal.dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="text-muted small">
+      El sistema buscará los registros pendientes en el rango de fechas indicado
+      y los conciliará automáticamente contra los abonos registrados.
+    </p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Fecha Inicio <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="validarFechaInicio" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Fecha Fin <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="validarFechaFin" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Moneda <span class="text-danger">*</span></label>
+          <select class="form-control" [(ngModel)]="validarMoneda">
+            <option value="Cordoba">Córdoba</option>
+            <option value="Dolar">Dólar</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary mr-3" (click)="modal.dismiss()">Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-info "
+      [disabled]="!validarFechaInicio || !validarFechaFin || !validarMoneda || isValidando"
+      (click)="confirmarValidar(modal)"
+    >
+      <span *ngIf="!isValidando"><i class="fas fa-check-circle"></i> Validar</span>
+      <span *ngIf="isValidando"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>
+    </button>
+  </div>
+</ng-template>
