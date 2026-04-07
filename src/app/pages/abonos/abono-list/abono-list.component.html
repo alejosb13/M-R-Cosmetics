@@ -79,8 +79,8 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Recibo</th>
+            <!-- <th scope="col">#</th> -->
+            <th scope="col">N° Recibo</th>
             <th scope="col">Monto</th>
             <th scope="col">Método Pago</th>
             <th scope="col">Detalle Pago</th>
@@ -93,7 +93,7 @@
         </thead>
         <tbody *ngIf="Abonos.length > 0">
           <tr *ngFor="let abono of Abonos; let i = index">
-            <th scope="row">{{ abono.id }}</th>
+            <!-- <th scope="row">{{ abono.id }}</th> -->
             <td>
               <div class="mr-3">
                 <!-- Admin: color según estado conciliación + click para ver resumen -->

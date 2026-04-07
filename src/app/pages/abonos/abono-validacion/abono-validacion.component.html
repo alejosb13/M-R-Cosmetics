@@ -48,7 +48,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>#</th>
+            <!-- <th>#</th> -->
             <th>N° Recibo</th>
             <th>Referencia</th>
             <th>Monto</th>
@@ -62,7 +62,7 @@
         </thead>
         <tbody *ngIf="resumenBancarios.length > 0">
           <tr *ngFor="let item of resumenBancarios" [ngClass]="getRowClass(item.estado_conciliacion)">
-            <td>{{ item.id }}</td>
+            <!-- <td>{{ item.id }}</td> -->
             <td>{{ item.numero_recibo ?? '-' }}</td>
             <td>{{ item.referencia }}</td>
             <td>{{ item.monto | number:'1.2-2' }}</td>
@@ -342,14 +342,15 @@
 
     <!-- Input N° Recibo (solo si switch ON) -->
     <div class="form-group" *ngIf="desestimando_relacionar">
-      <label>N° Recibo <span class="text-danger">*</span> <small class="text-muted">(factura_historial_id)</small></label>
+      <label>N° Recibo <span class="text-danger">*</span></label>
       <input
         type="number"
         class="form-control"
         placeholder="Ingrese el número de recibo"
-        [(ngModel)]="factura_historial_id"
+        [(ngModel)]="numero_recibo"
         min="1"
       />
+      <small class="text-muted">Se buscará el recibo por su número.</small>
     </div>
 
     <!-- TextArea Motivo (siempre visible) -->
@@ -357,7 +358,7 @@
       <label>
         {{ desestimando_relacionar ? 'Comentario adicional' : 'Motivo de desestimación' }}
         <span *ngIf="!desestimando_relacionar" class="text-danger">*</span>
-        <span *ngIf="desestimando_relacionar" class="text-muted">(opcional — reemplaza el mensaje por defecto)</span>
+        <span *ngIf="desestimando_relacionar" class="text-muted">(Opcional)</span>
       </label>
       <textarea
         class="form-control"
@@ -375,7 +376,7 @@
     <button
       type="button"
       class="btn btn-warning"
-      [disabled]="isDesestimando || (desestimando_relacionar ? !factura_historial_id : !desestimar_motivo?.trim())"
+      [disabled]="isDesestimando || (desestimando_relacionar ? !numero_recibo : !desestimar_motivo?.trim())"
       (click)="confirmarDesestimar(modal)"
     >
       <span *ngIf="!isDesestimando"><i class="fas fa-edit"></i> Confirmar</span>

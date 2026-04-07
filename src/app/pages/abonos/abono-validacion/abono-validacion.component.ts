@@ -51,7 +51,7 @@ export class AbonoValidacionComponent implements OnInit {
   // --- Modal Desestimar (estado error) ---
   selectedItem: any = null;
   desestimando_relacionar: boolean = false;
-  factura_historial_id: number | null = null;
+  numero_recibo: number | null = null;
   desestimar_motivo: string = "";
   isDesestimando: boolean = false;
 
@@ -323,7 +323,7 @@ export class AbonoValidacionComponent implements OnInit {
   openDesestimar(item: any, content: any) {
     this.selectedItem = item;
     this.desestimando_relacionar = false;
-    this.factura_historial_id = null;
+    this.numero_recibo = null;
     this.desestimar_motivo = "";
     this.isDesestimando = false;
     this.NgbModal.open(content, {
@@ -336,7 +336,7 @@ export class AbonoValidacionComponent implements OnInit {
   confirmarDesestimar(modal: any) {
     const payload: any = {
       id: this.selectedItem?.id,
-      factura_historial_id: this.desestimando_relacionar ? this.factura_historial_id : null,
+      numero_recibo: this.desestimando_relacionar ? this.numero_recibo : null,
       motivo: this.desestimando_relacionar
         ? (this.desestimar_motivo?.trim() || null)
         : this.desestimar_motivo,
