@@ -113,4 +113,12 @@ export class AbonoService {
       responseType: "json",
     });
   }
+
+  desestimiarResumenBancario(data: { id: number; factura_historial_id: number | null; motivo: string | null }): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/desestimar-resumen`;
+    return this.http.post<any>(URL, data, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
 }

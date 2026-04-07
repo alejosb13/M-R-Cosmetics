@@ -48,6 +48,13 @@ export class AbonoValidacionComponent implements OnInit {
   isValidando: boolean = false;
   validarResultado: any = null;
 
+  // --- Modal Desestimar (estado error) ---
+  selectedItem: any = null;
+  desestimando_relacionar: boolean = false;
+  factura_historial_id: number | null = null;
+  desestimar_motivo: string = "";
+  isDesestimando: boolean = false;
+
   constructor(
     private _Listado: Listado,
     private _AbonoService: AbonoService,
@@ -310,8 +317,56 @@ export class AbonoValidacionComponent implements OnInit {
       );
   }
 
+  // ──────────────────────────────────────────────────────
+  // Modal Desestimar (estado error)
+  // ──────────────────────────────────────────────────────
+  openDesestimar(item: any, content: any) {
+    this.selectedItem = item;
+    this.desestimando_relacionar = false;
+    this.factura_historial_id = null;
+    this.desestimar_motivo = "";
+    this.isDesestimando = false;
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-desestimar-title",
+      size: "md",
+      windowClass: this.themeSite === "dark-mode" ? "dark-modal" : "white-modal",
+    });
+  }
+
+  confirmarDesestimar(modal: any) {
+    const payload: any = {
+      id: this.selectedItem?.id,
+      factura_historial_id: this.desestimando_relacionar ? this.factura_historial_id : null,
+      motivo: this.desestimando_relacionar
+        ? (this.desestimar_motivo?.trim() || null)
+        : this.desestimar_motivo,
+    };
+
+    this.isDesestimando = true;
+    this._AbonoService.desestimiarResumenBancario(payload).subscribe(
+      (res) => {
+        this.isDesestimando = false;
+        modal.close("confirm");
+        this.asignarValores();
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          icon: "success",
+          title: "Abono desestimado",
+          text: res?.message || "El abono fue procesado correctamente.",
+        });
+      },
+      (err) => {
+        this.isDesestimando = false;
+        Swal.fire({
+          icon: "error",
+          title: "Error al desestimar",
+          text: err?.error?.message || err?.error?.mensaje || "Ocurrió un error al procesar la solicitud.",
+        });
+      }
+    );
+  }
+
   getRowClass(estado: string): string {
-    if (estado === "validado") return "table-success";
+    if (estado === "validado" || estado === "no_aplica") return "table-success";
     if (estado === "error") return "table-danger";
     return "table-warning";
   }

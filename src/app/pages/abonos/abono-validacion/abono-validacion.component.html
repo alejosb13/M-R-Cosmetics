@@ -57,6 +57,7 @@
             <th>Moneda</th>
             <th>Estado</th>
             <th>Mensaje</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody *ngIf="resumenBancarios.length > 0">
@@ -74,14 +75,24 @@
                 [ngClass]="{
                   'badge-success': item.estado_conciliacion === 'validado',
                   'badge-danger':  item.estado_conciliacion === 'error',
-                  'badge-warning': item.estado_conciliacion === 'pendiente'
+                  'badge-warning': item.estado_conciliacion === 'pendiente',
+                  'badge-secondary': item.estado_conciliacion === 'no_aplica'
                 }"
               >
                 {{ item.estado_conciliacion }}
               </span>
             </td>
             <td>{{ item.mensaje ?? '-' }}</td>
-
+            <td class="text-center">
+              <button
+                *ngIf="item.estado_conciliacion === 'error'"
+                class="btn btn-sm btn-warning"
+                ngbTooltip="Desestimar abono"
+                (click)="openDesestimar(item, contentDesestimar)"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
           </tr>
         </tbody>
         <tbody *ngIf="resumenBancarios.length === 0">
@@ -160,6 +171,7 @@
             <option value="pendiente">Pendiente</option>
             <option value="validado">Validado</option>
             <option value="error">Error</option>
+            <option value="no_aplica">No aplica</option>
           </select>
         </div>
       </div>
@@ -284,6 +296,90 @@
     >
       <span *ngIf="!isValidando"><i class="fas fa-check-circle"></i> Validar</span>
       <span *ngIf="isValidando"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>
+    </button>
+  </div>
+</ng-template>
+
+<!-- ── Modal Desestimar Abono (estado error) ──────────── -->
+<ng-template #contentDesestimar let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-desestimar-title">
+      Desestimar abono <span class="text-muted">#{{ selectedItem?.id }}</span>
+    </h5>
+    <button type="button" class="close" (click)="modal.dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <!-- Info del registro -->
+    <div class="alert alert-danger py-2 px-3 mb-3">
+      <small>
+        <strong>Referencia:</strong> {{ selectedItem?.referencia }} &nbsp;|&nbsp;
+        <strong>Monto:</strong> {{ selectedItem?.monto | number:'1.2-2' }} {{ selectedItem?.moneda === 'Cordoba' ? 'C$' : '$' }} &nbsp;|&nbsp;
+        <strong>Monto USD:</strong>
+        <span *ngIf="selectedItem?.monto_usd !== '--'">{{ selectedItem?.monto_usd | number:'1.2-2' }} $</span>
+        <span *ngIf="selectedItem?.monto_usd === '--'">--</span>
+        &nbsp;|&nbsp;
+        <strong>Fecha:</strong> {{ selectedItem?.fecha_operacion }}
+      </small>
+    </div>
+
+    <!-- Switch: ¿Relacionar a recibo? -->
+    <div class="form-group mb-3">
+      <div class="custom-control custom-switch">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="relacionarReciboSwitch"
+          [(ngModel)]="desestimando_relacionar"
+        />
+        <label class="custom-control-label" for="relacionarReciboSwitch">
+          ¿Desea relacionarlo a un recibo?
+        </label>
+      </div>
+    </div>
+
+    <!-- Input N° Recibo (solo si switch ON) -->
+    <div class="form-group" *ngIf="desestimando_relacionar">
+      <label>N° Recibo <span class="text-danger">*</span> <small class="text-muted">(factura_historial_id)</small></label>
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Ingrese el número de recibo"
+        [(ngModel)]="factura_historial_id"
+        min="1"
+      />
+    </div>
+
+    <!-- TextArea Motivo (siempre visible) -->
+    <div class="form-group">
+      <label>
+        {{ desestimando_relacionar ? 'Comentario adicional' : 'Motivo de desestimación' }}
+        <span *ngIf="!desestimando_relacionar" class="text-danger">*</span>
+        <span *ngIf="desestimando_relacionar" class="text-muted">(opcional — reemplaza el mensaje por defecto)</span>
+      </label>
+      <textarea
+        class="form-control"
+        rows="4"
+        [placeholder]="desestimando_relacionar ? 'Agregue un comentario adicional (opcional)...' : 'Explique el motivo por el cual desea desestimar este abono...'"
+        [(ngModel)]="desestimar_motivo"
+        maxlength="250"
+      ></textarea>
+      <small class="text-muted">{{ desestimar_motivo?.length ?? 0 }}/250 caracteres</small>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary mr-3" (click)="modal.dismiss()">Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-warning"
+      [disabled]="isDesestimando || (desestimando_relacionar ? !factura_historial_id : !desestimar_motivo?.trim())"
+      (click)="confirmarDesestimar(modal)"
+    >
+      <span *ngIf="!isDesestimando"><i class="fas fa-edit"></i> Confirmar</span>
+      <span *ngIf="isDesestimando"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>
     </button>
   </div>
 </ng-template>
