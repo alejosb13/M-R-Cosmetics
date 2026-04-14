@@ -72,6 +72,10 @@ export class CheckoutService {
     return this.dataStorage;
   }
 
+  getTipoPrecio(): 'contado' | 'credito' | null {
+    return this.dataStorage?.tipo_precio ?? null;
+  }
+
   addProductCheckout(producto: Producto) {
     let ProductoExistente:any= false;
     let factura_detalle: FacturaDetalle = {

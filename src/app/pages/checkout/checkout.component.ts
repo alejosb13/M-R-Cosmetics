@@ -70,6 +70,7 @@ export class CheckoutComponent implements OnInit {
   isAdmin: boolean;
   isLoad: boolean = false;
   isSupervisor: boolean;
+  isKshea: boolean = false;
 
   @ViewChild("instance", { static: true }) instance: NgbTypeahead;
   @ViewChild("modalBonificacion") modalBonificacion: ElementRef<any>;
@@ -113,6 +114,7 @@ export class CheckoutComponent implements OnInit {
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
+    this.isKshea = this._AuthService.isKshea();
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
   }
 

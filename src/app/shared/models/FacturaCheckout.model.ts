@@ -11,8 +11,9 @@ export interface FacturaCheckout {
     nruc?: string;
     fecha_vencimiento: string;
     iva: number;
-    tipo_venta:number
-    despachado:number
+    tipo_venta:number;
+    tipo_precio?: 'contado' | 'credito'; // Kshea: indica si el carrito es contado o crédito
+    despachado:number;
     // tcambio: number;
     status_pagado:boolean;
     estado: number;

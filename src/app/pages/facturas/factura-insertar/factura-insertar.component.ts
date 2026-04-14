@@ -11,6 +11,8 @@ import { TablasService } from "app/shared/services/tablas.service";
 import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
+import { AuthService } from "@app/auth/login/service/auth.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-factura-insertar",
@@ -29,11 +31,13 @@ export class FacturaInsertarComponent implements OnInit {
   Productos: Producto[];
 
   Producto: Producto;
-  // Clientes:Cliente[]
-  // Usuarios:Usuario[]
   ClienteId: number = 0;
   UsuarioId: number = 0;
   Stock: number = 1;
+
+  // Kshea: modo precio contado
+  isKshea: boolean = false;
+  precioContado: boolean = false; // false = crédito, true = contado
 
   themeSite: string;
   themeSubscription: Subscription;
@@ -43,15 +47,13 @@ export class FacturaInsertarComponent implements OnInit {
     private modalService: NgbModal,
     private _ProductosService: ProductosService,
     public _FacturasService: FacturasService,
-    // private _ClientesService: ClientesService,
-    // private _UsuariosService: UsuariosService,
     public _TablasService: TablasService,
-    public _CheckoutService: CheckoutService
+    public _CheckoutService: CheckoutService,
+    private _AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    // this._ClientesService.getCliente().subscribe((clientes:Cliente[])=> this.Clientes = [...clientes])
-    // this._UsuariosService.getUsuario().subscribe((usuarios:Usuario[])=> this.Usuarios = [...usuarios])
+    this.isKshea = this._AuthService.isKshea();
 
     this.loadProduct();
 
@@ -67,6 +69,10 @@ export class FacturaInsertarComponent implements OnInit {
   cambiarFiltroStock(event: any): void {
     this.Stock = event ? 1 : 0;
     this.loadProduct();
+  }
+
+  cambiarFiltroPrecioContado(event: any): void {
+    this.precioContado = !!event;
   }
 
   loadProduct(): void {
@@ -111,8 +117,39 @@ export class FacturaInsertarComponent implements OnInit {
   // }
 
   openFormProduct(producto: Producto) {
-    // this._ProductosService.producto = producto
-    this.Producto = producto;
+    // Validación Kshea: el carrito solo puede mezclar un tipo de precio
+    if (this.isKshea) {
+      const tipoPrecioActual = this._CheckoutService.getTipoPrecio();
+      const tipoNuevo: 'contado' | 'credito' = this.precioContado ? 'contado' : 'credito';
+      const productosEnCarrito = this._CheckoutService.getProductCheckout();
+
+      if (tipoPrecioActual && tipoPrecioActual !== tipoNuevo && productosEnCarrito.length > 0) {
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          title: 'Tipo de precio diferente',
+          html: `El carrito ya tiene productos de <b>${tipoPrecioActual}</b>.<br>
+                 No puedes mezclar productos de <b>contado</b> y <b>crédito</b>.<br>
+                 Vacía el carrito para cambiar el tipo.`,
+          icon: 'warning',
+        });
+        return;
+      }
+
+      // Si el producto contado no tiene precio_contado configurado, no permite agregarlo en modo contado
+      if (tipoNuevo === 'contado' && (producto.precio_contado == null)) {
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          text: 'Este producto no tiene precio contado configurado.',
+          icon: 'warning',
+        });
+        return;
+      }
+    }
+
+    this.Producto = { ...producto };
+
+    // Si Kshea + contado, reemplazamos el precio por precio_contado para el modal
+    if (this.isKshea && this.precioContado && producto.precio_contado != null) {
+      this.Producto = { ...producto, precio: producto.precio_contado };
+    }
 
     this.modalService
       .open(this.modalP, {
@@ -122,9 +159,7 @@ export class FacturaInsertarComponent implements OnInit {
       })
       .result.then(
         () => {},
-        (reason) => {
-          // console.log(reason);
-        }
+        (reason) => {}
       );
   }
 
@@ -183,6 +218,13 @@ export class FacturaInsertarComponent implements OnInit {
 
     this._CheckoutService.addProductCheckout(producto);
     this.actualizarProducto(producto);
+
+    // Kshea: guardar el tipo de precio en el checkout
+    if (this.isKshea) {
+      const factura: FacturaCheckout = this._CheckoutService.getCheckout();
+      factura.tipo_precio = this.precioContado ? 'contado' : 'credito';
+      this._CheckoutService.CheckoutToStorage(factura);
+    }
 
     let numeroProductos: FacturaDetalle[] =
       this._CheckoutService.getProductCheckout();

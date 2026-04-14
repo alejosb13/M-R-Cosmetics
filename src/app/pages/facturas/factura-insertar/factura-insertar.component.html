@@ -22,6 +22,25 @@
                     >Productos con stock</label
                   >
                 </div>
+                <div class="form-check form-switch" *ngIf="isKshea">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="flexSwitchPrecioContado"
+                    [(ngModel)]="precioContado"
+                    (ngModelChange)="cambiarFiltroPrecioContado($event)"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="flexSwitchPrecioContado"
+                    style="font-size: 15px"
+                  >
+                    Precio contado
+                    <span class="badge" [ngClass]="precioContado ? 'badge-success' : 'badge-secondary'">
+                      {{ precioContado ? 'Contado' : 'Crédito' }}
+                    </span>
+                  </label>
+                </div>
                 <div
                   class="header d-flex justify-content-between align-items-baseline"
                 >
@@ -61,7 +80,18 @@
                       *ngFor="let producto of _TablasService.datosTablaStorage"
                     >
                       {{ producto.descripcion }} - {{ producto.stock }} Uds -
-                      {{ producto.precio | currency : "USD" }}
+                      <ng-container *ngIf="isKshea && precioContado; else precioNormal">
+                        <span *ngIf="producto.precio_contado != null; else sinPrecioContado">
+                          {{ producto.precio_contado | currency : "USD" }}
+                          <span class="badge badge-success ml-1">Contado</span>
+                        </span>
+                        <ng-template #sinPrecioContado>
+                          <span class="text-muted">Sin precio contado</span>
+                        </ng-template>
+                      </ng-container>
+                      <ng-template #precioNormal>
+                        {{ producto.precio | currency : "USD" }}
+                      </ng-template>
                       <span class="badge badge-pill">
                         <form
                           role="form"

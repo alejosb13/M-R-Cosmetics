@@ -25,6 +25,14 @@ export class ProductosComponent implements OnInit {
   productos: number = 0;
   monto_total: number = 0;
   isAdmin: boolean;
+  isKshea: boolean = false;
+
+  // Modal precio contado
+  modalPrecioContado: { visible: boolean; producto: Producto | null; valor: string } = {
+    visible: false,
+    producto: null,
+    valor: '',
+  };
 
   themeSite: string;
   themeSubscription: Subscription;
@@ -40,6 +48,7 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin();
+    this.isKshea = this._AuthService.isKshea();
     this.asignarValores();
     this.getLogisticaProductos();
 
@@ -152,6 +161,84 @@ export class ProductosComponent implements OnInit {
           });
         }
       });
+  }
+
+  abrirModalPrecioContado(producto: Producto) {
+    if (!this.isAdmin || !this.isKshea) return;
+    this.modalPrecioContado = {
+      visible: true,
+      producto: { ...producto },
+      valor: producto.precio_contado != null ? String(producto.precio_contado) : '',
+    };
+  }
+
+  cerrarModalPrecioContado() {
+    this.modalPrecioContado = { visible: false, producto: null, valor: '' };
+  }
+
+  guardarPrecioContado() {
+    const producto = this.modalPrecioContado.producto;
+    if (!producto) return;
+
+    const valorStr = this.modalPrecioContado.valor.trim();
+    const decimalRegex = /^(\d+(\.\d+)?)$/;
+
+    if (valorStr !== '' && !decimalRegex.test(valorStr)) {
+      Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+        text: 'El precio contado debe ser un valor decimal válido o dejar vacío.',
+        icon: 'warning',
+      });
+      return;
+    }
+
+    const precioContadoNuevo: number | null = valorStr === '' ? null : Number(valorStr);
+
+    const payload: Producto = {
+      marca: producto.marca,
+      modelo: producto.modelo,
+      stock: producto.stock,
+      precio: producto.precio,
+      precio_contado: precioContadoNuevo,
+      linea: producto.linea,
+      descripcion: producto.descripcion,
+      estado: producto.estado,
+    };
+
+    if (!producto.id) return;
+
+    Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+      title: 'Actualizando precio contado',
+      text: 'Esto puede demorar un momento.',
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => { Swal.showLoading(); },
+    });
+
+    this._ProductosService.updateProducto(producto.id, payload).subscribe(
+      () => {
+        // Actualizar en memoria
+        const idx = this.Productos.findIndex((p) => p.id === producto.id);
+        if (idx !== -1) {
+          this.Productos[idx].precio_contado = precioContadoNuevo;
+        }
+        this.refreshCountries();
+        this.cerrarModalPrecioContado();
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          text: 'Precio contado actualizado con éxito.',
+          icon: 'success',
+        });
+      },
+      (error) => {
+        const msg = this._HelpersService.errorResponse(error);
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          title: 'Error',
+          html: msg,
+          icon: 'error',
+        });
+      }
+    );
   }
 
   descargarInventario() {

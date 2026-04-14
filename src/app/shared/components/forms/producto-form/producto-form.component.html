@@ -123,6 +123,28 @@
                 }"></ng-container>
             </div>
         </div>
+        <div class="col-md-4" *ngIf="isKshea">
+            <div class="form-group">
+                <label>P. Contado</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="precio_contado"
+                    formControlName="precio_contado"
+                    autocomplete="off"
+                    placeholder="Opcional"
+                    [ngClass]="{
+                        'is-invalid': ProductForm.controls['precio_contado'].invalid && ProductForm.controls['precio_contado'].touched,
+                        'is-valid': ProductForm.controls['precio_contado'].valid && ProductForm.controls['precio_contado'].value !== null && ProductForm.controls['precio_contado'].value !== ''
+                    }"
+                >
+                <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'pattern',
+                message: 'El valor debe ser decimal',
+                control: ProductForm.controls['precio_contado']
+                }"></ng-container>
+            </div>
+        </div>
         <!-- <div class="col-md-4">
             <div class="form-group">
                 <label>Comision <span class="text-danger">(*)</span></label>

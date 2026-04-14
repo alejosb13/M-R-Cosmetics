@@ -97,6 +97,18 @@ export class AuthService {
     return roleName == Roles.SUPERVISOR ? true : false
   }
 
+  getLinea(): string {
+    return this.dataStorage?.linea ?? '';
+  }
+
+  isKshea(): boolean {
+    return this.getLinea() === 'linea2';
+  }
+
+  isMyRProfesional(): boolean {
+    return this.getLinea() === 'linea1';
+  }
+
   set dataStorage(value:Auth ){
     localStorage.setItem(this.authLocalStorageToken, JSON.stringify(value));
   }

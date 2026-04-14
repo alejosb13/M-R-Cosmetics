@@ -68,6 +68,7 @@
             <th scope="col">Linea</th>
             <th scope="col">Stock</th>
             <th scope="col">Precio</th>
+            <th scope="col" *ngIf="isKshea">P.Contado</th>
             <th scope="col">Descripcion</th>
             <!-- <th scope="col">Comision</th> -->
             <th scope="col">Estado</th>
@@ -84,6 +85,16 @@
             <td>{{ producto.linea }}</td>
             <td>{{ producto.stock }}</td>
             <td>{{ producto.precio }}</td>
+            <td *ngIf="isKshea">
+              <span *ngIf="!isAdmin">{{ producto.precio_contado != null ? producto.precio_contado : '—' }}</span>
+              <span
+                *ngIf="isAdmin"
+                class="pointer text-primary"
+                role="button"
+                ngbTooltip="Editar precio contado"
+                (click)="abrirModalPrecioContado(producto)"
+              >{{ producto.precio_contado != null ? producto.precio_contado : '—' }} <i class="fas fa-pencil-alt fa-xs"></i></span>
+            </td>
             <td>{{ producto.descripcion }}</td>
             <!-- <td>{{ producto.comision }}</td> -->
             <td>
@@ -135,4 +146,49 @@
       </div>
     </div>
   </ng-container>
+</div>
+
+<!-- Modal P.Contado (solo admin Kshea) -->
+<div
+  *ngIf="isAdmin && isKshea && modalPrecioContado.visible"
+  class="modal fade show d-block"
+  tabindex="-1"
+  role="dialog"
+  style="background: rgba(0,0,0,0.5);"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Precio Contado</h5>
+        <button type="button" class="close" (click)="cerrarModalPrecioContado()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted mb-2">
+          <b>{{ modalPrecioContado.producto?.descripcion }}</b>
+        </p>
+        <div class="form-group">
+          <label>Nuevo precio contado <span class="text-muted">(dejar vacío para quitar)</span></label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Ej: 12.50"
+            [(ngModel)]="modalPrecioContado.valor"
+            name="precioContadoModal"
+            autocomplete="off"
+            appOnlyNumberAndPoint
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalPrecioContado()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="guardarPrecioContado()">
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

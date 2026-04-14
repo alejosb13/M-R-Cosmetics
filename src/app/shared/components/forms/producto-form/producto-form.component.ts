@@ -19,6 +19,7 @@ import { ProductosService } from "app/shared/services/productos.service";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
+import { AuthService } from "@app/auth/login/service/auth.service";
 
 @Component({
   selector: "app-producto-form",
@@ -32,6 +33,7 @@ export class ProductoFormComponent implements OnInit {
   // Frecuencias:Frecuencia[]
   daysOfWeek: string[];
   loadInfo: boolean = false;
+  isKshea: boolean = false;
 
   // @ViewChild('diasCobro') diasCobroInput: ElementRef;
   @Input() Id?: number;
@@ -43,10 +45,12 @@ export class ProductoFormComponent implements OnInit {
   constructor(
     private _CommunicationService: CommunicationService,
     private fb: UntypedFormBuilder,
-    public _ProductosService: ProductosService
+    public _ProductosService: ProductosService,
+    private _AuthService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.isKshea = this._AuthService.isKshea();
     this.definirValidaciones();
     this.definirValidacionesEstado();
 
@@ -85,6 +89,12 @@ export class ProductoFormComponent implements OnInit {
           // Validators.maxLength(80),
           Validators.pattern(ValidFunctionsValidator.DecimalRegEx),
           // Validators.minLength(3),
+        ]),
+      ],
+      precio_contado: [
+        null,
+        Validators.compose([
+          Validators.pattern(ValidFunctionsValidator.DecimalRegEx),
         ]),
       ],
       // comision: [
@@ -148,6 +158,7 @@ export class ProductoFormComponent implements OnInit {
           modelo: producto.modelo,
           stock: producto.stock,
           precio: producto.precio,
+          precio_contado: producto.precio_contado ?? null,
           // "comision" : producto.comision,
           linea: producto.linea,
           descripcion: producto.descripcion,
@@ -199,6 +210,10 @@ export class ProductoFormComponent implements OnInit {
       producto.marca = this.formularioControls.marca.value;
       producto.modelo = this.formularioControls.modelo.value;
       producto.precio = Number(this.formularioControls.precio.value);
+      if (this.isKshea) {
+        const precioContadoVal = this.formularioControls.precio_contado.value;
+        producto.precio_contado = (precioContadoVal !== null && precioContadoVal !== '') ? Number(precioContadoVal) : null;
+      }
       producto.stock = Number(this.formularioControls.stock.value);
       producto.descripcion = String(this.formularioControls.descripcion.value);
       // producto.estado       = Number(this.formularioControls.estado.value)
