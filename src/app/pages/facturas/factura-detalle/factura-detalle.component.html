@@ -161,7 +161,19 @@
               <span>Tipo Operacion</span>
             </div>
             <div class="value">
-              <span>{{ Factura.tipo_venta == 1 ? "Credito" : "Contado" }}</span>
+              <ng-container *ngIf="isKshea; else tipoVentaNormal">
+                <!-- <span class="badge" [ngClass]="Factura.tipo_precio === 'contado' ? 'badge-success' : 'badge-primary'">
+                  {{ Factura.tipo_precio === 'contado' ? 'Contado' : 'Crédito' }}
+                </span> -->
+                <span>{{
+                  Factura.tipo_precio === "contado" ? "Contado" : "Crédito"
+                }}</span>
+              </ng-container>
+              <ng-template #tipoVentaNormal>
+                <span>{{
+                  Factura.tipo_venta == 1 ? "Credito" : "Contado"
+                }}</span>
+              </ng-template>
             </div>
           </div>
           <div class="detalle">
@@ -265,7 +277,9 @@
                 class="texto-precio"
                 *ngIf="isAdmin"
                 role="button"
-                (click)="openDevolverProducto(contentDevolver, bonificacion, true)"
+                (click)="
+                  openDevolverProducto(contentDevolver, bonificacion, true)
+                "
                 ><i class="fas fa-undo"></i
               ></span>
             </td>

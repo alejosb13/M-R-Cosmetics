@@ -46,6 +46,7 @@ export class FacturaDetalleComponent implements OnInit {
   isBonificacion: boolean = false;
 
   isAdmin: boolean;
+  isKshea: boolean = false;
 
   tazaMonto: number = 0;
   isLoadtazaMonto: boolean = false;
@@ -75,6 +76,7 @@ export class FacturaDetalleComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin();
+    this.isKshea = this._AuthService.isKshea();
     this.FacturaId = Number(this._ActivatedRoute.snapshot.params.id);
     this.facturaById(this.FacturaId);
     this.getTazaFactura();

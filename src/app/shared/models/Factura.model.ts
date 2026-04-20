@@ -15,6 +15,7 @@ export interface Factura {
     iva: number;
     tcambio: number;
     tipo_venta?:number;
+    tipo_precio?: 'contado' | 'credito' | null;
     status: number;
     despachado: number;
     user?: Usuario;

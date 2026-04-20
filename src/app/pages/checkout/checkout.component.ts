@@ -33,6 +33,7 @@ import {
 import Swal, { SweetAlertOptions } from "sweetalert2";
 import { catchError } from "rxjs/operators";
 import { CommunicationService } from "@app/shared/services/communication.service";
+import { FormatInDecimalToFixed } from "@app/shared/utils/helpers";
 
 @Component({
   selector: "app-checkout",
@@ -472,10 +473,11 @@ export class CheckoutComponent implements OnInit {
         productosBonificacion: this.productosBonificacion, // Incluir productos de bonificación
         bonificacionTotal: this.getBonificacionTotal(),
         bonificacionUsada: this.bonificacionUsada,
+        ...(this.isKshea && this.factura.tipo_precio ? { tipo_precio: this.factura.tipo_precio } : {}),
       };
 
       console.log("[facturaRecibo]", facturaRecibo);
-
+      // return false; // Detener ejecución para pruebas
       this._CheckoutService.insertFactura(facturaRecibo).subscribe(
         (data) => {
           this.isLoad = false;
@@ -574,7 +576,7 @@ export class CheckoutComponent implements OnInit {
   // Calcular bonificación disponible
   getBonificacionTotal(): number {
     if (this.factura && this.factura.monto >= 100) {
-      return this.factura.monto * 0.15;
+      return FormatInDecimalToFixed(this.factura.monto * 0.15, 2); 
     }
     return 0;
   }
