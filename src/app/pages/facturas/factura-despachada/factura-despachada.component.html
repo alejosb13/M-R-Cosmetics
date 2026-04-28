@@ -57,7 +57,7 @@
             <th scope="col">Monto</th>
             <!-- <th scope="col">Tipo de Cambio</th> -->
             <!-- <th scope="col">IVA</th> -->
-            <th scope="col">Operación</th>
+            <th *ngIf="isKshea" scope="col">Operación</th>
             <th scope="col">Vendedor</th>
             <th scope="col">Estado</th>
             <th scope="col">Ver</th>
@@ -77,9 +77,8 @@
             <td>{{ factura.monto | currency : "USD" }}</td>
             <!-- <td>{{ factura.tcambio }}</td> -->
             <!-- <td>{{ factura.iva }}%</td> -->
-            <td>
-              <span *ngIf="factura.tipo_venta == 2">Contado</span>
-              <span *ngIf="factura.tipo_venta == 1">Credito</span>
+            <td *ngIf="isKshea">
+              {{ factura.tipo_precio ? (factura.tipo_precio | titlecase) : 'Crédito' }}
             </td>
             <td>{{ factura.user.name }} {{ factura.user.apellido }}</td>
             <td>

@@ -55,7 +55,7 @@
             <th scope="col">Nombre Empresa</th>
             <th scope="col">Monto Factura</th>
             <th scope="col">Saldo</th>
-            <th scope="col">Operación</th>
+            <th *ngIf="isKshea" scope="col">Operación</th>
             <th scope="col">Vendedor</th>
             <th scope="col">Ver</th>
             <th scope="col">Fecha de Vencimiento</th>
@@ -79,9 +79,8 @@
                   : (factura.saldo_restante | currency : "USD")
               }}
             </td>
-            <td>
-              <span *ngIf="factura.tipo_venta == 2">Contado</span>
-              <span *ngIf="factura.tipo_venta == 1">Credito</span>
+            <td *ngIf="isKshea">
+              {{ factura.tipo_precio ? (factura.tipo_precio | titlecase) : 'Crédito' }}
             </td>
             <td>{{ factura.user.name }} {{ factura.user.apellido }}</td>
             <td>

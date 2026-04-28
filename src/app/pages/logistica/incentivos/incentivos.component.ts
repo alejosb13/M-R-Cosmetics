@@ -35,6 +35,7 @@ export class IncentivosComponent implements OnInit {
   isLoad: boolean;
   isAdmin: boolean;
   isSupervisor: boolean;
+  isKshe: boolean;
 
   userQuery: Usuario;
   Data: any[];
@@ -42,6 +43,8 @@ export class IncentivosComponent implements OnInit {
   porcentaje20 = 0;
   totalContado = 0;
   totalCredito = 0;
+  porcentajeContado = 0;
+  porcentajeCredito = 0;
   porcentaje_asignado = 0;
   filtros: any = {};
   dateIni: string;
@@ -53,6 +56,7 @@ export class IncentivosComponent implements OnInit {
   // numHasta:number
   numRecibo: number;
   allNumber: boolean = true;
+  tipoIncentivo: string = 'todos'; // 'todos', 'credito', 'contado'
   // user:number
 
   @ViewChild("instance", { static: true }) instance: NgbTypeahead;
@@ -83,6 +87,7 @@ export class IncentivosComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
+    this.isKshe = this._AuthService.isKshea();
     this.userId = Number(this._AuthService.dataStorage.user.userId);
 
     if (this.isAdmin || this.isSupervisor) {
@@ -113,6 +118,7 @@ export class IncentivosComponent implements OnInit {
       // numDesde:this.filtros.numDesde,
       // numHasta:this.filtros.numHasta
       numRecibo: Number(this.filtros.numRecibo),
+      tipo_incentivo: this.filtros.tipo_incentivo || 'todos',
     };
 
     this._LogisticaService.getIncentivo(bodyForm).subscribe(
@@ -128,6 +134,9 @@ export class IncentivosComponent implements OnInit {
             ...data.recibo.recibo_historial_contado,
           ];
           this.userQuery = data.recibo.user;
+        } else if (data.recibo.hasOwnProperty("recibo_historial")) {
+          dataResponse = [...data.recibo.recibo_historial];
+          this.userQuery = data.recibo.user;
         }
         console.log(dataResponse);
 
@@ -138,6 +147,8 @@ export class IncentivosComponent implements OnInit {
 
         this.totalContado = data.total_contado;
         this.totalCredito = data.total_credito;
+        this.porcentajeContado = data.porcentaje_contado || 0;
+        this.porcentajeCredito = data.porcentaje_credito || 0;
         this.total = data.total;
         this.porcentaje20 = data.porcentaje20;
         this.porcentaje_asignado = data.porcentaje_asignado;
@@ -247,6 +258,7 @@ export class IncentivosComponent implements OnInit {
     this.numRecibo = 0;
     this.allNumber = true;
     this.allDates = false;
+    this.tipoIncentivo = 'todos';
 
     if (this.isAdmin || this.isSupervisor) this.resetUser();
 
@@ -267,6 +279,7 @@ export class IncentivosComponent implements OnInit {
       this.allDates = this.filtros.allDates;
       this.allNumber = this.filtros.allNumber;
       this.numRecibo = this.filtros.numRecibo;
+      this.tipoIncentivo = this.filtros.tipo_incentivo || 'todos';
     } else {
       if (!submit) {
         this.userId = Number(this._AuthService.dataStorage.user.userId);
@@ -291,6 +304,7 @@ export class IncentivosComponent implements OnInit {
         // numDesde: this.numDesde ? this.numDesde : 0,
         // numHasta: this.numHasta ? this.numHasta : 0,
         numRecibo: this.numRecibo ? this.numRecibo : 0,
+        tipo_incentivo: this.tipoIncentivo || 'todos',
       };
     }
 

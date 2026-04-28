@@ -30,6 +30,7 @@ export class FacturasEntregadasComponent implements OnInit {
   isLoad: boolean;
   isAdmin: boolean;
   isSupervisor: boolean;
+  isKshea: boolean = false;
   status_pagado: number;
   Factura: Factura;
   userId: number;
@@ -61,6 +62,7 @@ export class FacturasEntregadasComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this._AuthService.isAdmin();
     this.isSupervisor = this._AuthService.isSupervisor();
+    this.isKshea = this._AuthService.isKshea();
     this.userId = Number(this._AuthService.dataStorage.user.userId);
     this.roleName = String(this._AuthService.dataStorage.user.roleName);
     this.despachado = 0;

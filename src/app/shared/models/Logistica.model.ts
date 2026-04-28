@@ -23,4 +23,5 @@ export interface CarteraDateBodyForm{
   estado?:number
   disablePaginate?:number
   diasCobros?: string[]
+  tipo_incentivo?: string // 'ambos', 'credito', 'contado' - solo para Kshe
 }

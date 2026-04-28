@@ -46,10 +46,25 @@
           <span class="font-weight-bold d-block"
             >Monto total recibos: {{ total | currency : "USD" }}</span
           >
-          <span class="font-weight-bold d-block"
-            >Monto total {{ porcentaje_asignado * 100 }}%:
-            {{ porcentaje20 | currency : "USD" }}</span
-          >
+          <!-- Para Kshe: mostrar porcentajes separados -->
+          <ng-container *ngIf="isKshe">
+            <span class="font-weight-bold d-block"
+              >Contado (10%): {{ porcentajeContado | currency : "USD" }}</span
+            >
+            <span class="font-weight-bold d-block"
+              >Crédito (15%): {{ porcentajeCredito | currency : "USD" }}</span
+            >
+            <span class="font-weight-bold d-block"
+              >Total Incentivo: {{ porcentaje20 | currency : "USD" }}</span
+            >
+          </ng-container>
+          <!-- Para otras líneas: mostrar porcentaje único -->
+          <ng-container *ngIf="!isKshe">
+            <span class="font-weight-bold d-block"
+              >Monto total {{ porcentaje_asignado * 100 }}%:
+              {{ porcentaje20 | currency : "USD" }}</span
+            >
+          </ng-container>
           <!-- <span class="font-weight-bold d-block">Monto total recibos abonos: {{ totalContado | currency:"USD"}}</span>
           <span class="font-weight-bold d-block">Monto total recibos facturas: {{ totalCredito | currency:"USD"}}</span> -->
         </p>
@@ -239,6 +254,17 @@
             >
               {{ usuario.name }} {{ usuario.apellido }}
             </option>
+          </select>
+        </div>
+      </div>
+      <!-- Filtro de tipo de incentivo solo para Kshe -->
+      <div class="col-md-12" *ngIf="isKshe">
+        <div class="form-group">
+          <p class="font-weight-bold">Tipo de Incentivo</p>
+          <select class="form-control" [(ngModel)]="tipoIncentivo">
+            <option value="todos">Todos</option>
+            <option value="contado">Contado (10%)</option>
+            <option value="credito">Crédito (15%)</option>
           </select>
         </div>
       </div>
