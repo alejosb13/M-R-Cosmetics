@@ -48,12 +48,16 @@ export class AbonoValidacionComponent implements OnInit {
   isValidando: boolean = false;
   validarResultado: any = null;
 
-  // --- Modal Desestimar (estado error) ---
+  // --- Modal Desestimar (estado error genérico / otro recibo) ---
   selectedItem: any = null;
   desestimando_relacionar: boolean = false;
   numero_recibo: number | null = null;
   desestimar_motivo: string = "";
   isDesestimando: boolean = false;
+
+  // --- Modal Resolver diferencia Fase A (excede | menor) ---
+  resolver_comentario: string = "";
+  isResolviendo: boolean = false;
 
   constructor(
     private _Listado: Listado,
@@ -365,10 +369,116 @@ export class AbonoValidacionComponent implements OnInit {
     );
   }
 
-  getRowClass(estado: string): string {
-    if (estado === "validado" || estado === "no_aplica") return "table-success";
+  requiereResolucionDiferencia(item: any): boolean {
+    return (
+      item?.estado_conciliacion === "error" &&
+      (item?.estado_validacion === "excede" || item?.estado_validacion === "menor")
+    );
+  }
+
+  openResolverDiferencia(item: any, content: any) {
+    this.selectedItem = item;
+    this.resolver_comentario = "";
+    this.isResolviendo = false;
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-resolver-diferencia-title",
+      size: "md",
+      windowClass: this.themeSite === "dark-mode" ? "dark-modal" : "white-modal",
+    });
+  }
+
+  confirmarAprobarDiferencia(modal: any) {
+    if (!this.selectedItem?.id) return;
+
+    this.isResolviendo = true;
+    this._AbonoService
+      .aprobarResumenBancario({
+        id: this.selectedItem.id,
+        comentario: this.resolver_comentario?.trim() || null,
+      })
+      .subscribe(
+        (res) => {
+          this.isResolviendo = false;
+          modal.close("confirm");
+          this.asignarValores();
+          Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+            icon: "success",
+            title: "Abono aprobado",
+            text: res?.mensaje || "El abono quedó en estado validado.",
+          });
+        },
+        (err) => {
+          this.isResolviendo = false;
+          Swal.fire({
+            icon: "error",
+            title: "Error al aprobar",
+            text: err?.error?.mensaje || err?.error?.message || "Ocurrió un error.",
+          });
+        }
+      );
+  }
+
+  confirmarNoAplicaDiferencia(modal: any) {
+    if (!this.resolver_comentario?.trim() || !this.selectedItem?.id) return;
+
+    this.isResolviendo = true;
+    this._AbonoService
+      .desestimiarResumenBancario({
+        id: this.selectedItem.id,
+        numero_recibo: null,
+        motivo: this.resolver_comentario.trim(),
+      })
+      .subscribe(
+        (res) => {
+          this.isResolviendo = false;
+          modal.close("confirm");
+          this.asignarValores();
+          Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+            icon: "success",
+            title: "Marcado como no aplica",
+            text: res?.mensaje || "El registro fue actualizado.",
+          });
+        },
+        (err) => {
+          this.isResolviendo = false;
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err?.error?.mensaje || err?.error?.message || "Ocurrió un error.",
+          });
+        }
+      );
+  }
+
+  getRowClass(estado: string, estadoValidacion?: string): string {
+    if (estado === "validado") return "table-success";
+    if (estado === "no_aplica") return "table-secondary";
     if (estado === "error") return "table-danger";
+    if (estadoValidacion === "excede" || estadoValidacion === "menor") return "table-danger";
     return "table-warning";
+  }
+
+  getEstadoValidacionLabel(estado: string): string {
+    const labels: Record<string, string> = {
+      ok: "Coincide",
+      excede: "Monto mayor",
+      menor: "Monto menor",
+      no_encontrado: "No encontrado",
+      no_aplica: "No aplica",
+    };
+    return labels[estado] ?? estado ?? "-";
+  }
+
+  /** Monto de diferencia en USD para la columna Validación (valor absoluto). */
+  formatDiferenciaUsd(valor: number | null | undefined): string {
+    if (valor == null || isNaN(Number(valor))) {
+      return "—";
+    }
+    return `${Math.abs(Number(valor)).toFixed(2)} USD`;
+  }
+
+  muestraIndicadorDiferencia(estadoValidacion: string | null | undefined): boolean {
+    return estadoValidacion === "ok" || estadoValidacion === "excede" || estadoValidacion === "menor";
   }
 
   ngOnDestroy() {

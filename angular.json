@@ -18,6 +18,7 @@
             "polyfills": "src/polyfills.ts",
             "allowedCommonJsDependencies": [
               "chart.js",
+              "chartjs-plugin-datalabels",
               "sweetalert2",
               "moment"
             ],

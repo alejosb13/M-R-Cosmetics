@@ -114,8 +114,16 @@ export class AbonoService {
     });
   }
 
-  desestimiarResumenBancario(data: { id: number; factura_historial_id: number | null; motivo: string | null }): Observable<any> {
+  desestimiarResumenBancario(data: { id: number; numero_recibo?: number | null; motivo: string | null }): Observable<any> {
     const URL = `${environment.urlAPI}abonos/desestimar-resumen`;
+    return this.http.post<any>(URL, data, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  aprobarResumenBancario(data: { id: number; comentario?: string | null }): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/aprobar-resumen`;
     return this.http.post<any>(URL, data, {
       headers: this.headerJson_Token(),
       responseType: "json",

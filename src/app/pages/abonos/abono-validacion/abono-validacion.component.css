@@ -1,0 +1,97 @@
+/* Modal resolver diferencia — legible en light y dark (misma sección abono-validacion) */
+.modal-resolver-diferencia .resolver-mensaje-sistema {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  border-radius: 0.25rem;
+}
+
+.modal-resolver-diferencia .resolver-datos-monto {
+  background-color: #fff5f5;
+  border: 1px solid #f5c6cb;
+  color: #212529;
+}
+
+.modal-resolver-diferencia .resolver-datos-monto strong {
+  color: #495057;
+}
+
+.dark-modal .modal-resolver-diferencia .resolver-mensaje-sistema {
+  background-color: rgba(220, 53, 69, 0.25);
+  border-color: #dc3545;
+  color: #f8d7da;
+}
+
+.dark-modal .modal-resolver-diferencia .resolver-datos-monto {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: #4ab3b5;
+  color: #e0e0e0;
+}
+
+.dark-modal .modal-resolver-diferencia .resolver-datos-monto strong {
+  color: #b8d4d5;
+}
+
+.dark-modal .modal-resolver-diferencia .text-diferencia {
+  color: #ff8a8a !important;
+}
+
+.dark-modal .modal-resolver-diferencia label,
+.dark-modal .modal-resolver-diferencia .form-group > label {
+  color: #e0e0e0;
+}
+
+/* Columna Validación — indicador de diferencia */
+.td-validacion {
+  min-width: 7.5rem;
+  vertical-align: middle;
+}
+
+.validacion-indicador-linea {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.validacion-simbolo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #6c757d;
+}
+
+.validacion-flecha {
+  font-size: 0.85rem;
+  width: 1rem;
+  text-align: center;
+}
+
+.validacion-flecha-arriba {
+  color: #c0392b;
+}
+
+.validacion-flecha-abajo {
+  color: #c0392b;
+}
+
+.validacion-monto {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #842029;
+  white-space: nowrap;
+}
+
+.validacion-indicador .validacion-monto.text-muted {
+  color: #6c757d !important;
+  font-weight: 500;
+}
+
+.table-success .validacion-flecha-arriba,
+.table-success .validacion-flecha-abajo,
+.table-success .validacion-monto:not(.text-muted) {
+  color: inherit;
+}
+
+.table-danger .validacion-monto {
+  color: #842029;
+}

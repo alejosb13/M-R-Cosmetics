@@ -56,12 +56,13 @@
             <th>Fecha Operación</th>
             <th>Moneda</th>
             <th>Estado</th>
+            <th>Validación</th>
             <th>Mensaje</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody *ngIf="resumenBancarios.length > 0">
-          <tr *ngFor="let item of resumenBancarios" [ngClass]="getRowClass(item.estado_conciliacion)">
+          <tr *ngFor="let item of resumenBancarios" [ngClass]="getRowClass(item.estado_conciliacion, item.estado_validacion)">
             <!-- <td>{{ item.id }}</td> -->
             <td>{{ item.numero_recibo ?? '-' }}</td>
             <td>{{ item.referencia }}</td>
@@ -82,10 +83,54 @@
                 {{ item.estado_conciliacion }}
               </span>
             </td>
+            <td class="td-validacion">
+              <span
+                *ngIf="item.estado_validacion"
+                class="badge"
+                [ngClass]="{
+                  'badge-success': item.estado_validacion === 'ok',
+                  'badge-danger': item.estado_validacion === 'excede' || item.estado_validacion === 'menor' || item.estado_validacion === 'no_encontrado',
+                  'badge-secondary': item.estado_validacion === 'no_aplica'
+                }"
+              >
+                {{ getEstadoValidacionLabel(item.estado_validacion) }}
+              </span>
+              <span *ngIf="!item.estado_validacion" class="text-muted">-</span>
+
+              <div
+                *ngIf="muestraIndicadorDiferencia(item.estado_validacion)"
+                class="validacion-indicador mt-1"
+                [ngSwitch]="item.estado_validacion"
+              >
+                <!-- Referencia coincide, monto exacto -->
+                <span *ngSwitchCase="'ok'" class="validacion-indicador-linea">
+                  <span class="validacion-simbolo" title="Sin diferencia">—</span>
+                  <small class="validacion-monto text-muted">{{ formatDiferenciaUsd(item.diferencia_usd ?? 0) }}</small>
+                </span>
+                <!-- Referencia coincide, monto mayor en banco -->
+                <span *ngSwitchCase="'excede'" class="validacion-indicador-linea">
+                  <i class="fas fa-arrow-up validacion-flecha validacion-flecha-arriba" title="Monto banco mayor"></i>
+                  <small class="validacion-monto">{{ formatDiferenciaUsd(item.diferencia_usd) }}</small>
+                </span>
+                <!-- Referencia coincide, monto menor en banco -->
+                <span *ngSwitchCase="'menor'" class="validacion-indicador-linea">
+                  <i class="fas fa-arrow-down validacion-flecha validacion-flecha-abajo" title="Monto banco menor"></i>
+                  <small class="validacion-monto">{{ formatDiferenciaUsd(item.diferencia_usd) }}</small>
+                </span>
+              </div>
+            </td>
             <td>{{ item.mensaje ?? '-' }}</td>
-            <td class="text-center">
+            <td class="text-center text-nowrap">
               <button
-                *ngIf="item.estado_conciliacion === 'error'"
+                *ngIf="requiereResolucionDiferencia(item)"
+                class="btn btn-sm btn-danger mr-1"
+                ngbTooltip="Resolver diferencia de monto"
+                (click)="openResolverDiferencia(item, contentResolverDiferencia)"
+              >
+                <i class="fas fa-balance-scale"></i>
+              </button>
+              <button
+                *ngIf="item.estado_conciliacion === 'error' && !requiereResolucionDiferencia(item)"
                 class="btn btn-sm btn-warning"
                 ngbTooltip="Desestimar abono"
                 (click)="openDesestimar(item, contentDesestimar)"
@@ -97,7 +142,7 @@
         </tbody>
         <tbody *ngIf="resumenBancarios.length === 0">
           <tr>
-            <td colspan="9" class="text-center text-muted py-4">No hay registros para mostrar.</td>
+            <td colspan="10" class="text-center text-muted py-4">No hay registros para mostrar.</td>
           </tr>
         </tbody>
       </table>
@@ -297,6 +342,101 @@
       <span *ngIf="!isValidando"><i class="fas fa-check-circle"></i> Validar</span>
       <span *ngIf="isValidando"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>
     </button>
+  </div>
+</ng-template>
+
+<!-- ── Modal Resolver diferencia Fase A (excede | menor) ─ -->
+<ng-template #contentResolverDiferencia let-modal>
+  <div class="modal-resolver-diferencia">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modal-resolver-diferencia-title">
+        Resolver diferencia de monto
+        <span class="text-muted small d-block font-weight-normal mt-1">
+          Referencia {{ selectedItem?.referencia }}
+        </span>
+      </h5>
+      <button type="button" class="close" (click)="modal.dismiss()">
+        <span>&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="text-muted small mb-3">
+        La referencia coincide con un abono registrado, pero el monto del banco no cuadra.
+        Puede <strong>aprobar</strong> el abono o marcarlo como <strong>no aplica</strong>.
+      </p>
+
+      <div class="resolver-datos-monto py-2 px-3 mb-3 small">
+        <div class="row">
+          <div class="col-6">
+            <strong>Monto banco:</strong>
+            {{ selectedItem?.monto | number:'1.2-2' }} {{ selectedItem?.moneda === 'Cordoba' ? 'C$' : '$' }}
+          </div>
+          <div class="col-6">
+            <strong>Monto USD (banco):</strong>
+            <span *ngIf="selectedItem?.monto_convertido_val != null">{{ selectedItem?.monto_convertido_val | number:'1.2-2' }} $</span>
+            <span *ngIf="selectedItem?.monto_convertido_val == null && selectedItem?.monto_usd !== '--'">{{ selectedItem?.monto_usd | number:'1.2-2' }} $</span>
+          </div>
+          <div class="col-6 mt-2">
+            <strong>Monto registrado:</strong>
+            {{ selectedItem?.monto_registrado != null ? (selectedItem?.monto_registrado | number:'1.2-2') + ' $' : '-' }}
+          </div>
+          <div class="col-6 mt-2">
+            <strong>Diferencia:</strong>
+            <span class="text-danger font-weight-bold text-diferencia" *ngIf="selectedItem?.diferencia_usd != null">
+              {{ selectedItem?.diferencia_usd > 0 ? '+' : '' }}{{ selectedItem?.diferencia_usd | number:'1.2-2' }} USD
+            </span>
+          </div>
+          <div class="col-12 mt-2" *ngIf="selectedItem?.numero_recibo">
+            <strong>N° Recibo vinculado:</strong> {{ selectedItem?.numero_recibo }}
+          </div>
+        </div>
+      </div>
+
+      <div class="resolver-mensaje-sistema py-2 px-3 mb-3" *ngIf="selectedItem?.mensaje">
+        <small class="d-block mb-0">
+          <i class="fas fa-info-circle mr-1"></i>
+          {{ selectedItem?.mensaje }}
+        </small>
+      </div>
+
+      <div class="form-group mb-0">
+        <label>
+          Comentario
+          <span class="text-muted">(obligatorio si marca <em>No aplica</em>)</span>
+        </label>
+        <textarea
+          class="form-control"
+          rows="3"
+          placeholder="Motivo o comentario de la decisión..."
+          [(ngModel)]="resolver_comentario"
+          maxlength="250"
+        ></textarea>
+        <small class="text-muted">{{ resolver_comentario?.length ?? 0 }}/250</small>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary mr-3" (click)="modal.dismiss()" [disabled]="isResolviendo">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-warning mr-2"
+        [disabled]="isResolviendo || !resolver_comentario?.trim()"
+        (click)="confirmarNoAplicaDiferencia(modal)"
+      >
+        <span *ngIf="!isResolviendo"><i class="fas fa-ban"></i> No aplica</span>
+        <span *ngIf="isResolviendo"><i class="fas fa-circle-notch fa-spin"></i></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="isResolviendo"
+        (click)="confirmarAprobarDiferencia(modal)"
+      >
+        <span *ngIf="!isResolviendo"><i class="fas fa-check"></i> Aprobar</span>
+        <span *ngIf="isResolviendo"><i class="fas fa-circle-notch fa-spin"></i></span>
+      </button>
+    </div>
   </div>
 </ng-template>
 
