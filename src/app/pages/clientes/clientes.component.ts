@@ -20,6 +20,7 @@ import { Categoria } from "app/shared/models/Categoria.model";
 import { CategoriaService } from "app/shared/services/categoria.service";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { UbicacionesService } from "@app/shared/services/ubicaciones.service";
+import { FacturasService } from "app/shared/services/facturas.service";
 
 @Component({
   selector: "app-clientes",
@@ -83,7 +84,8 @@ export class ClientesComponent implements OnInit {
     private _RememberFiltersService: RememberFiltersService,
     private _HelpersService: HelpersService,
     private _ClientesService: ClientesService,
-    private _UbicacionesService: UbicacionesService
+    private _UbicacionesService: UbicacionesService,
+    private _FacturasService: FacturasService
   ) {}
 
   ngOnInit(): void {
@@ -220,6 +222,54 @@ export class ClientesComponent implements OnInit {
         });
       }
     );
+  }
+
+  descargarClientesUnaCompraExcell() {
+    Swal.mixin({
+      customClass: { container: this.themeSite },
+    }).fire({
+      title: "Descargando el archivo",
+      text: "Esto puede demorar un momento.",
+      timerProgressBar: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    const userIdFiltro = this.listadoFilter.userId ?? this.userId;
+
+    this._FacturasService
+      .clientesUnaCompraExcell({
+        userId: userIdFiltro,
+        roleName: this.roleName,
+        estado: 1,
+        frontendBaseUrl: window.location.origin,
+      })
+      .subscribe(
+        (data: Blob) => {
+          const url = window.URL.createObjectURL(data);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `clientes_una_compra_${this._HelpersService.currentFullDay()}.xlsx`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          Swal.mixin({ customClass: { container: this.themeSite } }).fire(
+            "",
+            "Descarga completada",
+            "success"
+          );
+        },
+        () => {
+          Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+            title: "Error",
+            text: "No se pudo descargar el archivo.",
+            icon: "error",
+          });
+        }
+      );
   }
 
   changeDiasCobros(event: HTMLInputElement) {
