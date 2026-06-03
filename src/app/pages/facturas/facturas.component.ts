@@ -3,7 +3,6 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthService } from "app/auth/login/service/auth.service";
 import { Factura } from "app/shared/models/Factura.model";
-import { FacturasService } from "app/shared/services/facturas.service";
 import { TablasService } from "app/shared/services/tablas.service";
 import { environment } from "environments/environment";
 import { Subscription } from "rxjs";
@@ -61,7 +60,6 @@ export class FacturasComponent implements OnInit, OnDestroy {
       this.status_pagado = params.get("status_pagado") == "pagadas" ? 1 : 0;
       this.asignarValores();
     });
-    console.log("asfasfa");
     this.themeSubscription = this._CommunicationService
       .getTheme()
       .subscribe((color: string) => {

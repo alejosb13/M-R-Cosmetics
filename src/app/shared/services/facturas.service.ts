@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "environments/environment";
 import { Factura } from "../models/Factura.model";
@@ -116,5 +116,22 @@ export class FacturasService {
   entregarFactura(id: number): Observable<any> {
     const URL = `${FacturaURL}/entregada/${id}`;
     return this.http.put(URL, { headers: this.headerJson_Token() });
+  }
+
+  clientesUnaCompraExcell(options: Record<string, string | number> = {}): Observable<Blob> {
+    const URL = `${environment.urlAPI}xlsx/clientes-una-compra`;
+    let params = new HttpParams();
+
+    for (const key in options) {
+      if (options[key] !== null && options[key] !== undefined && key !== "link") {
+        params = params.append(key, String(options[key]));
+      }
+    }
+
+    return this.http.get<Blob>(URL, {
+      params,
+      headers: this.headerJson_Token(),
+      responseType: "blob" as "json",
+    });
   }
 }
