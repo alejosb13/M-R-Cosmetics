@@ -1,0 +1,83 @@
+---
+description: Convención para el campo local_id en formularios. Siempre debe estar deshabilitado (solo lectura). El local activo se cambia únicamente desde el modal del header, no desde los formularios.
+globs: **/*.ts,**/*.html
+alwaysApply: false
+---
+
+# Campo `local_id` — siempre solo lectura en formularios
+
+## Regla
+
+El campo `local_id` en **todos** los formularios de la aplicación debe estar siempre deshabilitado (`disabled`).
+
+El usuario cambia su local activo **exclusivamente** desde el modal del encabezado (header). Ningún formulario CRUD debe permitir modificar ese valor directamente.
+
+## En el FormBuilder
+
+```typescript
+// ✅ CORRECTO — siempre disabled desde el inicio
+local_id: new FormControl({ value: '0', disabled: true }, [...CajaCrudValidators['local_id']]),
+```
+
+## En el componente
+
+```typescript
+constructor() {
+  this.suscribirCambioLocalActivo();
+  this.inicializarFormulario();
+}
+
+suscribirCambioLocalActivo() {
+  effect(() => {
+    this._LoginService.getLocalActivoSignal()();
+    if (!this.Entidad) {
+      this.actualizarLocalActivoEnFormulario();
+    }
+  });
+}
+
+actualizarLocalActivoEnFormulario() {
+  const localActivoId = Number(this._LoginService.getLocalActivo()?.id);
+  if (localActivoId) {
+    this.MiCrudForm.controls.local_id.patchValue(localActivoId);
+  }
+}
+
+getLocales() {
+  this._LocalesService.getLocales({ disablePaginate: '1', link: null })
+    .subscribe((locales) => {
+      this.Locales = locales;
+      this.inicializarFormulario(); // re-aplica el valor cuando ya existen las opciones
+    });
+}
+```
+
+- El campo **siempre** queda `disabled` (definido en el FormBuilder).
+- En modo **insertar**, el valor se actualiza en tiempo real al cambiar el local desde el header.
+- En modo **editar**, se muestra el `local_id` del registro existente.
+- Tras cargar los locales, se vuelve a llamar `inicializarFormulario()` para que el `<select>` muestre el nombre y no quede vacío en gris.
+
+```typescript
+// ❌ INCORRECTO — no habilitar aunque sea admin
+if (this._LoginService.isAdmin()) {
+  this.MiCrudForm.controls.local_id.enable();
+}
+```
+
+## En el template
+
+```html
+<!-- ✅ CORRECTO — el campo se ve pero no se puede editar -->
+<select cSelect formControlName="local_id" ...>
+  <option value="0" hidden>Seleccione un local</option>
+  <option *ngFor="let local of Locales" [value]="local.id">{{ local.nombre }}</option>
+</select>
+```
+
+El campo se sigue mostrando en el formulario para que el usuario vea a qué local pertenece el registro, pero no puede modificarlo.
+
+## Por qué
+
+- El local activo controla qué datos ve el usuario en toda la aplicación.
+- Cambiarlo desde un formulario rompería la coherencia de los datos cargados.
+- El único punto de cambio de local es el modal en el header (`LocalSelectorModalComponent` o similar).

@@ -81,11 +81,11 @@ export class ClienteInactivosComponent implements OnInit {
 
   constructor(
     private _CommunicationService: CommunicationService,
-    private _TablasService: TablasService,
+    public _TablasService: TablasService,
     private _AuthService: AuthService,
     private _LogisticaService: LogisticaService,
     private NgbModal: NgbModal,
-    private _HelpersService: HelpersService,
+    public _HelpersService: HelpersService,
     private _UsuariosService: UsuariosService,
     private _RememberFiltersService: RememberFiltersService,
     private _Listado: Listado,
@@ -365,10 +365,25 @@ export class ClienteInactivosComponent implements OnInit {
     }
   }
 
-  descargarPDF() {
+  private buildFiltrosExportBody(): CarteraDateBodyForm {
+    return {
+      dateIni: this.filtros.dateIni,
+      dateFin: this.filtros.dateFin,
+      userId: Number(this.filtros.userId),
+      tipo_venta: this.filtros.tipo_venta,
+      status_pagado: this.filtros.status_pagado,
+      allDates: this.filtros.allDates,
+      allNumber: this.filtros.allNumber,
+      tipos: this.filtros.tipos,
+      numRecibo: Number(this.filtros.numRecibo),
+      diasCobros: this.diasCobros,
+    };
+  }
+
+  private mostrarSwalDescarga(): void {
     Swal.mixin({
       customClass: {
-        container: this.themeSite, // Clase para el modo oscuro
+        container: this.themeSite,
       },
     }).fire({
       title: "Descargando el archivo",
@@ -381,37 +396,69 @@ export class ClienteInactivosComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    let bodyForm: CarteraDateBodyForm = {
-      dateIni: this.filtros.dateIni,
-      dateFin: this.filtros.dateFin,
-      userId: Number(this.filtros.userId),
-      tipo_venta: this.filtros.tipo_venta,
-      status_pagado: this.filtros.status_pagado,
-      allDates: this.filtros.allDates,
-      allNumber: this.filtros.allNumber,
-      // numDesde:this.filtros.numDesde,
-      // numHasta:this.filtros.numHasta
-      numRecibo: Number(this.filtros.numRecibo),
-    };
+  }
+
+  private nombreArchivoClientesInactivos(extension: "pdf" | "xlsx"): string {
+    const fecha = this._HelpersService.changeformatDate(
+      this._HelpersService.currentFullDay(),
+      "MM/DD/YYYY HH:mm:ss",
+      "DD-MM-YYYY_HH:mm:ss"
+    );
+
+    return `Clientes_inactivos_${this.filtros.userId}_${fecha}.${extension}`;
+  }
+
+  descargarPDF() {
+    this.mostrarSwalDescarga();
+
     this._LogisticaService
-      .getClientesInactivosPDF(bodyForm)
+      .getClientesInactivosPDF(this.buildFiltrosExportBody())
       .subscribe((data) => {
-        // console.log(data);
         this._HelpersService.downloadFile(
           data,
-          `Clientes_inactivos_${
-            this.userId
-          }_${this._HelpersService.changeformatDate(
-            this._HelpersService.currentFullDay(),
-            "MM/DD/YYYY HH:mm:ss",
-            "DD-MM-YYYY_HH:mm:ss"
-          )}`
+          this.nombreArchivoClientesInactivos("pdf")
         );
         Swal.mixin({
           customClass: {
-            container: this.themeSite, // Clase para el modo oscuro
+            container: this.themeSite,
           },
         }).fire("", "Descarga Completada", "success");
+      });
+  }
+
+  descargarExcel() {
+    this.mostrarSwalDescarga();
+
+    this._LogisticaService
+      .getClientesInactivosExcel(this.buildFiltrosExportBody())
+      .subscribe({
+        next: (data: Blob) => {
+          const url = window.URL.createObjectURL(data);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = this.nombreArchivoClientesInactivos("xlsx");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite,
+            },
+          }).fire("", "Descarga Completada", "success");
+        },
+        error: () => {
+          Swal.mixin({
+            customClass: {
+              container: this.themeSite,
+            },
+          }).fire({
+            title: "Error",
+            text: "No se pudo descargar el archivo.",
+            icon: "error",
+          });
+        },
       });
   }
 

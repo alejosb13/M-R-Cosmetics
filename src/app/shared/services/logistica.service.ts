@@ -317,6 +317,15 @@ export class LogisticaService {
     });
   }
 
+  getClientesInactivosExcel(options: CarteraDateBodyForm): Observable<Blob> {
+    const URL = `${environment.urlAPI}xlsx/clientes-inactivos`;
+
+    return this.http.post<Blob>(`${URL}`, options, {
+      headers: this.headerJson_Token(),
+      responseType: "blob" as "json",
+    });
+  }
+
   clientesInactivosNotas(data: any): Observable<any> {
     return this.http.post<any>(`${Logistica}/clientes-inactivos/notas`, data, {
       headers: this.headerJson_Token(),

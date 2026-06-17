@@ -1,0 +1,79 @@
+---
+description: Convenciones de nombres para variables, propiedades y funciones en TypeScript y Angular. Los nombres deben ser descriptivos y autoexplicativos.
+globs: **/*.ts,**/*.html
+alwaysApply: false
+---
+
+# Nombres descriptivos — Variables y funciones
+
+Los nombres deben comunicar **qué contienen o qué hacen** sin necesidad de leer el cuerpo.
+
+## Variables y propiedades
+
+```typescript
+// ❌ MAL — no se entiende qué contiene
+data: any;
+list: any[];
+flag: boolean;
+val: number;
+tmp: string;
+
+// ✅ BIEN — el nombre declara su contenido
+facturaList: Listado<Factura>;
+loaderTablaFacturas: boolean;
+totalConDescuento: number;
+busquedaProducto: string;
+```
+
+Prefijos recomendados para booleans:
+- `loader<Contexto>` → `loaderProductos`, `loaderServicios`
+- `mostrar<Cosa>` → `mostrarFiltros`
+- `puede<Accion>` → `puedeAgregarMetodo`
+- `tiene<Condicion>` → `tieneEfectivo`, `tieneStock`
+- `es<Estado>` → `esAdmin`, `esEdicion`
+
+## Funciones y métodos
+
+```typescript
+// ❌ MAL — no se entiende qué hace
+get() {}
+load() {}
+check() {}
+handle() {}
+process() {}
+fn() {}
+
+// ✅ BIEN — verbo + contexto claro
+getFacturas() {}
+cargarProductosDelLocal() {}
+verificarStockDisponible() {}
+calcularTotalConDescuento() {}
+agregarProductoAlCarrito() {}
+eliminarMetodoPago(index: number) {}
+```
+
+Prefijos recomendados:
+- `get<Entidad>` → petición HTTP o derivación de datos
+- `cargar<Entidad>` → carga inicial / polling
+- `agregar<Cosa>` → push a un array
+- `quitar / eliminar<Cosa>` → remoción
+- `calcular<Resultado>` → cálculo derivado
+- `abrir / cerrar<Modal>` → control de modales
+- `iniciar<Proceso>` → setup de timers o flujos
+
+## Parámetros
+
+```typescript
+// ❌ MAL
+function nueva(x: number) {}
+function filtrar(v: string) {}
+
+// ✅ BIEN — el parámetro dice qué espera recibir
+function nuevaPagina(linkPaginacion: PaginationLink) {}
+function buscarPorFiltro(terminoBusqueda: string) {}
+```
+
+## Regla de oro
+
+> Si al leer el nombre solo se puede adivinar **vagamente** qué hace o contiene, el nombre es incorrecto.
+> El nombre correcto hace que el comentario sea innecesario.

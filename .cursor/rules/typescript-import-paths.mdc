@@ -1,0 +1,51 @@
+---
+description: Alias de imports TypeScript del frontend (@models, @services, @shared, etc.)
+globs: src/app/**/*.ts,src/app/**/*.html
+alwaysApply: true
+---
+
+# Imports con path aliases (frontend)
+
+Usar **siempre** los alias definidos en `tsconfig.json`. No uses rutas `src/app/...` ni relativas largas (`../../../models/...`) en `pages`, `services`, `shared` o componentes.
+
+## Alias disponibles
+
+| Alias | Uso |
+|-------|-----|
+| `@app/*` | Código bajo `src/app/` |
+| `@pages/*` | Páginas `src/app/pages/` |
+| `@services/*` | Servicios `src/app/services/` |
+| `@models/*` | Modelos `src/app/models/` |
+| `@shared/*` | Shared `src/app/shared/` (componentes, utils, modals) |
+| `@icons/*` | Iconos propios `src/app/icons/` |
+| `@env` | `environment` (`src/environments/environment`) |
+| `@env/*` | Otros archivos en `src/environments/` |
+| `@src/*` | Raíz `src/` (assets, scss, etc.) |
+
+`@coreui/icons-angular` sigue siendo el paquete para `IconDirective` / `cIcon`; `@icons/*` es solo para subsets locales (`icon-subset.ts`, etc.).
+
+## Ejemplos
+
+```typescript
+// ❌ Evitar
+import { Factura } from 'src/app/models/Factura.model';
+import { FacturasService } from '../../../services/facturas.service';
+import { environment } from 'src/environments/environment';
+import logger from '../../../shared/utils/logger';
+
+// ✅ Preferir
+import { Factura } from '@models/Factura.model';
+import { FacturasService } from '@services/facturas.service';
+import { environment } from '@env';
+import logger from '@shared/utils/logger';
+import { FiltrosListFormComponent } from '@shared/components/forms/filtros-list-form/filtros-list-form.component';
+```
+
+```typescript
+// Página que importa otra área de pages
+import { routes } from '@pages/factura/factura.routes';
+```
+
+## Nuevos archivos
+
+Al crear componentes en `pages/`, importar modelos, servicios, shared y environment **solo** con estos alias.

@@ -1,0 +1,92 @@
+---
+description: Listados — siempre enviar estado=1 por defecto; estado 2 = todos en filtros
+globs: **/*listado*/**,**/*-list/**,**/helpers.service.ts,**/filtro.ts
+alwaysApply: false
+---
+
+# Listados: siempre `estado: 1` en la query (por defecto)
+
+## Regla obligatoria
+
+En **cada pantalla de listado** (`*-listado`, `*-list`), el objeto `parametrosURL` / `ParametrosURL` **debe incluir `estado: 1` desde el inicio**:
+
+```typescript
+parametrosURL: ParametersUrl = {
+  estado: 1,           // ← OBLIGATORIO: solo registros activos
+  link: null,
+  disablePaginate: '0',
+  // ...resto de filtros del módulo
+};
+```
+
+**Nunca** dejar un listado sin `estado: 1` en su estado inicial, salvo módulos donde el negocio exija otro criterio documentado (ej. historial de cierres con `estado: 2` a propósito).
+
+## Por qué (no es opcional)
+
+1. **Totales del listado** (`List.total`, badges, contadores) deben contar solo registros **activos**.
+2. Si la query no filtra por `estado = 1`, pueden entrar **anulados/inactivos** (`estado = 0`) y:
+   - inflar o distorsionar el total mostrado;
+   - mezclar filas que el usuario ya dio de baja;
+   - afectar lógica que asume “solo activos” (botones editar/eliminar, selects, etc.).
+3. El backend **no** impone `estado = 1` por defecto: **el front es responsable** de enviarlo en cada listado.
+
+## Valores de `estado` (contrato front ↔ API)
+
+| Valor | Significado | ¿Se envía al API? | Cuándo usarlo |
+|-------|-------------|-------------------|---------------|
+| **`1`** | Solo activos | **Sí** | **Default** en todo listado y combo auxiliar |
+| **`0`** | Solo inactivos/anulados | Sí | Usuario elige “inactivos” en modal de filtros |
+| **`2`** | Todos (activos + inactivos) | **No** | Usuario elige “todos” en modal de filtros |
+
+Convención del modal: `app-filtros-list-form` + `IniciarFiltro` (`@shared/utils/constants/filtro`) parten de `estado: 1`.
+
+## `HelpersService.formatParameters`
+
+Al armar la query HTTP:
+
+- `estado: 1` → se envía `?estado=1`
+- `estado: 0` → se envía `?estado=0`
+- `estado: 2` → **no** se envía el param (el backend devuelve todos)
+
+```typescript
+// ✅ Listado estándar
+this._EntradaService.getEntradas({
+  ...this.parametrosURL,
+  estado: 1,
+});
+
+// ✅ Combo / catálogo en formulario (también solo activos)
+this._TipoGastoService.getTiposGasto({
+  link: null,
+  disablePaginate: '1',
+  estado: 1,
+});
+```
+
+## Al aplicar filtros (`filtroEvent`)
+
+Mergear sin quitar `estado` salvo que el usuario lo cambie en el modal:
+
+```typescript
+this.parametrosURL = {
+  ...this.parametrosURL,
+  ...filtrosSanitizados,
+  link: null,
+};
+```
+
+Si el usuario no tocó estado en filtros, debe seguir siendo `1`.
+
+## ❌ Evitar
+
+```typescript
+// ❌ Sin estado: el API puede devolver anulados y el total no cuadra
+parametrosURL: ParametersUrl = { link: null, disablePaginate: '0' };
+
+// ❌ Combo sin estado: puede listar tipos/productos dados de baja
+this._ProductosService.getProductos({ disablePaginate: '1', link: null });
+```
+
+## ✅ Referencia en el proyecto
+
+Listados que ya siguen el patrón: `caja-listado`, `metodo-pago-listado`, `servicio-listado`, `entrada-listado`, `gasto-listado`, `tipo-gasto-listado`.

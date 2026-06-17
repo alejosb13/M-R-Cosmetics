@@ -211,3 +211,5 @@ Google+: <https://plus.google.com/+CreativetimPage>
 Instagram: <https://instagram.com/creativetimofficial>
 
 ng build --configuration production --output-hashing all
+
+docker run --rm -v $(pwd):/app -w /app node:20 npm run build:prod
