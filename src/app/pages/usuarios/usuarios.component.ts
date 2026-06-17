@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommunicationService } from "@app/shared/services/communication.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Role } from "app/auth/login/models/auth.model";
-import { Meta } from "app/shared/models/meta.model";
+import { Meta } from "app/shared/models/Meta.model";
 import {
   Recibo,
   RecibosRangosSinTerminar,

@@ -1,0 +1,17 @@
+services:
+  frontend:
+    image: node:18-alpine
+    container_name: frontend-mr-profesional
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3002:3002"
+    # Angular está sirviendo en 3002, por eso mapeamos 3002:3002
+    command: npx ng serve --host 0.0.0.0 --disable-host-check --poll 2000
+    networks:
+      - mr-profesional_network
+
+networks:
+  mr-profesional_network:
+    external: true

@@ -5,7 +5,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { CommunicationService } from "@app/shared/services/communication.service";
-import { Meta } from "app/shared/models/meta.model";
+import { Meta } from "app/shared/models/Meta.model";
 import { Recibo } from "app/shared/models/Recibo.model";
 import { ValidFunctionsValidator } from "app/shared/utils/valid-functions.validator";
 import { Subscription } from "rxjs";

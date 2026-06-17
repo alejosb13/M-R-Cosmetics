@@ -11,7 +11,7 @@ import { DevolucionFacturaService } from "../devoluciones/services/devolucion-fa
 import { AuthService } from "app/auth/login/service/auth.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import Swal from "sweetalert2";
-import { Meta, MetaHistorial } from "app/shared/models/meta.model";
+import { Meta, MetaHistorial } from "app/shared/models/Meta.model";
 import { Usuario } from "app/shared/models/Usuario.model";
 import { UsuariosService } from "app/shared/services/usuarios.service";
 import { RememberFiltersService } from "app/shared/services/remember-filters.service";
