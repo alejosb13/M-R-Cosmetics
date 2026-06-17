@@ -95,3 +95,15 @@
 .table-danger .validacion-monto {
   color: #842029;
 }
+
+/* Pendientes revisados en validación automática sin coincidencia */
+.table-pendiente-revisado > td,
+.table-pendiente-revisado > th {
+  background-color: #d1ecf1 !important;
+}
+
+.dark-modal .table-pendiente-revisado > td,
+.dark-modal .table-pendiente-revisado > th {
+  background-color: rgba(81, 203, 206, 0.18) !important;
+  color: #e0e0e0;
+}

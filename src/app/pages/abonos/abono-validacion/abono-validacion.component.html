@@ -15,8 +15,11 @@
           <button class="btn btn-success mr-2" (click)="openAgregar(contentAgregar)">
             <i class="fas fa-plus"></i> Agregar resumen
           </button>
-          <button class="btn btn-info" (click)="openValidar(contentValidar)">
+          <button class="btn btn-info mr-2" (click)="openValidar(contentValidar)">
             <i class="fas fa-check-circle"></i> Validar abonos
+          </button>
+          <button class="btn btn-warning" (click)="openReiniciar(contentReiniciar)">
+            <i class="fas fa-undo"></i> Reiniciar abonos
           </button>
         </div>
       </div>
@@ -121,6 +124,14 @@
             </td>
             <td>{{ item.mensaje ?? '-' }}</td>
             <td class="text-center text-nowrap">
+              <button
+                *ngIf="requiereResolucionPendiente(item)"
+                class="btn btn-sm btn-info mr-1"
+                ngbTooltip="Resolver pendiente sin coincidencia"
+                (click)="openDesestimar(item, contentDesestimar)"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
               <button
                 *ngIf="requiereResolucionDiferencia(item)"
                 class="btn btn-sm btn-danger mr-1"
@@ -345,6 +356,58 @@
   </div>
 </ng-template>
 
+<!-- ── Modal Reiniciar ─────────────────────────────────── -->
+<ng-template #contentReiniciar let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-reiniciar-title">Reiniciar Abonos Validados</h5>
+    <button type="button" class="close" (click)="modal.dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="text-muted small">
+      Los registros del rango seleccionado volverán a estado <strong>pendiente</strong>
+      y se eliminarán sus validaciones, como si acabaran de cargarse.
+    </p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Fecha Inicio <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="reiniciarFechaInicio" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Fecha Fin <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="reiniciarFechaFin" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Moneda <span class="text-danger">*</span></label>
+          <select class="form-control" [(ngModel)]="reiniciarMoneda">
+            <option value="Cordoba">Córdoba</option>
+            <option value="Dolar">Dólar</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary mr-3" (click)="modal.dismiss()">Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-warning"
+      [disabled]="!reiniciarFechaInicio || !reiniciarFechaFin || !reiniciarMoneda || isReiniciando"
+      (click)="confirmarReiniciar(modal)"
+    >
+      <span *ngIf="!isReiniciando"><i class="fas fa-undo"></i> Reiniciar</span>
+      <span *ngIf="isReiniciando"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>
+    </button>
+  </div>
+</ng-template>
+
 <!-- ── Modal Resolver diferencia Fase A (excede | menor) ─ -->
 <ng-template #contentResolverDiferencia let-modal>
   <div class="modal-resolver-diferencia">
@@ -444,7 +507,8 @@
 <ng-template #contentDesestimar let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="modal-desestimar-title">
-      Desestimar abono <span class="text-muted">#{{ selectedItem?.id }}</span>
+      {{ esPendienteSinMatch ? 'Resolver pendiente sin coincidencia' : 'Desestimar abono' }}
+      <span class="text-muted">#{{ selectedItem?.id }}</span>
     </h5>
     <button type="button" class="close" (click)="modal.dismiss()">
       <span>&times;</span>
@@ -453,7 +517,7 @@
   <div class="modal-body">
 
     <!-- Info del registro -->
-    <div class="alert alert-danger py-2 px-3 mb-3">
+    <div class="alert py-2 px-3 mb-3" [ngClass]="esPendienteSinMatch ? 'alert-info' : 'alert-danger'">
       <small>
         <strong>Referencia:</strong> {{ selectedItem?.referencia }} &nbsp;|&nbsp;
         <strong>Monto:</strong> {{ selectedItem?.monto | number:'1.2-2' }} {{ selectedItem?.moneda === 'Cordoba' ? 'C$' : '$' }} &nbsp;|&nbsp;
@@ -463,10 +527,58 @@
         &nbsp;|&nbsp;
         <strong>Fecha:</strong> {{ selectedItem?.fecha_operacion }}
       </small>
+      <small *ngIf="esPendienteSinMatch" class="d-block mt-2">
+        Este registro fue procesado en validación automática pero no encontró coincidencia de referencia.
+      </small>
     </div>
 
-    <!-- Switch: ¿Relacionar a recibo? -->
-    <div class="form-group mb-3">
+    <!-- Opciones de validación manual (pendiente sin coincidencia) -->
+    <ng-container *ngIf="esPendienteSinMatch">
+      <div class="form-group mb-3">
+        <div class="custom-control custom-switch mb-2">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="validarSinRelacionSwitch"
+            [(ngModel)]="pendiente_validar_sin_relacion"
+            (ngModelChange)="onPendienteValidarSinRelacionChange($event)"
+          />
+          <label class="custom-control-label" for="validarSinRelacionSwitch">
+            Validar sin relación a abono
+          </label>
+        </div>
+        <div class="custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="relacionarAbonoSwitch"
+            [(ngModel)]="pendiente_relacionar"
+            (ngModelChange)="onPendienteRelacionarChange($event)"
+          />
+          <label class="custom-control-label" for="relacionarAbonoSwitch">
+            Relacionar a un abono (N° Recibo)
+          </label>
+        </div>
+        <small class="text-muted d-block mt-2">
+          Elija una opción de validación o use <em>No aplica</em> para desestimar.
+        </small>
+      </div>
+
+      <div class="form-group" *ngIf="pendiente_relacionar">
+        <label>N° Recibo <span class="text-danger">*</span></label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Ingrese el número de recibo"
+          [(ngModel)]="numero_recibo"
+          min="1"
+        />
+        <small class="text-muted">Se buscará el recibo por su número.</small>
+      </div>
+    </ng-container>
+
+    <!-- Switch: ¿Relacionar a recibo? (solo error genérico) -->
+    <div class="form-group mb-3" *ngIf="!esPendienteSinMatch">
       <div class="custom-control custom-switch">
         <input
           type="checkbox"
@@ -480,8 +592,8 @@
       </div>
     </div>
 
-    <!-- Input N° Recibo (solo si switch ON) -->
-    <div class="form-group" *ngIf="desestimando_relacionar">
+    <!-- Input N° Recibo (solo si switch ON en error) -->
+    <div class="form-group" *ngIf="!esPendienteSinMatch && desestimando_relacionar">
       <label>N° Recibo <span class="text-danger">*</span></label>
       <input
         type="number"
@@ -493,17 +605,26 @@
       <small class="text-muted">Se buscará el recibo por su número.</small>
     </div>
 
-    <!-- TextArea Motivo (siempre visible) -->
     <div class="form-group">
       <label>
-        {{ desestimando_relacionar ? 'Comentario adicional' : 'Motivo de desestimación' }}
-        <span *ngIf="!desestimando_relacionar" class="text-danger">*</span>
-        <span *ngIf="desestimando_relacionar" class="text-muted">(Opcional)</span>
+        <ng-container *ngIf="esPendienteSinMatch">
+          Comentario
+          <span class="text-danger">*</span>
+        </ng-container>
+        <ng-container *ngIf="!esPendienteSinMatch">
+          {{ desestimando_relacionar ? 'Comentario adicional' : 'Motivo de desestimación' }}
+          <span *ngIf="!desestimando_relacionar" class="text-danger">*</span>
+          <span *ngIf="desestimando_relacionar" class="text-muted">(Opcional)</span>
+        </ng-container>
       </label>
       <textarea
         class="form-control"
         rows="4"
-        [placeholder]="desestimando_relacionar ? 'Agregue un comentario adicional (opcional)...' : 'Explique el motivo por el cual desea desestimar este abono...'"
+        [placeholder]="esPendienteSinMatch
+          ? 'Indique el motivo de la decisión...'
+          : (desestimando_relacionar
+            ? 'Agregue un comentario adicional (opcional)...'
+            : 'Explique el motivo por el cual desea desestimar este abono...')"
         [(ngModel)]="desestimar_motivo"
         maxlength="250"
       ></textarea>
@@ -513,11 +634,34 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary mr-3" (click)="modal.dismiss()">Cancelar</button>
+
+    <ng-container *ngIf="esPendienteSinMatch">
+      <button
+        type="button"
+        class="btn btn-warning mr-2"
+        [disabled]="!puedeConfirmarDesestimar() || isDesestimando"
+        (click)="confirmarDesestimar(modal)"
+      >
+        <span *ngIf="!isDesestimando"><i class="fas fa-ban"></i> No aplica</span>
+        <span *ngIf="isDesestimando"><i class="fas fa-circle-notch fa-spin"></i></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="!puedeValidarPendiente()"
+        (click)="confirmarValidarPendiente(modal)"
+      >
+        <span *ngIf="!isDesestimando"><i class="fas fa-check"></i> Validar</span>
+        <span *ngIf="isDesestimando"><i class="fas fa-circle-notch fa-spin"></i></span>
+      </button>
+    </ng-container>
+
     <button
+      *ngIf="!esPendienteSinMatch"
       type="button"
       class="btn btn-warning"
       [disabled]="isDesestimando || (desestimando_relacionar ? !numero_recibo : !desestimar_motivo?.trim())"
-      (click)="confirmarDesestimar(modal)"
+      (click)="confirmarDesestimarError(modal)"
     >
       <span *ngIf="!isDesestimando"><i class="fas fa-edit"></i> Confirmar</span>
       <span *ngIf="isDesestimando"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>

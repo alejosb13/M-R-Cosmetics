@@ -417,6 +417,7 @@ export class AbonoListComponent implements OnInit {
         numeroRecibo: this.numeroRecibo,
         metodoPago: this.metodoPago,
         estadoValidacion: this.estadoValidacion,
+        autorizacion: this.listadoFilter.autorizacion?.trim() || "",
       };
     }
 

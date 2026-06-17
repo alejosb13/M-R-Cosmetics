@@ -48,9 +48,18 @@ export class AbonoValidacionComponent implements OnInit {
   isValidando: boolean = false;
   validarResultado: any = null;
 
+  // --- Modal Reiniciar (fecha + moneda → reiniciarResumenBancario) ---
+  reiniciarFechaInicio: string = "";
+  reiniciarFechaFin: string = "";
+  reiniciarMoneda: string = "Cordoba";
+  isReiniciando: boolean = false;
+
   // --- Modal Desestimar (estado error genérico / otro recibo) ---
   selectedItem: any = null;
+  esPendienteSinMatch: boolean = false;
   desestimando_relacionar: boolean = false;
+  pendiente_relacionar: boolean = false;
+  pendiente_validar_sin_relacion: boolean = false;
   numero_recibo: number | null = null;
   desestimar_motivo: string = "";
   isDesestimando: boolean = false;
@@ -100,6 +109,8 @@ export class AbonoValidacionComponent implements OnInit {
     this.dateFin = `${year}-${month}-${rangoMonth.ultimoDiaDelMes}`;
     this.validarFechaInicio = this.dateIni;
     this.validarFechaFin = this.dateFin;
+    this.reiniciarFechaInicio = this.dateIni;
+    this.reiniciarFechaFin = this.dateFin;
   }
 
   asignarValores() {
@@ -322,11 +333,72 @@ export class AbonoValidacionComponent implements OnInit {
   }
 
   // ──────────────────────────────────────────────────────
+  // Modal Reiniciar (fechaInicio + fechaFin + moneda)
+  // ──────────────────────────────────────────────────────
+  openReiniciar(content: any) {
+    this.NgbModal.open(content, {
+      ariaLabelledBy: "modal-reiniciar-title",
+      size: "lg",
+      windowClass: this.themeSite === "dark-mode" ? "dark-modal" : "white-modal",
+    });
+  }
+
+  confirmarReiniciar(modal: any) {
+    if (!this.reiniciarFechaInicio || !this.reiniciarFechaFin || !this.reiniciarMoneda) return;
+
+    Swal.mixin({ customClass: { container: this.themeSite } })
+      .fire({
+        title: "¿Reiniciar abonos validados?",
+        html: `Se eliminarán las validaciones y los registros del rango volverán a <strong>pendiente</strong> como recién cargados.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#51cbce",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, reiniciar",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (!result.isConfirmed) return;
+
+        this.isReiniciando = true;
+        this._AbonoService
+          .reiniciarResumenBancario({
+            fechaInicio: this.reiniciarFechaInicio,
+            fechaFin: this.reiniciarFechaFin,
+            moneda: this.reiniciarMoneda,
+          })
+          .subscribe(
+            (res) => {
+              this.isReiniciando = false;
+              modal.close("confirm");
+              this.asignarValores();
+              Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+                icon: "success",
+                title: "Reinicio completado",
+                text: `${res.total_reiniciados ?? 0} registros reiniciados.`,
+              });
+            },
+            (err) => {
+              this.isReiniciando = false;
+              Swal.fire({
+                icon: "error",
+                title: "Error al reiniciar",
+                text: err?.error?.mensaje || err?.error?.message || "Ocurrió un error.",
+              });
+            }
+          );
+      });
+  }
+
+  // ──────────────────────────────────────────────────────
   // Modal Desestimar (estado error)
   // ──────────────────────────────────────────────────────
   openDesestimar(item: any, content: any) {
     this.selectedItem = item;
+    this.esPendienteSinMatch = this.requiereResolucionPendiente(item);
     this.desestimando_relacionar = false;
+    this.pendiente_relacionar = false;
+    this.pendiente_validar_sin_relacion = false;
     this.numero_recibo = null;
     this.desestimar_motivo = "";
     this.isDesestimando = false;
@@ -338,6 +410,94 @@ export class AbonoValidacionComponent implements OnInit {
   }
 
   confirmarDesestimar(modal: any) {
+    const payload: any = {
+      id: this.selectedItem?.id,
+      numero_recibo: null,
+      motivo: this.desestimar_motivo?.trim() || null,
+    };
+
+    this.isDesestimando = true;
+    this._AbonoService.desestimiarResumenBancario(payload).subscribe(
+      (res) => {
+        this.isDesestimando = false;
+        modal.close("confirm");
+        this.asignarValores();
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          icon: "success",
+          title: "Abono desestimado",
+          text: res?.mensaje || res?.message || "El abono fue procesado correctamente.",
+        });
+      },
+      (err) => {
+        this.isDesestimando = false;
+        Swal.fire({
+          icon: "error",
+          title: "Error al desestimar",
+          text: err?.error?.message || err?.error?.mensaje || "Ocurrió un error al procesar la solicitud.",
+        });
+      }
+    );
+  }
+
+  onPendienteRelacionarChange(activo: boolean) {
+    if (activo) {
+      this.pendiente_validar_sin_relacion = false;
+      return;
+    }
+    this.numero_recibo = null;
+  }
+
+  onPendienteValidarSinRelacionChange(activo: boolean) {
+    if (activo) {
+      this.pendiente_relacionar = false;
+      this.numero_recibo = null;
+    }
+  }
+
+  confirmarValidarPendiente(modal: any) {
+    if (!this.puedeValidarPendiente()) return;
+
+    const payload: {
+      id: number;
+      numero_recibo?: number | null;
+      motivo: string;
+      accion?: 'validar_sin_relacion';
+    } = {
+      id: this.selectedItem?.id,
+      motivo: this.desestimar_motivo.trim(),
+    };
+
+    if (this.pendiente_validar_sin_relacion) {
+      payload.accion = 'validar_sin_relacion';
+      payload.numero_recibo = null;
+    } else {
+      payload.numero_recibo = this.numero_recibo;
+    }
+
+    this.isDesestimando = true;
+    this._AbonoService.desestimiarResumenBancario(payload).subscribe(
+      (res) => {
+        this.isDesestimando = false;
+        modal.close("confirm");
+        this.asignarValores();
+        Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+          icon: "success",
+          title: "Abono validado",
+          text: res?.mensaje || res?.message || "El abono fue validado correctamente.",
+        });
+      },
+      (err) => {
+        this.isDesestimando = false;
+        Swal.fire({
+          icon: "error",
+          title: "Error al validar",
+          text: err?.error?.message || err?.error?.mensaje || "Ocurrió un error al procesar la solicitud.",
+        });
+      }
+    );
+  }
+
+  confirmarDesestimarError(modal: any) {
     const payload: any = {
       id: this.selectedItem?.id,
       numero_recibo: this.desestimando_relacionar ? this.numero_recibo : null,
@@ -354,15 +514,15 @@ export class AbonoValidacionComponent implements OnInit {
         this.asignarValores();
         Swal.mixin({ customClass: { container: this.themeSite } }).fire({
           icon: "success",
-          title: "Abono desestimado",
-          text: res?.message || "El abono fue procesado correctamente.",
+          title: this.desestimando_relacionar ? "Abono validado" : "Abono desestimado",
+          text: res?.mensaje || res?.message || "El abono fue procesado correctamente.",
         });
       },
       (err) => {
         this.isDesestimando = false;
         Swal.fire({
           icon: "error",
-          title: "Error al desestimar",
+          title: "Error al procesar",
           text: err?.error?.message || err?.error?.mensaje || "Ocurrió un error al procesar la solicitud.",
         });
       }
@@ -374,6 +534,26 @@ export class AbonoValidacionComponent implements OnInit {
       item?.estado_conciliacion === "error" &&
       (item?.estado_validacion === "excede" || item?.estado_validacion === "menor")
     );
+  }
+
+  requiereResolucionPendiente(item: any): boolean {
+    return (
+      item?.estado_conciliacion === "pendiente" &&
+      item?.estado_validacion === "no_encontrado"
+    );
+  }
+
+  puedeConfirmarDesestimar(): boolean {
+    if (this.isDesestimando) return false;
+    return !!this.desestimar_motivo?.trim();
+  }
+
+  puedeValidarPendiente(): boolean {
+    if (this.isDesestimando || !this.desestimar_motivo?.trim()) return false;
+
+    if (this.pendiente_validar_sin_relacion) return true;
+
+    return this.pendiente_relacionar && !!this.numero_recibo;
   }
 
   openResolverDiferencia(item: any, content: any) {
@@ -455,6 +635,7 @@ export class AbonoValidacionComponent implements OnInit {
     if (estado === "no_aplica") return "table-secondary";
     if (estado === "error") return "table-danger";
     if (estadoValidacion === "excede" || estadoValidacion === "menor") return "table-danger";
+    if (estado === "pendiente" && estadoValidacion === "no_encontrado") return "table-pendiente-revisado";
     return "table-warning";
   }
 

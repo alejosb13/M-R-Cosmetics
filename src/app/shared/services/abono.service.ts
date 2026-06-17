@@ -114,7 +114,12 @@ export class AbonoService {
     });
   }
 
-  desestimiarResumenBancario(data: { id: number; numero_recibo?: number | null; motivo: string | null }): Observable<any> {
+  desestimiarResumenBancario(data: {
+    id: number;
+    numero_recibo?: number | null;
+    motivo?: string | null;
+    accion?: 'validar_sin_relacion';
+  }): Observable<any> {
     const URL = `${environment.urlAPI}abonos/desestimar-resumen`;
     return this.http.post<any>(URL, data, {
       headers: this.headerJson_Token(),
@@ -124,6 +129,14 @@ export class AbonoService {
 
   aprobarResumenBancario(data: { id: number; comentario?: string | null }): Observable<any> {
     const URL = `${environment.urlAPI}abonos/aprobar-resumen`;
+    return this.http.post<any>(URL, data, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  reiniciarResumenBancario(data: { fechaInicio: string; fechaFin: string; moneda: string }): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/reiniciar-resumen`;
     return this.http.post<any>(URL, data, {
       headers: this.headerJson_Token(),
       responseType: "json",
