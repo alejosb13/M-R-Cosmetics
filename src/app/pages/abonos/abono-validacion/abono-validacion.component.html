@@ -92,7 +92,7 @@
                 class="badge"
                 [ngClass]="{
                   'badge-success': item.estado_validacion === 'ok',
-                  'badge-danger': item.estado_validacion === 'excede' || item.estado_validacion === 'menor' || item.estado_validacion === 'no_encontrado',
+                  'badge-danger': item.estado_validacion === 'excede' || item.estado_validacion === 'menor' || item.estado_validacion === 'no_encontrado' || item.estado_validacion === 'error_manual',
                   'badge-secondary': item.estado_validacion === 'no_aplica'
                 }"
               >
@@ -141,7 +141,7 @@
                 <i class="fas fa-balance-scale"></i>
               </button>
               <button
-                *ngIf="item.estado_conciliacion === 'error' && !requiereResolucionDiferencia(item)"
+                *ngIf="muestraBotonDesestimarError(item)"
                 class="btn btn-sm btn-warning"
                 ngbTooltip="Desestimar abono"
                 (click)="openDesestimar(item, contentDesestimar)"

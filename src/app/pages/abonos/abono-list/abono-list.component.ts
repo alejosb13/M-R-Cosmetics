@@ -63,6 +63,18 @@ export class AbonoListComponent implements OnInit {
   // Resumen bancario modal (admin)
   resumenBancarioSeleccionado: any = null;
 
+  // Modal validar manual desde abono
+  abonoSeleccionadoValidar: Abono | null = null;
+  validarManual_referencia: string = '';
+  validarManual_fechaOperacion: string = '';
+  validarManual_estadoConciliacion: 'validado' | 'error' = 'validado';
+  validarManual_mensaje: string = '';
+  isValidandoManual: boolean = false;
+  readonly validarManual_mensajePrefijo = '[Creado desde Abonos - Manual] ';
+  readonly validarManual_mensajeMaxTotal = 255;
+  readonly validarManual_mensajeMaxUsuario =
+    255 - '[Creado desde Abonos - Manual] '.length;
+
   roleName: string;
   listadoData: ListadoModel<Abono>;
   listadoFilter: FiltrosList = { link: null };
@@ -171,26 +183,124 @@ export class AbonoListComponent implements OnInit {
     );
   }
 
-  openValidar() {
-    this._Router.navigate(["/abono/validacion"]);
-  }
-
   openResumenBancario(content: any, abono: any) {
     const validacion = abono?.metodo_pago_validacion;
     if (!validacion) return;
-    // Preferir datos del resumen_bancario si ya están cargados; si no, armar desde la validación
-    this.resumenBancarioSeleccionado = validacion.resumen_bancario ?? {
-      referencia:           validacion.referencia,
-      monto:                validacion.entrada,
-      fecha_operacion:      validacion.fecha_excel,
-      moneda:               null,
-      estado_conciliacion:  validacion.estado_validacion === 'ok' ? 'validado' : validacion.estado_validacion,
-      mensaje:              validacion.mensaje,
+
+    const resumen =
+      validacion.resumen_bancario ?? validacion.resumenBancario ?? null;
+
+    this.resumenBancarioSeleccionado = {
+      referencia: resumen?.referencia ?? validacion.referencia,
+      monto: resumen?.monto ?? validacion.entrada,
+      fecha_operacion: resumen?.fecha_operacion ?? validacion.fecha_excel,
+      moneda: resumen?.moneda ?? null,
+      estado_conciliacion:
+        resumen?.estado_conciliacion ??
+        (validacion.estado_validacion === 'ok'
+          ? 'validado'
+          : validacion.estado_validacion),
+      estado_validacion: validacion.estado_validacion,
+      mensaje: validacion.mensaje ?? null,
     };
+
     this.NgbModal.open(content, {
       ariaLabelledBy: 'modal-resumen-title',
       windowClass: this.themeSite === 'dark-mode' ? 'dark-modal' : 'white-modal',
     });
+  }
+
+  openValidar() {
+    this._Router.navigate(["/abono/validacion"]);
+  }
+
+  puedeValidarManual(abono: Abono): boolean {
+    if (!this.isAdmin || !abono) return false;
+    if (Number(abono.metodo_pago?.tipo) !== 2) return false;
+    return !(abono as any).metodo_pago_validacion;
+  }
+
+  reciboValidacionEsOk(abono: Abono): boolean {
+    return (abono as any).metodo_pago_validacion?.estado_validacion === 'ok';
+  }
+
+  reciboValidacionEsError(abono: Abono): boolean {
+    const estado = (abono as any).metodo_pago_validacion?.estado_validacion;
+    return !!estado && estado !== 'ok';
+  }
+
+  tooltipReciboValidacion(abono: Abono): string {
+    if (!(abono as any).metodo_pago_validacion) return '';
+    if (this.reciboValidacionEsOk(abono)) return 'Autorización validada — ver resumen bancario';
+    if (this.reciboValidacionEsError(abono)) return 'Validación con error — ver resumen bancario';
+    return 'Ver resumen bancario';
+  }
+
+  openValidarManual(abono: Abono, content: any) {
+    this.abonoSeleccionadoValidar = abono;
+    const autorizacion = abono.metodo_pago?.autorizacion?.trim();
+    this.validarManual_referencia = autorizacion || '-';
+    this.validarManual_fechaOperacion = this._HelpersService.changeformatDate(
+      this._HelpersService.currentDay(),
+      'MM/DD/YYYY',
+      'YYYY-MM-DD'
+    );
+    this.validarManual_estadoConciliacion = 'validado';
+    this.validarManual_mensaje = '';
+    this.isValidandoManual = false;
+
+    this.NgbModal.open(content, {
+      ariaLabelledBy: 'modal-validar-manual-title',
+      size: 'md',
+      windowClass: this.themeSite === 'dark-mode' ? 'dark-modal' : 'white-modal',
+    });
+  }
+
+  puedeConfirmarValidarManual(): boolean {
+    if (this.isValidandoManual || !this.abonoSeleccionadoValidar) return false;
+    if (!this.validarManual_mensaje?.trim()) return false;
+    if (!this.validarManual_fechaOperacion) return false;
+
+    const referencia = this.validarManual_referencia?.trim();
+    return !!referencia && referencia !== '-';
+  }
+
+  confirmarValidarManual(modal: any) {
+    if (!this.puedeConfirmarValidarManual() || !this.abonoSeleccionadoValidar) return;
+
+    this.isValidandoManual = true;
+    this._AbonoService
+      .validarManualDesdeAbono({
+        factura_historial_id: this.abonoSeleccionadoValidar.id,
+        referencia: this.validarManual_referencia.trim(),
+        fecha_operacion: this.validarManual_fechaOperacion,
+        estado_conciliacion: this.validarManual_estadoConciliacion,
+        mensaje: this.validarManual_mensaje.trim(),
+      })
+      .subscribe(
+        (res) => {
+          this.isValidandoManual = false;
+          modal.close('confirm');
+          this.asignarValores();
+          Swal.mixin({ customClass: { container: this.themeSite } }).fire({
+            icon: 'success',
+            title: 'Abono validado',
+            text: res?.mensaje || 'Validación manual registrada correctamente.',
+          });
+        },
+        (err) => {
+          this.isValidandoManual = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al validar',
+            text:
+              err?.error?.mensaje ||
+              err?.error?.message ||
+              (typeof err?.error === 'string' ? err.error : null) ||
+              'Ocurrió un error al procesar la solicitud.',
+          });
+        }
+      );
   }
 
   onExcelFileChange(event: any) {

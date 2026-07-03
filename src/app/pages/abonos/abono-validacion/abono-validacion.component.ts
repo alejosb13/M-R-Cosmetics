@@ -543,6 +543,25 @@ export class AbonoValidacionComponent implements OnInit {
     );
   }
 
+  /** Validación creada desde listado abonos — sin acciones en resumen bancario. */
+  esErrorManualDesdeAbonos(item: any): boolean {
+    if (item?.estado_validacion === "error_manual") return true;
+
+    const mensaje = String(item?.mensaje ?? "");
+    return (
+      item?.estado_conciliacion === "error" &&
+      mensaje.includes("[Creado desde Abonos - Manual]")
+    );
+  }
+
+  muestraBotonDesestimarError(item: any): boolean {
+    return (
+      item?.estado_conciliacion === "error" &&
+      !this.requiereResolucionDiferencia(item) &&
+      !this.esErrorManualDesdeAbonos(item)
+    );
+  }
+
   puedeConfirmarDesestimar(): boolean {
     if (this.isDesestimando) return false;
     return !!this.desestimar_motivo?.trim();
@@ -634,7 +653,7 @@ export class AbonoValidacionComponent implements OnInit {
     if (estado === "validado") return "table-success";
     if (estado === "no_aplica") return "table-secondary";
     if (estado === "error") return "table-danger";
-    if (estadoValidacion === "excede" || estadoValidacion === "menor") return "table-danger";
+    if (estadoValidacion === "excede" || estadoValidacion === "menor" || estadoValidacion === "error_manual") return "table-danger";
     if (estado === "pendiente" && estadoValidacion === "no_encontrado") return "table-pendiente-revisado";
     return "table-warning";
   }
@@ -646,6 +665,7 @@ export class AbonoValidacionComponent implements OnInit {
       menor: "Monto menor",
       no_encontrado: "No encontrado",
       no_aplica: "No aplica",
+      error_manual: "Error manual",
     };
     return labels[estado] ?? estado ?? "-";
   }

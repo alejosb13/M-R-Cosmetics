@@ -142,4 +142,18 @@ export class AbonoService {
       responseType: "json",
     });
   }
+
+  validarManualDesdeAbono(data: {
+    factura_historial_id: number;
+    referencia: string;
+    fecha_operacion: string;
+    estado_conciliacion: 'validado' | 'error';
+    mensaje: string;
+  }): Observable<any> {
+    const URL = `${environment.urlAPI}abonos/validar-manual-desde-abono`;
+    return this.http.post<any>(URL, data, {
+      headers: this.headerJson_Token(),
+      responseType: 'json',
+    });
+  }
 }

@@ -99,11 +99,9 @@
                 <!-- Admin: color según estado conciliación + click para ver resumen -->
                 <ng-container *ngIf="isAdmin">
                   <span
-                    [ngClass]="{
-                      'text-success font-weight-bold':
-                        abono.metodo_pago_validacion?.estado_validacion ===
-                        'ok',
-                    }"
+                    class="recibo-numero-admin"
+                    [class.recibo-numero-validado]="reciboValidacionEsOk(abono)"
+                    [class.recibo-numero-error]="reciboValidacionEsError(abono)"
                     [style.cursor]="
                       abono.metodo_pago_validacion ? 'pointer' : 'default'
                     "
@@ -111,9 +109,7 @@
                       abono.metodo_pago_validacion &&
                         openResumenBancario(contentResumenBancario, abono)
                     "
-                    [ngbTooltip]="
-                      abono.metodo_pago_validacion ? 'Ver resumen bancario' : ''
-                    "
+                    [ngbTooltip]="tooltipReciboValidacion(abono)"
                   >
                     #{{ abono.recibo_historial.numero }}
                   </span>
@@ -153,6 +149,14 @@
             </td>
             <td>
               <div class="d-flex flex-direction">
+                <div
+                  class="mr-3 text-success pointer"
+                  ngbTooltip="Marcar como validado"
+                  (click)="openValidarManual(abono, contentValidarManual)"
+                  *ngIf="puedeValidarManual(abono)"
+                >
+                  <i class="fas fa-check-circle"></i>
+                </div>
                 <div
                   class="mr-3 text-warning"
                   ngbTooltip="Editar"
@@ -375,15 +379,34 @@
               resumenBancarioSeleccionado.estado_conciliacion === 'error',
             'badge-warning':
               resumenBancarioSeleccionado.estado_conciliacion === 'pendiente',
+            'badge-secondary':
+              resumenBancarioSeleccionado.estado_conciliacion === 'no_aplica',
           }"
         >
           {{ resumenBancarioSeleccionado.estado_conciliacion }}
         </span>
       </div>
-      <div class="col-12 mb-3" *ngIf="resumenBancarioSeleccionado.mensaje">
-        <p class="font-weight-bold mb-1">Mensaje</p>
-        <span class="text-muted small">{{
-          resumenBancarioSeleccionado.mensaje
+      <div class="col-md-6 mb-3" *ngIf="resumenBancarioSeleccionado.estado_validacion">
+        <p class="font-weight-bold mb-1">Estado Validación</p>
+        <span
+          class="badge"
+          [ngClass]="{
+            'badge-success': resumenBancarioSeleccionado.estado_validacion === 'ok',
+            'badge-danger':
+              resumenBancarioSeleccionado.estado_validacion === 'excede' ||
+              resumenBancarioSeleccionado.estado_validacion === 'menor' ||
+              resumenBancarioSeleccionado.estado_validacion === 'no_encontrado' ||
+              resumenBancarioSeleccionado.estado_validacion === 'error_manual',
+            'badge-secondary': resumenBancarioSeleccionado.estado_validacion === 'no_aplica',
+          }"
+        >
+          {{ resumenBancarioSeleccionado.estado_validacion }}
+        </span>
+      </div>
+      <div class="col-12 mb-3">
+        <p class="font-weight-bold mb-1">Mensaje de validación</p>
+        <span class="text-muted small d-block resumen-mensaje-validacion">{{
+          resumenBancarioSeleccionado.mensaje || "—"
         }}</span>
       </div>
     </div>
@@ -671,6 +694,136 @@
     <button class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
       Cerrar <i class="fas fa-times"></i>
     </button>
+  </div>
+</ng-template>
+
+<!-- Modal validar manual desde abono (simula flujo resumen bancario) -->
+<ng-template #contentValidarManual let-modal>
+  <div class="modal-validar-manual">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modal-validar-manual-title">
+        Marcar abono como validado
+        <span class="text-muted">#{{ abonoSeleccionadoValidar?.recibo_historial?.numero }}</span>
+      </h5>
+      <button type="button" class="close" (click)="modal.dismiss()" aria-label="Cerrar">
+        <span>&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" *ngIf="abonoSeleccionadoValidar">
+      <div class="alert alert-info py-2 px-3 mb-3">
+        <small>
+          <strong>Monto:</strong>
+          {{ abonoSeleccionadoValidar.precio | currency: 'USD' }}
+          &nbsp;|&nbsp;
+          <strong>Moneda:</strong> Dolar
+          &nbsp;|&nbsp;
+          <strong>Cliente:</strong>
+          {{ abonoSeleccionadoValidar.cliente?.nombreCompleto }}
+        </small>
+        <small class="d-block mt-2 text-muted">
+          Se creará un registro en resumen bancario y su validación, igual que en la carga desde Excel.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="validarManualReferencia">
+          Referencia <span class="text-danger">*</span>
+        </label>
+        <input
+          id="validarManualReferencia"
+          type="text"
+          class="form-control"
+          maxlength="30"
+          placeholder="Referencia bancaria"
+          [(ngModel)]="validarManual_referencia"
+        />
+        <small class="text-muted">Por defecto: autorización del abono.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="validarManualFecha">
+          Fecha de operación <span class="text-danger">*</span>
+        </label>
+        <input
+          id="validarManualFecha"
+          type="date"
+          class="form-control"
+          [(ngModel)]="validarManual_fechaOperacion"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="d-block mb-2">
+          Estado de conciliación <span class="text-danger">*</span>
+        </label>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input
+            type="radio"
+            id="estadoConciliacionValidado"
+            name="estadoConciliacionManual"
+            class="custom-control-input"
+            value="validado"
+            [(ngModel)]="validarManual_estadoConciliacion"
+          />
+          <label class="custom-control-label" for="estadoConciliacionValidado">
+            Validado
+          </label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input
+            type="radio"
+            id="estadoConciliacionError"
+            name="estadoConciliacionManual"
+            class="custom-control-input"
+            value="error"
+            [(ngModel)]="validarManual_estadoConciliacion"
+          />
+          <label class="custom-control-label" for="estadoConciliacionError">
+            Error
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group mb-0">
+        <label for="validarManualMensaje">
+          Mensaje <span class="text-danger">*</span>
+        </label>
+        <textarea
+          id="validarManualMensaje"
+          class="form-control"
+          rows="4"
+          placeholder="Detalle de la validación manual..."
+          [(ngModel)]="validarManual_mensaje"
+          [maxlength]="validarManual_mensajeMaxUsuario"
+        ></textarea>
+        <small class="text-muted d-block mt-1">
+          {{ validarManual_mensaje?.length ?? 0 }}/{{ validarManual_mensajeMaxUsuario }} caracteres
+          (máx. {{ validarManual_mensajeMaxTotal }} incl. prefijo automático)
+        </small>
+        <small class="text-muted d-block">
+          Prefijo: <code>{{ validarManual_mensajePrefijo }}</code>
+        </small>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary mr-3"
+        (click)="modal.dismiss()"
+        [disabled]="isValidandoManual"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="!puedeConfirmarValidarManual()"
+        (click)="confirmarValidarManual(modal)"
+      >
+        <span *ngIf="!isValidandoManual"><i class="fas fa-check"></i> Confirmar validación</span>
+        <span *ngIf="isValidandoManual"><i class="fas fa-circle-notch fa-spin"></i> Procesando...</span>
+      </button>
+    </div>
   </div>
 </ng-template>
 

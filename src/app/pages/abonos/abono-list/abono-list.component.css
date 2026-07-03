@@ -8,3 +8,37 @@
 .form-check .form-check-label {
   padding-left: 10px;
 }
+
+.modal-validar-manual .alert-info {
+  border-radius: 0.25rem;
+}
+
+.dark-modal .modal-validar-manual label,
+.dark-modal .modal-validar-manual .form-group > label {
+  color: #e0e0e0;
+}
+
+.dark-modal .modal-validar-manual .alert-info {
+  background-color: rgba(23, 162, 184, 0.2);
+  border-color: #17a2b8;
+  color: #b8e0e8;
+}
+
+.dark-modal .modal-validar-manual code {
+  color: #9ecfd1;
+}
+
+.recibo-numero-admin.recibo-numero-validado {
+  color: #28a745;
+  font-weight: 700;
+}
+
+.recibo-numero-admin.recibo-numero-error {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+.resumen-mensaje-validacion {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
