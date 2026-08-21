@@ -63,6 +63,13 @@ export class Recuperacion85Component implements OnInit {
   themeSite: string;
   themeSubscription: Subscription;
 
+  expandedUserId: number | null = null;
+  detalleByUser: { [userId: number]: any } = {};
+  detalleLoading: { [userId: number]: boolean } = {};
+  detallePageByUser: { [userId: number]: number } = {};
+  detallePageSize = 15;
+  excelLoading: { [userId: number]: boolean } = {};
+
   // Propiedades para gráficos
   public barChartLabels: string[] = [];
   public barChartData: any[] = [];
@@ -314,6 +321,11 @@ export class Recuperacion85Component implements OnInit {
           this._TablasService.datosTablaStorage = recuperacion;
           this._TablasService.total = 0;
           this._TablasService.busqueda = "";
+          this.expandedUserId = null;
+          this.detalleByUser = {};
+          this.detalleLoading = {};
+          this.detallePageByUser = {};
+          this.excelLoading = {};
 
           this.refreshCountries();
           this.isLoad = false;
@@ -380,6 +392,92 @@ export class Recuperacion85Component implements OnInit {
       (this.page - 1) * this.pageSize,
       (this.page - 1) * this.pageSize + this.pageSize
     );
+  }
+
+  toggleDetalle(userId: number) {
+    if (this.expandedUserId === userId) {
+      this.expandedUserId = null;
+      return;
+    }
+
+    this.expandedUserId = userId;
+    if (!this.detallePageByUser[userId]) {
+      this.detallePageByUser[userId] = 1;
+    }
+
+    if (this.detalleByUser[userId]) {
+      return;
+    }
+
+    this.cargarDetalle(userId);
+  }
+
+  cambiarPaginaDetalle(userId: number, page: number) {
+    this.detallePageByUser[userId] = page;
+  }
+
+  filasDetalle(userId: number): any[] {
+    const detalle = this.detalleByUser[userId];
+    if (!detalle || !Array.isArray(detalle.data)) {
+      return [];
+    }
+
+    const page = this.detallePageByUser[userId] || 1;
+    const start = (page - 1) * this.detallePageSize;
+
+    return detalle.data.slice(start, start + this.detallePageSize);
+  }
+
+  cargarDetalle(userId: number) {
+    this.detalleLoading[userId] = true;
+    this._LogisticaService
+      .getRecuperacionDetalle({
+        userId,
+        dateIni: this.filtros.dateIni,
+        dateFin: this.filtros.dateFin,
+      })
+      .subscribe(
+        (detalle) => {
+          this.detalleByUser[userId] = detalle;
+          if (!this.detallePageByUser[userId]) {
+            this.detallePageByUser[userId] = 1;
+          }
+          this.detalleLoading[userId] = false;
+        },
+        () => {
+          this.detalleLoading[userId] = false;
+        }
+      );
+  }
+
+  descargarExcelDetalle(userId: number, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    this.excelLoading[userId] = true;
+    this._LogisticaService
+      .getRecuperacionDetalleExcel({
+        userId,
+        dateIni: this.filtros.dateIni,
+        dateFin: this.filtros.dateFin,
+      })
+      .subscribe(
+        (data: Blob) => {
+          const url = window.URL.createObjectURL(data);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `meta_recuperacion_${userId}_${this.filtros.dateIni}.xlsx`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.excelLoading[userId] = false;
+        },
+        () => {
+          this.excelLoading[userId] = false;
+        }
+      );
   }
 
   openFiltros(content: any) {

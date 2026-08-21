@@ -10,10 +10,6 @@
 
   <ng-container *ngIf="!isLoad">
     <div class="card-header border-0 pt-4 bg-white">
-      <!-- <a class="btn btn-primary" routerLink="/devolucion/agregar/producto">
-        <i class="fas fa-plus"></i>
-        Agregar
-      </a> -->
       <div class="col-md-12">
         <div class="d-flex flex-row justify-content-between mt-3">
           <button
@@ -22,12 +18,6 @@
           >
             Filtros <i class="fas fa-filter"></i>
           </button>
-          <!-- <form class="d-flex align-items-center col-4 buscador pr-0">
-                <div class="form-label-group w-100">
-                    <input type="email" id="inputEmail" class="form-control form-control-sm" placeholder="Buscar" (keyup)="BuscarValor()" (change)="BuscarValor()" [(ngModel)]="_TablasService.busqueda" name="buscar">
-                    <label for="inputEmail">Buscar</label>
-                </div>
-            </form> -->
         </div>
       </div>
 
@@ -51,46 +41,198 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th scope="col"></th>
             <th scope="col">#</th>
             <th scope="col">Nombre Completo</th>
-            <!-- <th scope="col">Total Facturas</th> -->
-            <!-- <th scope="col">Total Abonos</th> -->
             <th scope="col">Abonos del mes</th>
             <th scope="col">Meta</th>
             <th scope="col">Recuperacion %</th>
           </tr>
         </thead>
         <tbody *ngIf="_TablasService.datosTablaStorage.length > 0">
-          <tr *ngFor="let Recuperacion of _TablasService.datosTablaStorage">
-            <th>
-              {{ Recuperacion.user_id }}
-            </th>
-            <td>
-              {{ Recuperacion.user.name }} {{ Recuperacion.user.apellido }}
-            </td>
-            <!-- <td>
-              {{ Recuperacion.facturasTotal|currency:"USD"}}
-            </td>
-            <td>
-              {{ Recuperacion.abonosTotal|currency:"USD"}}
-            </td> -->
-            <td>
-              {{ Recuperacion.abonosTotalLastMount | currency : "USD" }}
-            </td>
-            <td>
-              {{ Recuperacion.recuperacionTotal | currency : "USD" }}
-            </td>
-            <td>{{ Recuperacion.recuperacionPorcentaje }}%</td>
-          </tr>
+          <ng-container
+            *ngFor="let Recuperacion of _TablasService.datosTablaStorage"
+          >
+            <tr
+              class="accordion-toggle pointer"
+              (click)="toggleDetalle(Recuperacion.user_id)"
+            >
+              <td>
+                <i
+                  class="fas"
+                  [ngClass]="
+                    expandedUserId === Recuperacion.user_id
+                      ? 'fa-chevron-down'
+                      : 'fa-chevron-right'
+                  "
+                ></i>
+              </td>
+              <th>
+                {{ Recuperacion.user_id }}
+              </th>
+              <td>
+                {{ Recuperacion.user.name }} {{ Recuperacion.user.apellido }}
+              </td>
+              <td>
+                {{ Recuperacion.abonosTotalLastMount | currency : "USD" }}
+              </td>
+              <td>
+                {{ Recuperacion.recuperacionTotal | currency : "USD" }}
+              </td>
+              <td>{{ Recuperacion.recuperacionPorcentaje }}%</td>
+            </tr>
+            <tr
+              *ngIf="expandedUserId === Recuperacion.user_id"
+              class="bg-light"
+            >
+              <td colspan="6" class="p-3">
+                <div
+                  *ngIf="detalleLoading[Recuperacion.user_id]"
+                  class="text-center py-3"
+                >
+                  Cargando detalle
+                  <i class="fas fa-circle-notch fa-spin"></i>
+                </div>
+
+                <ng-container *ngIf="!detalleLoading[Recuperacion.user_id]">
+                  <ng-container
+                    *ngIf="detalleByUser[Recuperacion.user_id] as detalle"
+                  >
+                  <div
+                    class="d-flex flex-wrap justify-content-between align-items-start mb-3"
+                  >
+                    <div class="small">
+                      <!-- <div>
+                        Meta calculada (live):
+                        <b>{{
+                          detalle.resumen.meta_calculada | currency : "USD"
+                        }}</b>
+                      </div> -->
+                      <div>
+                        Meta foto (lista):
+                        <b>{{
+                          detalle.resumen.meta_foto != null
+                            ? (detalle.resumen.meta_foto | currency : "USD")
+                            : "—"
+                        }}</b>
+                      </div>
+                      <div>
+                        Saldo abierto:
+                        <b>{{
+                          detalle.resumen.saldo_abierto | currency : "USD"
+                        }}</b>
+                      </div>
+                      <div>
+                        Facturas del mes:
+                        <b>{{
+                          detalle.resumen.facturas_mes | currency : "USD"
+                        }}</b>
+                      </div>
+                      <div>
+                        Cuota futura:
+                        <b>{{
+                          detalle.resumen.cuota_futura | currency : "USD"
+                        }}</b>
+                      </div>
+                      <div>
+                        Fuera de meta:
+                        <b>{{
+                          detalle.resumen.fuera_de_meta | currency : "USD"
+                        }}</b>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-success btn-sm"
+                      [disabled]="excelLoading[Recuperacion.user_id]"
+                      (click)="
+                        descargarExcelDetalle(Recuperacion.user_id, $event)
+                      "
+                    >
+                      <span *ngIf="!excelLoading[Recuperacion.user_id]">
+                        Excel <i class="fas fa-file-excel"></i>
+                      </span>
+                      <span *ngIf="excelLoading[Recuperacion.user_id]">
+                        Descargando
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-2">
+                      <thead>
+                        <tr>
+                          <th>Factura</th>
+                          <th>Cliente</th>
+                          <th>Monto</th>
+                          <th>Saldo</th>
+                          <th>Plazo</th>
+                          <th>Días corte</th>
+                          <th>Debía</th>
+                          <th>Abonado</th>
+                          <th>Aporte</th>
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngIf="filasDetalle(Recuperacion.user_id).length > 0">
+                        <tr
+                          *ngFor="let row of filasDetalle(Recuperacion.user_id)"
+                        >
+                          <td>{{ row.factura_id }}</td>
+                          <td>{{ row.cliente }}</td>
+                          <td>{{ row.monto | currency : "USD" }}</td>
+                          <td>{{ row.saldo_restante | currency : "USD" }}</td>
+                          <td>{{ row.plazo_dias }}</td>
+                          <td>{{ row.dias_al_corte }}</td>
+                          <td>{{ row.debia | currency : "USD" }}</td>
+                          <td>{{ row.abonado | currency : "USD" }}</td>
+                          <td>
+                            <b>{{ row.aporte | currency : "USD" }}</b>
+                          </td>
+                          <td>{{ row.estado_etiqueta }}</td>
+                        </tr>
+                      </tbody>
+                      <tbody
+                        *ngIf="filasDetalle(Recuperacion.user_id).length === 0"
+                      >
+                        <tr>
+                          <td colspan="10" class="text-center">
+                            Sin facturas en el cálculo
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                    *ngIf="detalle.total > 0"
+                  >
+                    <small>{{ detalle.total }} factura(s)</small>
+                    <ngb-pagination
+                      [collectionSize]="detalle.total"
+                      [(page)]="detallePageByUser[Recuperacion.user_id]"
+                      [pageSize]="detallePageSize"
+                      [maxSize]="5"
+                      [rotate]="true"
+                      (pageChange)="
+                        cambiarPaginaDetalle(Recuperacion.user_id, $event)
+                      "
+                    ></ngb-pagination>
+                  </div>
+                  </ng-container>
+                </ng-container>
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
         <tbody *ngIf="_TablasService.datosTablaStorage.length == 0">
           <tr>
             <td colspan="11">
               <div
                 class="container d-flex align-items-center justify-content-center"
-              >
-                <!-- <h5>No existen clientes inactivos</h5> -->
-              </div>
+              ></div>
             </td>
           </tr>
         </tbody>
@@ -107,9 +249,7 @@
 
       <br />
       <br />
-      <!-- Gráficos -->
       <div class="row px-4" *ngIf="isAdmin || isSupervisor">
-        <!-- Gráfico Ventas vs Metas -->
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
@@ -130,7 +270,6 @@
           </div>
         </div>
 
-        <!-- Gráfico Porcentaje de Recuperación -->
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
@@ -194,16 +333,6 @@
           />
         </div>
       </div>
-
-      <!-- <div class="col-md-12" *ngIf="isAdmin">
-        <div class="form-group tipehead" >
-          <p class=" font-weight-bold">Usuario</p>
-          <select name="" id="" class="form-control" [(ngModel)]="userId">
-            <option [selected]="userId == 0" value="0">Todos los usuarios</option>
-            <option *ngFor="let usuario of userStore" [selected]="usuario.id == userId" [value]="usuario.id">{{ usuario.name }} {{ usuario.apellido }}</option>
-          </select>
-        </div>
-      </div> -->
     </div>
   </div>
   <div class="modal-footer justify-content-center w-100">

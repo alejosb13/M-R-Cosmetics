@@ -261,6 +261,28 @@ export class LogisticaService {
     });
   }
 
+  getRecuperacionDetalle(body: {
+    userId: number;
+    dateIni: string;
+    dateFin: string;
+  }): Observable<any> {
+    return this.http.post<any>(`${Logistica}/recuperacion/detalle`, body, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
+  getRecuperacionDetalleExcel(body: {
+    userId: number;
+    dateIni: string;
+    dateFin: string;
+  }): Observable<Blob> {
+    return this.http.post<Blob>(`${Logistica}/recuperacion/detalle-excel`, body, {
+      headers: this.headerJson_Token(),
+      responseType: "blob" as "json",
+    });
+  }
+
   insertNotaCartera(factura_id: number, nota: string): Observable<any> {
     return this.http.post<any>(
       `${Logistica}/cartera-note`,
