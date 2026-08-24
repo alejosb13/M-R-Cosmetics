@@ -1,0 +1,5 @@
+## Mensajes de commit
+
+Los mensajes de commit generados por IA deben estar en español.
+Una o dos frases; explicar el porqué, no el listado de archivos.
+Si hay prefijo (feat, fix, refactor), dejarlo y escribir el resto en español.

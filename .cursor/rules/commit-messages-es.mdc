@@ -1,0 +1,20 @@
+---
+description: Mensajes de commit generados por IA en español
+alwaysApply: true
+---
+
+# Mensajes de commit en español
+
+Los mensajes de commit que genere la IA (Agent, Source Control, Generate Commit Message) van **siempre en español**.
+
+- Una o dos frases. Explicar el **porqué**, no listar archivos.
+- Presente o infinitivo. Sin punto final innecesario.
+- Si el repo usa `feat:` / `fix:` / `refactor:`, mantener el prefijo y el resto en español.
+
+```
+# ❌ MAL
+Add date-aware product cost query v2
+
+# ✅ BIEN
+feat: calcular el costo del producto al corte del mes filtrado
+```
